@@ -9,6 +9,13 @@ edit_uri: edit/main/docs/
 copyright: >
   Copyright &copy; 2025 Zhipeng He
 
+nav:
+  - Home: index.md
+  - Remote Development:
+    - "Surviving without VS Code Remote SSH": remote-dev/Surviving-without-VS-Code-Remote-SSH.md
+    - "The .DS_Store Strikes Back: Finder Edition": remote-dev/The-DS_Store-Strikes-Back.md
+  - License: LICENSE.md
+
 theme:
   name: material
   language: en
@@ -24,12 +31,21 @@ theme:
     - navigation.instant.progress
     - navigation.path
     - navigation.top
+    - navigation.expand
     - content.action.view
     - content.action.edit
+    - content.code.copy
+    - content.code.select
 
 plugins:
   - search
   - social
+  - git-revision-date-localized:
+      enabled: true
+      enable_creation_date: true
+  - git-committers:
+      repository: ZhipengHe/Walltime-Chronicles
+      branch: main
 
 extra:
   social:
@@ -44,6 +60,7 @@ markdown_extensions:
   - attr_list
   - def_list
   - md_in_html
+  - footnotes
   - pymdownx.details
   - pymdownx.highlight:
       anchor_linenums: true

@@ -16,4 +16,4 @@ site/
 # VSCode
 .vscode/
 
-
+.DS_Store
