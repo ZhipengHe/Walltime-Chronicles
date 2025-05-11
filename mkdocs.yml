@@ -14,6 +14,8 @@ nav:
   - Remote Development:
     - "Surviving without VS Code Remote SSH": remote-dev/Surviving-without-VS-Code-Remote-SSH.md
     - "The .DS_Store Strikes Back: Finder Edition": remote-dev/The-DS_Store-Strikes-Back.md
+  - PBS Scriptbook:
+    - "Batch-Cooking PBS Scripts with a Bash Pan": pbs-scripts/Batch-Cooking-PBS-Scripts-with-a-Bash-Pan.md
   - License: LICENSE.md
 
 theme:
@@ -36,6 +38,7 @@ theme:
     - content.action.edit
     - content.code.copy
     - content.code.select
+    - content.code.annotate
 
 plugins:
   - search

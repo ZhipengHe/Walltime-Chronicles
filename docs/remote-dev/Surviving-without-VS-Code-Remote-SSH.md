@@ -11,6 +11,19 @@ So... you're trying to develop on QUT Aqua, but the server gods have other plans
 
 ---
 
+??? tip "Before you start: Recommend to add a shortcut to `~/.ssh/config`"
+    If you are using SSH keys to connect to the HPC, you can add a shortcut to `~/.ssh/config` to make your life easier. QUT Aqua documentation provides a [guide](https://docs.eres.qut.edu.au/hpc-getting-started-with-high-performance-computin#how-you-log-into-aqua-depends-on-the-operating-system-of-your-computer) on how to set up SSH keys for passwordless login.
+
+    ```bash
+    # Add to your ~/.ssh/config
+    Host aqua
+        HostName aqua.qut.edu.au
+        User your-username
+        IdentityFile ~/.ssh/id_rsa_aqua # Add your SSH key here
+        ServerAliveInterval 60
+    ```
+    Then, you can connect to the HPC by running `ssh aqua`. Also, you can use `aqua` to replace `your-username@aqua.qut.edu.au` in the following commands.
+
 ## :puzzle_piece: 1. Fake it with SSH-mounted folders 
 
 ### :cheese: Option A: Mount via Finder — the cheese board approach
@@ -29,55 +42,89 @@ So... you're trying to develop on QUT Aqua, but the server gods have other plans
 
 #### But ... is this method elegant?
 
-If you're a macOS user, you might have experienced the `.DS_Store` file issue. It's a hidden file that causes all sorts of trouble when you try to edit files on the HPC.
+You've mounted an SMB share to your Finder. Congratulations! You've just volunteered for the following comedy of errors:
 
-![DS_Store Meme](./images/DS_Store-meme.png) 
+1. **Git? More like "Get Lost"** - Your carefully crafted version control system now has all the functionality of a chocolate teapot. Want to commit changes? Sorry, Git is too sophisticated for your peasant SMB connection. It's like bringing a quantum physicist to a kindergarten counting class.
+2. **VS Code's Terminal: The Phantom Feature** - That beautiful integrated terminal in VS Code? It now stares at you like a confused puppy. `Command not found` becomes your new error mantra. It's there... but also not there, like your motivation on Monday mornings.
+3. **The Mysterious Disconnection** - Nothing says "surprise vacation" like your SMB connection randomly dropping when you're in the middle of important work. It's like having a co-worker who pulls the fire alarm whenever they're bored.
+4. **HPC Disruption: The Digital Hostage Situation** - Ah, you've put ALL your files on the server! So when the High-Performance Computing cluster decides to have its quarterly existential crisis (or weekly, who's counting?), your work becomes as accessible as your childhood memories. Your options? Make coffee, stare wistfully out the window.
+5. **The .DS_Store Epidemic: Exclusive for macOS** - Ah, macOS and its infamous `.DS_Store` files! Your Mac scatters these digital breadcrumbs in every folder you visit like an overzealous tourist taking selfies at landmarks. The HPC server, meanwhile, treats them with the same enthusiasm as finding glitter in its keyboard – "Thanks for the desktop settings I absolutely didn't ask for and can't use!" 
 
-Check out [The .DS_Store Strikes Back: Finder Edition](./The-DS_Store-Strikes-Back.md) about why this is a problem and how to solve it (or not).
+??? tip "For macOS users only: How to fix the .DS_Store issue"
+    ![DS_Store Meme](./images/DS_Store-meme.png) 
 
-### :wrench: Option B: SSHFS — The slightly nerdier route
+    Check out [The .DS_Store Strikes Back: Finder Edition](./The-DS_Store-Strikes-Back.md) about why this is a problem and how to solve it (or not).
 
-!!! warning "The below content is still under construction"
-
-    I just started using SSHFS recently, so I'm not sure if this is a good idea. Need to test it out.
+### :wrench: Option B: SSHFS — Mount through SSH Wizardry
 
 Mount your HPC home directory *directly* via SSH, no Finder fluff. It's like having your HPC filesystem in your pocket.
 
 #### For macOS Users:
 ```bash
-# Install the prerequisites
+# Install the prerequisites (because your Mac doesn't come with everything, despite what Apple claims)
 brew install macfuse
-brew install --cask macfuse
 brew install gromgit/fuse/sshfs-mac
 
-# Mount your HPC home
+# Mount your HPC home (1)
 mkdir ~/aqua
-sshfs your-username@aqua.qut.edu.au:/home/your-username ~/aqua
+sshfs your-username@aqua.qut.edu.au:/home/your-username ~/aqua #(2)
+
+# When you're done pretending these files are local
+umount ~/aqua
+# Or if that fails spectacularly (as technology loves to do)
+diskutil unmount ~/aqua
 ```
+
+1. When you're running `sshfs` first time, you will be asked to go to "System Preferences" → "Security & Privacy" → "Security" → click "Allow" for running the app. Then you also need to restart your Mac.
+2. You can use `aqua` to replace `your-username@aqua.qut.edu.au` if you have added a shortcut to `~/.ssh/config`.
 
 #### For Linux Users (Ubuntu):
 ```bash
-# Install SSHFS
-sudo apt-get install sshfs
+# Install SSHFS (because of course Linux makes you work for everything)
+sudo apt install sshfs
 
-# Mount your HPC home
-mkdir ~/aqua
-sshfs your-username@aqua.qut.edu.au:/home/your-username ~/aqua
+# Mount your HPC home, telling the laws of physics to take a break
+mkdir -p ~/aqua
+sshfs your-username@aqua.qut.edu.au:/home/your-username ~/aqua -o follow_symlinks
+
+# To send these files back to their natural habitat
+fusermount -u ~/aqua
 ```
 
-Then open it in VS Code:
+#### For Windows Users:
+
+Install [WinFSP](https://github.com/winfsp/winfsp/releases) and [SSHFS-Win](https://github.com/winfsp/sshfs-win/releases), because Windows needs two separate things to do what other systems accomplish with one. Then use Windows Explorer (which Microsoft keeps renaming as if that will make us forget its bugs) to map a network drive:
+
+```
+\\sshfs\your-username@aqua.qut.edu.au
+```
+Then open it in VS Code like you've just performed a miracle:
+
 ```bash
 code ~/aqua
 ```
 
-✅ *Pro*: Looks local. Feels local.
-✅ *Con*: Feels **too** local for large files. Might lag.
+:check_mark: *Pro*: 
+- Looks local. Feels local.
+- Git operations work... until they mysteriously don't
+
+:x: *Con*: 
+- Feels **too** local for large files. Might lag.
+- If the connection drops, your filesystem freezes like it's seen a ghost
+
+??? tip "Performance Tips That Might Help (No Promises)"
+    - Use `-o cache=yes` to create the illusion of performance (side effects may include file synchronization existential crises)
+    - Add `-o compression=yes` to squeeze your data through the internet tubes more efficiently
+    - If everything hangs, adjust your `ServerAlive` settings, which is like giving your connection a gentle nudge every few minutes to check if it's still breathing
+
+??? info "Working with Git Over SSHFS: A Tragicomedy"
+    When using Git over SSHFS, you're essentially asking Git to perform a synchronized swimming routine while blindfolded. For anything more complex than a simple commit, consider SSH-ing directly into the server and running Git commands there. Your future self will thank you for not testing the limits of your patience.
 
 ---
 
-## 🔁 2. `rsync`, `scp` and `git`: Your old-school sync buddies
+## :repeat: 2. `rsync`, `scp` and `git`: Your old-school sync buddies
 
-### Option A: `rsync` & `scp` — The Reliable Workhorse
+### :gear: Option A: `rsync` & `scp` — The Reliable Workhorse
 
 ```bash
 # Sync your local code to HPC
@@ -93,7 +140,11 @@ Or for a quick one-file fling:
 scp script.py your-username@aqua.qut.edu.au:/home/your-username/projects/
 ```
 
-### Option B: Git — The Version Control Way
+It's not fancy, but it works — like duct tape.
+
+### :simple-git: Option B: Git — The Version Control Way
+
+If you are version-controlling your life (as you should), Git is a clean and reliable method.
 
 ```bash
 # On your local machine
@@ -107,11 +158,13 @@ git push aqua main
 git clone your-username@aqua.qut.edu.au:/path/to/repo
 ```
 
-💡 *Pro Tip*: Use `.gitignore` to avoid syncing unnecessary files
+:check_mark: *Pro*: Clean history, branch control, reproducibility
+
+:x: *Con*: Needs initial setup and your SSH keys must behave
 
 ---
 
-## 🖥️ 3. The Terminal-Only Approach
+## :desktop_computer: 3. The Terminal-Only Approach
 
 When all else fails, embrace the terminal:
 
@@ -126,39 +179,85 @@ Then pick your weapon of choice:
 * `neovim` — For the modern
 * `emacs` — For the... unique
 
-🎯 *Bonus*: Fast, keyboard-driven, and doesn't require GUI permission forms.
+:direct_hit: *Bonus*: Fast, keyboard-driven, and doesn't require GUI permission forms.
 
 > *Note*: I will write another page about how to use `neovim` and its plugins to replace VS Code as a lightweight editor (with SSH).
 
 ---
 
-## 🌐 4. The Web-Based Approach
+## :globe_with_meridians: 4. The Web-Based Approach
 
-### Option A: Jupyter Notebooks
+### :simple-jupyter: Option A: Jupyter Notebooks
 
-!!! warning "The below content is still under construction"
-
-    I'm not sure if this is a good idea. Need to test it out.
+!!! info "Install Jupyter Lab in HPC before you start"
+    The official Aqua documentation provides a [guide](https://docs.eres.qut.edu.au/hpc-accessing-available-software#install-conda) on how to install Miniconda in HPC.
 
 ```bash
 # On the HPC
-module load anaconda3
-jupyter notebook --no-browser --port=8888
+# I prefer to use Jupyter Lab instead of Jupyter Notebook
+jupyter lab --no-browser --port=8888 # (1)
 
-# On your local machine
+# On your local machine, forward the port 8888 to your local machine
+# local_port:localhost:remote_port (2)
 ssh -N -L 8888:localhost:8888 your-username@aqua.qut.edu.au
 ```
 
-### Option B: VS Code in Browser
+1. If port 8888 is already in use, you can try another port, e.g. 8889.
+2. `-N` means no command to run on the remote machine. `-L` means forward the local port to the remote port. Both local and remote ports are 8888 in this case.
 
-If your sysadmin hasn’t locked *everything* down:
+### :material-microsoft-visual-studio-code: Option B: VS Code in Browser
 
-1. Install [`code-server`](https://github.com/coder/code-server) on the cluster
+:warning: *Warning*: This might require a sysadmin's blessing! Fortunately, the server gods haven't locked *everything* down:
+
+1. Install [`code-server`](https://github.com/coder/code-server) on the HPC.
+```bash
+# On HPC server
+# Install code-server to your home directory
+curl -fsSL https://code-server.dev/install.sh | sh -s -- --method standalone --prefix=$HOME
+# code-server will be installed to $HOME/bin/code-server
+
+# check if code-server is installed
+code-server --version
+
+# Start code-server
+code-server  --bind-addr 127.0.0.1:8080 --disable-telemetry --disable-update-check --auth none
+
+# On your local machine
+# Forward the port 8080 to your local machine
+ssh -N -L 8080:127.0.0.1:8080 your-username@aqua.qut.edu.au
+```
 2. Open it in your browser
+```bash
+# Open the web page in your browser
+http://localhost:8080
+``` 
 3. Marvel as VS Code rises from the ashes — web-style
 
-⚠️ *Warning*: This might require a sysadmin's blessing
+??? tip "Sync VS Code settings to code-server"
+    You can import your VS Code settings to code-server by importing the profile from VS Code. Check out [this page](https://code.visualstudio.com/docs/configure/profiles#_share-profiles) for more details about how to export and import profiles. However, this's not the perfect solution. Not all VS Code extensions are available for code-server, some extensions are restricted for Microsoft VS Code. Only the extensions that are available for code-server are listed in [Open VSX Registry](https://open-vsx.org/).
 
+??? tip "Run code-server in the background with `tmux`"
+    You can run code-server in the background with `tmux` to avoid the session being killed after you disconnect from the HPC.
+
+    ```bash
+    # Start a new tmux session
+    tmux new -s code
+
+    # Run code-server in the background
+    code-server --bind-addr 127.0.0.1:8080 --disable-telemetry --disable-update-check --auth none
+
+    # Detach from the tmux session: `Ctrl+b`, then `d`
+
+    # Reattach to the tmux session
+    tmux attach -t code
+
+    # Kill the tmux session
+    tmux kill-session -t code
+
+    # If you forget the session name, you can list all sessions
+    tmux ls
+    ```
+    
 ---
 
 ## TL;DR — What Works Best?
@@ -171,35 +270,6 @@ If your sysadmin hasn’t locked *everything* down:
 | Terminal Editors  | ❌ (no GUI)      | ✅            | N/A       | No           |
 | Jupyter           | ✅ (in browser)  | ✅            | ✅         | Yes          |
 | code-server       | ✅ (in browser)  | ✅            | ✅         | Yes          |
-
----
-
-## 🎯 Pro Tips for Remote Development
-
-1. **Keep Your Sanity**
-   ```bash
-   # Add to your ~/.ssh/config
-   Host aqua
-       HostName aqua.qut.edu.au
-       User your-username
-       IdentityFile ~/.ssh/id_rsa_aqua # Add your SSH key here
-       ServerAliveInterval 60
-   ```
-
-2. **Monitor Your Resources**
-   ```bash
-   # Check disk usage
-   du -sh ~/aqua
-   
-   # Check sync status
-   rsync -avzn ./local/ your-username@aqua.qut.edu.au:/remote/
-   ```
-
-3. **Backup Everything**
-   ```bash
-   # Regular backups
-   rsync -avz --backup --backup-dir=../backups/$(date +%Y%m%d) ./project/ your-username@aqua.qut.edu.au:/remote/
-   ```
 
 ---
 
