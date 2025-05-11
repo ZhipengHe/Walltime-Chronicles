@@ -260,16 +260,17 @@ http://localhost:8080
     
 ---
 
-## TL;DR — What Works Best?
+## TL;DR — What Works (and What Requires Sacrifice)
 
-| Method            | Edit in VS Code | Shell Access | File Sync | GUI Required |
-| ----------------- | --------------- | ------------ | --------- | ------------ |
-| SMB (Finder)      | ✅               | ❌            | ✅         | Yes          |
-| SSHFS             | ✅               | ❌            | ✅         | No           |
-| rsync / Git       | ✅ (local edit)  | ✅            | ✅         | No           |
-| Terminal Editors  | ❌ (no GUI)      | ✅            | N/A       | No           |
-| Jupyter           | ✅ (in browser)  | ✅            | ✅         | Yes          |
-| code-server       | ✅ (in browser)  | ✅            | ✅         | Yes          |
+| :hammer_and_wrench: Method | :woman_technologist: Edit in VS Code | :desktop_computer: Terminal Access | :file_folder: Where Files Live            | :frame_photo: GUI Needed | :zap: Vibe Check                       |
+| ---------------------------- | ------------------------------------- | ----------------------------------- | ------------------------------------------ | ---------------------------- | -------------------------------------- |
+| **SMB (Finder)**             | :white_check_mark: Yes, like it's local                | :x: Nope, just files                  | :file_cabinet: Remote (mounted)           | :white_check_mark: Yes                        | :cheese: "Cheesy but it works"         |
+| **SSHFS**                    | :white_check_mark: Yes (mostly)                        | :x: Not really                        | :file_cabinet: Remote (mounted)           | :x: Nope                       | :turtle: "Kinda slow, kinda cool"      |
+| **rsync / Git**              | :white_check_mark: Edit local, sync later              | :white_check_mark: Full control                      | :house: Local (then synced)                | :x: Nope                       | :toolbox: "Old school, solid"          |
+| **Terminal Editors**         | :x: No GUI, no problem                  | :white_check_mark: Born in the terminal              | :file_cabinet: Remote (SSH only)          | :x: Nope                       | :crossed_swords: "For shell warriors" |
+| **Jupyter**                  | :white_check_mark: Yes, via browser                    | :white_check_mark: If allowed                        | :file_cabinet: Remote (Jupyter workspace) | :white_check_mark: Yes                        | :test_tube: "Science with style"      |
+| **code-server**              | :white_check_mark: Yes, but web-based                  | :white_check_mark: Shell & more                      | :file_cabinet: Remote (in browser)        | :white_check_mark: Yes                        | :genie: "Feels like cheating"          |
+
 
 ---
 
