@@ -33,16 +33,16 @@
    ```
 ---
 
-## EPISODE VI: THE RETURN OF THE METADATA
+## EPISODE VI: THE RETURN OF THE METADATA (._*)
 
-> *"The ._ files are back, and they're more annoying than ever."*
+> *"The ._\* files are back, and they're more annoying than ever."*
 
 !!! warning "The Hidden Menace"
-    When you copy files to a remote server, macOS creates mysterious `._` files. They're like the Ewoks of the file system - small, seemingly harmless, but they can cause big problems.
+    When you copy files to a remote server, macOS creates mysterious `._*` files. They're like the Ewoks of the file system - small, seemingly harmless, but they can cause big problems.
 
 - **Darth Metadata**: "Your files are not complete without my metadata. I will follow them everywhere."
 
-- **Luke**: "But these `._` files are causing issues with my Python scripts!"
+- **Luke**: "But these `._*` files are causing issues with my Python scripts!"
 
 - **Yoda**: "Hidden they are, but dangerous they can be. Clean them you must."
 
@@ -59,7 +59,7 @@
 
 2. **Understanding the ._* Files - The Unstoppable Force**
 
-    On macOS, preventing the creation of ._* files (AppleDouble metadata) entirely is not officially supported—especially on non-HFS+ or non-APFS volumes.
+    On macOS, preventing the creation of `._*` files (AppleDouble metadata) entirely is not officially supported—especially on non-HFS+ or non-APFS volumes.
 
     **Why ._* files are created:**
     macOS uses ._* AppleDouble files to store:
@@ -75,7 +75,7 @@
 
 3. **Best Available Solutions :question:**
 
-    ***Just kidding, there are no best available solutions for this problem.*** That's why I said mount the remote server as a local drive by Finder is not a
+    ***Just kidding, there are no best available solutions for this problem.*** That's why I said mount the remote server as a local drive by Finder is not an elegant solution.
 
 
 4. **For Git Users**

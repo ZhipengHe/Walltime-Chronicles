@@ -50,7 +50,7 @@ You've mounted an SMB share to your Finder. Congratulations! You've just volunte
 4. **HPC Disruption: The Digital Hostage Situation** - Ah, you've put ALL your files on the server! So when the High-Performance Computing cluster decides to have its quarterly existential crisis (or weekly, who's counting?), your work becomes as accessible as your childhood memories. Your options? Make coffee, stare wistfully out the window.
 5. **The .DS_Store Epidemic: Exclusive for macOS** - Ah, macOS and its infamous `.DS_Store` files! Your Mac scatters these digital breadcrumbs in every folder you visit like an overzealous tourist taking selfies at landmarks. The HPC server, meanwhile, treats them with the same enthusiasm as finding glitter in its keyboard – "Thanks for the desktop settings I absolutely didn't ask for and can't use!" 
 
-??? tip "For macOS users only: How to fix the .DS_Store issue"
+??? tip "For macOS users only: How to fix the .DS_Store and ._* files issue"
     ![DS_Store Meme](./images/DS_Store-meme.png) 
 
     Check out [The .DS_Store Strikes Back: Finder Edition](./The-DS_Store-Strikes-Back.md) about why this is a problem and how to solve it (or not).
@@ -119,6 +119,11 @@ code ~/aqua
 
 ??? info "Working with Git Over SSHFS: A Tragicomedy"
     When using Git over SSHFS, you're essentially asking Git to perform a synchronized swimming routine while blindfolded. For anything more complex than a simple commit, consider SSH-ing directly into the server and running Git commands there. Your future self will thank you for not testing the limits of your patience.
+
+??? tip "For macOS users only: Still cannot get rid of the .DS_Store and ._* files?"
+    ![DS_Store Meme](./images/DS_Store-meme.png) 
+
+    Check out [The .DS_Store Strikes Back: Finder Edition](./The-DS_Store-Strikes-Back.md) about why this is a problem and how to solve it (or not).
 
 ---
 
@@ -257,7 +262,30 @@ http://localhost:8080
     # If you forget the session name, you can list all sessions
     tmux ls
     ```
-    
+
+??? failure "Known issue on Integrated Terminal and Extension Host"
+    I found that the terminal and the extension host are not stable when using code-server. The issue seems to revolve around the **ptyHost**, **File Watcher**, and **Extension Host**, and it's being **repeatedly killed by SIGTERM**.
+
+    :brain: **What Is Happening?**
+
+    ```log
+    [12:18:01] ptyHost terminated unexpectedly with code null
+    [12:18:01] [File Watcher (universal)] restarting watcher after unexpected error: terminated by itself with code null, signal: SIGTERM (ETERM)
+    [12:18:01] [127.0.0.1][d0f383fd][ExtensionHostConnection] <3126357> Extension Host Process exited with code: null, signal: SIGTERM.
+    [12:18:02] [127.0.0.1][d0f383fd][ExtensionHostConnection] Unknown reconnection token (seen before).
+    [12:18:02] [127.0.0.1][368c67ad][ExtensionHostConnection] New connection established.
+    [12:18:02] [127.0.0.1][368c67ad][ExtensionHostConnection] <3132486> Launched Extension Host Process.
+    ```
+
+    From the logs:
+
+    * :collision: The `ptyHost` process (responsible for terminal sessions) crashed or was killed — possibly due to system resource limits or policy.
+    * :card_file_box: File watcher was forcefully killed (SIGTERM) — system or job policy likely did this.
+    * :puzzle_piece: Extension host was also killed — same reason, likely tied to HPC rules.
+    * :arrows_counterclockwise: code-server tried to reconnect to the crashed extension host but failed.
+    * :new: code-server restarted the extension host process automatically.
+
+
 ---
 
 ## TL;DR — What Works (and What Requires Sacrifice)
@@ -269,7 +297,7 @@ http://localhost:8080
 | **rsync / Git**              | :white_check_mark: Edit local, sync later              | :white_check_mark: Full control                      | :house: Local (then synced)                | :x: Nope                       | :toolbox: "Old school, solid"          |
 | **Terminal Editors**         | :x: No GUI, no problem                  | :white_check_mark: Born in the terminal              | :file_cabinet: Remote (SSH only)          | :x: Nope                       | :crossed_swords: "For shell warriors" |
 | **Jupyter**                  | :white_check_mark: Yes, via browser                    | :white_check_mark: If allowed                        | :file_cabinet: Remote (Jupyter workspace) | :white_check_mark: Yes                        | :test_tube: "Science with style"      |
-| **code-server**              | :white_check_mark: Yes, but web-based                  | :white_check_mark: Shell & more                      | :file_cabinet: Remote (in browser)        | :white_check_mark: Yes                        | :genie: "Feels like cheating"          |
+| **code-server**              | :white_check_mark: Yes, but web-based                  | :question: Unstable                    | :file_cabinet: Remote (in browser)        | :white_check_mark: Yes                        | :genie: "Feels like cheating"          |
 
 
 ---
