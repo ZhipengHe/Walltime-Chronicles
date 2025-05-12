@@ -1,0 +1,1376 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="My personal survival log of mysterious errors, queueing oddities, and PBS quirks encountered on QUT Aqua">
+      
+      
+        <meta name="author" content="Zhipeng He">
+      
+      
+        <link rel="canonical" href="https://zhipenghe.me/walltime-chronicles/remote-dev/Surviving-without-VS-Code-Remote-SSH/">
+      
+      
+        <link rel="prev" href="../..">
+      
+      
+        <link rel="next" href="../The-DS_Store-Strikes-Back/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.13">
+    
+    
+      
+        <title>Surviving without VS Code Remote SSH - Walltime Chronicles</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.342714a4.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="https://unpkg.com/katex@0/dist/katex.min.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+      
+        <meta  property="og:type"  content="website" >
+      
+        <meta  property="og:title"  content="Surviving without VS Code Remote SSH - Walltime Chronicles" >
+      
+        <meta  property="og:description"  content="My personal survival log of mysterious errors, queueing oddities, and PBS quirks encountered on QUT Aqua" >
+      
+        <meta  property="og:image"  content="https://zhipenghe.me/walltime-chronicles/assets/images/social/remote-dev/Surviving-without-VS-Code-Remote-SSH.png" >
+      
+        <meta  property="og:image:type"  content="image/png" >
+      
+        <meta  property="og:image:width"  content="1200" >
+      
+        <meta  property="og:image:height"  content="630" >
+      
+        <meta  property="og:url"  content="https://zhipenghe.me/walltime-chronicles/remote-dev/Surviving-without-VS-Code-Remote-SSH/" >
+      
+        <meta  name="twitter:card"  content="summary_large_image" >
+      
+        <meta  name="twitter:title"  content="Surviving without VS Code Remote SSH - Walltime Chronicles" >
+      
+        <meta  name="twitter:description"  content="My personal survival log of mysterious errors, queueing oddities, and PBS quirks encountered on QUT Aqua" >
+      
+        <meta  name="twitter:image"  content="https://zhipenghe.me/walltime-chronicles/assets/images/social/remote-dev/Surviving-without-VS-Code-Remote-SSH.png" >
+      
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#surviving-without-vs-code-remote-ssh" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Walltime Chronicles" class="md-header__button md-logo" aria-label="Walltime Chronicles" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.75 8h6.5a.75.75 0 0 1 .75.75v6.5a.75.75 0 0 1-.75.75h-6.5a.75.75 0 0 1-.75-.75v-6.5A.75.75 0 0 1 8.75 8m.75 6.5h5v-5h-5Z"/><path d="M15.25 1a.75.75 0 0 1 .75.75V4h2.25c.966 0 1.75.784 1.75 1.75V8h2.25a.75.75 0 0 1 0 1.5H20v5h2.25a.75.75 0 0 1 0 1.5H20v2.25A1.75 1.75 0 0 1 18.25 20H16v2.25a.75.75 0 0 1-1.5 0V20h-5v2.25a.75.75 0 0 1-1.5 0V20H5.75A1.75 1.75 0 0 1 4 18.25V16H1.75a.75.75 0 0 1 0-1.5H4v-5H1.75a.75.75 0 0 1 0-1.5H4V5.75C4 4.784 4.784 4 5.75 4H8V1.75a.75.75 0 0 1 1.5 0V4h5V1.75a.75.75 0 0 1 .75-.75m3 17.5a.25.25 0 0 0 .25-.25V5.75a.25.25 0 0 0-.25-.25H5.75a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Walltime Chronicles
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Surviving without VS Code Remote SSH
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/ZhipengHe/Walltime-Chronicles" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    ZhipengHe/Walltime-Chronicles
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Walltime Chronicles" class="md-nav__button md-logo" aria-label="Walltime Chronicles" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.75 8h6.5a.75.75 0 0 1 .75.75v6.5a.75.75 0 0 1-.75.75h-6.5a.75.75 0 0 1-.75-.75v-6.5A.75.75 0 0 1 8.75 8m.75 6.5h5v-5h-5Z"/><path d="M15.25 1a.75.75 0 0 1 .75.75V4h2.25c.966 0 1.75.784 1.75 1.75V8h2.25a.75.75 0 0 1 0 1.5H20v5h2.25a.75.75 0 0 1 0 1.5H20v2.25A1.75 1.75 0 0 1 18.25 20H16v2.25a.75.75 0 0 1-1.5 0V20h-5v2.25a.75.75 0 0 1-1.5 0V20H5.75A1.75 1.75 0 0 1 4 18.25V16H1.75a.75.75 0 0 1 0-1.5H4v-5H1.75a.75.75 0 0 1 0-1.5H4V5.75C4 4.784 4.784 4 5.75 4H8V1.75a.75.75 0 0 1 1.5 0V4h5V1.75a.75.75 0 0 1 .75-.75m3 17.5a.25.25 0 0 0 .25-.25V5.75a.25.25 0 0 0-.25-.25H5.75a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25Z"/></svg>
+
+    </a>
+    Walltime Chronicles
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/ZhipengHe/Walltime-Chronicles" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    ZhipengHe/Walltime-Chronicles
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Remote Development
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Remote Development
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Surviving without VS Code Remote SSH
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Surviving without VS Code Remote SSH
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-fake-it-with-ssh-mounted-folders" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Fake it with SSH-mounted folders
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Fake it with SSH-mounted folders">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#option-a-mount-via-finder-the-cheese-board-approach" class="md-nav__link">
+    <span class="md-ellipsis">
+      Option A: Mount via Finder — the cheese board approach
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Option A: Mount via Finder — the cheese board approach">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#but-is-this-method-elegant" class="md-nav__link">
+    <span class="md-ellipsis">
+      But ... is this method elegant?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#option-b-sshfs-mount-through-ssh-wizardry" class="md-nav__link">
+    <span class="md-ellipsis">
+      Option B: SSHFS — Mount through SSH Wizardry
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Option B: SSHFS — Mount through SSH Wizardry">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#for-macos-users" class="md-nav__link">
+    <span class="md-ellipsis">
+      For macOS Users:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#for-linux-users-ubuntu" class="md-nav__link">
+    <span class="md-ellipsis">
+      For Linux Users (Ubuntu):
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#for-windows-users" class="md-nav__link">
+    <span class="md-ellipsis">
+      For Windows Users:
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-rsync-scp-and-git-your-old-school-sync-buddies" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. rsync, scp and git: Your old-school sync buddies
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. rsync, scp and git: Your old-school sync buddies">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#option-a-rsync-scp-the-reliable-workhorse" class="md-nav__link">
+    <span class="md-ellipsis">
+      Option A: rsync &amp; scp — The Reliable Workhorse
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#option-b-git-the-version-control-way" class="md-nav__link">
+    <span class="md-ellipsis">
+      Option B: Git — The Version Control Way
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-the-terminal-only-approach" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. The Terminal-Only Approach
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-the-web-based-approach" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. The Web-Based Approach
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. The Web-Based Approach">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#option-a-jupyter-notebooks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Option A: Jupyter Notebooks
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#option-b-vs-code-in-browser" class="md-nav__link">
+    <span class="md-ellipsis">
+      Option B: VS Code in Browser
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tldr-what-works-and-what-requires-sacrifice" class="md-nav__link">
+    <span class="md-ellipsis">
+      TL;DR — What Works (and What Requires Sacrifice)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#final-words" class="md-nav__link">
+    <span class="md-ellipsis">
+      Final Words
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../The-DS_Store-Strikes-Back/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    The .DS_Store Strikes Back: Finder Edition
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    PBS Scriptbook
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            PBS Scriptbook
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../pbs-scripts/Batch-Cooking-PBS-Scripts-with-a-Bash-Pan/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Batch-Cooking PBS Scripts with a Bash Pan
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../LICENSE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    License
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-fake-it-with-ssh-mounted-folders" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Fake it with SSH-mounted folders
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Fake it with SSH-mounted folders">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#option-a-mount-via-finder-the-cheese-board-approach" class="md-nav__link">
+    <span class="md-ellipsis">
+      Option A: Mount via Finder — the cheese board approach
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Option A: Mount via Finder — the cheese board approach">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#but-is-this-method-elegant" class="md-nav__link">
+    <span class="md-ellipsis">
+      But ... is this method elegant?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#option-b-sshfs-mount-through-ssh-wizardry" class="md-nav__link">
+    <span class="md-ellipsis">
+      Option B: SSHFS — Mount through SSH Wizardry
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Option B: SSHFS — Mount through SSH Wizardry">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#for-macos-users" class="md-nav__link">
+    <span class="md-ellipsis">
+      For macOS Users:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#for-linux-users-ubuntu" class="md-nav__link">
+    <span class="md-ellipsis">
+      For Linux Users (Ubuntu):
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#for-windows-users" class="md-nav__link">
+    <span class="md-ellipsis">
+      For Windows Users:
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-rsync-scp-and-git-your-old-school-sync-buddies" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. rsync, scp and git: Your old-school sync buddies
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. rsync, scp and git: Your old-school sync buddies">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#option-a-rsync-scp-the-reliable-workhorse" class="md-nav__link">
+    <span class="md-ellipsis">
+      Option A: rsync &amp; scp — The Reliable Workhorse
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#option-b-git-the-version-control-way" class="md-nav__link">
+    <span class="md-ellipsis">
+      Option B: Git — The Version Control Way
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-the-terminal-only-approach" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. The Terminal-Only Approach
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-the-web-based-approach" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. The Web-Based Approach
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. The Web-Based Approach">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#option-a-jupyter-notebooks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Option A: Jupyter Notebooks
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#option-b-vs-code-in-browser" class="md-nav__link">
+    <span class="md-ellipsis">
+      Option B: VS Code in Browser
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tldr-what-works-and-what-requires-sacrifice" class="md-nav__link">
+    <span class="md-ellipsis">
+      TL;DR — What Works (and What Requires Sacrifice)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#final-words" class="md-nav__link">
+    <span class="md-ellipsis">
+      Final Words
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/ZhipengHe/Walltime-Chronicles/edit/main/docs/remote-dev/Surviving-without-VS-Code-Remote-SSH.md" title="Edit this page" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+    
+      
+    
+    <a href="https://github.com/ZhipengHe/Walltime-Chronicles/raw/main/docs/remote-dev/Surviving-without-VS-Code-Remote-SSH.md" title="View source of this page" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"/></svg>
+    </a>
+  
+
+
+<h1 id="surviving-without-vs-code-remote-ssh">Surviving without VS Code Remote SSH</h1>
+<blockquote>
+<p><em>"Or: "They took away my extension, but not my will to code.""</em></p>
+</blockquote>
+<div class="admonition failure">
+<p class="admonition-title">VS Code Remote SSH is banned</p>
+<p>QUT Aqua banned VS Code Remote SSH extension due to potential high workload on the node. Even you try to connect to Aqua through Remote SSH, it will be disconnected automatically after around 30 seconds.
+Check <a href="https://docs.eres.qut.edu.au/hpc-vscode-usage#using-vs-code-to-edit-files-on-the-hpc">this</a> for more details.</p>
+</div>
+<p>So... you're trying to develop on QUT Aqua, but the server gods have other plans. Maybe you can't use VS Code Remote SSH. Maybe you're just feeling adventurous. But do not worry — you can still edit remote files and develop like a champ. Here's how I've kept my sanity while developing on remote HPC systems.</p>
+<hr />
+<details class="tip">
+<summary>Before you start: Recommend to add a shortcut to <code>~/.ssh/config</code></summary>
+<p>If you are using SSH keys to connect to the HPC, you can add a shortcut to <code>~/.ssh/config</code> to make your life easier. QUT Aqua documentation provides a <a href="https://docs.eres.qut.edu.au/hpc-getting-started-with-high-performance-computin#how-you-log-into-aqua-depends-on-the-operating-system-of-your-computer">guide</a> on how to set up SSH keys for passwordless login.</p>
+<p><div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Add to your ~/.ssh/config</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>Host<span class="w"> </span>aqua
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span>HostName<span class="w"> </span>aqua.qut.edu.au
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span>User<span class="w"> </span>your-username
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span>IdentityFile<span class="w"> </span>~/.ssh/id_rsa_aqua<span class="w"> </span><span class="c1"># Add your SSH key here</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span>ServerAliveInterval<span class="w"> </span><span class="m">60</span>
+</span></code></pre></div>
+Then, you can connect to the HPC by running <code>ssh aqua</code>. Also, you can use <code>aqua</code> to replace <code>your-username@aqua.qut.edu.au</code> in the following commands.</p>
+</details>
+<h2 id="1-fake-it-with-ssh-mounted-folders"><img alt="🧩" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f9e9.svg" title=":puzzle_piece:" /> 1. Fake it with SSH-mounted folders</h2>
+<h3 id="option-a-mount-via-finder-the-cheese-board-approach"><img alt="🧀" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f9c0.svg" title=":cheese:" /> Option A: Mount via Finder — the cheese board approach</h3>
+<blockquote>
+<p>Here's a quick guide for macOS users. Please refer to the <a href="https://docs.eres.qut.edu.au/hpc-transferring-files-tofrom-hpc#using-file-explorer-or-finder-to-mount-a-drive-to-the-hpc">official documentation</a> for other OS.</p>
+</blockquote>
+<ol>
+<li>Open <strong>Finder</strong> → <code>Go</code> → <code>Connect to Server...</code></li>
+<li>Enter:</li>
+</ol>
+<p><div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>smb://hpc-fs/home/
+</span></code></pre></div>
+3. Mount it, then open the folder in VS Code like it's 1999.</p>
+<p><img alt="📝" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f4dd.svg" title=":memo:" /> <em>Note</em>: You can edit files, but <strong>no shell</strong>, <strong>no Git</strong>, and no terminal tantrums. It's like eating cake without the frosting.</p>
+<h4 id="but-is-this-method-elegant">But ... is this method elegant?</h4>
+<p>You've mounted an SMB share to your Finder. Congratulations! You've just volunteered for the following comedy of errors:</p>
+<ol>
+<li><strong>Git? More like "Get Lost"</strong> - Your carefully crafted version control system now has all the functionality of a chocolate teapot. Want to commit changes? Sorry, Git is too sophisticated for your peasant SMB connection. It's like bringing a quantum physicist to a kindergarten counting class.</li>
+<li><strong>VS Code's Terminal: The Phantom Feature</strong> - That beautiful integrated terminal in VS Code? It now stares at you like a confused puppy. <code>Command not found</code> becomes your new error mantra. It's there... but also not there, like your motivation on Monday mornings.</li>
+<li><strong>The Mysterious Disconnection</strong> - Nothing says "surprise vacation" like your SMB connection randomly dropping when you're in the middle of important work. It's like having a co-worker who pulls the fire alarm whenever they're bored.</li>
+<li><strong>HPC Disruption: The Digital Hostage Situation</strong> - Ah, you've put ALL your files on the server! So when the High-Performance Computing cluster decides to have its quarterly existential crisis (or weekly, who's counting?), your work becomes as accessible as your childhood memories. Your options? Make coffee, stare wistfully out the window.</li>
+<li><strong>The .DS_Store Epidemic: Exclusive for macOS</strong> - Ah, macOS and its infamous <code>.DS_Store</code> files! Your Mac scatters these digital breadcrumbs in every folder you visit like an overzealous tourist taking selfies at landmarks. The HPC server, meanwhile, treats them with the same enthusiasm as finding glitter in its keyboard – "Thanks for the desktop settings I absolutely didn't ask for and can't use!" </li>
+</ol>
+<details class="tip">
+<summary>For macOS users only: How to fix the .DS_Store and ._* files issue</summary>
+<p><img alt="DS_Store Meme" src="../images/DS_Store-meme.png" /> </p>
+<p>Check out <a href="../The-DS_Store-Strikes-Back/">The .DS_Store Strikes Back: Finder Edition</a> about why this is a problem and how to solve it (or not).</p>
+</details>
+<h3 id="option-b-sshfs-mount-through-ssh-wizardry"><img alt="🔧" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f527.svg" title=":wrench:" /> Option B: SSHFS — Mount through SSH Wizardry</h3>
+<p>Mount your HPC home directory <em>directly</em> via SSH, no Finder fluff. It's like having your HPC filesystem in your pocket.</p>
+<h4 id="for-macos-users">For macOS Users:</h4>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Install the prerequisites (because your Mac doesn&#39;t come with everything, despite what Apple claims)</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>brew<span class="w"> </span>install<span class="w"> </span>macfuse
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>brew<span class="w"> </span>install<span class="w"> </span>gromgit/fuse/sshfs-mac
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="c1"># Mount your HPC home (1)</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>mkdir<span class="w"> </span>~/aqua
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>sshfs<span class="w"> </span>your-username@aqua.qut.edu.au:/home/your-username<span class="w"> </span>~/aqua<span class="w"> </span><span class="c1">#(2)</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="c1"># When you&#39;re done pretending these files are local</span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>umount<span class="w"> </span>~/aqua
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="c1"># Or if that fails spectacularly (as technology loves to do)</span>
+</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>diskutil<span class="w"> </span>unmount<span class="w"> </span>~/aqua
+</span></code></pre></div>
+<ol>
+<li>When you're running <code>sshfs</code> first time, you will be asked to go to "System Preferences" → "Security &amp; Privacy" → "Security" → click "Allow" for running the app. Then you also need to restart your Mac.</li>
+<li>You can use <code>aqua</code> to replace <code>your-username@aqua.qut.edu.au</code> if you have added a shortcut to <code>~/.ssh/config</code>.</li>
+</ol>
+<h4 id="for-linux-users-ubuntu">For Linux Users (Ubuntu):</h4>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># Install SSHFS (because of course Linux makes you work for everything)</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>sshfs
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="c1"># Mount your HPC home, telling the laws of physics to take a break</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>~/aqua
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>sshfs<span class="w"> </span>your-username@aqua.qut.edu.au:/home/your-username<span class="w"> </span>~/aqua<span class="w"> </span>-o<span class="w"> </span>follow_symlinks
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="c1"># To send these files back to their natural habitat</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>fusermount<span class="w"> </span>-u<span class="w"> </span>~/aqua
+</span></code></pre></div>
+<h4 id="for-windows-users">For Windows Users:</h4>
+<p>Install <a href="https://github.com/winfsp/winfsp/releases">WinFSP</a> and <a href="https://github.com/winfsp/sshfs-win/releases">SSHFS-Win</a>, because Windows needs two separate things to do what other systems accomplish with one. Then use Windows Explorer (which Microsoft keeps renaming as if that will make us forget its bugs) to map a network drive:</p>
+<p><div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>\\sshfs\your-username@aqua.qut.edu.au
+</span></code></pre></div>
+Then open it in VS Code like you've just performed a miracle:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>code<span class="w"> </span>~/aqua
+</span></code></pre></div>
+<p><img alt="✔" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/2714.svg" title=":check_mark:" /> <em>Pro</em>: 
+- Looks local. Feels local.
+- Git operations work... until they mysteriously don't</p>
+<p><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/274c.svg" title=":x:" /> <em>Con</em>: 
+- Feels <strong>too</strong> local for large files. Might lag.
+- If the connection drops, your filesystem freezes like it's seen a ghost</p>
+<details class="tip">
+<summary>Performance Tips That Might Help (No Promises)</summary>
+<ul>
+<li>Use <code>-o cache=yes</code> to create the illusion of performance (side effects may include file synchronization existential crises)</li>
+<li>Add <code>-o compression=yes</code> to squeeze your data through the internet tubes more efficiently</li>
+<li>If everything hangs, adjust your <code>ServerAlive</code> settings, which is like giving your connection a gentle nudge every few minutes to check if it's still breathing</li>
+</ul>
+</details>
+<details class="info">
+<summary>Working with Git Over SSHFS: A Tragicomedy</summary>
+<p>When using Git over SSHFS, you're essentially asking Git to perform a synchronized swimming routine while blindfolded. For anything more complex than a simple commit, consider SSH-ing directly into the server and running Git commands there. Your future self will thank you for not testing the limits of your patience.</p>
+</details>
+<details class="tip">
+<summary>For macOS users only: Still cannot get rid of the .DS_Store and ._* files?</summary>
+<p><img alt="DS_Store Meme" src="../images/DS_Store-meme.png" /> </p>
+<p>Check out <a href="../The-DS_Store-Strikes-Back/">The .DS_Store Strikes Back: Finder Edition</a> about why this is a problem and how to solve it (or not).</p>
+</details>
+<hr />
+<h2 id="2-rsync-scp-and-git-your-old-school-sync-buddies"><img alt="🔁" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f501.svg" title=":repeat:" /> 2. <code>rsync</code>, <code>scp</code> and <code>git</code>: Your old-school sync buddies</h2>
+<h3 id="option-a-rsync-scp-the-reliable-workhorse"><img alt="⚙" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/2699.svg" title=":gear:" /> Option A: <code>rsync</code> &amp; <code>scp</code> — The Reliable Workhorse</h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># Sync your local code to HPC</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>rsync<span class="w"> </span>-avz<span class="w"> </span>./my-project/<span class="w"> </span>your-username@aqua.qut.edu.au:/home/your-username/projects/
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="c1"># Sync back from HPC</span>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>rsync<span class="w"> </span>-avz<span class="w"> </span>your-username@aqua.qut.edu.au:/home/your-username/projects/<span class="w"> </span>./my-project/
+</span></code></pre></div>
+<p>Or for a quick one-file fling:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>scp<span class="w"> </span>script.py<span class="w"> </span>your-username@aqua.qut.edu.au:/home/your-username/projects/
+</span></code></pre></div>
+<p>It's not fancy, but it works — like duct tape.</p>
+<h3 id="option-b-git-the-version-control-way"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M23.546 10.93 13.067.452a1.55 1.55 0 0 0-2.188 0L8.708 2.627l2.76 2.76a1.838 1.838 0 0 1 2.327 2.341l2.658 2.66a1.838 1.838 0 0 1 1.9 3.039 1.837 1.837 0 0 1-2.6 0 1.85 1.85 0 0 1-.404-1.996L12.86 8.955v6.525c.176.086.342.203.488.348a1.85 1.85 0 0 1 0 2.6 1.844 1.844 0 0 1-2.609 0 1.834 1.834 0 0 1 0-2.598c.182-.18.387-.316.605-.406V8.835a1.834 1.834 0 0 1-.996-2.41L7.636 3.7.45 10.881c-.6.605-.6 1.584 0 2.189l10.48 10.477a1.545 1.545 0 0 0 2.186 0l10.43-10.43a1.544 1.544 0 0 0 0-2.187"/></svg></span> Option B: Git — The Version Control Way</h3>
+<p>If you are version-controlling your life (as you should), Git is a clean and reliable method.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># On your local machine</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>git<span class="w"> </span>init
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>git<span class="w"> </span>add<span class="w"> </span>.
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Initial commit&quot;</span>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>git<span class="w"> </span>remote<span class="w"> </span>add<span class="w"> </span>aqua<span class="w"> </span>your-username@aqua.qut.edu.au:/path/to/repo
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>git<span class="w"> </span>push<span class="w"> </span>aqua<span class="w"> </span>main
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>
+</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="c1"># On the HPC</span>
+</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>git<span class="w"> </span>clone<span class="w"> </span>your-username@aqua.qut.edu.au:/path/to/repo
+</span></code></pre></div>
+<p><img alt="✔" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/2714.svg" title=":check_mark:" /> <em>Pro</em>: Clean history, branch control, reproducibility</p>
+<p><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/274c.svg" title=":x:" /> <em>Con</em>: Needs initial setup and your SSH keys must behave</p>
+<hr />
+<h2 id="3-the-terminal-only-approach"><img alt="🖥" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f5a5.svg" title=":desktop_computer:" /> 3. The Terminal-Only Approach</h2>
+<p>When all else fails, embrace the terminal:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>ssh<span class="w"> </span>your-username@aqua.qut.edu.au
+</span></code></pre></div>
+<p>Then pick your weapon of choice:</p>
+<ul>
+<li><code>vim</code> — For the brave</li>
+<li><code>nano</code> — For the sane</li>
+<li><code>neovim</code> — For the modern</li>
+<li><code>emacs</code> — For the... unique</li>
+</ul>
+<p><img alt="🎯" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f3af.svg" title=":direct_hit:" /> <em>Bonus</em>: Fast, keyboard-driven, and doesn't require GUI permission forms.</p>
+<blockquote>
+<p><em>Note</em>: I will write another page about how to use <code>neovim</code> and its plugins to replace VS Code as a lightweight editor (with SSH).</p>
+</blockquote>
+<hr />
+<h2 id="4-the-web-based-approach"><img alt="🌐" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f310.svg" title=":globe_with_meridians:" /> 4. The Web-Based Approach</h2>
+<h3 id="option-a-jupyter-notebooks"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7.157 22.201A1.784 1.799 0 0 1 5.374 24a1.784 1.799 0 0 1-1.784-1.799 1.784 1.799 0 0 1 1.784-1.799 1.784 1.799 0 0 1 1.783 1.799M20.582 1.427a1.415 1.427 0 0 1-1.415 1.428 1.415 1.427 0 0 1-1.416-1.428A1.415 1.427 0 0 1 19.167 0a1.415 1.427 0 0 1 1.415 1.427M4.992 3.336A1.047 1.056 0 0 1 3.946 4.39a1.047 1.056 0 0 1-1.047-1.055A1.047 1.056 0 0 1 3.946 2.28a1.047 1.056 0 0 1 1.046 1.056m7.336 1.517c3.769 0 7.06 1.38 8.768 3.424a9.36 9.36 0 0 0-3.393-4.547 9.24 9.24 0 0 0-5.377-1.728A9.24 9.24 0 0 0 6.95 3.73a9.36 9.36 0 0 0-3.394 4.547c1.713-2.04 5.004-3.424 8.772-3.424m.001 13.295c-3.768 0-7.06-1.381-8.768-3.425a9.36 9.36 0 0 0 3.394 4.547A9.24 9.24 0 0 0 12.33 21a9.24 9.24 0 0 0 5.377-1.729 9.36 9.36 0 0 0 3.393-4.547c-1.712 2.044-5.003 3.425-8.772 3.425Z"/></svg></span> Option A: Jupyter Notebooks</h3>
+<div class="admonition info">
+<p class="admonition-title">Install Jupyter Lab in HPC before you start</p>
+<p>The official Aqua documentation provides a <a href="https://docs.eres.qut.edu.au/hpc-accessing-available-software#install-conda">guide</a> on how to install Miniconda in HPC.</p>
+</div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># On the HPC</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="c1"># I prefer to use Jupyter Lab instead of Jupyter Notebook</span>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>jupyter<span class="w"> </span>lab<span class="w"> </span>--no-browser<span class="w"> </span>--port<span class="o">=</span><span class="m">8888</span><span class="w"> </span><span class="c1"># (1)</span>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="c1"># On your local machine, forward the port 8888 to your local machine</span>
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="c1"># local_port:localhost:remote_port (2)</span>
+</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>ssh<span class="w"> </span>-N<span class="w"> </span>-L<span class="w"> </span><span class="m">8888</span>:localhost:8888<span class="w"> </span>your-username@aqua.qut.edu.au
+</span></code></pre></div>
+<ol>
+<li>If port 8888 is already in use, you can try another port, e.g. 8889.</li>
+<li><code>-N</code> means no command to run on the remote machine. <code>-L</code> means forward the local port to the remote port. Both local and remote ports are 8888 in this case.</li>
+</ol>
+<h3 id="option-b-vs-code-in-browser"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 16.47V7.39l-6 4.54M2.22 9.19a.86.86 0 0 1-.02-1.15l1.2-1.11c.2-.18.69-.26 1.05 0l3.42 2.61 7.93-7.25c.32-.32.87-.45 1.5-.12l4 1.91c.36.21.7.54.7 1.15v13.5c0 .4-.29.83-.6 1l-4.4 2.1c-.32.13-.92.01-1.13-.2l-8.02-7.3-3.4 2.6c-.38.26-.85.19-1.05 0l-1.2-1.1c-.32-.33-.28-.87.05-1.2l3-2.7"/></svg></span> Option B: VS Code in Browser</h3>
+<p><img alt="⚠" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/26a0.svg" title=":warning:" /> <em>Warning</em>: This might require a sysadmin's blessing! Fortunately, the server gods haven't locked <em>everything</em> down:</p>
+<ol>
+<li>Install <a href="https://github.com/coder/code-server"><code>code-server</code></a> on the HPC.
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1"># On HPC server</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="c1"># Install code-server to your home directory</span>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://code-server.dev/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>sh<span class="w"> </span>-s<span class="w"> </span>--<span class="w"> </span>--method<span class="w"> </span>standalone<span class="w"> </span>--prefix<span class="o">=</span><span class="nv">$HOME</span>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="c1"># code-server will be installed to $HOME/bin/code-server</span>
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>
+</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="c1"># check if code-server is installed</span>
+</span><span id="__span-11-7"><a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>code-server<span class="w"> </span>--version
+</span><span id="__span-11-8"><a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>
+</span><span id="__span-11-9"><a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="c1"># Start code-server</span>
+</span><span id="__span-11-10"><a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a>code-server<span class="w">  </span>--bind-addr<span class="w"> </span><span class="m">127</span>.0.0.1:8080<span class="w"> </span>--disable-telemetry<span class="w"> </span>--disable-update-check<span class="w"> </span>--auth<span class="w"> </span>none
+</span><span id="__span-11-11"><a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a>
+</span><span id="__span-11-12"><a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a><span class="c1"># On your local machine</span>
+</span><span id="__span-11-13"><a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a><span class="c1"># Forward the port 8080 to your local machine</span>
+</span><span id="__span-11-14"><a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a>ssh<span class="w"> </span>-N<span class="w"> </span>-L<span class="w"> </span><span class="m">8080</span>:127.0.0.1:8080<span class="w"> </span>your-username@aqua.qut.edu.au
+</span></code></pre></div></li>
+<li>Open it in your browser
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="c1"># Open the web page in your browser</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>http://localhost:8080
+</span></code></pre></div></li>
+<li>Marvel as VS Code rises from the ashes — web-style</li>
+</ol>
+<details class="tip">
+<summary>Sync VS Code settings to code-server</summary>
+<p>You can import your VS Code settings to code-server by importing the profile from VS Code. Check out <a href="https://code.visualstudio.com/docs/configure/profiles#_share-profiles">this page</a> for more details about how to export and import profiles. However, this's not the perfect solution. Not all VS Code extensions are available for code-server, some extensions are restricted for Microsoft VS Code. Only the extensions that are available for code-server are listed in <a href="https://open-vsx.org/">Open VSX Registry</a>.</p>
+</details>
+<details class="tip">
+<summary>Run code-server in the background with <code>tmux</code></summary>
+<p>You can run code-server in the background with <code>tmux</code> to avoid the session being killed after you disconnect from the HPC.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1"># Start a new tmux session</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>tmux<span class="w"> </span>new<span class="w"> </span>-s<span class="w"> </span>code
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="c1"># Run code-server in the background</span>
+</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>code-server<span class="w"> </span>--bind-addr<span class="w"> </span><span class="m">127</span>.0.0.1:8080<span class="w"> </span>--disable-telemetry<span class="w"> </span>--disable-update-check<span class="w"> </span>--auth<span class="w"> </span>none
+</span><span id="__span-13-6"><a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>
+</span><span id="__span-13-7"><a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="c1"># Detach from the tmux session: `Ctrl+b`, then `d`</span>
+</span><span id="__span-13-8"><a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a>
+</span><span id="__span-13-9"><a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a><span class="c1"># Reattach to the tmux session</span>
+</span><span id="__span-13-10"><a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a>tmux<span class="w"> </span>attach<span class="w"> </span>-t<span class="w"> </span>code
+</span><span id="__span-13-11"><a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a>
+</span><span id="__span-13-12"><a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a><span class="c1"># Kill the tmux session</span>
+</span><span id="__span-13-13"><a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a>tmux<span class="w"> </span>kill-session<span class="w"> </span>-t<span class="w"> </span>code
+</span><span id="__span-13-14"><a id="__codelineno-13-14" name="__codelineno-13-14" href="#__codelineno-13-14"></a>
+</span><span id="__span-13-15"><a id="__codelineno-13-15" name="__codelineno-13-15" href="#__codelineno-13-15"></a><span class="c1"># If you forget the session name, you can list all sessions</span>
+</span><span id="__span-13-16"><a id="__codelineno-13-16" name="__codelineno-13-16" href="#__codelineno-13-16"></a>tmux<span class="w"> </span>ls
+</span></code></pre></div>
+</details>
+<details class="failure">
+<summary>Known issue on Integrated Terminal and Extension Host</summary>
+<p>I found that the terminal and the extension host are not stable when using code-server. The issue seems to revolve around the <strong>ptyHost</strong>, <strong>File Watcher</strong>, and <strong>Extension Host</strong>, and it's being <strong>repeatedly killed by SIGTERM</strong>.</p>
+<p><img alt="🧠" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f9e0.svg" title=":brain:" /> <strong>What Is Happening?</strong></p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>[12:18:01] ptyHost terminated unexpectedly with code null
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>[12:18:01] [File Watcher (universal)] restarting watcher after unexpected error: terminated by itself with code null, signal: SIGTERM (ETERM)
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>[12:18:01] [127.0.0.1][d0f383fd][ExtensionHostConnection] &lt;3126357&gt; Extension Host Process exited with code: null, signal: SIGTERM.
+</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>[12:18:02] [127.0.0.1][d0f383fd][ExtensionHostConnection] Unknown reconnection token (seen before).
+</span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>[12:18:02] [127.0.0.1][368c67ad][ExtensionHostConnection] New connection established.
+</span><span id="__span-14-6"><a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>[12:18:02] [127.0.0.1][368c67ad][ExtensionHostConnection] &lt;3132486&gt; Launched Extension Host Process.
+</span></code></pre></div>
+<p>From the logs:</p>
+<ul>
+<li><img alt="💥" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f4a5.svg" title=":collision:" /> The <code>ptyHost</code> process (responsible for terminal sessions) crashed or was killed — possibly due to system resource limits or policy.</li>
+<li><img alt="🗃" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f5c3.svg" title=":card_file_box:" /> File watcher was forcefully killed (SIGTERM) — system or job policy likely did this.</li>
+<li><img alt="🧩" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f9e9.svg" title=":puzzle_piece:" /> Extension host was also killed — same reason, likely tied to HPC rules.</li>
+<li><img alt="🔄" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f504.svg" title=":arrows_counterclockwise:" /> code-server tried to reconnect to the crashed extension host but failed.</li>
+<li><img alt="🆕" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f195.svg" title=":new:" /> code-server restarted the extension host process automatically.</li>
+</ul>
+</details>
+<hr />
+<h2 id="tldr-what-works-and-what-requires-sacrifice">TL;DR — What Works (and What Requires Sacrifice)</h2>
+<table>
+<thead>
+<tr>
+<th><img alt="🛠" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f6e0.svg" title=":hammer_and_wrench:" /> Method</th>
+<th><img alt="👩‍💻" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f469-200d-1f4bb.svg" title=":woman_technologist:" /> Edit in VS Code</th>
+<th><img alt="🖥" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f5a5.svg" title=":desktop_computer:" /> Terminal Access</th>
+<th><img alt="📁" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f4c1.svg" title=":file_folder:" /> Where Files Live</th>
+<th><img alt="🖼" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f5bc.svg" title=":frame_photo:" /> GUI Needed</th>
+<th><img alt="⚡" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/26a1.svg" title=":zap:" /> Vibe Check</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>SMB (Finder)</strong></td>
+<td><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/2705.svg" title=":white_check_mark:" /> Yes, like it's local</td>
+<td><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/274c.svg" title=":x:" /> Nope, just files</td>
+<td><img alt="🗄" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f5c4.svg" title=":file_cabinet:" /> Remote (mounted)</td>
+<td><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/2705.svg" title=":white_check_mark:" /> Yes</td>
+<td><img alt="🧀" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f9c0.svg" title=":cheese:" /> "Cheesy but it works"</td>
+</tr>
+<tr>
+<td><strong>SSHFS</strong></td>
+<td><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/2705.svg" title=":white_check_mark:" /> Yes (mostly)</td>
+<td><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/274c.svg" title=":x:" /> Not really</td>
+<td><img alt="🗄" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f5c4.svg" title=":file_cabinet:" /> Remote (mounted)</td>
+<td><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/274c.svg" title=":x:" /> Nope</td>
+<td><img alt="🐢" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f422.svg" title=":turtle:" /> "Kinda slow, kinda cool"</td>
+</tr>
+<tr>
+<td><strong>rsync / Git</strong></td>
+<td><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/2705.svg" title=":white_check_mark:" /> Edit local, sync later</td>
+<td><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/2705.svg" title=":white_check_mark:" /> Full control</td>
+<td><img alt="🏠" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f3e0.svg" title=":house:" /> Local (then synced)</td>
+<td><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/274c.svg" title=":x:" /> Nope</td>
+<td><img alt="🧰" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f9f0.svg" title=":toolbox:" /> "Old school, solid"</td>
+</tr>
+<tr>
+<td><strong>Terminal Editors</strong></td>
+<td><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/274c.svg" title=":x:" /> No GUI, no problem</td>
+<td><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/2705.svg" title=":white_check_mark:" /> Born in the terminal</td>
+<td><img alt="🗄" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f5c4.svg" title=":file_cabinet:" /> Remote (SSH only)</td>
+<td><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/274c.svg" title=":x:" /> Nope</td>
+<td><img alt="⚔" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/2694.svg" title=":crossed_swords:" /> "For shell warriors"</td>
+</tr>
+<tr>
+<td><strong>Jupyter</strong></td>
+<td><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/2705.svg" title=":white_check_mark:" /> Yes, via browser</td>
+<td><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/2705.svg" title=":white_check_mark:" /> If allowed</td>
+<td><img alt="🗄" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f5c4.svg" title=":file_cabinet:" /> Remote (Jupyter workspace)</td>
+<td><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/2705.svg" title=":white_check_mark:" /> Yes</td>
+<td><img alt="🧪" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f9ea.svg" title=":test_tube:" /> "Science with style"</td>
+</tr>
+<tr>
+<td><strong>code-server</strong></td>
+<td><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/2705.svg" title=":white_check_mark:" /> Yes, but web-based</td>
+<td><img alt="❓" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/2753.svg" title=":question:" /> Unstable</td>
+<td><img alt="🗄" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f5c4.svg" title=":file_cabinet:" /> Remote (in browser)</td>
+<td><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/2705.svg" title=":white_check_mark:" /> Yes</td>
+<td><img alt="🧞" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f9de.svg" title=":genie:" /> "Feels like cheating"</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="final-words">Final Words</h2>
+<p>Remote development on HPC doesn't have to be a pain. Pick your poison, set up your workflow, and remember: the best development environment is the one that doesn't make you want to throw your computer out the window.</p>
+<p>Happy coding, and may your HPC connections be stable! 🚀</p>
+
+
+
+
+
+
+
+  
+    
+  
+  
+    
+  
+
+
+  <aside class="md-source-file">
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="Last update">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="May 12, 2025 14:17:44">May 12, 2025</span>
+  </span>
+
+    
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="Created">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="May 12, 2025 14:17:44">May 12, 2025</span>
+  </span>
+
+    
+    
+    
+      
+  <span class="md-source-file__fact">
+    
+      
+  <span class="md-icon" title="Contributors">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33s1.71.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2"/></svg>
+  </span>
+  <span>GitHub</span>
+
+    
+    <nav>
+      
+        <a href="https://github.com/ZhipengHe" class="md-author" title="@ZhipengHe">
+          
+          <img src="https://avatars.githubusercontent.com/u/29477872?v=4&size=72" alt="ZhipengHe">
+        </a>
+      
+      
+      
+    </nav>
+  </span>
+
+    
+  </aside>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2025 Zhipeng He
+
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://zhipenghe.me" target="_blank" rel="noopener" title="zhipenghe.me" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M543.8 287.6c17 0 32-14 32-32.1 1-9-3-17-11-24L512 185V64c0-17.7-14.3-32-32-32h-32c-17.7 0-32 14.3-32 32v36.7L309.5 7c-6-5-14-7-21-7s-15 1-22 8L10 231.5c-7 7-10 15-10 24 0 18 14 32.1 32 32.1h32v69.7c-.1.9-.1 1.8-.1 2.8v112c0 22.1 17.9 40 40 40h16c1.2 0 2.4-.1 3.6-.2 1.5.1 3 .2 4.5.2h55.9c22.1 0 40-17.9 40-40v-88c0-17.7 14.3-32 32-32h64c17.7 0 32 14.3 32 32v88c0 22.1 17.9 40 40 40h56.5c1.4 0 2.8 0 4.2-.1 1.1.1 2.2.1 3.3.1h16c22.1 0 40-17.9 40-40v-16.2c.3-2.6.5-5.3.5-8.1l-.7-160.2h32z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/zhipenghe" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["search.suggest", "search.highlight", "search.share", "navigation.instant", "navigation.instant.progress", "navigation.path", "navigation.top", "navigation.expand", "content.action.view", "content.action.edit", "content.code.copy", "content.code.select", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      
+        <script src="../../javascripts/katex.js"></script>
+      
+        <script src="https://unpkg.com/katex@0/dist/katex.min.js"></script>
+      
+        <script src="https://unpkg.com/katex@0/dist/contrib/auto-render.min.js"></script>
+      
+    
+  </body>
+</html>
