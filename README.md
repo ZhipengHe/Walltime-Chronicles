@@ -12,7 +12,7 @@ My personal survival log of mysterious errors, queueing oddities, and PBS quirks
 - :brain: **Tips, Workarounds, and Gotchas**  
   Things that *should* have been in the official docs.
 
-- :hammer_pick: **PBS Scripts & Snippets**  
+- :hammer_and_wrench: **PBS Scripts & Snippets**  
   Copy-paste-friendly templates with helpful comments.
 
 - :test_tube: **Experiments & Mistakes**  
@@ -20,7 +20,7 @@ My personal survival log of mysterious errors, queueing oddities, and PBS quirks
 
 ## Documentation
 
-The full documentation is available at [Walltime Chronicles Documentation](https://zhipenghe.me/walltime-chronicles/).
+The full documentation is available at [Walltime Chronicles Documentation](https://zhipenghe.me/Walltime-Chronicles/).
 
 To build the documentation locally:
 

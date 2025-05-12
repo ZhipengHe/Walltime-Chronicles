@@ -10,15 +10,6 @@ edit_uri: edit/main/docs/
 copyright: >
   Copyright &copy; 2025 Zhipeng He
 
-nav:
-  - Home: index.md
-  - Remote Development:
-    - "Surviving without VS Code Remote SSH": remote-dev/Surviving-without-VS-Code-Remote-SSH.md
-    - "The .DS_Store Strikes Back: Finder Edition": remote-dev/The-DS_Store-Strikes-Back.md
-  - PBS Scriptbook:
-    - "Batch-Cooking PBS Scripts with a Bash Pan": pbs-scripts/Batch-Cooking-PBS-Scripts-with-a-Bash-Pan.md
-  - License: LICENSE.md
-
 theme:
   name: material
   language: en
@@ -95,3 +86,13 @@ extra_javascript:
 
 extra_css:
   - https://unpkg.com/katex@0/dist/katex.min.css
+
+
+nav:
+  - "~/welcome": index.md
+  - "Cmd+Opt+Remote":
+    - "Surviving without VS Code Remote SSH": remote-dev/Surviving-without-VS-Code-Remote-SSH.md
+    - "The .DS_Store Strikes Back: Finder Edition": remote-dev/The-DS_Store-Strikes-Back.md
+  - "PBS Cookbook":
+    - "Batch-Cooking PBS Scripts with a Bash Pan": pbs-scripts/Batch-Cooking-PBS-Scripts-with-a-Bash-Pan.md
+  - License: LICENSE.md
