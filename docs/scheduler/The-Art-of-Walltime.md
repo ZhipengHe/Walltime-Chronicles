@@ -17,7 +17,7 @@ This guide is essentially a survival manual that:
 
 ## :material-scale-balance: The Walltime Calculation Ritual
 
-### 1. Check Your Job History (Know Thyself)
+### 1. Check Your Job History (Know Yourself)
 
 !!! info "See `pbs_brew_inspector.sh` recipe from [PBS Brew Inspector: Tasting Notes from Your Job History](../pbs-scripts/PBS-Brew-Inspector.md)."
 
@@ -77,21 +77,147 @@ QUT Aqua HPC system has specific queue limits you should know intimately:
 
 ### The Walltime Estimation Formula
 
-```
-Requested_Walltime = (Previous_Runtime × Scaling_Factor) + Safety_Margin
-```
+$$ T_{\text{estimated}} = T_{\text{baseline}} \times S + M $$
 
 Where:
 
-* **Previous_Runtime**: From similar jobs or early testing
-* **Scaling_Factor**: Based on dataset size changes (1.5x data ≈ 1.5x time)
-* **Safety_Margin**: 1 hour for short jobs, 4+ hours for multi-day runs
+* **$T_{\text{baseline}}$**: From similar jobs or early testing (in hours)
+* **$S$**: Scaling factor representing the ratio of computational workload between new and baseline jobs
+* **$M$**: Safety margin (e.g., 1 hour for short jobs, 4+ hours for multi-day runs)
 
-### Scaling Rules of Thumb
+The scaling factor $S$ can be expressed as:
 
-* **Linear algorithms**: Batch size × 2 = Time × 2
-* **Complex ML training**: Batch size × 2 ≠ Time × 2 (usually less)
-* **Multi-node jobs**: Adding nodes rarely gives perfect speedup
+$$ S = \frac{\text{Computational workload of new job}}{\text{Computational workload of baseline job}} $$
+
+This ratio depends on algorithm complexity, data size, model architecture, and hardware configuration, as detailed in the formulas below.
+
+### Scaling Rules for Different Workloads
+
+#### CPU-Based Workloads
+
+* **$O(n)$ Linear Algorithms:**
+    * $S \approx \frac{n_{\text{new}}}{n_{\text{baseline}}}$
+    * Examples: data parsing, point-wise operations, streaming analytics
+    * Doubling data size doubles runtime with constant resources
+
+* **$O(n\log n)$ Log-Linear Algorithms:**
+    * $S \approx \frac{n_{\text{new}}}{n_{\text{baseline}}} \times \frac{\log n_{\text{new}}}{\log n_{\text{baseline}}}$
+    * Examples: sorting, FFTs, divide and conquer algorithms, heap operations
+    * Doubling data size slightly more than doubles runtime (2.1-2.3×)
+
+* **$O(n^2)$ Quadratic Algorithms:**
+    * $S \approx \frac{n_{\text{new}}^2}{n_{\text{baseline}}^2}$
+    * Examples: pairwise distance matrices, naive string matching, simple nested loops
+    * Doubling data size quadruples runtime (4×)
+
+* **$O(n^3)$ Cubic Algorithms:**
+    * $S \approx \frac{n_{\text{new}}^3}{n_{\text{baseline}}^3}$
+    * Examples: 3D simulations, molecular dynamics, sparse matrix operations
+    * Doubling data size increases runtime by 8× (rapidly becomes impractical)
+
+* **$O(n^k)$ Polynomial Algorithms:**
+    * $S \approx \frac{n_{\text{new}}^k}{n_{\text{baseline}}^k}, \text{where } k > 3$
+    * Examples: k-clique finding, certain dynamic programming solutions, naive polynomial evaluation
+    * Scaling becomes prohibitive for large datasets as $k$ increases
+
+* **$O(2^n)$ Exponential Algorithms:**
+    * $S \approx \frac{2^{n_{\text{new}}}}{2^{n_{\text{baseline}}}}$
+    * Examples: traveling salesman via brute force, power set generation, exhaustive combinatorial search
+    * Even small increases in problem size can cause astronomical runtime increases
+
+* **$O(n!)$ Factorial Algorithms:**
+    * $S \approx \frac{n_{\text{new}}!}{n_{\text{baseline}}!}$
+    * Examples: exact combinatorial optimisation, brute-force search in NP-complete problems
+    * Practical only for very small problem sizes (typically $n < 12$)
+
+
+#### GPU-Based Workloads (Deep Learning)
+
+* **Simplified Practical Formula** (when detailed architecture changes are unknown):
+    * $S \approx \frac{b_{\text{new}} \times p_{\text{new}} \times s_{\text{new}} \times e_{\text{new}}}{b_{\text{baseline}} \times p_{\text{baseline}} \times s_{\text{baseline}} \times e_{\text{baseline}}}$ where $p=\text{parameters}$, $s=\text{input size}$, $e=\text{epochs}$
+
+* **Data Size Scaling**: 
+    * Linear models: $S \approx \frac{N_{\text{new}}}{N_{\text{baseline}}}$ where $N=\text{samples}$
+    * Neural networks: $S \approx \left(\frac{N_{\text{new}}}{N_{\text{baseline}}}\right)^c$ where $c \approx 0.8\text{-}0.9$ due to:
+        * Vectorisation benefits with larger datasets
+        * GPU kernel efficiency at scale
+        * Potential for convergence in fewer epochs with more diverse data
+
+* **Batch Size Considerations**:
+    * Theoretical throughput: $S \approx \frac{b_{\text{baseline}}}{b_{\text{new}}}$ where $b=\text{batch size}$
+    * Reality (throughput): $S \approx \left(\frac{b_{\text{baseline}}}{b_{\text{new}}}\right)^c$ where $c \approx 0.8\text{-}0.9$ due to:
+        * Memory bandwidth limitations
+        * Kernel launch overhead
+        * Diminishing efficiency gains at large batch sizes
+    * Reality (convergence): Larger batches may require more epochs to reach the same accuracy, adding an additional factor of $\left(\frac{b_{\text{new}}}{b_{\text{history}}}\right)^{0.1\text{-}0.3}$
+
+* **Model Size Effects**:
+    * Parameter count scaling:
+        * Dense models: $S \approx \frac{p_{\text{new}}}{p_{\text{baseline}}}$ where $p=\text{parameters}$
+        * Sparse models: $S \approx \left(\frac{p_{\text{new}}}{p_{\text{baseline}}}\right)^c$ where $c < 1$
+        * Very large models: $S \approx \left(\frac{p_{\text{new}}}{p_{\text{baseline}}}\right)^d$ where $d > 1$ due to cache effects and memory access patterns
+        * Note: When model size exceeds GPU memory, performance drops dramatically due to gradient checkpointing or model parallelism
+
+* **Architecture-Specific Computation** (Forward + Backward Pass):
+    * Feedforward NNs: $S \approx \frac{b_{\text{new}} \times N_{\text{new}} \times \sum_i (n_i \times n_{i+1})}{b_{\text{baseline}} \times N_{\text{baseline}} \times \sum_i (n_i \times n_{i+1})_{\text{baseline}}}$ where $b=\text{batch size}$, $N=\text{samples}$, $n_i=\text{neurons in layer i}$
+    
+    * CNNs: $S \approx \frac{b_{\text{new}} \times \sum_i (h_i \times w_i) \times \sum_j (k_j^2 \times c_{j,\text{in}} \times c_{j,\text{out}})}{b_{\text{baseline}} \times \sum_i (h_i \times w_i)_{\text{baseline}} \times \sum_j (k_j^2 \times c_{j,\text{in}} \times c_{j,\text{out}})_{\text{baseline}}}$ where $h,w=\text{height,width}$, $k=\text{kernel size}$, $c=\text{channels}$
+    
+    * RNNs: $S \approx \frac{b_{\text{new}} \times s_{\text{new}} \times h_{\text{new}}^2 \times l_{\text{new}} \times (1+d_{\text{new}})}{b_{\text{baseline}} \times s_{\text{baseline}} \times h_{\text{baseline}}^2 \times l_{\text{baseline}} \times (1+d_{\text{baseline}})}$ where $s=\text{sequence length}$, $h=\text{hidden dimension}$, $l=\text{layers}$, $d=\text{bidirectional (0/1)}$
+    
+    * Transformers: $S \approx \frac{b_{\text{new}} \times s_{\text{new}}^2 \times d_{\text{new}} \times l_{\text{new}}}{b_{\text{baseline}} \times s_{\text{baseline}}^2 \times d_{\text{baseline}} \times l_{\text{baseline}}}$ where $s=\text{sequence length}$, $d=\text{embedding dimension}$, $l=\text{layers}$, $b=\text{batch size}$
+
+* **Convergence Variability**:
+    * Stochastic factors can cause training to require 0.5-2× the expected number of epochs
+    * Always include a buffer factor of at least 1.5× for convergence uncertainty
+
+#### Hardware Scaling Effects (Optional)
+
+> **Note:** The following scaling rules are based on the assumption that the hardware is the limiting factor for the new job and more resources are required. If the same resources are used for the new job, the scaling rules may not be applicable.
+
+* **CPU Multi-Threading**:
+    * Ideal scaling: $S \approx \frac{C_{\text{baseline}}}{C_{\text{new}}}$ where $C$ = number of cores
+    * Typical reality: $S \approx \frac{C_{\text{baseline}}}{C_{\text{new}} \times e}$ where $e \approx 0.7-0.9$ is efficiency factor
+    * Amdahl's Law: $S \approx \frac{1}{(1-p) + \frac{p \times C_{\text{baseline}}}{C_{\text{new}}}}$ where $p$ is parallelisable fraction
+  
+* **GPU Scaling**:
+    * Multi-GPU data parallelism: $S \approx \frac{G_{\text{baseline}}}{G_{\text{new}} \times e}$ where $G$ = number of GPUs, $e \approx 0.7-0.9$
+    * Model Parallelism: Generally worse efficiency than data parallelism
+    * Multi-node penalty: $S_{\text{multi-node}} \approx S_{\text{single-node}} \times e_{\text{comm}}$ where $e_{\text{comm}} < 1$ is communication efficiency
+
+    ??? warning "Consider the balance between walltime and GPUs"
+        There's often a trade-off between walltime and resource requests (GPUs). A job that uses more resources may finish faster but wait longer in the queue and consume more of your allocation. Consider these alternatives:
+
+        | Approach | Walltime | Resources | Queue Time | Total Time |
+        |----------|----------|-----------|------------|------------|
+        | High-resource | 12h | 4× H100 GPUs | 24h+ | 36h+ |
+        | Balanced | 24h | 2× H100 GPUs | 8h | 32h |
+        | Low-resource | 36h | 1× H100 GPU | 2h | 38h |
+
+        **Key considerations:**
+
+        * **Queue congestion**: More resources generally means longer queue wait times
+        * **Allocation efficiency**: Using fewer resources over longer times is often more efficient
+        * **Urgency factor**: If results are needed quickly, higher resource requests may be justified
+        * **Scalability**: Not all workloads scale efficiently with more resources
+        * **Checkpoint frequency**: Longer jobs should implement more frequent checkpoints
+
+* **Memory**:
+    * Memory bandwidth scaling: $S \approx \frac{M_{\text{new}}}{M_{\text{baseline}}} \times e$ where $e \approx 0.6-0.8$ for memory-bound tasks
+    * Swapping penalty: If memory requirements exceed available RAM, expect 10-100× slowdown
+    * Large memory jobs: Request just enough memory to avoid OOM errors, but not excessively more
+    * Memory locality: Tasks with good cache locality scale better with cores than pure memory bandwidth
+    * NUMA effects: Multiple CPU sockets can reduce scaling efficiency by 5-15% due to non-uniform memory access
+
+    ??? info "Memory-bound vs Compute-bound Jobs"
+        * **Memory-bound jobs** (e.g., large data processing) benefit more from increased memory bandwidth than additional CPU cores
+        * **Compute-bound jobs** (e.g., numerical simulations) benefit more from additional CPU/GPU cores than memory
+        * Identifying which category your job falls into helps make better resource requests
+
+!!! example "Here provides some examples of how to use the scaling rules to estimate the walltime for different types of jobs. (TODO)"
+
+
+
 
 ---
 

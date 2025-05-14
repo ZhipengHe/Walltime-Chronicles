@@ -3,7 +3,7 @@ site_url: https://zhipenghe.me/walltime-chronicles/
 site_author: Zhipeng He
 site_description: My personal survival log of mysterious errors, queueing oddities, and PBS quirks encountered on QUT Aqua
 
-repo_name: ZhipengHe/Walltime-Chronicles
+# repo_name: ZhipengHe/Walltime-Chronicles
 repo_url: https://github.com/ZhipengHe/Walltime-Chronicles
 edit_uri: edit/main/docs/
 

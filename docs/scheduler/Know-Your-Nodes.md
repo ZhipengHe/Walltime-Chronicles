@@ -9,4 +9,6 @@ So you want to run your code, but what hardware should you order? Welcome to the
 This field guide will help you identify which computational beasts are available and how to lure them into running your jobs with minimum fuss.
 
 
+!!! warning "Warning: This is a work in progress"
+    This guide is a work in progress. It is not yet complete.
 
