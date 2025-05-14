@@ -93,6 +93,10 @@ nav:
   - "Cmd+Opt+Remote":
     - "Surviving without VS Code Remote SSH": remote-dev/Surviving-without-VS-Code-Remote-SSH.md
     - "The .DS_Store Strikes Back: Finder Edition": remote-dev/The-DS_Store-Strikes-Back.md
+  - "The Scheduler's Gambit":
+    - "Know Your Nodes": scheduler/Know-Your-Nodes.md
+    - "Guess, Request, Regret: The Art of Walltime": scheduler/The-Art-of-Walltime.md
   - "PBS Cookbook":
     - "Batch-Cooking PBS Scripts with a Bash Pan": pbs-scripts/Batch-Cooking-PBS-Scripts-with-a-Bash-Pan.md
+    - "PBS Brew Inspector: Tasting Notes from Your Job History": pbs-scripts/PBS-Brew-Inspector.md
   - License: LICENSE.md
