@@ -1,5 +1,10 @@
 # PBS Brew Inspector: Tasting Notes from Your Job History
 
+> *Or: A user-friendly and informative alternative to `qjob -x`.*
+
+!!! question "Why not use built-in `qjob -x` command in Aqua?"
+    QUT Aqua HPC provides a command `qjob -x` that can be used to extract the details of the finished jobs from the PBS system (Check [this page](https://docs.eres.qut.edu.au/hpc-basic-command-line#useful-commands-on-the-hpc) for more details). However, the format of the output is not very user-friendly and not very informative.
+
 !!! info "See full recipe of `pbs_brew_inspector.sh` in [Full Recipe](#full-recipe-of-pbs_brew_inspectorsh)."
 
 ## :material-microscope: What's in Your Computational Brew?
@@ -58,6 +63,9 @@ GPU Jobs Metrics (average of 4 GPU jobs):
   GPU Memory Usage: 13.0%
 ```
 
+!!! warning "Widen your terminal to see it all!"
+    The output table spans over 160 characters — that's pretty wide! To avoid missing any columns, give your terminal a good stretch. Go on, maximise that window! You will get the full picture, literally.
+
 ## :material-chart-line: Reading Your Tasting Notes
 The real magic happens when you interpret these results. Here's what to look for:
 
@@ -95,6 +103,26 @@ The true artisan understands their ingredients. By regularly inspecting your com
 Happy brewing!
 
 ## :material-script: Full Recipe of `pbs_brew_inspector.sh`
+
+!!! tip "Download the script directly on the server"
+    Download the script directly on the server by running the following commands:
+    ```bash
+    # by wget
+    wget https://raw.githubusercontent.com/ZhipengHe/Walltime-Chronicles/main/docs/pbs-scripts/scripts/pbs_brew_inspector.sh
+    # by curl
+    curl -O https://raw.githubusercontent.com/ZhipengHe/Walltime-Chronicles/main/docs/pbs-scripts/scripts/pbs_brew_inspector.sh
+    ```
+
+    You can choose to move the script to a more convenient location, e.g. `~/bin/`. Then you can run it directly by typing `pbs_brew_inspector.sh` in the terminal.
+
+    ```bash
+    # make the script executable
+    chmod +x pbs_brew_inspector.sh
+    # move the script to a more convenient location
+    mv pbs_brew_inspector.sh ~/bin/
+    # run the script
+    pbs_brew_inspector.sh
+    ```
 
 Copy the below script and save it as `pbs_brew_inspector.sh` to your server to use it. Or you can download it from [this link](../pbs-scripts/scripts/pbs_brew_inspector.sh).
 
