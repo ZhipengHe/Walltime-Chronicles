@@ -8,7 +8,7 @@ This guide is essentially a survival manual that:
 
 * Helps you interpret your historical job data (like reading tea leaves, but with actual numbers).
 * Shows you how to make walltime decisions that won't keep you up at night.
-* Teaches you to balance between "too short and doomed to fail" and "so long you'll die of old age in the queue."
+* Teaches you to balance between "too short and doomed to fail" and "so long you'll die of old age in the queue".
 * Respects the sacred 48-hour limit (except for the mythical persistent queue).
 
 **Result:** *Jobs that actually finish, queue priority that doesn't make you weep, and the sweet, sweet feeling of resource efficiency.*

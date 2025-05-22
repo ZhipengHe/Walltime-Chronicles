@@ -75,6 +75,19 @@ The real magic happens when you interpret these results. Here's what to look for
 4. **CPU Efficiency**: A CPU usage of 330.8% on 8-CPU jobs reveals you're effectively using about 4 cores out of 8 - potentially an area for optimisation.
 
 
+!!! warning "Job History Limitation"
+    Due to Aqua Server's configuration, the script can only extract the details of jobs from the last 96 hours (4 days). Jobs older than this period will not be available in the PBS history.
+
+    To verify the current job history retention period:
+
+    ```bash 
+    [user@aquarius02 ~]$ qmgr -c "print server job_history_duration"
+    #
+    # Set server attributes.
+    #
+    set server job_history_duration = 96:00:00
+    ```
+
 ## :material-lightbulb-on: Pairing Suggestions
 `pbs_brew_inspector.sh` pairs beautifully with:
 

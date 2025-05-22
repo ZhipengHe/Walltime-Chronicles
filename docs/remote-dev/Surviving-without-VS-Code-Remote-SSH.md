@@ -33,9 +33,9 @@ So... you're trying to develop on QUT Aqua, but the server gods have other plans
 1. Open **Finder** → `Go` → `Connect to Server...`
 2. Enter:
 
-   ```
-   smb://hpc-fs/home/
-   ```
+    ```
+    smb://hpc-fs/home/
+    ```
 3. Mount it, then open the folder in VS Code like it's 1999.
 
 :memo: *Note*: You can edit files, but **no shell**, **no Git**, and no terminal tantrums. It's like eating cake without the frosting.
