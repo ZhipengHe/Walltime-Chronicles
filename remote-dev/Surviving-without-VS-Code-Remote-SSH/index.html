@@ -381,13 +381,13 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#option-a-mount-via-finder-the-cheese-board-approach" class="md-nav__link">
+  <a href="#option-a-mount-via-finder" class="md-nav__link">
     <span class="md-ellipsis">
-      Option A: Mount via Finder — the cheese board approach
+      Option A: Mount via Finder
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Option A: Mount via Finder — the cheese board approach">
+    <nav class="md-nav" aria-label="Option A: Mount via Finder">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -417,7 +417,7 @@
           <li class="md-nav__item">
   <a href="#for-macos-users" class="md-nav__link">
     <span class="md-ellipsis">
-      For macOS Users:
+      For macOS Users
     </span>
   </a>
   
@@ -426,7 +426,7 @@
           <li class="md-nav__item">
   <a href="#for-linux-users-ubuntu" class="md-nav__link">
     <span class="md-ellipsis">
-      For Linux Users (Ubuntu):
+      For Linux Users (Ubuntu)
     </span>
   </a>
   
@@ -435,7 +435,7 @@
           <li class="md-nav__item">
   <a href="#for-windows-users" class="md-nav__link">
     <span class="md-ellipsis">
-      For Windows Users:
+      For Windows Users
     </span>
   </a>
   
@@ -828,13 +828,13 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#option-a-mount-via-finder-the-cheese-board-approach" class="md-nav__link">
+  <a href="#option-a-mount-via-finder" class="md-nav__link">
     <span class="md-ellipsis">
-      Option A: Mount via Finder — the cheese board approach
+      Option A: Mount via Finder
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Option A: Mount via Finder — the cheese board approach">
+    <nav class="md-nav" aria-label="Option A: Mount via Finder">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -864,7 +864,7 @@
           <li class="md-nav__item">
   <a href="#for-macos-users" class="md-nav__link">
     <span class="md-ellipsis">
-      For macOS Users:
+      For macOS Users
     </span>
   </a>
   
@@ -873,7 +873,7 @@
           <li class="md-nav__item">
   <a href="#for-linux-users-ubuntu" class="md-nav__link">
     <span class="md-ellipsis">
-      For Linux Users (Ubuntu):
+      For Linux Users (Ubuntu)
     </span>
   </a>
   
@@ -882,7 +882,7 @@
           <li class="md-nav__item">
   <a href="#for-windows-users" class="md-nav__link">
     <span class="md-ellipsis">
-      For Windows Users:
+      For Windows Users
     </span>
   </a>
   
@@ -1047,7 +1047,7 @@ Check <a href="https://docs.eres.qut.edu.au/hpc-vscode-usage#using-vs-code-to-ed
 Then, you can connect to the HPC by running <code>ssh aqua</code>. Also, you can use <code>aqua</code> to replace <code>your-username@aqua.qut.edu.au</code> in the following commands.</p>
 </details>
 <h2 id="1-fake-it-with-ssh-mounted-folders"><img alt="🧩" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f9e9.svg" title=":puzzle_piece:" /> 1. Fake it with SSH-mounted folders</h2>
-<h3 id="option-a-mount-via-finder-the-cheese-board-approach"><img alt="🧀" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f9c0.svg" title=":cheese:" /> Option A: Mount via Finder — the cheese board approach</h3>
+<h3 id="option-a-mount-via-finder"><img alt="🧀" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f9c0.svg" title=":cheese:" /> Option A: Mount via Finder</h3>
 <blockquote>
 <p>Here's a quick guide for macOS users. Please refer to the <a href="https://docs.eres.qut.edu.au/hpc-transferring-files-tofrom-hpc#using-file-explorer-or-finder-to-mount-a-drive-to-the-hpc">official documentation</a> for other OS.</p>
 </blockquote>
@@ -1055,29 +1055,31 @@ Then, you can connect to the HPC by running <code>ssh aqua</code>. Also, you can
 <li>Open <strong>Finder</strong> → <code>Go</code> → <code>Connect to Server...</code></li>
 <li>
 <p>Enter:</p>
-<p><div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>smb://hpc-fs/home/
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>smb://hpc-fs/home/
 </span></code></pre></div>
-3. Mount it, then open the folder in VS Code like it's 1999.</p>
+</li>
+<li>
+<p>Mount it, then open the folder in VS Code like it's 1999.</p>
 </li>
 </ol>
 <p><img alt="📝" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f4dd.svg" title=":memo:" /> <em>Note</em>: You can edit files, but <strong>no shell</strong>, <strong>no Git</strong>, and no terminal tantrums. It's like eating cake without the frosting.</p>
 <h4 id="but-is-this-method-elegant">But ... is this method elegant?</h4>
 <p>You've mounted an SMB share to your Finder. Congratulations! You've just volunteered for the following comedy of errors:</p>
 <ol>
-<li><strong>Git? More like "Get Lost"</strong> - Your carefully crafted version control system now has all the functionality of a chocolate teapot. Want to commit changes? Sorry, Git is too sophisticated for your peasant SMB connection. It's like bringing a quantum physicist to a kindergarten counting class.</li>
-<li><strong>VS Code's Terminal: The Phantom Feature</strong> - That beautiful integrated terminal in VS Code? It now stares at you like a confused puppy. <code>Command not found</code> becomes your new error mantra. It's there... but also not there, like your motivation on Monday mornings.</li>
-<li><strong>The Mysterious Disconnection</strong> - Nothing says "surprise vacation" like your SMB connection randomly dropping when you're in the middle of important work. It's like having a co-worker who pulls the fire alarm whenever they're bored.</li>
-<li><strong>HPC Disruption: The Digital Hostage Situation</strong> - Ah, you've put ALL your files on the server! So when the High-Performance Computing cluster decides to have its quarterly existential crisis (or weekly, who's counting?), your work becomes as accessible as your childhood memories. Your options? Make coffee, stare wistfully out the window.</li>
-<li><strong>The .DS_Store Epidemic: Exclusive for macOS</strong> - Ah, macOS and its infamous <code>.DS_Store</code> files! Your Mac scatters these digital breadcrumbs in every folder you visit like an overzealous tourist taking selfies at landmarks. The HPC server, meanwhile, treats them with the same enthusiasm as finding glitter in its keyboard – "Thanks for the desktop settings I absolutely didn't ask for and can't use!" </li>
+<li><strong>Git Limitations</strong> - Your version control system becomes severely limited over SMB. Git operations that work fine locally will fail or behave unpredictably through the mounted share.</li>
+<li><strong>VS Code Terminal Issues</strong> - The integrated terminal in VS Code won't work properly with mounted SMB shares. You'll get <code>Command not found</code> errors for most terminal operations.</li>
+<li><strong>Connection Stability</strong> - SMB connections can drop unexpectedly, especially during longer work sessions or when the network is unstable.</li>
+<li><strong>HPC Dependency</strong> - Since all your files live on the server, any HPC maintenance or downtime makes your work completely inaccessible.</li>
+<li><strong>The .DS_Store Problem (macOS)</strong> - Your Mac will create <code>.DS_Store</code> files in every folder you visit through Finder. These desktop service files clutter the HPC filesystem and serve no purpose on the server.</li>
 </ol>
 <details class="tip">
 <summary>For macOS users only: How to fix the .DS_Store and ._* files issue</summary>
-<p><img alt="DS_Store Meme" src="../images/DS_Store-meme.png" /> </p>
+<p><img alt="DS_Store Meme" src="../images/DS_Store-meme.png" /></p>
 <p>Check out <a href="../The-DS_Store-Strikes-Back/">The .DS_Store Strikes Back: Finder Edition</a> about why this is a problem and how to solve it (or not).</p>
 </details>
 <h3 id="option-b-sshfs-mount-through-ssh-wizardry"><img alt="🔧" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f527.svg" title=":wrench:" /> Option B: SSHFS — Mount through SSH Wizardry</h3>
 <p>Mount your HPC home directory <em>directly</em> via SSH, no Finder fluff. It's like having your HPC filesystem in your pocket.</p>
-<h4 id="for-macos-users">For macOS Users:</h4>
+<h4 id="for-macos-users">For macOS Users</h4>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Install the prerequisites (because your Mac doesn&#39;t come with everything, despite what Apple claims)</span>
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>brew<span class="w"> </span>install<span class="w"> </span>macfuse
 </span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>brew<span class="w"> </span>install<span class="w"> </span>gromgit/fuse/sshfs-mac
@@ -1095,7 +1097,7 @@ Then, you can connect to the HPC by running <code>ssh aqua</code>. Also, you can
 <li>When you're running <code>sshfs</code> first time, you will be asked to go to "System Preferences" → "Security &amp; Privacy" → "Security" → click "Allow" for running the app. Then you also need to restart your Mac.</li>
 <li>You can use <code>aqua</code> to replace <code>your-username@aqua.qut.edu.au</code> if you have added a shortcut to <code>~/.ssh/config</code>.</li>
 </ol>
-<h4 id="for-linux-users-ubuntu">For Linux Users (Ubuntu):</h4>
+<h4 id="for-linux-users-ubuntu">For Linux Users (Ubuntu)</h4>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># Install SSHFS (because of course Linux makes you work for everything)</span>
 </span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>sshfs
 </span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
@@ -1106,19 +1108,23 @@ Then, you can connect to the HPC by running <code>ssh aqua</code>. Also, you can
 </span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="c1"># To send these files back to their natural habitat</span>
 </span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>fusermount<span class="w"> </span>-u<span class="w"> </span>~/aqua
 </span></code></pre></div>
-<h4 id="for-windows-users">For Windows Users:</h4>
+<h4 id="for-windows-users">For Windows Users</h4>
 <p>Install <a href="https://github.com/winfsp/winfsp/releases">WinFSP</a> and <a href="https://github.com/winfsp/sshfs-win/releases">SSHFS-Win</a>, because Windows needs two separate things to do what other systems accomplish with one. Then use Windows Explorer (which Microsoft keeps renaming as if that will make us forget its bugs) to map a network drive:</p>
-<p><div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>\\sshfs\your-username@aqua.qut.edu.au
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>\\sshfs\your-username@aqua.qut.edu.au
 </span></code></pre></div>
-Then open it in VS Code like you've just performed a miracle:</p>
+<p>Then open it in VS Code like you've just performed a miracle:</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>code<span class="w"> </span>~/aqua
 </span></code></pre></div>
-<p><img alt="✔" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/2714.svg" title=":check_mark:" /> <em>Pro</em>: 
-- Looks local. Feels local.
-- Git operations work... until they mysteriously don't</p>
-<p><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/274c.svg" title=":x:" /> <em>Con</em>: 
-- Feels <strong>too</strong> local for large files. Might lag.
-- If the connection drops, your filesystem freezes like it's seen a ghost</p>
+<p><img alt="✔" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/2714.svg" title=":check_mark:" /> <em>Pro</em>:</p>
+<ul>
+<li>Looks local. Feels local.</li>
+<li>Git operations work... until they mysteriously don't</li>
+</ul>
+<p><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/274c.svg" title=":x:" /> <em>Con</em>:</p>
+<ul>
+<li>Feels <strong>too</strong> local for large files. Might lag.</li>
+<li>If the connection drops, your filesystem freezes like it's seen a ghost</li>
+</ul>
 <details class="tip">
 <summary>Performance Tips That Might Help (No Promises)</summary>
 <ul>
@@ -1133,7 +1139,7 @@ Then open it in VS Code like you've just performed a miracle:</p>
 </details>
 <details class="tip">
 <summary>For macOS users only: Still cannot get rid of the .DS_Store and ._* files?</summary>
-<p><img alt="DS_Store Meme" src="../images/DS_Store-meme.png" /> </p>
+<p><img alt="DS_Store Meme" src="../images/DS_Store-meme.png" /></p>
 <p>Check out <a href="../The-DS_Store-Strikes-Back/">The .DS_Store Strikes Back: Finder Edition</a> about why this is a problem and how to solve it (or not).</p>
 </details>
 <hr />
@@ -1201,7 +1207,8 @@ Then open it in VS Code like you've just performed a miracle:</p>
 <h3 id="option-b-vs-code-in-browser"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 16.47V7.39l-6 4.54M2.22 9.19a.86.86 0 0 1-.02-1.15l1.2-1.11c.2-.18.69-.26 1.05 0l3.42 2.61 7.93-7.25c.32-.32.87-.45 1.5-.12l4 1.91c.36.21.7.54.7 1.15v13.5c0 .4-.29.83-.6 1l-4.4 2.1c-.32.13-.92.01-1.13-.2l-8.02-7.3-3.4 2.6c-.38.26-.85.19-1.05 0l-1.2-1.1c-.32-.33-.28-.87.05-1.2l3-2.7"/></svg></span> Option B: VS Code in Browser</h3>
 <p><img alt="⚠" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/26a0.svg" title=":warning:" /> <em>Warning</em>: This might require a sysadmin's blessing! Fortunately, the server gods haven't locked <em>everything</em> down:</p>
 <ol>
-<li>Install <a href="https://github.com/coder/code-server"><code>code-server</code></a> on the HPC.
+<li>
+<p>Install <a href="https://github.com/coder/code-server"><code>code-server</code></a> on the HPC.</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1"># On HPC server</span>
 </span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="c1"># Install code-server to your home directory</span>
 </span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://code-server.dev/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>sh<span class="w"> </span>-s<span class="w"> </span>--<span class="w"> </span>--method<span class="w"> </span>standalone<span class="w"> </span>--prefix<span class="o">=</span><span class="nv">$HOME</span>
@@ -1216,12 +1223,17 @@ Then open it in VS Code like you've just performed a miracle:</p>
 </span><span id="__span-11-12"><a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a><span class="c1"># On your local machine</span>
 </span><span id="__span-11-13"><a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a><span class="c1"># Forward the port 8080 to your local machine</span>
 </span><span id="__span-11-14"><a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a>ssh<span class="w"> </span>-N<span class="w"> </span>-L<span class="w"> </span><span class="m">8080</span>:127.0.0.1:8080<span class="w"> </span>your-username@aqua.qut.edu.au
-</span></code></pre></div></li>
-<li>Open it in your browser
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="c1"># Open the web page in your browser</span>
+</span></code></pre></div>
+</li>
+<li>
+<p>Open it in your browser</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a># Open the web page in your browser
 </span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>http://localhost:8080
-</span></code></pre></div></li>
-<li>Marvel as VS Code rises from the ashes — web-style</li>
+</span></code></pre></div>
+</li>
+<li>
+<p>Marvel as VS Code rises from the ashes — web-style</p>
+</li>
 </ol>
 <details class="tip">
 <summary>Sync VS Code settings to code-server</summary>
@@ -1358,7 +1370,7 @@ Then open it in VS Code like you've just performed a miracle:</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="May 22, 2025 20:18:08 AEST">May 22, 2025</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="June 28, 2025 00:52:06 AEST">June 28, 2025</span>
   </span>
 
     

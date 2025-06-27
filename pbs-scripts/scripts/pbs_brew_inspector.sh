@@ -87,7 +87,7 @@ while getopts "U:cbgilp" opt; do
            SHOW_GPU_INTER=false
            SHOW_CPU_BATCH_LARGE=false
            ;;
-        \?) 
+        \?)
            echo "Invalid option -$OPTARG" >&2
            echo "Usage: $0 [-U username] [-c|-g|-b|-i|-l|-p]"
            echo "  -U username : Specify username (default: current user)"
@@ -300,7 +300,7 @@ printf "Jobs CPU-only: %d\n" "$((total_jobs - total_gpu_jobs))"
 printf "\nAverage Resource Efficiency:\n"
 printf "  CPU Usage: %.1f%%\n" "$avg_cpu_percent"
 printf "  Memory Usage: %.1f%% (%.2f GB used / %.2f GB allocated)\n" "$avg_mem_use_pct" "$avg_mem_use_gb" "$avg_mem_limit_gb"
-printf "  Walltime Usage: %.1f%%\n" "$avg_wall_efficiency" 
+printf "  Walltime Usage: %.1f%%\n" "$avg_wall_efficiency"
 
 # Only show GPU stats if we have GPU jobs
 if [ $total_gpu_jobs -gt 0 ]; then

@@ -715,7 +715,7 @@
         <li class="md-nav__item">
   <a href="#happy-cooking" class="md-nav__link">
     <span class="md-ellipsis">
-      Happy Cooking!
+      Happy Cooking
     </span>
   </a>
   
@@ -724,7 +724,7 @@
         <li class="md-nav__item">
   <a href="#coming-soon" class="md-nav__link">
     <span class="md-ellipsis">
-      Coming Soon...
+      Coming Soon
     </span>
   </a>
   
@@ -976,7 +976,7 @@
         <li class="md-nav__item">
   <a href="#happy-cooking" class="md-nav__link">
     <span class="md-ellipsis">
-      Happy Cooking!
+      Happy Cooking
     </span>
   </a>
   
@@ -985,7 +985,7 @@
         <li class="md-nav__item">
   <a href="#coming-soon" class="md-nav__link">
     <span class="md-ellipsis">
-      Coming Soon...
+      Coming Soon
     </span>
   </a>
   
@@ -1025,16 +1025,35 @@
 
 <h1 id="batch-cooking-pbs-scripts-with-a-bash-pan">Batch-Cooking PBS Scripts with a Bash Pan</h1>
 <h2 id="whats-cooking"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.6 9 18 3.1l1.7 1L16.9 9zm-.6 1H3v2h2v7c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2v-7h2v-2z"/></svg></span> What's Cooking?</h2>
-<p>So, you have multiple experiments, each with their own little quirks, and you want to run them one after another on the HPC without babysitting each one? Welcome to <strong>batch-cooking PBS jobs</strong> — where bash scripts are your pan, and experiments are the ingredients.</p>
-<p>This script is basically a recipe that:</p>
+<p>So, you have multiple experiments, each with their own little quirks, and you want to run them one after another on the HPC without babysitting each one like a helicopter parent hovering over a toddler's first steps? Welcome to <strong>batch-cooking PBS jobs</strong> — where bash scripts are your pan, experiments are the ingredients, and you're the chef who's finally learned to prep everything in advance.</p>
+<p>This script is basically a recipe that saves your sanity:</p>
 <ul>
-<li>Grabs a timestamp so your job names never clash (like naming your children but with less emotional weight).</li>
+<li>Grabs a timestamp so your job names never clash (because "job_1" vs "job_1" is a fight nobody wins).</li>
 <li>Prepares a fresh PBS submission script (like meal-prepping but for compute time).</li>
 <li>Sets up your environment (modules + virtualenv, the usual kitchen hygiene).</li>
-<li>Dumps in your experiments, one by one, and gives them a nice little echo wrapper so you can read the logs without crying.</li>
-<li>Submits it all in one go with <code>qsub</code>.</li>
+<li>Dumps in your experiments, one by one, and gives them a nice little echo wrapper so you can actually read the logs without developing eye strain.</li>
+<li>Submits it all in one go with <code>qsub</code> and lets you get on with your life.</li>
 </ul>
-<p><strong>Result:</strong> <em>one tidy <code>.pbs</code> file, logs clearly marked, and no waking up at 2 a.m. wondering if you ran <code>Example_Experiment_1.sh</code> twice.</em></p>
+<p><strong>Result:</strong> <em>one tidy <code>.pbs</code> file, logs clearly marked, and no more waking up at 2 a.m. in a cold sweat wondering if you accidentally ran <code>Example_Experiment_1.sh</code> twice.</em></p>
+<div class="admonition question">
+<p class="admonition-title">Why Not PBS Arrays?</p>
+<p>You might be wondering: "Why not use PBS job arrays instead of this sequential approach?" Fair question! This method makes more sense when:</p>
+<p><strong>Sequential is Better:</strong></p>
+<ul>
+<li><strong>Experiment dependencies</strong> - Later experiments need results from earlier ones</li>
+<li><strong>Resource sharing</strong> - All experiments share the same loaded environment and data</li>
+<li><strong>Simpler debugging</strong> - One log file to rule them all, easier to trace issues</li>
+<li><strong>Memory efficiency</strong> - Load large datasets once, reuse across experiments</li>
+<li><strong>Queue limitations</strong> - Some systems limit concurrent array jobs, especially for GPU resources</li>
+</ul>
+<p><strong>PBS Arrays Win When:</strong></p>
+<ul>
+<li><strong>True parallelization</strong> - Independent experiments running simultaneously</li>
+<li><strong>Fault tolerance</strong> - One failed experiment doesn't kill the others</li>
+<li><strong>Resource flexibility</strong> - Different experiments need different resources</li>
+</ul>
+<p>Think of it as assembly line cooking (this method) vs. having multiple chefs working simultaneously (PBS arrays).</p>
+</div>
 <hr />
 <h2 id="how-to-customise"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m19.07 14.88 2.05 2.05L15.06 23H13v-2.06zm1.97-1.75c.14 0 .27.06.38.17l1.28 1.28c.22.21.22.56 0 .77l-1 1-2.05-2.05 1-1c.11-.11.25-.17.39-.17M17 4v6l-2-2-2 2V4H9v16h2v2H7c-1.05 0-2-.95-2-2v-1H3v-2h2v-4H3v-2h2V7H3V5h2V4a2 2 0 0 1 2-2h12c1.05 0 2 .95 2 2v6l-2 2V4zM5 5v2h2V5zm0 6v2h2v-2zm0 6v2h2v-2z"/></svg></span> How To Customise</h2>
 <p>Want to make it your own? Let's break down each part of the recipe:</p>
@@ -1053,7 +1072,7 @@
 </span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="o">)</span>
 </span></code></pre></div>
 <h3 id="2-setting-up-unique-job-names">2. Setting Up Unique Job Names</h3>
-<p>Creating a timestamp ensures your job names never clash (like naming your children but with less emotional weight).</p>
+<p>Creating a timestamp ensures your job names are unique and don't step on each other's toes.</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Create a unique timestamp once</span>
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nv">TIMESTAMP</span><span class="o">=</span><span class="k">$(</span>date<span class="w"> </span>+%Y%m%d_%H%M%S<span class="k">)</span>
 </span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="nv">JOB_NAME</span><span class="o">=</span><span class="s2">&quot;task_</span><span class="si">${</span><span class="nv">TIMESTAMP</span><span class="si">}</span><span class="s2">&quot;</span>
@@ -1065,7 +1084,7 @@
 <li>Modify the timestamp format by changing <code>%Y%m%d_%H%M%S</code></li>
 </ul>
 <h3 id="3-crafting-your-pbs-header">3. Crafting Your PBS Header</h3>
-<p>Adjust the PBS directives (walltime, resources, queue) to match your appetite and quota.</p>
+<p>Adjust the PBS directives to match your computational appetite and resource budget — because nobody wants their job to starve in the queue or get kicked out for hogging resources.</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Create PBS script</span>
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>cat<span class="w"> </span>&gt;<span class="w"> </span><span class="si">${</span><span class="nv">PBS_SCRIPT</span><span class="si">}</span><span class="w"> </span><span class="s">&lt;&lt; EOF</span>
 </span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="s">#!/bin/bash</span>
@@ -1073,21 +1092,20 @@
 </span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="s">#PBS -l select=1:ncpus=8:ngpus=1:mem=64GB:gpu_id=H100  # Adjust resources here</span>
 </span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="s">#PBS -M $USER@qut.edu.au  # Your email for notifications</span>
 </span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="s">#PBS -l walltime=48:00:00  # Maximum runtime - format is HH:MM:SS</span>
-</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="s">#PBS -q gpuq  # Queue to submit to - adjust based on your HPC</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="s">#PBS -q gpu_batch_exec  # Queue to submit to - adjust based on your HPC</span>
 </span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="s">#PBS -j oe  # Join output and error files</span>
 </span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="s">#PBS -m abe  # Mail on abort, begin, and end</span>
 </span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="s">#PBS -o ${JOB_NAME}_output.log  # Output log filename</span>
-</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="s">#PBS -e ${JOB_NAME}_error.log  # Error log filename</span>
-</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="s">EOF</span>
+</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="s">EOF</span>
 </span></code></pre></div>
 <p>Common modifications:</p>
 <ul>
 <li>Change <code>select=1:ncpus=8:ngpus=1:mem=64GB:gpu_id=H100</code> for different resource needs</li>
 <li>Adjust <code>walltime=48:00:00</code> for jobs that need more or less time</li>
-<li>Change <code>gpuq</code> to another queue if needed (e.g., <code>cpuq</code>, <code>bigmem</code>, etc.)</li>
+<li>Change <code>gpu_batch_exec</code> to another queue if needed (e.g., <code>cpu_batch_exec</code>, <code>cpu_batch_exlm</code>, etc.)</li>
 </ul>
 <h3 id="4-setting-up-your-environment">4. Setting Up Your Environment</h3>
-<p>Configure the paths and modules for your kitchen:</p>
+<p>Configure the paths and modules for your computational kitchen (because even HPC needs its ingredients properly organized):</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># Add environment setup to the PBS script</span>
 </span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>cat<span class="w"> </span>&gt;&gt;<span class="w"> </span><span class="si">${</span><span class="nv">PBS_SCRIPT</span><span class="si">}</span><span class="w"> </span><span class="s">&lt;&lt; EOF</span>
 </span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="s"># Set paths</span>
@@ -1115,12 +1133,12 @@
 <ul>
 <li>Change the path prefix (<code>\${WORK_DIR}/scripts/</code>) if your scripts are stored elsewhere</li>
 <li>Add experiment-specific parameters</li>
-<li>Add timing information by adding commands like:
-  <div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;echo &#39;Start time: </span><span class="k">$(</span>date<span class="k">)</span><span class="s2">&#39;&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span><span class="si">${</span><span class="nv">PBS_SCRIPT</span><span class="si">}</span>
+<li>Add timing information by adding commands like:</li>
+</ul>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;echo &#39;Start time: </span><span class="k">$(</span>date<span class="k">)</span><span class="s2">&#39;&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span><span class="si">${</span><span class="nv">PBS_SCRIPT</span><span class="si">}</span>
 </span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="c1"># ... experiment command ...</span>
 </span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;echo &#39;End time: </span><span class="k">$(</span>date<span class="k">)</span><span class="s2">&#39;&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span><span class="si">${</span><span class="nv">PBS_SCRIPT</span><span class="si">}</span>
-</span></code></pre></div></li>
-</ul>
+</span></code></pre></div>
 <h3 id="5-adding-experiment-loops">5. Adding Experiment Loops</h3>
 <p>This part adds each experiment to the PBS script with nice formatting:</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># Add each experiment to the PBS script</span>
@@ -1152,10 +1170,12 @@
 </span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;You can monitor the job using: qstat -u \$USER&quot;</span>
 </span><span id="__span-6-10"><a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Output will be saved in: </span><span class="si">${</span><span class="nv">JOB_NAME</span><span class="si">}</span><span class="s2">_output.log&quot;</span>
 </span></code></pre></div>
-<p>You can add additional commands here to:
-- Copy the PBS script to an archive location
-- Add the job ID to a tracking file
-- Set up monitoring or notifications</p>
+<p>You can add additional commands here to:</p>
+<ul>
+<li>Copy the PBS script to an archive location</li>
+<li>Add the job ID to a tracking file</li>
+<li>Set up monitoring or notifications</li>
+</ul>
 <hr />
 <h2 id="the-complete-recipe"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12.5 1.5c-1.77 0-3.33 1.17-3.83 2.87C8.14 4.13 7.58 4 7 4a4 4 0 0 0-4 4 4.01 4.01 0 0 0 3 3.87V19h13v-7.13c1.76-.46 3-2.05 3-3.87a4 4 0 0 0-4-4c-.58 0-1.14.13-1.67.37-.5-1.7-2.06-2.87-3.83-2.87m-.5 9h1v7h-1zm-3 2h1v5H9zm6 0h1v5h-1zM6 20v1a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-1z"/></svg></span> The Complete Recipe</h2>
 <p>Here's the full script that you can copy, paste, and modify to suit your needs:</p>
@@ -1184,11 +1204,11 @@
 </span><span id="__span-7-23"><a id="__codelineno-7-23" name="__codelineno-7-23" href="#__codelineno-7-23"></a><span class="s">#PBS -l select=1:ncpus=8:ngpus=1:mem=64GB:gpu_id=H100</span>
 </span><span id="__span-7-24"><a id="__codelineno-7-24" name="__codelineno-7-24" href="#__codelineno-7-24"></a><span class="s">#PBS -M $USER@qut.edu.au</span>
 </span><span id="__span-7-25"><a id="__codelineno-7-25" name="__codelineno-7-25" href="#__codelineno-7-25"></a><span class="s">#PBS -l walltime=48:00:00</span>
-</span><span id="__span-7-26"><a id="__codelineno-7-26" name="__codelineno-7-26" href="#__codelineno-7-26"></a><span class="s">#PBS -q gpuq</span>
+</span><span id="__span-7-26"><a id="__codelineno-7-26" name="__codelineno-7-26" href="#__codelineno-7-26"></a><span class="s">#PBS -q gpu_batch_exec</span>
 </span><span id="__span-7-27"><a id="__codelineno-7-27" name="__codelineno-7-27" href="#__codelineno-7-27"></a><span class="s">#PBS -j oe</span>
 </span><span id="__span-7-28"><a id="__codelineno-7-28" name="__codelineno-7-28" href="#__codelineno-7-28"></a><span class="s">#PBS -m abe</span>
 </span><span id="__span-7-29"><a id="__codelineno-7-29" name="__codelineno-7-29" href="#__codelineno-7-29"></a><span class="s">#PBS -o ${JOB_NAME}_output.log</span>
-</span><span id="__span-7-30"><a id="__codelineno-7-30" name="__codelineno-7-30" href="#__codelineno-7-30"></a><span class="s">#PBS -e ${JOB_NAME}_error.log</span>
+</span><span id="__span-7-30"><a id="__codelineno-7-30" name="__codelineno-7-30" href="#__codelineno-7-30"></a>
 </span><span id="__span-7-31"><a id="__codelineno-7-31" name="__codelineno-7-31" href="#__codelineno-7-31"></a><span class="s"># Set paths</span>
 </span><span id="__span-7-32"><a id="__codelineno-7-32" name="__codelineno-7-32" href="#__codelineno-7-32"></a><span class="s">WORK_DIR=\${PBS_O_WORKDIR}</span>
 </span><span id="__span-7-33"><a id="__codelineno-7-33" name="__codelineno-7-33" href="#__codelineno-7-33"></a><span class="s">DATASET_DIR=\${WORK_DIR}/dataset</span>
@@ -1232,7 +1252,7 @@
 </span><span id="__span-7-71"><a id="__codelineno-7-71" name="__codelineno-7-71" href="#__codelineno-7-71"></a>
 </span><span id="__span-7-72"><a id="__codelineno-7-72" name="__codelineno-7-72" href="#__codelineno-7-72"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Job submitted with name: </span><span class="si">${</span><span class="nv">JOB_NAME</span><span class="si">}</span><span class="s2">&quot;</span>
 </span><span id="__span-7-73"><a id="__codelineno-7-73" name="__codelineno-7-73" href="#__codelineno-7-73"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;You can monitor the job using: qstat -u \$USER&quot;</span>
-</span><span id="__span-7-74"><a id="__codelineno-7-74" name="__codelineno-7-74" href="#__codelineno-7-74"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Output will be saved in: </span><span class="si">${</span><span class="nv">JOB_NAME</span><span class="si">}</span><span class="s2">_output.log&quot;</span><span class="w"> </span>
+</span><span id="__span-7-74"><a id="__codelineno-7-74" name="__codelineno-7-74" href="#__codelineno-7-74"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Output will be saved in: </span><span class="si">${</span><span class="nv">JOB_NAME</span><span class="si">}</span><span class="s2">_output.log&quot;</span>
 </span></code></pre></div>
 <hr />
 <h2 id="tips-from-the-bash-kitchen"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 6a6 6 0 0 1 6 6c0 2.22-1.21 4.16-3 5.2V19a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1v-1.8c-1.79-1.04-3-2.98-3-5.2a6 6 0 0 1 6-6m2 15v1a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1v-1zm6-10h3v2h-3zM1 11h3v2H1zM13 1v3h-2V1zM4.92 3.5l2.13 2.14-1.42 1.41L3.5 4.93zm12.03 2.13 2.12-2.13 1.43 1.43-2.13 2.12z"/></svg></span> Tips from the Bash Kitchen</h2>
@@ -1243,16 +1263,18 @@
 <li>Mind your dollar signs in heredocs! Escape PBS variables like <code>\${PBS_O_WORKDIR}</code> but leave <code>${TIMESTAMP}</code> naked. The difference? One's for the future, one's for right now — like prepping tomorrow's lunch vs. tonight's dinner.</li>
 </ul>
 <h2 id="troubleshooting-tips"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m21.71 20.29-1.42 1.42a1 1 0 0 1-1.41 0L7 9.85A3.8 3.8 0 0 1 6 10a4 4 0 0 1-3.78-5.3l2.54 2.54.53-.53 1.42-1.42.53-.53L4.7 2.22A4 4 0 0 1 10 6a3.8 3.8 0 0 1-.15 1l11.86 11.88a1 1 0 0 1 0 1.41M2.29 18.88a1 1 0 0 0 0 1.41l1.42 1.42a1 1 0 0 0 1.41 0l5.47-5.46-2.83-2.83M20 2l-4 2v2l-2.17 2.17 2 2L18 8h2l2-4Z"/></svg></span> Troubleshooting Tips</h2>
-<p>Even the best chefs have kitchen mishaps. Here's how to handle common issues:</p>
+<p>Even the best chefs have kitchen mishaps — and computational cooking is no exception. Here's how to handle the inevitable disasters:</p>
 <ul>
 <li>
 <p><strong>Path Problems</strong>: If your experiments aren't running, check that the paths in the <code>EXPERIMENTS</code> array match your actual directory structure.</p>
 </li>
 <li>
-<p><strong>Script Permissions</strong>: Ensure your individual experiment scripts have execute permissions:
-  <div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>chmod<span class="w"> </span>+x<span class="w"> </span>scripts/exp_script/Example_Experiment_*.sh
-</span></code></pre></div></p>
+<p><strong>Script Permissions</strong>: Ensure your individual experiment scripts have execute permissions:</p>
 </li>
+</ul>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>chmod<span class="w"> </span>+x<span class="w"> </span>scripts/exp_script/Example_Experiment_*.sh
+</span></code></pre></div>
+<ul>
 <li>
 <p><strong>Dependency Hell</strong>: If your experiments have different Python package requirements, consider:</p>
 <ul>
@@ -1311,12 +1333,12 @@
 </span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;mail -s \&quot;Job </span><span class="si">${</span><span class="nv">JOB_NAME</span><span class="si">}</span><span class="s2"> Complete\&quot; </span><span class="nv">$USER</span><span class="s2">@qut.edu.au &lt; </span><span class="si">${</span><span class="nv">JOB_NAME</span><span class="si">}</span><span class="s2">_output.log&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span><span class="si">${</span><span class="nv">PBS_SCRIPT</span><span class="si">}</span>
 </span></code></pre></div>
 <hr />
-<h2 id="happy-cooking"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M22 18a4 4 0 0 1-4 4h-3a4 4 0 0 1-4-4v-2h6.79l2.76-4.77 1.56.9L19.87 16H22zM9 22H2c0-3 0-6 .33-9.17C2.6 10.3 3.08 7.66 3.6 5H3V3h5v2h-.6c.52 2.66 1 5.3 1.27 7.83C9 16 9 19 9 22"/></svg></span> Happy Cooking!</h2>
-<p>With this script, you can set up a batch of experiments, hit submit, and let the HPC do its thing while you focus on more interesting work—or maybe even go outside for a change.</p>
+<h2 id="happy-cooking"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M22 18a4 4 0 0 1-4 4h-3a4 4 0 0 1-4-4v-2h6.79l2.76-4.77 1.56.9L19.87 16H22zM9 22H2c0-3 0-6 .33-9.17C2.6 10.3 3.08 7.66 3.6 5H3V3h5v2h-.6c.52 2.66 1 5.3 1.27 7.83C9 16 9 19 9 22"/></svg></span> Happy Cooking</h2>
+<p>With this script, you can set up a batch of experiments, hit submit, and let the HPC do its thing while you focus on more interesting work — like remembering what sunlight looks like or having conversations with humans instead of error logs.</p>
 <blockquote>
-<p><strong>Remember:</strong> A watched pot never boils, and a watched HPC job doesn't finish any faster.</p>
+<p><strong>Remember:</strong> A watched pot never boils, and a watched HPC job doesn't finish any faster. But at least with proper logging, you'll know exactly when it fails spectacularly.</p>
 </blockquote>
-<h2 id="coming-soon"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6.89 6.36C8.23 3.91 10 2 12 2s3.77 1.91 5.11 4.36c-.85.21-1.61.71-2.11 1.41a3.71 3.71 0 0 0-5.2-.8c-.3.22-.58.49-.8.8-.5-.7-1.26-1.2-2.11-1.41M15 18.06l-3-3-3 3-3-3-1.27 1.27a7.504 7.504 0 0 0 9.11 5.43 7.53 7.53 0 0 0 5.43-5.43L18 15.06zm-6-2.12 3-3 3 3 3-3 1.5 1.5c-.13-2.31-.7-4.58-1.69-6.68-1.16.1-2.06 1.07-2.06 2.24h-1.5A2.25 2.25 0 0 0 12 7.75 2.25 2.25 0 0 0 9.75 10h-1.5c0-1.17-.9-2.14-2.06-2.24-.99 2.1-1.56 4.37-1.69 6.68l1.5-1.5z"/></svg></span> Coming Soon...</h2>
+<h2 id="coming-soon"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6.89 6.36C8.23 3.91 10 2 12 2s3.77 1.91 5.11 4.36c-.85.21-1.61.71-2.11 1.41a3.71 3.71 0 0 0-5.2-.8c-.3.22-.58.49-.8.8-.5-.7-1.26-1.2-2.11-1.41M15 18.06l-3-3-3 3-3-3-1.27 1.27a7.504 7.504 0 0 0 9.11 5.43 7.53 7.53 0 0 0 5.43-5.43L18 15.06zm-6-2.12 3-3 3 3 3-3 1.5 1.5c-.13-2.31-.7-4.58-1.69-6.68-1.16.1-2.06 1.07-2.06 2.24h-1.5A2.25 2.25 0 0 0 12 7.75 2.25 2.25 0 0 0 9.75 10h-1.5c0-1.17-.9-2.14-2.06-2.24-.99 2.1-1.56 4.37-1.69 6.68l1.5-1.5z"/></svg></span> Coming Soon</h2>
 <ul>
 <li>A version that uses PBS job arrays (aka "batch-cooking with timers").</li>
 <li>Error catching and handling — building on our "Handling Failures Gracefully" section.</li>
@@ -1346,7 +1368,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="May 12, 2025 16:24:47 AEST">May 12, 2025</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="June 28, 2025 00:52:06 AEST">June 28, 2025</span>
   </span>
 
     

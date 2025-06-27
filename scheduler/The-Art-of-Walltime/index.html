@@ -783,7 +783,7 @@
         <li class="md-nav__item">
   <a href="#coming-soon" class="md-nav__link">
     <span class="md-ellipsis">
-      Coming Soon...
+      Coming Soon
     </span>
   </a>
   
@@ -1243,7 +1243,7 @@
         <li class="md-nav__item">
   <a href="#coming-soon" class="md-nav__link">
     <span class="md-ellipsis">
-      Coming Soon...
+      Coming Soon
     </span>
   </a>
   
@@ -1435,7 +1435,7 @@
 </ul>
 </li>
 <li>
-<p><strong>Data Size Scaling</strong>: </p>
+<p><strong>Data Size Scaling</strong>:</p>
 <ul>
 <li>Linear models: <span class="arithmatex">\(S \approx \frac{N_{\text{new}}}{N_{\text{baseline}}}\)</span> where <span class="arithmatex">\(N=\text{samples}\)</span></li>
 <li>Neural networks: <span class="arithmatex">\(S \approx \left(\frac{N_{\text{new}}}{N_{\text{baseline}}}\right)^c\)</span> where <span class="arithmatex">\(c \approx 0.8\text{-}0.9\)</span> due to:<ul>
@@ -1640,8 +1640,8 @@
 <hr />
 <h2 id="walltime-recipes-for-common-scenarios"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12.5 1.5c-1.77 0-3.33 1.17-3.83 2.87C8.14 4.13 7.58 4 7 4a4 4 0 0 0-4 4 4.01 4.01 0 0 0 3 3.87V19h13v-7.13c1.76-.46 3-2.05 3-3.87a4 4 0 0 0-4-4c-.58 0-1.14.13-1.67.37-.5-1.7-2.06-2.87-3.83-2.87m-.5 9h1v7h-1zm-3 2h1v5H9zm6 0h1v5h-1zM6 20v1a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-1z"/></svg></span> Walltime Recipes for Common Scenarios</h2>
 <h3 id="recipe-the-quick-test-run">Recipe: The Quick Test Run</h3>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>#PBS -l walltime=01:00:00
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>#PBS -q cpu_inter_exec  # or gpu_inter_exec if you need GPUs
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1">#PBS -l walltime=01:00:00</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="c1">#PBS -q cpu_inter_exec  # or gpu_inter_exec if you need GPUs</span>
 </span></code></pre></div>
 <p><strong>Best for:</strong></p>
 <ul>
@@ -1651,8 +1651,8 @@
 <li>When you'll be actively monitoring</li>
 </ul>
 <h3 id="recipe-the-standard-training-run">Recipe: The Standard Training Run</h3>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>#PBS -l walltime=24:00:00
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>#PBS -q gpu_batch_exec  # For ML workloads
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1">#PBS -l walltime=24:00:00</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="c1">#PBS -q gpu_batch_exec  # For ML workloads</span>
 </span></code></pre></div>
 <p><strong>Best for:</strong></p>
 <ul>
@@ -1662,8 +1662,8 @@
 <li>When you need those precious GPUs</li>
 </ul>
 <h3 id="recipe-the-i-have-no-idea-special">Recipe: The "I Have No Idea" Special</h3>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>#PBS -l walltime=04:00:00
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>#PBS -q cpu_batch_exec
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1">#PBS -l walltime=04:00:00</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="c1">#PBS -q cpu_batch_exec</span>
 </span></code></pre></div>
 <p><strong>Best for:</strong></p>
 <ul>
@@ -1673,8 +1673,8 @@
 <li>When you know it needs more than interactive time</li>
 </ul>
 <h3 id="recipe-the-weekend-warrior">Recipe: The Weekend Warrior</h3>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>#PBS -l walltime=48:00:00  # The max for most queues
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>#PBS -q gpu_batch_exec  # Or cpu_batch_exec
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1">#PBS -l walltime=48:00:00  # The max for most queues</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="c1">#PBS -q gpu_batch_exec  # Or cpu_batch_exec</span>
 </span></code></pre></div>
 <p><strong>Best for:</strong></p>
 <ul>
@@ -1684,8 +1684,8 @@
 <li>Hitting the maximum walltime and hoping for the best</li>
 </ul>
 <h3 id="recipe-the-pipeline-master">Recipe: The Pipeline Master</h3>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>#PBS -l walltime=168:00:00  # 7 days
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>#PBS -q cpu_inter_pers
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1">#PBS -l walltime=168:00:00  # 7 days</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="c1">#PBS -q cpu_inter_pers</span>
 </span></code></pre></div>
 <p><strong>Best for:</strong></p>
 <ul>
@@ -1753,7 +1753,7 @@
 <p><strong>Remember:</strong> Walltime isn't just a number – it's a relationship between you, your code, your data, the specific queue limits, and the cruel mistress of computational fate.</p>
 </blockquote>
 <hr />
-<h2 id="coming-soon"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6.89 6.36C8.23 3.91 10 2 12 2s3.77 1.91 5.11 4.36c-.85.21-1.61.71-2.11 1.41a3.71 3.71 0 0 0-5.2-.8c-.3.22-.58.49-.8.8-.5-.7-1.26-1.2-2.11-1.41M15 18.06l-3-3-3 3-3-3-1.27 1.27a7.504 7.504 0 0 0 9.11 5.43 7.53 7.53 0 0 0 5.43-5.43L18 15.06zm-6-2.12 3-3 3 3 3-3 1.5 1.5c-.13-2.31-.7-4.58-1.69-6.68-1.16.1-2.06 1.07-2.06 2.24h-1.5A2.25 2.25 0 0 0 12 7.75 2.25 2.25 0 0 0 9.75 10h-1.5c0-1.17-.9-2.14-2.06-2.24-.99 2.1-1.56 4.37-1.69 6.68l1.5-1.5z"/></svg></span> Coming Soon...</h2>
+<h2 id="coming-soon"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6.89 6.36C8.23 3.91 10 2 12 2s3.77 1.91 5.11 4.36c-.85.21-1.61.71-2.11 1.41a3.71 3.71 0 0 0-5.2-.8c-.3.22-.58.49-.8.8-.5-.7-1.26-1.2-2.11-1.41M15 18.06l-3-3-3 3-3-3-1.27 1.27a7.504 7.504 0 0 0 9.11 5.43 7.53 7.53 0 0 0 5.43-5.43L18 15.06zm-6-2.12 3-3 3 3 3-3 1.5 1.5c-.13-2.31-.7-4.58-1.69-6.68-1.16.1-2.06 1.07-2.06 2.24h-1.5A2.25 2.25 0 0 0 12 7.75 2.25 2.25 0 0 0 9.75 10h-1.5c0-1.17-.9-2.14-2.06-2.24-.99 2.1-1.56 4.37-1.69 6.68l1.5-1.5z"/></svg></span> Coming Soon</h2>
 <ul>
 <li>A guide to interpreting cryptic error messages when your job dies with 5 seconds of walltime remaining.</li>
 <li>The psychological impact of watching your perfectly estimated job finish with exactly 00:00:01 remaining.</li>
@@ -1783,7 +1783,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="May 22, 2025 20:18:08 AEST">May 22, 2025</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="June 28, 2025 00:52:06 AEST">June 28, 2025</span>
   </span>
 
     
