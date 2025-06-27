@@ -815,20 +815,22 @@
 </ul>
 <h3 id="the-solution-clean-up-the-dark-side">The Solution: Clean Up the Dark Side</h3>
 <ol>
-<li><strong>Remove Existing .DS_Store Files</strong></li>
-</ol>
+<li>
+<p><strong>Remove Existing .DS_Store Files</strong></p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Clean up all .DS_Store files</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>find<span class="w"> </span>.<span class="w"> </span>-name<span class="w"> </span><span class="s2">&quot;.DS_Store&quot;</span><span class="w"> </span>-delete
 </span></code></pre></div>
-<ol>
-<li><strong>Prevent Future .DS_Store Creation</strong></li>
-</ol>
+</li>
+<li>
+<p><strong>Prevent Future .DS_Store Creation</strong></p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Disable .DS_Store on network volumes</span>
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>defaults<span class="w"> </span>write<span class="w"> </span>com.apple.desktopservices<span class="w"> </span>DSDontWriteNetworkStores<span class="w"> </span>-bool<span class="w"> </span>TRUE
 </span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
 </span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1"># Restart Finder to apply changes</span>
 </span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>killall<span class="w"> </span>Finder
 </span></code></pre></div>
+</li>
+</ol>
 <hr />
 <h2 id="episode-vi-the-return-of-the-metadata-_">EPISODE VI: THE RETURN OF THE METADATA (._*)</h2>
 <blockquote>
@@ -851,15 +853,15 @@
 </ul>
 <h3 id="the-solution-defeat-the-metadata-menace">The Solution: Defeat the Metadata Menace</h3>
 <ol>
-<li><strong>Remove Existing Metadata Files</strong></li>
-</ol>
+<li>
+<p><strong>Remove Existing Metadata Files</strong></p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Remove all ._ files</span>
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>find<span class="w"> </span>.<span class="w"> </span>-name<span class="w"> </span><span class="s2">&quot;._*&quot;</span><span class="w"> </span>-delete
 </span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
 </span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="c1"># Or clean both .DS_Store and ._ files</span>
 </span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>find<span class="w"> </span>.<span class="w"> </span>-type<span class="w"> </span>f<span class="w"> </span>-name<span class="w"> </span><span class="s2">&quot;._*&quot;</span><span class="w"> </span>-o<span class="w"> </span>-name<span class="w"> </span><span class="s2">&quot;.DS_Store&quot;</span><span class="w"> </span>-delete
 </span></code></pre></div>
-<ol>
+</li>
 <li>
 <p><strong>Understanding the ._* Files - The Unstoppable Force</strong></p>
 <p>On macOS, preventing the creation of <code>._*</code> files (AppleDouble metadata) entirely is not officially supported—especially on non-HFS+ or non-APFS volumes.</p>
@@ -915,7 +917,7 @@ These are automatically created when copying files to filesystems that don&#39;t
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="June 28, 2025 00:52:06 AEST">June 28, 2025</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="June 28, 2025 01:30:31 AEST">June 28, 2025</span>
   </span>
 
     
