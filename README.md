@@ -6,16 +6,16 @@ My personal survival log of mysterious errors, queueing oddities, and PBS quirks
 
 ## What's Inside
 
-- :thread: **Mystery Errors & Their Solutions**  
+- :thread: **Mystery Errors & Their Solutions**
   Real issues with real fixes (and real frustration).
 
-- :brain: **Tips, Workarounds, and Gotchas**  
+- :brain: **Tips, Workarounds, and Gotchas**
   Things that *should* have been in the official docs.
 
-- :hammer_and_wrench: **PBS Scripts & Snippets**  
+- :hammer_and_wrench: **PBS Scripts & Snippets**
   Copy-paste-friendly templates with helpful comments.
 
-- :test_tube: **Experiments & Mistakes**  
+- :test_tube: **Experiments & Mistakes**
   Because learning is messy.
 
 ## Documentation
@@ -25,16 +25,19 @@ The full documentation is available at [Walltime Chronicles Documentation](https
 To build the documentation locally:
 
 1. Install the requirements:
+
    ```bash
    pip install -r requirements.txt
    ```
 
 2. Build the documentation:
+
    ```bash
    mkdocs build
    ```
 
 3. Serve the documentation locally:
+
    ```bash
    mkdocs serve
    ```

@@ -40,11 +40,11 @@ pre-commit install
 ## Project Structure
 
 - `docs/` - Main documentation content in Markdown
-  - `index.md` - Homepage with project overview and disclaimers
-  - `pbs-scripts/` - PBS job scripts and tools documentation
-  - `scheduler/` - Walltime estimation and node selection guides
-  - `remote-dev/` - Remote development setup and troubleshooting
-  - `javascripts/` - KaTeX math rendering support
+    - `index.md` - Homepage with project overview and disclaimers
+    - `pbs-scripts/` - PBS job scripts and tools documentation
+    - `scheduler/` - Walltime estimation and node selection guides
+    - `remote-dev/` - Remote development setup and troubleshooting
+    - `javascripts/` - KaTeX math rendering support
 - `mkdocs.yml` - MkDocs configuration with Material theme
 - `requirements.txt` - Python dependencies for MkDocs build
 - `.pre-commit-config.yaml` - Pre-commit hooks for code quality

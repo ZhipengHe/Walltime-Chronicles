@@ -8,7 +8,5 @@
 So you want to run your code, but what hardware should you order? Welcome to the **HPC buffet** — where some dishes are fast but small, others are huge but slow, and the good stuff always seems to be reserved for someone else.
 This field guide will help you identify which computational beasts are available and how to lure them into running your jobs with minimum fuss.
 
-
 !!! warning "Warning: This is a work in progress"
     This guide is a work in progress. It is not yet complete.
-

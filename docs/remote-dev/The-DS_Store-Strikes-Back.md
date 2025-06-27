@@ -2,11 +2,12 @@
 
 > *A long time ago, on a remote server far, far away...*
 
+When working with remote servers from macOS, you'll inevitably encounter the dark side of the Force: hidden system files that follow your every move. These invisible menaces can break deployment scripts, bloat repositories, and generally cause chaos in your otherwise pristine remote environments.
+
 ## EPISODE V: THE .DS_STORE STRIKES BACK
 
 !!! warning "The Dark Side of macOS"
     Imperial .DS_Store files have driven Rebel developers from their remote server folders. These hidden files spread like the Dark Side across every folder you visit.
-
 
 - **Darth `.DS_Store`**: "Your lack of `defaults write` is disturbing. My hidden files will spread across every folder you visit."
 
@@ -17,20 +18,24 @@
 - **Han:** "I've been running from these hidden files for ten years. Not a remote server is safe in the galaxy!"
 
 ### The Solution: Clean Up the Dark Side
+
 1. **Remove Existing .DS_Store Files**
+
    ```bash
    # Clean up all .DS_Store files
    find . -name ".DS_Store" -delete
    ```
 
 2. **Prevent Future .DS_Store Creation**
+
    ```bash
    # Disable .DS_Store on network volumes
    defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool TRUE
-   
+
    # Restart Finder to apply changes
    killall Finder
    ```
+
 ---
 
 ## EPISODE VI: THE RETURN OF THE METADATA (._*)
@@ -49,10 +54,11 @@
 ### The Solution: Defeat the Metadata Menace
 
 1. **Remove Existing Metadata Files**
+
    ```bash
    # Remove all ._ files
    find . -name "._*" -delete
-   
+
    # Or clean both .DS_Store and ._ files
    find . -type f -name "._*" -o -name ".DS_Store" -delete
    ```
@@ -73,14 +79,14 @@
         - FAT, exFAT, NTFS drives
         - Some WebDAV volumes
 
-3. **Best Available Solutions :question:**
+3. **The Harsh Reality**
 
-    ***Just kidding, there are no best available solutions for this problem.*** That's why I said mount the remote server as a local drive by Finder is not an elegant solution.
-
+    ***Just kidding, there are no best available solutions for this problem.*** That's why using Finder to mount remote servers as local drives is not an elegant solution.
 
 4. **For Git Users**
 
     Add the following to your .gitignore file:
+
     ```bash
     # Add to your .gitignore (won't prevent creation, but prevents tracking)
     echo "._*\n.DS_Store" >> .gitignore
@@ -92,4 +98,4 @@
 
 > *"The Force is strong with clean file systems."*
 
-May your remote development be free of metadata files, and may the Force be with you! 🚀 
+May your remote development be free of metadata files, and may the Force be with you! 🚀

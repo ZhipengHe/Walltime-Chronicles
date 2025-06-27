@@ -5,20 +5,26 @@
 !!! question "Why not use built-in `qjob -x` command in Aqua?"
     QUT Aqua HPC provides a command `qjob -x` that can be used to extract the details of the finished jobs from the PBS system (Check [this page](https://docs.eres.qut.edu.au/hpc-basic-command-line#useful-commands-on-the-hpc) for more details). However, the format of the output is not very user-friendly and not very informative.
 
+<!-- markdownlint-disable-next-line link-fragments -->
 !!! info "See full recipe of `pbs_brew_inspector.sh` in [Full Recipe](#full-recipe-of-pbs_brew_inspectorsh)."
 
 ## :material-microscope: What's in Your Computational Brew?
-Ever wondered what's really happening with those jobs you've been running? `pbs_brew_inspector.sh` is your personal sommelier for PBS jobs - swirling, sniffing, and analysing the complex flavours of your computational brews. This script extracts the subtle notes of resource usage and efficiency from your completed jobs, helping you perfect your next batch.
-Think of it as your lab notebook for computational experiments - documenting exactly how your recipes performed, what ingredients they consumed, and how efficient they were.
+
+You've been submitting jobs for weeks, crossing your fingers and hoping for the best — but do you actually know what's happening under the hood? Are you wasting resources like a novice chef burning through expensive ingredients, or are you efficiently crafting computational masterpieces?
+
+`pbs_brew_inspector.sh` is your personal sommelier for PBS jobs — swirling, sniffing, and analysing the complex flavours of your computational brews. This script extracts the subtle notes of resource usage and efficiency from your completed jobs, helping you perfect your next batch instead of stumbling around in the dark.
+
+Think of it as your lab notebook for computational experiments, but one that actually tells you the truth about how your recipes performed, what ingredients they consumed, and whether you're a resource efficiency genius or... well, let's find out.
 
 ## :material-flask-outline: The Tasting Menu
-Running `pbs_brew_inspector.sh` produces a comprehensive report that breaks down your job history into these essential flavour components:
 
-* **Walltime Profile:** How long your jobs ran versus how long you requested?
-* **CPU Intensity:** Single-note or complex multi-core symphonies?
-* **Memory Usage:** Light and crisp or rich and heavy?
-* **GPU Utilisation:** The spicy kick of accelerated computing.
-* **Efficiency Metrics:** The perfect balance of resource requests.
+When you run `pbs_brew_inspector.sh`, you're not just getting a boring list of numbers — you're getting a full sensory analysis of your computational performance. Here's what's on the tasting menu:
+
+- **Walltime Profile:** How long your jobs ran versus how long you requested?
+- **CPU Intensity:** Single-note or complex multi-core symphonies?
+- **Memory Usage:** Light and crisp or rich and heavy?
+- **GPU Utilisation:** The spicy kick of accelerated computing.
+- **Efficiency Metrics:** The perfect balance of resource requests.
 
 ## :material-chef-hat: Brewing Instructions
 
@@ -33,7 +39,7 @@ bash ./pbs_brew_inspector.sh -gi    # Look at interactive GPU sessions
 
 You'll be presented with a beautifully formatted table showing each job's characteristics:
 
-```
+```text
 > bash ./pbs_brew_inspector.sh -gb # Example output for GPU batch jobs
 
 Resource Usage Report -- $USER @ Wed May 14 02:47:54 PM AEST 2025
@@ -67,20 +73,20 @@ GPU Jobs Metrics (average of 4 GPU jobs):
     The output table spans over 160 characters — that's pretty wide! To avoid missing any columns, give your terminal a good stretch. Go on, maximise that window! You will get the full picture, literally.
 
 ## :material-chart-line: Reading Your Tasting Notes
-The real magic happens when you interpret these results. Here's what to look for:
+
+Now comes the fun part — decoding what these numbers are actually telling you about your computational habits. Think of this as learning to read the secret language of resource efficiency:
 
 1. **Walltime Efficiency**: In the example above, you'll notice jobs using only about 23.4% of the requested walltime. This suggests your jobs could use shorter time requests for better queue priority.
 2. **Memory Utilisation**: With 9.1% average memory usage, you're requesting far more memory than needed. Consider reducing memory requests for faster queue times.
 3. **GPU Utilisation Patterns**: The 54.2% average GPU utilisation indicates reasonable but not optimal GPU use. There might be opportunities to optimise your code to better utilise this expensive resource.
 4. **CPU Efficiency**: A CPU usage of 330.8% on 8-CPU jobs reveals you're effectively using about 4 cores out of 8 - potentially an area for optimisation.
 
-
 !!! warning "Job History Limitation"
     Due to Aqua Server's configuration, the script can only extract the details of jobs from the last 96 hours (4 days). Jobs older than this period will not be available in the PBS history.
 
     To verify the current job history retention period:
 
-    ```bash 
+    ```bash
     [user@aquarius02 ~]$ qmgr -c "print server job_history_duration"
     #
     # Set server attributes.
@@ -89,13 +95,14 @@ The real magic happens when you interpret these results. Here's what to look for
     ```
 
 ## :material-lightbulb-on: Pairing Suggestions
+
 `pbs_brew_inspector.sh` pairs beautifully with:
 
 - [**Guess, Request, Regret: The Art of Walltime**](../scheduler/The-Art-of-Walltime.md): Use these insights to master your walltime estimates
 - More pages coming soon...
 
-
 ## :material-tools: Customisation Notes
+
 Like any good recipe, you can customise this tool to your taste:
 
 - Modify the output format for specific metrics you care about
@@ -104,6 +111,7 @@ Like any good recipe, you can customise this tool to your taste:
 - Export the data for visualisation in your favourite plotting tool
 
 ## :material-flag-triangle: The Brew Inspector's Wisdom
+
 The true artisan understands their ingredients. By regularly inspecting your computational brews, you'll develop an intuition for:
 
 - How long similar jobs will take (crucial for walltime estimates)
@@ -111,9 +119,9 @@ The true artisan understands their ingredients. By regularly inspecting your com
 - Where you're wasting computational resources
 - How to optimise your code for better efficiency
 
-> **Remember:** analysing your past jobs isn't just about efficiency—it's about becoming fluent in the language of computational resources, and crafting exquisite computational recipes that make the most of your precious cluster time.
+> **Remember:** Analysing your past jobs isn't just about efficiency — it's about evolving from someone who throws computational ingredients at the wall to see what sticks, into a master chef who knows exactly how much of each resource will create the perfect recipe.
 
-Happy brewing!
+Stop guessing. Start brewing with confidence. Your future self (and your queue priority) will thank you.
 
 ## :material-script: Full Recipe of `pbs_brew_inspector.sh`
 
@@ -229,7 +237,7 @@ while getopts "U:cbgilp" opt; do
            SHOW_GPU_INTER=false
            SHOW_CPU_BATCH_LARGE=false
            ;;
-        \?) 
+        \?)
            echo "Invalid option -$OPTARG" >&2
            echo "Usage: $0 [-U username] [-c|-g|-b|-i|-l|-p]"
            echo "  -U username : Specify username (default: current user)"
@@ -302,10 +310,10 @@ jobs=$(qstat -H -u $USERNAME | awk '{print $1}' | grep '^[0-9]')
 for job in $jobs; do
     output=$(qstat -fx "$job")
     total_jobs=$((total_jobs + 1))
-    
+
     # Basic job info
     queue=$(echo "$output" | awk '/queue/ {print $3}')
-    
+
     # Skip if queue doesn't match filter
     if [[ "$queue" == "cpu_batch_exec" && "$SHOW_CPU_BATCH" != "true" ]] || \
        [[ "$queue" == "gpu_batch_exec" && "$SHOW_GPU_BATCH" != "true" ]] || \
@@ -316,30 +324,30 @@ for job in $jobs; do
         total_jobs=$((total_jobs - 1))
         continue
     fi
-    
+
     # Used resources
     cpu_time=$(echo "$output" | awk '/resources_used.cput/ {print $3}')
     wall_time=$(echo "$output" | awk '/resources_used.walltime/ {print $3}')
     cpu_percent=$(echo "$output" | awk '/resources_used.cpupercent/ {print $3}')
     [ -z "$cpu_percent" ] && cpu_percent=0
     sum_cpu_percent=$((sum_cpu_percent + cpu_percent))
-    
+
     # Allocated resources
     alloc_wall=$(echo "$output" | awk '/Resource_List.walltime/ {print $3}')
     alloc_cpu=$(echo "$output" | awk '/Resource_List.ncpus/ {print $3}')
     alloc_gpu=$(echo "$output" | awk '/Resource_List.ngpus/ {print $3}')
     [ -z "$alloc_gpu" ] && alloc_gpu="0"
     node_count=$(echo "$output" | awk '/Resource_List.nodect/ {print $3}')
-    
+
     # Memory usage
     used_mem_kb=$(echo "$output" | awk '/resources_used.mem/ {print $3}' | sed 's/kb//')
     [ -z "$used_mem_kb" ] && used_mem_kb=0
     alloc_mem_raw=$(echo "$output" | awk '/Resource_List.mem/ {print $3}')
-    
+
     # Extract numeric value and unit from allocated memory
     alloc_mem_num=$(echo "$alloc_mem_raw" | sed -E 's/([0-9]+)([a-zA-Z]+)/\1/')
     alloc_mem_unit=$(echo "$alloc_mem_raw" | sed -E 's/([0-9]+)([a-zA-Z]+)/\2/')
-    
+
     # Convert to GB if needed
     case "${alloc_mem_unit,,}" in
         "gb") alloc_mem="$alloc_mem_num" ;;
@@ -347,25 +355,25 @@ for job in $jobs; do
         "kb") alloc_mem=$(awk "BEGIN {printf \"%.2f\", $alloc_mem_num / 1048576}") ;;
         *) alloc_mem="$alloc_mem_raw" ;;
     esac
-    
+
     used_mem_gb=$(awk "BEGIN {printf \"%.2f\", $used_mem_kb / 1048576}")
     sum_mem_use_gb=$(awk "BEGIN {printf \"%.2f\", $sum_mem_use_gb + $used_mem_gb}")
     sum_mem_limit_gb=$(awk "BEGIN {printf \"%.2f\", $sum_mem_limit_gb + $alloc_mem}")
-    
+
     # Calculate memory usage percentage
     mem_use_pct=$(awk "BEGIN {printf \"%.1f\", ($used_mem_gb / $alloc_mem) * 100}")
     sum_mem_use_pct=$(awk "BEGIN {printf \"%.1f\", $sum_mem_use_pct + $mem_use_pct}")
-    
+
     # GPU metrics - Handle CPU-only jobs
     if [ "$alloc_gpu" != "0" ]; then
         # This is a GPU job
         total_gpu_jobs=$((total_gpu_jobs + 1))
-        
+
         gpu_mem=$(echo "$output" | awk '/resources_used.gpu_mem_avg/ {print $3}')
         [ -z "$gpu_mem" ] && gpu_mem=0
         gpu_mem_pct="${gpu_mem}%"
         sum_gpu_mem_pct=$(awk "BEGIN {printf \"%.1f\", $sum_gpu_mem_pct + $gpu_mem}")
-        
+
         gpu_util=$(echo "$output" | awk '/resources_used.gpu_percent_avg/ {print $3}')
         if [[ ! -z "$gpu_util" && "$gpu_util" -gt 100 ]]; then
             # Adjust GPU utilisation percentage if needed (some systems report in thousandths)
@@ -382,16 +390,16 @@ for job in $jobs; do
         gpu_util_pct="N/A"
         gpu_mem_pct="N/A"
     fi
-    
+
     # Calculate wall time efficiency
     wtimesec=$(time_to_seconds "$wall_time")
     wlimitsec=$(time_to_seconds "$alloc_wall")
     sum_wall_seconds=$((sum_wall_seconds + wtimesec))
     sum_wall_limit_seconds=$((sum_wall_limit_seconds + wlimitsec))
-    
+
     wall_efficiency=$(awk "BEGIN {printf \"%.1f\", ($wtimesec / $wlimitsec) * 100}")
     sum_wall_efficiency=$(awk "BEGIN {printf \"%.1f\", $sum_wall_efficiency + $wall_efficiency}")
-    
+
     # Print row with improved formatting
     printf "%-13s %-11s %-11s %-11s %-9s %-10s %-10s %-9s %-9s %-10s %-8s %-10s %-8s %-8s\n" \
     "${job}" "$wall_time" "$alloc_wall" "$cpu_time" "$cpu_percent%" \
@@ -408,7 +416,7 @@ if [ $total_jobs -gt 0 ]; then
     avg_wall_seconds=$((sum_wall_seconds / total_jobs))
     avg_wall_limit_seconds=$((sum_wall_limit_seconds / total_jobs))
     avg_wall_efficiency=$(awk "BEGIN {printf \"%.1f\", $sum_wall_efficiency / $total_jobs}")
-    
+
     # Only calculate GPU averages if we have GPU jobs
     if [ $total_gpu_jobs -gt 0 ]; then
         avg_gpu_util=$(awk "BEGIN {printf \"%.1f\", $sum_gpu_util / $total_gpu_jobs}")
@@ -419,11 +427,11 @@ if [ $total_jobs -gt 0 ]; then
         gpu_util_display="N/A"
         gpu_mem_display="N/A"
     fi
-    
+
     # Format average walltime using the dedicated function
     avg_wall_time=$(format_time $avg_wall_seconds)
     avg_wall_limit=$(format_time $avg_wall_limit_seconds)
-    
+
     # Print separator and averages row
     printf "%s\n" "$(printf '=%.0s' {1..160})"
     printf "%-13s %-11s %-11s %-11s %-9s %-10s %-10s %-9s %-9s %-10s %-8s %-10s %-8s %-8s\n" \
@@ -442,7 +450,7 @@ printf "Jobs CPU-only: %d\n" "$((total_jobs - total_gpu_jobs))"
 printf "\nAverage Resource Efficiency:\n"
 printf "  CPU Usage: %.1f%%\n" "$avg_cpu_percent"
 printf "  Memory Usage: %.1f%% (%.2f GB used / %.2f GB allocated)\n" "$avg_mem_use_pct" "$avg_mem_use_gb" "$avg_mem_limit_gb"
-printf "  Walltime Usage: %.1f%%\n" "$avg_wall_efficiency" 
+printf "  Walltime Usage: %.1f%%\n" "$avg_wall_efficiency"
 
 # Only show GPU stats if we have GPU jobs
 if [ $total_gpu_jobs -gt 0 ]; then
@@ -451,5 +459,3 @@ if [ $total_gpu_jobs -gt 0 ]; then
     printf "  GPU Memory Usage: %.1f%%\n" "$avg_gpu_mem_pct"
 fi
 ```
-
-

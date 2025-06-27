@@ -2,7 +2,6 @@
 
 > *"Or: "They took away my extension, but not my will to code.""*
 
-
 !!! failure "VS Code Remote SSH is banned"
     QUT Aqua banned VS Code Remote SSH extension due to potential high workload on the node. Even you try to connect to Aqua through Remote SSH, it will be disconnected automatically after around 30 seconds.
     Check [this](https://docs.eres.qut.edu.au/hpc-vscode-usage#using-vs-code-to-edit-files-on-the-hpc) for more details.
@@ -24,18 +23,19 @@ So... you're trying to develop on QUT Aqua, but the server gods have other plans
     ```
     Then, you can connect to the HPC by running `ssh aqua`. Also, you can use `aqua` to replace `your-username@aqua.qut.edu.au` in the following commands.
 
-## :puzzle_piece: 1. Fake it with SSH-mounted folders 
+## :puzzle_piece: 1. Fake it with SSH-mounted folders
 
-### :cheese: Option A: Mount via Finder — the cheese board approach
+### :cheese: Option A: Mount via Finder
 
 > Here's a quick guide for macOS users. Please refer to the [official documentation](https://docs.eres.qut.edu.au/hpc-transferring-files-tofrom-hpc#using-file-explorer-or-finder-to-mount-a-drive-to-the-hpc) for other OS.
 
 1. Open **Finder** → `Go` → `Connect to Server...`
 2. Enter:
 
-    ```
+    ```text
     smb://hpc-fs/home/
     ```
+
 3. Mount it, then open the folder in VS Code like it's 1999.
 
 :memo: *Note*: You can edit files, but **no shell**, **no Git**, and no terminal tantrums. It's like eating cake without the frosting.
@@ -44,14 +44,14 @@ So... you're trying to develop on QUT Aqua, but the server gods have other plans
 
 You've mounted an SMB share to your Finder. Congratulations! You've just volunteered for the following comedy of errors:
 
-1. **Git? More like "Get Lost"** - Your carefully crafted version control system now has all the functionality of a chocolate teapot. Want to commit changes? Sorry, Git is too sophisticated for your peasant SMB connection. It's like bringing a quantum physicist to a kindergarten counting class.
-2. **VS Code's Terminal: The Phantom Feature** - That beautiful integrated terminal in VS Code? It now stares at you like a confused puppy. `Command not found` becomes your new error mantra. It's there... but also not there, like your motivation on Monday mornings.
-3. **The Mysterious Disconnection** - Nothing says "surprise vacation" like your SMB connection randomly dropping when you're in the middle of important work. It's like having a co-worker who pulls the fire alarm whenever they're bored.
-4. **HPC Disruption: The Digital Hostage Situation** - Ah, you've put ALL your files on the server! So when the High-Performance Computing cluster decides to have its quarterly existential crisis (or weekly, who's counting?), your work becomes as accessible as your childhood memories. Your options? Make coffee, stare wistfully out the window.
-5. **The .DS_Store Epidemic: Exclusive for macOS** - Ah, macOS and its infamous `.DS_Store` files! Your Mac scatters these digital breadcrumbs in every folder you visit like an overzealous tourist taking selfies at landmarks. The HPC server, meanwhile, treats them with the same enthusiasm as finding glitter in its keyboard – "Thanks for the desktop settings I absolutely didn't ask for and can't use!" 
+1. **Git Limitations** - Your version control system becomes severely limited over SMB. Git operations that work fine locally will fail or behave unpredictably through the mounted share.
+2. **VS Code Terminal Issues** - The integrated terminal in VS Code won't work properly with mounted SMB shares. You'll get `Command not found` errors for most terminal operations.
+3. **Connection Stability** - SMB connections can drop unexpectedly, especially during longer work sessions or when the network is unstable.
+4. **HPC Dependency** - Since all your files live on the server, any HPC maintenance or downtime makes your work completely inaccessible.
+5. **The .DS_Store Problem (macOS)** - Your Mac will create `.DS_Store` files in every folder you visit through Finder. These desktop service files clutter the HPC filesystem and serve no purpose on the server.
 
 ??? tip "For macOS users only: How to fix the .DS_Store and ._* files issue"
-    ![DS_Store Meme](./images/DS_Store-meme.png) 
+    ![DS_Store Meme](./images/DS_Store-meme.png)
 
     Check out [The .DS_Store Strikes Back: Finder Edition](./The-DS_Store-Strikes-Back.md) about why this is a problem and how to solve it (or not).
 
@@ -59,7 +59,8 @@ You've mounted an SMB share to your Finder. Congratulations! You've just volunte
 
 Mount your HPC home directory *directly* via SSH, no Finder fluff. It's like having your HPC filesystem in your pocket.
 
-#### For macOS Users:
+#### For macOS Users
+
 ```bash
 # Install the prerequisites (because your Mac doesn't come with everything, despite what Apple claims)
 brew install macfuse
@@ -78,7 +79,8 @@ diskutil unmount ~/aqua
 1. When you're running `sshfs` first time, you will be asked to go to "System Preferences" → "Security & Privacy" → "Security" → click "Allow" for running the app. Then you also need to restart your Mac.
 2. You can use `aqua` to replace `your-username@aqua.qut.edu.au` if you have added a shortcut to `~/.ssh/config`.
 
-#### For Linux Users (Ubuntu):
+#### For Linux Users (Ubuntu)
+
 ```bash
 # Install SSHFS (because of course Linux makes you work for everything)
 sudo apt install sshfs
@@ -91,24 +93,27 @@ sshfs your-username@aqua.qut.edu.au:/home/your-username ~/aqua -o follow_symlink
 fusermount -u ~/aqua
 ```
 
-#### For Windows Users:
+#### For Windows Users
 
 Install [WinFSP](https://github.com/winfsp/winfsp/releases) and [SSHFS-Win](https://github.com/winfsp/sshfs-win/releases), because Windows needs two separate things to do what other systems accomplish with one. Then use Windows Explorer (which Microsoft keeps renaming as if that will make us forget its bugs) to map a network drive:
 
-```
+```text
 \\sshfs\your-username@aqua.qut.edu.au
 ```
+
 Then open it in VS Code like you've just performed a miracle:
 
 ```bash
 code ~/aqua
 ```
 
-:check_mark: *Pro*: 
+:check_mark: *Pro*:
+
 - Looks local. Feels local.
 - Git operations work... until they mysteriously don't
 
-:x: *Con*: 
+:x: *Con*:
+
 - Feels **too** local for large files. Might lag.
 - If the connection drops, your filesystem freezes like it's seen a ghost
 
@@ -121,7 +126,7 @@ code ~/aqua
     When using Git over SSHFS, you're essentially asking Git to perform a synchronized swimming routine while blindfolded. For anything more complex than a simple commit, consider SSH-ing directly into the server and running Git commands there. Your future self will thank you for not testing the limits of your patience.
 
 ??? tip "For macOS users only: Still cannot get rid of the .DS_Store and ._* files?"
-    ![DS_Store Meme](./images/DS_Store-meme.png) 
+    ![DS_Store Meme](./images/DS_Store-meme.png)
 
     Check out [The .DS_Store Strikes Back: Finder Edition](./The-DS_Store-Strikes-Back.md) about why this is a problem and how to solve it (or not).
 
@@ -179,10 +184,10 @@ ssh your-username@aqua.qut.edu.au
 
 Then pick your weapon of choice:
 
-* `vim` — For the brave
-* `nano` — For the sane
-* `neovim` — For the modern
-* `emacs` — For the... unique
+- `vim` — For the brave
+- `nano` — For the sane
+- `neovim` — For the modern
+- `emacs` — For the... unique
 
 :direct_hit: *Bonus*: Fast, keyboard-driven, and doesn't require GUI permission forms.
 
@@ -215,27 +220,31 @@ ssh -N -L 8888:localhost:8888 your-username@aqua.qut.edu.au
 :warning: *Warning*: This might require a sysadmin's blessing! Fortunately, the server gods haven't locked *everything* down:
 
 1. Install [`code-server`](https://github.com/coder/code-server) on the HPC.
-```bash
-# On HPC server
-# Install code-server to your home directory
-curl -fsSL https://code-server.dev/install.sh | sh -s -- --method standalone --prefix=$HOME
-# code-server will be installed to $HOME/bin/code-server
 
-# check if code-server is installed
-code-server --version
+    ```bash
+    # On HPC server
+    # Install code-server to your home directory
+    curl -fsSL https://code-server.dev/install.sh | sh -s -- --method standalone --prefix=$HOME
+    # code-server will be installed to $HOME/bin/code-server
 
-# Start code-server
-code-server  --bind-addr 127.0.0.1:8080 --disable-telemetry --disable-update-check --auth none
+    # check if code-server is installed
+    code-server --version
 
-# On your local machine
-# Forward the port 8080 to your local machine
-ssh -N -L 8080:127.0.0.1:8080 your-username@aqua.qut.edu.au
-```
+    # Start code-server
+    code-server  --bind-addr 127.0.0.1:8080 --disable-telemetry --disable-update-check --auth none
+
+    # On your local machine
+    # Forward the port 8080 to your local machine
+    ssh -N -L 8080:127.0.0.1:8080 your-username@aqua.qut.edu.au
+    ```
+
 2. Open it in your browser
-```bash
-# Open the web page in your browser
-http://localhost:8080
-``` 
+
+    ```text
+    # Open the web page in your browser
+    http://localhost:8080
+    ```
+
 3. Marvel as VS Code rises from the ashes — web-style
 
 ??? tip "Sync VS Code settings to code-server"
@@ -285,7 +294,6 @@ http://localhost:8080
     * :arrows_counterclockwise: code-server tried to reconnect to the crashed extension host but failed.
     * :new: code-server restarted the extension host process automatically.
 
-
 ---
 
 ## TL;DR — What Works (and What Requires Sacrifice)
@@ -298,7 +306,6 @@ http://localhost:8080
 | **Terminal Editors**         | :x: No GUI, no problem                  | :white_check_mark: Born in the terminal              | :file_cabinet: Remote (SSH only)          | :x: Nope                       | :crossed_swords: "For shell warriors" |
 | **Jupyter**                  | :white_check_mark: Yes, via browser                    | :white_check_mark: If allowed                        | :file_cabinet: Remote (Jupyter workspace) | :white_check_mark: Yes                        | :test_tube: "Science with style"      |
 | **code-server**              | :white_check_mark: Yes, but web-based                  | :question: Unstable                    | :file_cabinet: Remote (in browser)        | :white_check_mark: Yes                        | :genie: "Feels like cheating"          |
-
 
 ---
 
