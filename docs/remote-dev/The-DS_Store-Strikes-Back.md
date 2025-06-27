@@ -21,20 +21,20 @@ When working with remote servers from macOS, you'll inevitably encounter the dar
 
 1. **Remove Existing .DS_Store Files**
 
-   ```bash
-   # Clean up all .DS_Store files
-   find . -name ".DS_Store" -delete
-   ```
+    ```bash
+    # Clean up all .DS_Store files
+    find . -name ".DS_Store" -delete
+    ```
 
 2. **Prevent Future .DS_Store Creation**
 
-   ```bash
-   # Disable .DS_Store on network volumes
-   defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool TRUE
+    ```bash
+    # Disable .DS_Store on network volumes
+    defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool TRUE
 
-   # Restart Finder to apply changes
-   killall Finder
-   ```
+    # Restart Finder to apply changes
+    killall Finder
+    ```
 
 ---
 
@@ -55,13 +55,13 @@ When working with remote servers from macOS, you'll inevitably encounter the dar
 
 1. **Remove Existing Metadata Files**
 
-   ```bash
-   # Remove all ._ files
-   find . -name "._*" -delete
+    ```bash
+    # Remove all ._ files
+    find . -name "._*" -delete
 
-   # Or clean both .DS_Store and ._ files
-   find . -type f -name "._*" -o -name ".DS_Store" -delete
-   ```
+    # Or clean both .DS_Store and ._ files
+    find . -type f -name "._*" -o -name ".DS_Store" -delete
+    ```
 
 2. **Understanding the ._* Files - The Unstoppable Force**
 
