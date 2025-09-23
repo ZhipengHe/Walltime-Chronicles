@@ -202,18 +202,54 @@ Then pick your weapon of choice:
 !!! info "Install Jupyter Lab in HPC before you start"
     The official Aqua documentation provides a [guide](https://docs.eres.qut.edu.au/hpc-accessing-available-software#install-conda) on how to install Miniconda in HPC.
 
+#### A.1 Run Jupyter Lab on the *Login Node*
+
 ```bash
 # On the HPC
 # I prefer to use Jupyter Lab instead of Jupyter Notebook
 jupyter lab --no-browser --port=8888 # (1)
 
 # On your local machine, forward the port 8888 to your local machine
-# local_port:localhost:remote_port (2)
+# local_port:localhost:remote_port # (2)
 ssh -N -L 8888:localhost:8888 your-username@aqua.qut.edu.au
 ```
 
 1. If port 8888 is already in use, you can try another port, e.g. 8889.
 2. `-N` means no command to run on the remote machine. `-L` means forward the local port to the remote port. Both local and remote ports are 8888 in this case.
+
+Open in your browser:
+
+```text
+http://localhost:8888/?token=...
+```
+
+??? tip "Tips for using Jupyter Lab on the Compute Node"
+    - Keep both the **Jupyter Lab session** and the **SSH tunnel** open. Closing either will disconnect the browser.
+    - Each compute node allocation gives you a different internal IP (`10.xx.xx.xx`), so update your tunnel command every time.
+    - For repeated use, you can simplify the tunnel with an SSH config entry (`~/.ssh/config`).
+
+#### A.2 Run Jupyter Lab on the *Compute Node* (recommended for GPU or heavy jobs)
+
+```bash
+# Step 1. Request an interactive job on a compute node
+qsub -I -S /bin/bash -l select=1:ncpus=4:ngpus=1:mem=32gb -l walltime=02:00:00
+
+# Step 2. Once inside the compute node (e.g., gpu0n004), start Jupyter Lab
+jupyter lab --no-browser --port=8889 --ip=$(hostname -i)   # (1)
+
+# Step 3. On your local machine, forward the port via the login node
+# Replace 10.xx.xx.xx with the IP address shown in Jupyter’s startup message
+ssh -N -L 8889:10.xx.xx.xx:8889 your-username@aqua.qut.edu.au   # (2)
+```
+
+1. `--ip=$(hostname -i)` makes Jupyter listen on the compute node’s internal IP (e.g., `10.13.30.24`). Port can be changed to any unused port.
+2. Use that IP in the tunnel command so the login node can route traffic.
+
+Open in your browser:
+
+```text
+http://localhost:8889/lab?token=...
+```
 
 ### :material-microsoft-visual-studio-code: Option B: VS Code in Browser
 
