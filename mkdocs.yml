@@ -77,6 +77,7 @@ markdown_extensions:
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
   - pymdownx.tasklist:
       custom_checkbox: true
+      clickable_checkbox: true
   - pymdownx.arithmatex:
       generic: true
 
@@ -91,6 +92,12 @@ extra_css:
 
 nav:
   - "~/welcome": index.md
+  - "Crash Course Café":
+    - "Getting Started": tutorials/get-start.md
+    - "Prerequisites Checklist": tutorials/prerequisites.md
+    - "Lesson 0: HPC Fundamentals": tutorials/Lesson-0.md
+    # - "Lesson 1: Environment Setup & First Interactive Session": tutorials/Lesson-1.md
+
   - "Cmd+Opt+Remote":
     - "Surviving without VS Code Remote SSH": remote-dev/Surviving-without-VS-Code-Remote-SSH.md
     - "The .DS_Store Strikes Back: Finder Edition": remote-dev/The-DS_Store-Strikes-Back.md
