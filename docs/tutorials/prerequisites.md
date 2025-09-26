@@ -20,14 +20,14 @@ Before diving into the HPC Crash Course lessons, make sure you're prepared with 
 You'll obviously need to be able to connect to QUT's Aqua system. If you can SSH in and see a command prompt, you're good to go!
 
 !!! info "Need to set up access?"
-    See the official QUT guide: [Getting Started with High Performance Computing](https://docs.eres.qut.edu.au/hpc-getting-started-with-high-performance-computin#accessing-the-hpc) (access only in QUT network. Please use VPN to access the documentation when off-campus.)
+    See the official QUT guide: [Getting Started with High Performance Computing](https://docs.eres.qut.edu.au/hpc-getting-started-with-high-performance-computin#accessing-the-hpc)[^1].
 
 ### 🐧 Essential Linux Commands & File Systems
 
 Working on HPC systems means living in the Linux command line. You don't need to be a shell expert, but you should be comfortable with basic navigation, file operations, and understanding how the file system is organized.
 
 !!! info "Need to learn Linux fundamentals?"
-    QUT eResearch provides an excellent tutorial: [Introduction to the Unix Shell for HPC Users](https://docs.eres.qut.edu.au/sn-index) - covers essential commands, file systems, and more (access only in QUT network. Please use VPN to access the documentation when off-campus.)
+    QUT eResearch provides an excellent tutorial: [Introduction to the Unix Shell for HPC Users](https://docs.eres.qut.edu.au/sn-index) - covers essential commands, file systems, and more[^1].
 
 #### Core Commands You'll Use Daily
 
@@ -217,4 +217,6 @@ Embrace the command line with powerful terminal editors.
 
 ## 🚀 Ready to Start?
 
-Once you've checked off all the prerequisites, you're ready to begin with [Lesson 0: HPC Fundamentals](lesson-0.md)!
+Once you've checked off all the prerequisites, you're ready to begin with [Lesson 0: HPC Fundamentals](Lesson-0.md)!
+
+[^1]: Access only in QUT network. Please use VPN to access the documentation when off-campus.

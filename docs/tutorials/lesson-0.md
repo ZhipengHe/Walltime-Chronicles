@@ -119,12 +119,12 @@ graph TD
     - **High-speed InfiniBand** interconnect for parallel jobs
     - **Petabyte-scale storage** accessible from all nodes
 
-    For detailed hardware specifications, see [QUT eResearch Aqua Hardware Documentation](https://docs.eres.qut.edu.au/about-aqua#hardware).
+    For detailed hardware specifications, see [QUT eResearch Aqua Hardware Documentation](https://docs.eres.qut.edu.au/about-aqua#hardware)[^1].
 
 ### File Systems
 
 !!! info "Complete Documentation"
-    For detailed filesystem specifications, quotas, and usage guidelines, see [QUT eResearch Filesystem Documentation](https://docs.eres.qut.edu.au/hpc-filesystem#summary-of-important-filesystems-mounted-on-aqua).
+    For detailed filesystem specifications, quotas, and usage guidelines, see [QUT eResearch Filesystem Documentation](https://docs.eres.qut.edu.au/hpc-filesystem#summary-of-important-filesystems-mounted-on-aqua)[^1].
 
 Files on Aqua are stored in different locations depending on their purpose and access requirements:
 
@@ -187,7 +187,7 @@ Files on Aqua are stored in different locations depending on their purpose and a
 
 ---
 
-## 🧠 Part 2: What PBS Actually Does for You (4 minutes)
+## 🧠 Part 2: What PBS Actually Does for You (8 minutes)
 
 ### The Problem PBS Solves
 
@@ -211,7 +211,7 @@ Imagine trying to organize shared use of a car among 500 people without any syst
 
 **PBS (Portable Batch System)** is like having a really smart building manager who handles all the resource allocation and scheduling automatically.
 
-### How PBS Works (The 30-Second Version)
+### How PBS Works?
 
 Here's the basic flow of how PBS manages your job from submission to completion:
 
@@ -327,7 +327,7 @@ sequenceDiagram
 - **CPU Type**: `cpu_id=AMD-25-17` (AMD EPYC processors)
 - **GPU Type**: `gpu_id=H100` or `gpu_id=A100` (specify GPU model)
 
-### Why Job Scheduling Exists
+### Why Job Scheduling Exists?
 
 Without PBS, 500+ users would compete for the same hardware simultaneously - complete chaos!
 
@@ -377,3 +377,5 @@ Without PBS, 500+ users would compete for the same hardware simultaneously - com
     - Testing your setup
 
 Ready to get your hands dirty? Let's head to [Lesson 1: Environment Setup & First Interactive Session](Lesson-1.md)! 🚀
+
+[^1]: Access only in QUT network. Please use VPN to access the documentation when off-campus.

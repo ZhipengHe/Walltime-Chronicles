@@ -13,6 +13,9 @@ If you have ever:
 
 Then this is the right place.
 
+!!! info "New: Crash Course Café in Development"
+    I'm currently building a [beginner-friendly tutorial series](tutorials/get-start.md) for those new to HPC. It's a work in progress - no promises on completion dates!
+
 ---
 
 ## What You'll Find Here
