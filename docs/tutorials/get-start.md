@@ -98,10 +98,10 @@ This crash course is your launching pad. When you hit specific challenges, you'l
 
 >*"What is this magical compute cluster anyway?"*
 
-- [ ] Understanding clusters, nodes, and cores
-- [ ] What PBS actually does for you
-- [ ] QUT Aqua's specific architecture
-- [ ] Why job scheduling exists (and why it's worth the hassle)
+- [x] Understanding clusters, nodes, and cores (with QUT Aqua specifics)
+- [x] QUT Aqua's file systems and storage locations
+- [x] What PBS actually does for you (Interactive, Batch, Array jobs)
+- [x] Why job scheduling exists (and why it's worth the hassle)
 
 ### Lesson 1: Environment Setup & First Interactive Session (15 min)
 
