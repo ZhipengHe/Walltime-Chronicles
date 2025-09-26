@@ -379,29 +379,6 @@
 
               
             
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../Lesson-1.md" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Lesson 1: Environment Setup & First Interactive Session
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
           </ul>
         </nav>
       
@@ -812,13 +789,13 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#part-2-what-pbs-actually-does-for-you-4-minutes" class="md-nav__link">
+  <a href="#part-2-what-pbs-actually-does-for-you-8-minutes" class="md-nav__link">
     <span class="md-ellipsis">
-      🧠 Part 2: What PBS Actually Does for You (4 minutes)
+      🧠 Part 2: What PBS Actually Does for You (8 minutes)
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="🧠 Part 2: What PBS Actually Does for You (4 minutes)">
+    <nav class="md-nav" aria-label="🧠 Part 2: What PBS Actually Does for You (8 minutes)">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -840,9 +817,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#how-pbs-works-the-30-second-version" class="md-nav__link">
+  <a href="#how-pbs-works" class="md-nav__link">
     <span class="md-ellipsis">
-      How PBS Works (The 30-Second Version)
+      How PBS Works?
     </span>
   </a>
   
@@ -893,7 +870,7 @@
           <li class="md-nav__item">
   <a href="#why-job-scheduling-exists" class="md-nav__link">
     <span class="md-ellipsis">
-      Why Job Scheduling Exists
+      Why Job Scheduling Exists?
     </span>
   </a>
   
@@ -1059,12 +1036,12 @@
 <li><strong>High-speed InfiniBand</strong> interconnect for parallel jobs</li>
 <li><strong>Petabyte-scale storage</strong> accessible from all nodes</li>
 </ul>
-<p>For detailed hardware specifications, see <a href="https://docs.eres.qut.edu.au/about-aqua#hardware">QUT eResearch Aqua Hardware Documentation</a>.</p>
+<p>For detailed hardware specifications, see <a href="https://docs.eres.qut.edu.au/about-aqua#hardware">QUT eResearch Aqua Hardware Documentation</a><sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup>.</p>
 </div>
 <h3 id="file-systems">File Systems</h3>
 <div class="admonition info">
 <p class="admonition-title">Complete Documentation</p>
-<p>For detailed filesystem specifications, quotas, and usage guidelines, see <a href="https://docs.eres.qut.edu.au/hpc-filesystem#summary-of-important-filesystems-mounted-on-aqua">QUT eResearch Filesystem Documentation</a>.</p>
+<p>For detailed filesystem specifications, quotas, and usage guidelines, see <a href="https://docs.eres.qut.edu.au/hpc-filesystem#summary-of-important-filesystems-mounted-on-aqua">QUT eResearch Filesystem Documentation</a><sup id="fnref2:1"><a class="footnote-ref" href="#fn:1">1</a></sup>.</p>
 </div>
 <p>Files on Aqua are stored in different locations depending on their purpose and access requirements:</p>
 <p><strong>Home Directory (<code>/home/$USER</code> or <code>~</code>):</strong></p>
@@ -1153,7 +1130,7 @@
 </table>
 </div>
 <hr />
-<h2 id="part-2-what-pbs-actually-does-for-you-4-minutes">🧠 Part 2: What PBS Actually Does for You (4 minutes)</h2>
+<h2 id="part-2-what-pbs-actually-does-for-you-8-minutes">🧠 Part 2: What PBS Actually Does for You (8 minutes)</h2>
 <h3 id="the-problem-pbs-solves">The Problem PBS Solves</h3>
 <p>Imagine trying to organize shared use of a car among 500 people without any system. Chaos, right?</p>
 <div class="admonition info">
@@ -1171,7 +1148,7 @@
 </div>
 <h3 id="pbs-your-digital-resource-manager">PBS: Your Digital Resource Manager</h3>
 <p><strong>PBS (Portable Batch System)</strong> is like having a really smart building manager who handles all the resource allocation and scheduling automatically.</p>
-<h3 id="how-pbs-works-the-30-second-version">How PBS Works (The 30-Second Version)</h3>
+<h3 id="how-pbs-works">How PBS Works?</h3>
 <p>Here's the basic flow of how PBS manages your job from submission to completion:</p>
 <pre class="mermaid"><code>sequenceDiagram
     participant You
@@ -1268,7 +1245,7 @@
 <li><strong>CPU Type</strong>: <code>cpu_id=AMD-25-17</code> (AMD EPYC processors)</li>
 <li><strong>GPU Type</strong>: <code>gpu_id=H100</code> or <code>gpu_id=A100</code> (specify GPU model)</li>
 </ul>
-<h3 id="why-job-scheduling-exists">Why Job Scheduling Exists</h3>
+<h3 id="why-job-scheduling-exists">Why Job Scheduling Exists?</h3>
 <p>Without PBS, 500+ users would compete for the same hardware simultaneously - complete chaos!</p>
 <div class="admonition success">
 <p class="admonition-title">PBS Benefits</p>
@@ -1306,6 +1283,14 @@
 </ul>
 </div>
 <p>Ready to get your hands dirty? Let's head to <a href="Lesson-1.md">Lesson 1: Environment Setup &amp; First Interactive Session</a>! 🚀</p>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p>Access only in QUT network. Please use VPN to access the documentation when off-campus.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref2:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
 
 
 
@@ -1328,7 +1313,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="September 26, 2025 15:15:01 AEST">September 26, 2025</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="September 26, 2025 15:43:59 AEST">September 26, 2025</span>
   </span>
 
     
