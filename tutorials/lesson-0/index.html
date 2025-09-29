@@ -15,6 +15,10 @@
         <link rel="canonical" href="https://zhipenghe.me/walltime-chronicles/tutorials/lesson-0/">
       
       
+        <link rel="prev" href="../prerequisites/">
+      
+      
+        <link rel="next" href="../../remote-dev/Surviving-without-VS-Code-Remote-SSH/">
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
@@ -274,20 +278,20 @@
       
   
   
+    
   
   
+  
     
     
     
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
         
           
           <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
@@ -303,7 +307,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             Crash Course Café
@@ -360,10 +364,32 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../Lesson-0.md" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Lesson 0: HPC Fundamentals
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -374,6 +400,212 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-youll-accomplish" class="md-nav__link">
+    <span class="md-ellipsis">
+      📋 What You'll Accomplish
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-1-understanding-qut-aqua-architecture-7-minutes" class="md-nav__link">
+    <span class="md-ellipsis">
+      🏗️ Part 1: Understanding QUT Aqua Architecture (7 minutes)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🏗️ Part 1: Understanding QUT Aqua Architecture (7 minutes)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#scale-comparison-personal-to-supercomputing" class="md-nav__link">
+    <span class="md-ellipsis">
+      Scale Comparison: Personal to Supercomputing
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Scale Comparison: Personal to Supercomputing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#your-laptop" class="md-nav__link">
+    <span class="md-ellipsis">
+      Your Laptop
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-compute-node" class="md-nav__link">
+    <span class="md-ellipsis">
+      A Compute Node
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#qut-aqua-the-complete-infrastructure" class="md-nav__link">
+    <span class="md-ellipsis">
+      QUT Aqua: The Complete Infrastructure
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-systems" class="md-nav__link">
+    <span class="md-ellipsis">
+      File Systems
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-2-what-pbs-actually-does-for-you-8-minutes" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧠 Part 2: What PBS Actually Does for You (8 minutes)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🧠 Part 2: What PBS Actually Does for You (8 minutes)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-problem-pbs-solves" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Problem PBS Solves
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pbs-your-digital-resource-manager" class="md-nav__link">
+    <span class="md-ellipsis">
+      PBS: Your Digital Resource Manager
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-pbs-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      How PBS Works?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#types-of-pbs-jobs-youll-use" class="md-nav__link">
+    <span class="md-ellipsis">
+      Types of PBS Jobs You'll Use
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Types of PBS Jobs You&#39;ll Use">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#interactive-jobs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Interactive Jobs
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#batch-jobs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Batch Jobs
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#job-arrays" class="md-nav__link">
+    <span class="md-ellipsis">
+      Job Arrays
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-job-scheduling-exists" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why Job Scheduling Exists?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-takeaways" class="md-nav__link">
+    <span class="md-ellipsis">
+      🎯 Key Takeaways
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#whats-next" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔗 What's Next?
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1328,6 +1560,29 @@
 
     
     
+    
+      
+  <span class="md-source-file__fact">
+    
+      
+  <span class="md-icon" title="Contributors">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33s1.71.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2"/></svg>
+  </span>
+  <span>GitHub</span>
+
+    
+    <nav>
+      
+        <a href="https://github.com/ZhipengHe" class="md-author" title="@ZhipengHe">
+          
+          <img src="https://avatars.githubusercontent.com/u/29477872?v=4&size=72" alt="ZhipengHe">
+        </a>
+      
+      
+      
+    </nav>
+  </span>
+
     
   </aside>
 
