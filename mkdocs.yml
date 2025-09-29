@@ -99,8 +99,8 @@ nav:
   - "Crash Course Café":
     - "Getting Started": tutorials/get-start.md
     - "Prerequisites Checklist": tutorials/prerequisites.md
-    - "Lesson 0: HPC Fundamentals": tutorials/Lesson-0.md
-    # - "Lesson 1: Environment Setup & First Interactive Session": tutorials/Lesson-1.md
+    - "Lesson 0: HPC Fundamentals": tutorials/lesson-0.md
+    # - "Lesson 1: Environment Setup & First Interactive Session": tutorials/lesson-1.md
 
   - "Cmd+Opt+Remote":
     - "Surviving without VS Code Remote SSH": remote-dev/Surviving-without-VS-Code-Remote-SSH.md

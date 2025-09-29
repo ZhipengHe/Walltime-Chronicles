@@ -217,6 +217,6 @@ Embrace the command line with powerful terminal editors.
 
 ## 🚀 Ready to Start?
 
-Once you've checked off all the prerequisites, you're ready to begin with [Lesson 0: HPC Fundamentals](Lesson-0.md)!
+Once you've checked off all the prerequisites, you're ready to begin with [Lesson 0: HPC Fundamentals](lesson-0.md)!
 
 [^1]: Access only in QUT network. Please use VPN to access the documentation when off-campus.

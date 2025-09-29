@@ -376,6 +376,6 @@ Without PBS, 500+ users would compete for the same hardware simultaneously - com
     - Understanding login vs compute nodes
     - Testing your setup
 
-Ready to get your hands dirty? Let's head to [Lesson 1: Environment Setup & First Interactive Session](Lesson-1.md)! 🚀
+Ready to get your hands dirty? Let's head to [Lesson 1: Environment Setup & First Interactive Session](lesson-1.md)! 🚀
 
 [^1]: Access only in QUT network. Please use VPN to access the documentation when off-campus.
