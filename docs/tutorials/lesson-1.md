@@ -363,9 +363,9 @@ You'll be back on the login node, and your compute resources are released.
 
 !!! question "Need Help?"
 
-    - **Environment issues?** Check the [Remote Development Guide](../remote-dev/)
-    - **Package problems?** See the [Remote Development Guide](../remote-dev/)
-    - **Interactive session not starting?** Review [Resource Request Guidelines](../scheduler/)
+    - **Environment issues?** Check [Surviving without VS Code Remote SSH](../../remote-dev/Surviving-without-VS-Code-Remote-SSH/)
+    - **Package problems?** See [Surviving without VS Code Remote SSH](../../remote-dev/Surviving-without-VS-Code-Remote-SSH/)
+    - **Interactive session not starting?** Review [Guess, Request, Regret: The Art of Walltime](../../scheduler/The-Art-of-Walltime/)
 
 ---
 
