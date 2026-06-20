@@ -17,3 +17,6 @@ site/
 .vscode/
 
 .DS_Store
+
+# Local-only working dir for audits, discussions, plans (not for the published site)
+.plan/
