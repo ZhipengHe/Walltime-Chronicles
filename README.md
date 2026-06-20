@@ -24,22 +24,22 @@ The full documentation is available at [Walltime Chronicles Documentation](https
 
 To build the documentation locally:
 
-1. Install the requirements:
+1. Install the dependencies with [uv](https://docs.astral.sh/uv/):
 
    ```bash
-   pip install -r requirements.txt
+   uv sync
    ```
 
 2. Build the documentation:
 
    ```bash
-   mkdocs build
+   uv run mkdocs build
    ```
 
 3. Serve the documentation locally:
 
    ```bash
-   mkdocs serve
+   uv run mkdocs serve
    ```
 
 ## Disclaimer
