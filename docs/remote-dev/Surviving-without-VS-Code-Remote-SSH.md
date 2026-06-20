@@ -189,10 +189,10 @@ Mount your HPC home directory *directly* via SSH, no Finder fluff. It's like hav
     ```bash
     # Install the prerequisites (because your Mac doesn't come
     # with everything, despite what Apple claims)
-    brew install macfuse
+    brew install macfuse # (1)!
     brew install gromgit/fuse/sshfs-mac
 
-    # Mount your HPC home (1)!
+    # Mount your HPC home
     mkdir ~/aqua
     sshfs your-username@aqua.qut.edu.au:/home/your-username ~/aqua # (2)!
 
