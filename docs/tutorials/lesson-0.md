@@ -159,23 +159,31 @@ Files on Aqua are stored in different locations depending on their purpose and a
 - **Automatically cleaned** when job finishes
 - **Use for**: Intermediate calculations, temporary outputs
 
-!!! bug "Home Filesystem Performance Issues (As of September 26, 2025)"
-    The home filesystem has been experiencing intermittent issues with processing lots of small files.
+!!! tip "File system best practice: avoid millions of small files in `/home`"
+    The Lustre-backed `/home/$USER` filesystem slows down when a single user accumulates millions of small files. QUT eResearch asks users to keep file counts in home reasonable, and to archive folders that aren't in active use[^1].
 
-    **Examples of problematic operations:**
+    **If a workflow generates many small files** (extracting large archives, compiling software with many intermediates, large dependency installs), prefer either of:
 
-    - Installing Miniconda (thousands of small Python files)
-    - Extracting large archives with many files
-    - Building software that creates many temporary files
-
-    **Workaround: Use `/scratch` for operations involving many small files:**
+    - **Run it on `/scratch`** and copy the finished output back to `/home`:
 
     ```bash
-    # Create your working directory on scratch
-    mkdir /scratch/$USER/project_work
+    mkdir -p /scratch/$USER/project_work
+    cd /scratch/$USER/project_work
+    # ... do the build / extract here ...
+    cp -r <results> ~/                  # back to home when done
     ```
 
-    **Important**: Since `/scratch` files may be deleted after a month of inactivity, **backup important files to your home directory regularly**.
+    - **Archive completed folders** with `tar` once you're finished with them:
+
+    ```bash
+    tar -cvf <foldername>.tar <foldername>
+    rm -rf <foldername>
+    ```
+
+    !!! warning
+        `/scratch` files are deleted after 30 days of inactivity, so move anything you want to keep into `/home` (or shared `/work`) before then.
+
+    Reference: [QUT eResearch — Filesystem and data management](https://docs.eres.qut.edu.au/hpc-filesystem#summary-of-important-filesystems-mounted-on-aqua)[^1].
 
 !!! tip "Storage Performance Comparison"
     | Filesystem | Speed | Backup | Use Case |

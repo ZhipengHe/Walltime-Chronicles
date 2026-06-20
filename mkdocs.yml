@@ -79,6 +79,8 @@ markdown_extensions:
   - pymdownx.emoji:
       emoji_index: !!python/name:material.extensions.emoji.twemoji
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.tabbed:
+      alternate_style: true
   - pymdownx.tasklist:
       custom_checkbox: true
       clickable_checkbox: true
@@ -100,7 +102,7 @@ nav:
     - "Getting Started": tutorials/get-start.md
     - "Prerequisites Checklist": tutorials/prerequisites.md
     - "Lesson 0: HPC Fundamentals": tutorials/lesson-0.md
-    # - "Lesson 1: Environment Setup & First Interactive Session": tutorials/lesson-1.md
+    - "Lesson 1: Environment Setup & First Interactive Session": tutorials/lesson-1.md
 
   - "Cmd+Opt+Remote":
     - "Surviving without VS Code Remote SSH": remote-dev/Surviving-without-VS-Code-Remote-SSH.md
