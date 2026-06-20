@@ -183,7 +183,7 @@ Embrace the command line with powerful terminal editors.
     ```
 
 !!! info "Detailed Setup Instructions"
-    Each method has specific setup requirements and trade-offs. See our comprehensive guide: [Surviving without VS Code Remote SSH](../../remote-dev/Surviving-without-VS-Code-Remote-SSH) for step-by-step instructions, troubleshooting, and performance tips.
+    Each method has specific setup requirements and trade-offs. See our comprehensive guide: [Surviving without VS Code Remote SSH](../remote-dev/Surviving-without-VS-Code-Remote-SSH.md) for step-by-step instructions, troubleshooting, and performance tips.
 
 ---
 

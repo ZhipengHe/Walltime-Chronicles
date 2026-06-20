@@ -86,7 +86,7 @@ This crash course is your launching pad. When you hit specific challenges, you'l
 - [x] **Linux file system**: Understanding absolute vs relative paths, directory structure, home directory (`~`), root (`/`), permissions
 - [x] **File transfer method**: SCP, rsync, or remote editing setup complete
 
-*Need help with setup? See our [Remote Development Guide](../remote-dev/) first.*
+*Need help with setup? See our [Remote Development Guide](../remote-dev/Surviving-without-VS-Code-Remote-SSH.md) first.*
 
 ---
 
