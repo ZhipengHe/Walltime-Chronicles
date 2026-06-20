@@ -1,0 +1,97 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+#
+# CodeRabbit config for Walltime-Chronicles (MkDocs documentation site).
+# Goals, in priority order:
+#   1. Never review the local-only .plan/ workspace, mkdocs build output, or lockfiles.
+#   2. Catch broken internal links and stale eRes references in user-facing docs.
+#   3. Flag tag-pinned GitHub Actions — must be commit-SHA-pinned (PR #1 set this baseline).
+
+language: "en-US"
+early_access: false
+
+reviews:
+  profile: "chill"
+  request_changes_workflow: false
+  high_level_summary: true
+  poem: false
+  review_status: true
+  collapse_walkthrough: false
+
+  auto_review:
+    enabled: true
+    drafts: false
+    ignore_title_keywords:
+      - "WIP"
+      - "DO NOT MERGE"
+      - "[skip ci]"
+    base_branches:
+      - "main"
+
+  suggested_labels: true
+
+  path_filters:
+    - "!.plan/**"
+    - "!site/**"
+    - "!**/uv.lock"
+    - "!**/.cache/**"
+    - "!docs/**/images/**"
+    - "!**/*.png"
+    - "!**/*.jpg"
+    - "!**/*.svg"
+
+  path_instructions:
+    - path: "docs/**/*.md"
+      instructions: |
+        - Internal cross-links between docs must be source-relative .md paths
+          (e.g. `../tutorials/lesson-0.md`), not directory-only links — mkdocs
+          emits "unrecognized relative link" INFOs otherwise (see PR #7 fixing
+          this regression in get-start.md and prerequisites.md).
+        - When citing QUT eResearch HPC docs (`docs.eres.qut.edu.au/...`),
+          append the `[^1]` footnote ("Access only in QUT network. Please use
+          VPN ... off-campus.") that every other page uses.
+        - Voice is conversational / "Crash Course Café" — keep humour where
+          it already exists; don't flatten it into bureaucratic prose.
+
+    - path: "mkdocs.yml"
+      instructions: |
+        - Every entry under `nav:` must point to a file that exists under docs/.
+          Flag nav entries pointing to non-existent files.
+        - The `markdown_extensions:` list is load-bearing — `pymdownx.tabbed`,
+          `pymdownx.details`, `pymdownx.superfences` (with the mermaid custom
+          fence), `attr_list`, and `footnotes` are all used by pages and must
+          not be removed without checking which pages depend on them.
+
+    - path: ".github/workflows/*.{yml,yaml}"
+      instructions: |
+        - Remote GitHub Actions (`uses: owner/repo@ref`) must be pinned to a
+          full 40-character commit SHA, not a tag (PR #1 set this baseline,
+          and Dependabot is configured to maintain it).
+        - `permissions:` must be declared at workflow or job level.
+
+    - path: "docs/pbs-scripts/scripts/*.sh"
+      instructions: |
+        - These are example PBS / HPC helper scripts shown to readers. Shellcheck
+          findings are welcome but flag with low priority — these are
+          illustrative, not infrastructure.
+
+  tools:
+    markdownlint:
+      enabled: true
+    yamllint:
+      enabled: true
+    actionlint:
+      enabled: true
+    gitleaks:
+      enabled: true
+    shellcheck:
+      enabled: true
+    # languagetool runs on markdown by default and is noisy on technical docs
+    # (PBS, walltime, HPC jargon) — disable explicitly.
+    languagetool:
+      enabled: false
+
+chat:
+  auto_reply: true
+
+knowledge_base:
+  opt_out: false
