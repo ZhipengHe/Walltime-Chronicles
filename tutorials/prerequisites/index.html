@@ -551,6 +551,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#option-5-vscode-remote-tunnel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option 5: VSCode Remote Tunnel 🔌
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1184,6 +1195,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#option-5-vscode-remote-tunnel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option 5: VSCode Remote Tunnel 🔌
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1319,7 +1341,7 @@
 <p>Working on HPC systems means living in the Linux command line. You don't need to be a shell expert, but you should be comfortable with basic navigation, file operations, and understanding how the file system is organized.</p>
 <div class="admonition info">
 <p class="admonition-title">Need to learn Linux fundamentals?</p>
-<p>QUT eResearch provides an excellent tutorial: <a href="https://docs.eres.qut.edu.au/sn-index">Introduction to the Unix Shell for HPC Users</a> - covers essential commands, file systems, and more<sup id="fnref2:1"><a class="footnote-ref" href="#fn:1">1</a></sup>.</p>
+<p>QUT eResearch provides an excellent tutorial: <a href="https://docs.eres.qut.edu.au/sn-index">Intro to the Shell</a> - covers essential commands, file systems, and more<sup id="fnref2:1"><a class="footnote-ref" href="#fn:1">1</a></sup>.</p>
 </div>
 <h4 id="core-commands-youll-use-daily">Core Commands You'll Use Daily</h4>
 <div class="admonition example">
@@ -1388,6 +1410,7 @@
 <div class="admonition failure">
 <p class="admonition-title">Important: VS Code Remote SSH is NOT Available on QUT Aqua</p>
 <p>VS Code Remote SSH extension is automatically disconnected after ~30 seconds due to server policies. Don't waste time trying to make it work!</p>
+<p>QUT eResearch's sanctioned replacement is <strong>VSCode Remote Tunnel</strong> running inside an interactive job — see Option 5 below.</p>
 </div>
 <h4 id="option-1-develop-locally-sync-to-hpc">Option 1: Develop Locally, Sync to HPC 💻➡️🖥️</h4>
 <p>Write and test code locally, then transfer to HPC for execution.</p>
@@ -1411,6 +1434,10 @@
 </span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="c1"># SCP - Simple file copying</span>
 </span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>scp<span class="w"> </span>script.py<span class="w"> </span>username@aqua.qut.edu.au:~/
 </span></code></pre></div>
+<div class="admonition info">
+<p class="admonition-title">Need more transfer options?</p>
+<p>QUT eResearch has the full reference — Windows Map Drive (<code>\\hpc-fs\&lt;username&gt;</code>), Mac Finder (<code>smb://hpc-fs/&lt;username&gt;/</code>), WinSCP, and the dedicated SFTP endpoint at <code>eresdtn01.qut.edu.au</code>: <a href="https://docs.eres.qut.edu.au/hpc-transferring-files-tofrom-hpc">Transferring files to/from the HPC</a><sup id="fnref3:1"><a class="footnote-ref" href="#fn:1">1</a></sup>. Useful for Windows users and large datasets.</p>
+</div>
 <h4 id="option-2-mount-hpc-as-local-drive">Option 2: Mount HPC as Local Drive 🗂️💻</h4>
 <p>Make HPC files appear as local folders for seamless editing.</p>
 <div class="admonition example">
@@ -1438,12 +1465,18 @@
 </div>
 <h4 id="option-3-web-based-development">Option 3: Web-Based Development 🌐💻</h4>
 <p>Use browser-based development environments running on HPC.</p>
+<div class="admonition tip">
+<p class="admonition-title">QUT JupyterHub (Recommended for Data Science)</p>
+<p>QUT eResearch runs a managed JupyterHub at <a href="https://jupyterhub.eres.qut.edu.au">https://jupyterhub.eres.qut.edu.au</a><sup id="fnref4:1"><a class="footnote-ref" href="#fn:1">1</a></sup> — log in with your QUT credentials, click <em>Start My Server</em>, and you get a backing PBS job (default <code>Aqua - 1 core, 8 GB, 8 hours</code>) without writing a single script. First connect can take up to ~10 minutes while your job queues.</p>
+<p>Full walkthrough: <a href="https://docs.eres.qut.edu.au/how-to-use-jupyterhub">How to use JupyterHub</a><sup id="fnref5:1"><a class="footnote-ref" href="#fn:1">1</a></sup>.</p>
+</div>
 <div class="admonition example">
-<p class="admonition-title">JupyterLab (Recommended for Data Science)</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># On HPC</span>
+<p class="admonition-title">Manual JupyterLab (for custom environments)</p>
+<p>Use this when JupyterHub's defaults don't fit — custom conda env, specific GPU, longer walltime, non-standard kernel. Start it inside an interactive PBS job and tunnel the port over SSH.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># Inside an interactive job on HPC</span>
 </span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>jupyter<span class="w"> </span>lab<span class="w"> </span>--no-browser<span class="w"> </span>--port<span class="o">=</span><span class="m">8888</span>
 </span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>
-</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="c1"># On your local machine</span>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="c1"># On your local machine, in a new terminal</span>
 </span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>ssh<span class="w"> </span>-N<span class="w"> </span>-L<span class="w"> </span><span class="m">8888</span>:localhost:8888<span class="w"> </span>username@aqua.qut.edu.au
 </span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>
 </span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="c1"># Open: http://localhost:8888</span>
@@ -1461,6 +1494,39 @@
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>ssh<span class="w"> </span>username@aqua.qut.edu.au
 </span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>nano<span class="w"> </span>my-script.py<span class="w">  </span><span class="c1"># or vim, emacs</span>
 </span></code></pre></div>
+</div>
+<h4 id="option-5-vscode-remote-tunnel">Option 5: VSCode Remote Tunnel 🔌</h4>
+<p>Run a tunneled VS Code session from inside an interactive PBS job. This is the eResearch-sanctioned replacement for the blocked Remote-SSH extension.</p>
+<div class="admonition tip">
+<p class="admonition-title">Best for:</p>
+<ul>
+<li>You want the VS Code Remote-SSH experience without breaking eResearch policy</li>
+<li>You're comfortable holding an interactive PBS job for the length of your session</li>
+<li>You're already signed in with a Microsoft or GitHub account</li>
+</ul>
+</div>
+<div class="admonition example">
+<p class="admonition-title">Sketch</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># 1. Start an interactive job</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>qsub<span class="w"> </span>-I<span class="w"> </span>-l<span class="w"> </span><span class="nv">walltime</span><span class="o">=</span><span class="m">02</span>:00:00<span class="w"> </span>-l<span class="w"> </span><span class="k">select</span><span class="o">=</span><span class="m">1</span>:ncpus<span class="o">=</span><span class="m">2</span>:mem<span class="o">=</span>4GB
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="c1"># 2. Inside the job, fetch the VS Code CLI (once per home dir)</span>
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>curl<span class="w"> </span>-Lk<span class="w"> </span><span class="s1">&#39;https://code.visualstudio.com/sha/download?build=stable&amp;os=cli-alpine-x64&#39;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="w">  </span>--output<span class="w"> </span>vscode_cli.tar.gz
+</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>~/bin<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>tar<span class="w"> </span>-xf<span class="w"> </span>vscode_cli.tar.gz<span class="w"> </span>-C<span class="w"> </span>~/bin/<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>rm<span class="w"> </span>vscode_cli.tar.gz
+</span><span id="__span-10-8"><a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>
+</span><span id="__span-10-9"><a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="c1"># 3. Start the tunnel and follow the device-code prompt</span>
+</span><span id="__span-10-10"><a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>~/bin/code<span class="w"> </span>tunnel
+</span></code></pre></div>
+<p>On your local machine: open VS Code, click the green Remote icon (bottom-left), <strong>Connect to Tunnel</strong>, and pick the HPC node from the list.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Trade-off</p>
+<p>Your editor lives inside an interactive PBS job — when the job ends, the tunnel ends. Great for half-day sessions; not for "leave VS Code open all week" workflows.</p>
+</div>
+<div class="admonition info">
+<p class="admonition-title">Detailed Walkthrough</p>
+<p>QUT eResearch has the screenshot-by-screenshot version: <a href="https://docs.eres.qut.edu.au/hpc-vscode-usage#option-2-vscode-remote-tunnel">VS Code Usage — Option 2: VSCode Remote Tunnel</a><sup id="fnref6:1"><a class="footnote-ref" href="#fn:1">1</a></sup>.</p>
 </div>
 <div class="admonition info">
 <p class="admonition-title">Detailed Setup Instructions</p>
@@ -1499,7 +1565,7 @@
 <hr />
 <ol>
 <li id="fn:1">
-<p>Access only in QUT network. Please use VPN to access the documentation when off-campus.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref2:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+<p>Access only in QUT network. Please use VPN to access the documentation when off-campus.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref2:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref3:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref4:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref5:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref6:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
 </li>
 </ol>
 </div>
@@ -1525,7 +1591,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="June 21, 2026 01:04:13 AEST">June 21, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="June 21, 2026 01:25:25 AEST">June 21, 2026</span>
   </span>
 
     
@@ -1556,6 +1622,11 @@
         <a href="https://github.com/ZhipengHe" class="md-author" title="@ZhipengHe">
           
           <img src="https://avatars.githubusercontent.com/u/29477872?v=4&size=72" alt="ZhipengHe">
+        </a>
+      
+        <a href="https://github.com/web-flow" class="md-author" title="@web-flow">
+          
+          <img src="https://avatars.githubusercontent.com/u/19864447?v=4&size=72" alt="web-flow">
         </a>
       
       
