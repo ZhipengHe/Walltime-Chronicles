@@ -18,7 +18,7 @@
         <link rel="prev" href="../prerequisites/">
       
       
-        <link rel="next" href="../../remote-dev/Surviving-without-VS-Code-Remote-SSH/">
+        <link rel="next" href="../lesson-1/">
       
       
         
@@ -665,6 +665,34 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lesson-1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 1: Environment Setup & First Interactive Session
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -1513,20 +1541,29 @@
 <li><strong>Automatically cleaned</strong> when job finishes</li>
 <li><strong>Use for</strong>: Intermediate calculations, temporary outputs</li>
 </ul>
-<div class="admonition bug">
-<p class="admonition-title">Home Filesystem Performance Issues (As of September 26, 2025)</p>
-<p>The home filesystem has been experiencing intermittent issues with processing lots of small files.</p>
-<p><strong>Examples of problematic operations:</strong></p>
+<div class="admonition tip">
+<p class="admonition-title">File system best practice: avoid millions of small files in <code>/home</code></p>
+<p>The Lustre-backed <code>/home/$USER</code> filesystem slows down when a single user accumulates millions of small files. QUT eResearch asks users to keep file counts in home reasonable, and to archive folders that aren't in active use<sup id="fnref3:1"><a class="footnote-ref" href="#fn:1">1</a></sup>.</p>
+<p><strong>If a workflow generates many small files</strong> (extracting large archives, compiling software with many intermediates, large dependency installs), prefer either of:</p>
 <ul>
-<li>Installing Miniconda (thousands of small Python files)</li>
-<li>Extracting large archives with many files</li>
-<li>Building software that creates many temporary files</li>
+<li><strong>Run it on <code>/scratch</code></strong> and copy the finished output back to <code>/home</code>:</li>
 </ul>
-<p><strong>Workaround: Use <code>/scratch</code> for operations involving many small files:</strong></p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Create your working directory on scratch</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>mkdir<span class="w"> </span>/scratch/<span class="nv">$USER</span>/project_work
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>/scratch/<span class="nv">$USER</span>/project_work
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nb">cd</span><span class="w"> </span>/scratch/<span class="nv">$USER</span>/project_work
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c1"># ... do the build / extract here ...</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>cp<span class="w"> </span>-r<span class="w"> </span>&lt;results&gt;<span class="w"> </span>~/<span class="w">                  </span><span class="c1"># back to home when done</span>
 </span></code></pre></div>
-<p><strong>Important</strong>: Since <code>/scratch</code> files may be deleted after a month of inactivity, <strong>backup important files to your home directory regularly</strong>.</p>
+<ul>
+<li><strong>Archive completed folders</strong> with <code>tar</code> once you're finished with them:</li>
+</ul>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>tar<span class="w"> </span>-cvf<span class="w"> </span>&lt;foldername&gt;.tar<span class="w"> </span>&lt;foldername&gt;
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>rm<span class="w"> </span>-rf<span class="w"> </span>&lt;foldername&gt;
+</span></code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><code>/scratch</code> files are deleted after 30 days of inactivity, so move anything you want to keep into <code>/home</code> (or shared <code>/work</code>) before then.</p>
+</div>
+<p>Reference: <a href="https://docs.eres.qut.edu.au/hpc-filesystem#summary-of-important-filesystems-mounted-on-aqua">QUT eResearch — Filesystem and data management</a><sup id="fnref4:1"><a class="footnote-ref" href="#fn:1">1</a></sup>.</p>
 </div>
 <div class="admonition tip">
 <p class="admonition-title">Storage Performance Comparison</p>
@@ -1720,12 +1757,12 @@
 <li>Testing your setup</li>
 </ul>
 </div>
-<p>Ready to get your hands dirty? Let's head to <a href="lesson-1.md">Lesson 1: Environment Setup &amp; First Interactive Session</a>! 🚀</p>
+<p>Ready to get your hands dirty? Let's head to <a href="../lesson-1/">Lesson 1: Environment Setup &amp; First Interactive Session</a>! 🚀</p>
 <div class="footnote">
 <hr />
 <ol>
 <li id="fn:1">
-<p>Access only in QUT network. Please use VPN to access the documentation when off-campus.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref2:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+<p>Access only in QUT network. Please use VPN to access the documentation when off-campus.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref2:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref3:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref4:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
 </li>
 </ol>
 </div>
@@ -1751,7 +1788,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="September 29, 2025 16:39:36 AEST">September 29, 2025</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="June 20, 2026 23:54:17 AEST">June 20, 2026</span>
   </span>
 
     
