@@ -11,17 +11,17 @@ Walltime Chronicles is a MkDocs-based documentation site that provides a persona
 ### Documentation
 
 ```bash
-# Install dependencies
-pip install -r requirements.txt
+# Install dependencies (resolves from pyproject.toml + uv.lock)
+uv sync
 
 # Build documentation
-mkdocs build
+uv run mkdocs build
 
 # Serve documentation locally (default: http://127.0.0.1:8000)
-mkdocs serve
+uv run mkdocs serve
 
 # Deploy to GitHub Pages (if configured)
-mkdocs gh-deploy
+uv run mkdocs gh-deploy
 ```
 
 ### Code Quality and Linting
@@ -46,7 +46,8 @@ pre-commit install
     - `remote-dev/` - Remote development setup and troubleshooting
     - `javascripts/` - KaTeX math rendering support
 - `mkdocs.yml` - MkDocs configuration with Material theme
-- `requirements.txt` - Python dependencies for MkDocs build
+- `pyproject.toml` - Python project metadata and dependencies for MkDocs build
+- `uv.lock` - Pinned dependency versions (managed by `uv sync` / `uv lock`)
 - `.pre-commit-config.yaml` - Pre-commit hooks for code quality
 
 ## Writing Style and Content Guidelines

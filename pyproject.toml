@@ -1,0 +1,20 @@
+[project]
+name = "walltime-chronicles"
+version = "0.0.0"
+description = "Personal survival log of mysterious errors, queueing oddities, and PBS quirks encountered on QUT Aqua HPC system"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+authors = [
+    { name = "Zhipeng He" },
+]
+dependencies = [
+    "mkdocs-git-committers-plugin-2>=2.5.0",
+    "mkdocs-git-revision-date-localized-plugin>=1.4.5",
+    "mkdocs-material[imaging]>=9.6.0",
+]
+
+[dependency-groups]
+dev = [
+    "pre-commit>=4.2.0",
+]
