@@ -343,21 +343,10 @@ ssh your-username@aqua.qut.edu.au
 
 Then pick your weapon of choice:
 
-`vim`
-
-: For the brave.
-
-`nano`
-
-: For the sane.
-
-`neovim`
-
-: For the modern.
-
-`emacs`
-
-: For the... unique.
+- `vim` — for the brave.
+- `nano` — for the sane.
+- `neovim` — for the modern.
+- `emacs` — for the... unique.
 
 :direct_hit: *Bonus*: Fast, keyboard-driven, and doesn't require GUI permission forms.
 
@@ -403,8 +392,8 @@ For when JupyterHub's defaults don't fit. You install Jupyter yourself and tunne
     jupyter lab --no-browser --port=8888 # (1)!
 
     # On your local machine, forward the port 8888 to your local machine
-    # local_port:localhost:remote_port # (2)!
-    ssh -N -L 8888:localhost:8888 your-username@aqua.qut.edu.au
+    # local_port:localhost:remote_port
+    ssh -N -L 8888:localhost:8888 your-username@aqua.qut.edu.au # (2)!
     ```
 
     1.  If port 8888 is already in use, try `8889` or any unused port.
