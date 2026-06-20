@@ -24,11 +24,11 @@ By the end of this 15-minute lesson, you'll have:
     You can use either **Miniconda** OR **UV** for Python environment management. Both are excellent choices --
      pick the one that appeals to you! Learning one is perfectly sufficient for HPC work.
 
-### 🐍 1.A: Installing Miniconda (5 minutes)
+### 🐍 Installing Miniconda (5 minutes)
 
 Miniconda is your Python environment lifesaver on HPC systems. No more "it works on my laptop" nightmares!
 
-### Why Miniconda on HPC?
+#### Why Miniconda on HPC?
 
 !!! info "The Problem"
     HPC Python requires you to load modules before use, which can be cumbersome for development. Miniconda gives you:
@@ -37,7 +37,7 @@ Miniconda is your Python environment lifesaver on HPC systems. No more "it works
     - **Isolated environments** for different projects
     - **No permission headaches** when installing packages
 
-### Installation Steps
+#### Installation Steps
 
 !!! tip "Shortcut: use the QUT-provided Miniconda module instead"
     If you don't need a specific Miniconda version, QUT eResearch already ships one. You can skip the install-yourself steps below and just:
@@ -109,7 +109,7 @@ Miniconda is your Python environment lifesaver on HPC systems. No more "it works
         /home/your-username/miniconda3/bin/python
         ```
 
-### Quick Environment Test
+#### Quick Environment Test
 
 Create a test environment to make sure everything works:
 
@@ -127,11 +127,11 @@ conda deactivate
     echo 'export PATH="/home/$USER/miniconda3/bin:$PATH"' >> ~/.bashrc
     ```
 
-### 1.B: Installing UV (3 minutes)
+### ⚡ Installing UV (3 minutes)
 
 UV is the new hotness in Python package management - it's blazingly fast and perfect for HPC environments where every second counts.
 
-### Why UV?
+#### Why UV?
 
 !!! abstract "Speed Comparison"
     | Tool | Time to install requests |
@@ -140,7 +140,7 @@ UV is the new hotness in Python package management - it's blazingly fast and per
     | conda | ~30 seconds |
     | **uv** | **~2 seconds** ⚡ |
 
-### Installation
+#### Installation
 
 If you set up conda above, you can drop UV into the base env. If you skipped conda, UV has a one-line standalone installer that doesn't need it:
 
@@ -156,7 +156,7 @@ If you set up conda above, you can drop UV into the base env. If you skipped con
     source ~/.bashrc
     ```
 
-### Verify Installation
+#### Verify Installation
 
 ```bash
 uv --version
@@ -167,7 +167,7 @@ uv --version
     uv 0.5.x  # or newer
     ```
 
-### Quick Test Drive
+#### Quick Test Drive
 
 Let's see UV in action:
 
