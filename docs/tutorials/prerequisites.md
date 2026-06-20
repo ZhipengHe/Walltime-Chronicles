@@ -27,7 +27,7 @@ You'll obviously need to be able to connect to QUT's Aqua system. If you can SSH
 Working on HPC systems means living in the Linux command line. You don't need to be a shell expert, but you should be comfortable with basic navigation, file operations, and understanding how the file system is organized.
 
 !!! info "Need to learn Linux fundamentals?"
-    QUT eResearch provides an excellent tutorial: [Introduction to the Unix Shell for HPC Users](https://docs.eres.qut.edu.au/sn-index) - covers essential commands, file systems, and more[^1].
+    QUT eResearch provides an excellent tutorial: [Intro to the Shell](https://docs.eres.qut.edu.au/sn-index) - covers essential commands, file systems, and more[^1].
 
 #### Core Commands You'll Use Daily
 
@@ -105,6 +105,8 @@ Working on HPC systems requires different strategies than local development. Cho
 !!! failure "Important: VS Code Remote SSH is NOT Available on QUT Aqua"
     VS Code Remote SSH extension is automatically disconnected after ~30 seconds due to server policies. Don't waste time trying to make it work!
 
+    eRes' sanctioned replacement is **VSCode Remote Tunnel** running inside an interactive job — see Option 5 below.
+
 #### Option 1: Develop Locally, Sync to HPC 💻➡️🖥️
 
 Write and test code locally, then transfer to HPC for execution.
@@ -128,6 +130,9 @@ git push origin main    # Push to repository
 # SCP - Simple file copying
 scp script.py username@aqua.qut.edu.au:~/
 ```
+
+!!! info "Need more transfer options?"
+    QUT eRes has the full reference — Windows Map Drive (`\\hpc-fs\<username>`), Mac Finder (`smb://hpc-fs/<username>/`), WinSCP, and the dedicated SFTP endpoint at `eresdtn01.qut.edu.au`: [Transferring files to/from the HPC](https://docs.eres.qut.edu.au/hpc-transferring-files-tofrom-hpc)[^1]. Useful for Windows users and large datasets.
 
 #### Option 2: Mount HPC as Local Drive 🗂️💻
 
@@ -157,12 +162,19 @@ Make HPC files appear as local folders for seamless editing.
 
 Use browser-based development environments running on HPC.
 
-!!! example "JupyterLab (Recommended for Data Science)"
+!!! tip "QUT JupyterHub (Recommended for Data Science)"
+    QUT eRes runs a managed JupyterHub at [https://jupyterhub.eres.qut.edu.au](https://jupyterhub.eres.qut.edu.au)[^1] — log in with your QUT credentials, click *Start My Server*, and you get a backing PBS job (default `Aqua - 1 core, 8 GB, 8 hours`) without writing a single script. First connect can take up to ~10 minutes while your job queues.
+
+    Full walkthrough: [How to use JupyterHub](https://docs.eres.qut.edu.au/how-to-use-jupyterhub)[^1].
+
+!!! example "Manual JupyterLab (for custom environments)"
+    Use this when JupyterHub's defaults don't fit — custom conda env, specific GPU, longer walltime, non-standard kernel. Start it inside an interactive PBS job and tunnel the port over SSH.
+
     ```bash
-    # On HPC
+    # Inside an interactive job on HPC
     jupyter lab --no-browser --port=8888
 
-    # On your local machine
+    # On your local machine, in a new terminal
     ssh -N -L 8888:localhost:8888 username@aqua.qut.edu.au
 
     # Open: http://localhost:8888
@@ -181,6 +193,37 @@ Embrace the command line with powerful terminal editors.
     ssh username@aqua.qut.edu.au
     nano my-script.py  # or vim, emacs
     ```
+
+#### Option 5: VSCode Remote Tunnel 🔌
+
+Run a tunneled VS Code session from inside an interactive PBS job. This is the eRes-sanctioned replacement for the blocked Remote-SSH extension.
+
+!!! tip "Best for:"
+    - You want the VS Code Remote-SSH experience without breaking eRes policy
+    - You're comfortable holding an interactive PBS job for the length of your session
+    - You're already signed in with a Microsoft or GitHub account
+
+!!! example "Sketch"
+    ```bash
+    # 1. Start an interactive job
+    qsub -I -l walltime=02:00:00 -l select=1:ncpus=2:mem=4GB
+
+    # 2. Inside the job, fetch the VS Code CLI (once per home dir)
+    curl -Lk 'https://code.visualstudio.com/sha/download?build=stable&os=cli-alpine-x64' \
+      --output vscode_cli.tar.gz
+    mkdir -p ~/bin && tar -xf vscode_cli.tar.gz -C ~/bin/ && rm vscode_cli.tar.gz
+
+    # 3. Start the tunnel and follow the device-code prompt
+    ~/bin/code tunnel
+    ```
+
+    On your local machine: open VS Code, click the green Remote icon (bottom-left), **Connect to Tunnel**, and pick the HPC node from the list.
+
+!!! warning "Trade-off"
+    Your editor lives inside an interactive PBS job — when the job ends, the tunnel ends. Great for half-day sessions; not for "leave VS Code open all week" workflows.
+
+!!! info "Detailed Walkthrough"
+    QUT eRes has the screenshot-by-screenshot version: [VS Code Usage — Option 2: VSCode Remote Tunnel](https://docs.eres.qut.edu.au/hpc-vscode-usage#option-2-vscode-remote-tunnel)[^1].
 
 !!! info "Detailed Setup Instructions"
     Each method has specific setup requirements and trade-offs. See our comprehensive guide: [Surviving without VS Code Remote SSH](../remote-dev/Surviving-without-VS-Code-Remote-SSH.md) for step-by-step instructions, troubleshooting, and performance tips.
