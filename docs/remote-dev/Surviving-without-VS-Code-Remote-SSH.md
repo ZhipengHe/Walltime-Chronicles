@@ -6,13 +6,15 @@
     2026-06-21. URLs, install paths, and tool versions drift. Cross-check with [QUT eResearch HPC docs](https://docs.eres.qut.edu.au)[^1] if anything below feels off.
 
 !!! failure "VS Code Remote SSH is banned"
-    QUT Aqua banned the VS Code Remote SSH extension due to high workload on the login node. Even if you try to connect to Aqua through Remote SSH, it will be disconnected automatically after around 30 seconds.
+    QUT Aqua banned the VS Code Remote SSH extension due to high workload on the login node. Any attempt to connect via Remote-SSH gets disconnected after ~30 seconds.
 
     The QUT eResearch-sanctioned replacement is ==**VSCode Remote Tunnel**== — see [Section 1 below](#1-vscode-remote-tunnel-the-sanctioned-replacement). Full official walkthrough: [VS Code Usage on Aqua](https://docs.eres.qut.edu.au/hpc-vscode-usage)[^1].
 
-So... you're trying to develop on QUT Aqua, but the server gods have other plans. Maybe you can't use VS Code Remote SSH. Maybe you're just feeling adventurous. Either way — you can still edit remote files and develop like a champ. Here's how I've kept my sanity while developing on remote HPC systems.
+So... you're trying to develop on QUT Aqua, but the server gods have other plans. Maybe you want VS Code. Maybe you just want files. Either way — here's how I've kept my sanity while developing on remote HPC systems.
 
 ## :material-map-marker-path: Pick your weapon
+
+Click any node below to jump to that section.
 
 ```mermaid
 graph TD
@@ -23,14 +25,22 @@ graph TD
 
     Code -->|Official path| Tunnel["§1 VSCode Remote Tunnel<br/>(sanctioned)"]
     Code -->|Files only| Mount["§2 SMB / SSHFS mount"]
-    Code -->|Browser-based| WebCode["§5 Option D · code-server"]
+    Code -->|Browser-based| WebCode["§5 Option C · code-server"]
 
     Data --> Sync["§3 rsync / scp / git"]
 
     Notebook -->|Managed| JHub["§5 Option A · QUT JupyterHub"]
-    Notebook -->|Custom env| JLab["§5 Option B/C · Manual JupyterLab"]
+    Notebook -->|Custom env| JLab["§5 Option B · Manual JupyterLab"]
 
     Quick --> Term["§4 Terminal editors<br/>vim / nano / emacs"]
+
+    click Tunnel "#1-vscode-remote-tunnel-the-sanctioned-replacement"
+    click Mount "#2-fake-it-with-ssh-mounted-folders"
+    click WebCode "#option-c-vs-code-in-browser-code-server"
+    click Sync "#3-rsync-scp-and-git-your-old-school-sync-buddies"
+    click JHub "#option-a-qut-jupyterhub-recommended-managed"
+    click JLab "#option-b-manual-jupyter-lab-port-forwarded"
+    click Term "#4-the-terminal-only-approach"
 
     style Start fill:#e1f5fe
     style Tunnel fill:#e8f5e8
@@ -41,7 +51,7 @@ graph TD
 
 ---
 
-??? tip "Before you start: Recommended — add a shortcut to `~/.ssh/config`"
+???+ tip "Before you start: Recommended — add a shortcut to `~/.ssh/config`"
     If you're using SSH keys to connect to the HPC, a `~/.ssh/config` entry saves a lot of typing. QUT eResearch has a [setup guide for passwordless login](https://docs.eres.qut.edu.au/hpc-getting-started-with-high-performance-computin#how-you-log-into-aqua-depends-on-the-operating-system-of-your-computer)[^1].
 
     ```bash
@@ -77,27 +87,26 @@ graph LR
 
 ### Setup
 
-=== "Step-by-step"
-    Run these inside an interactive PBS job:
+Run these inside an interactive PBS job:
 
-    ```bash
-    # 1. Start an interactive job (CPU example; for GPU swap in `ngpus=1`)
-    qsub -I -l select=1:ncpus=4:mem=16GB -l walltime=04:00:00
+```bash
+# 1. Start an interactive job (CPU example; for GPU swap in `ngpus=1`)
+qsub -I -l select=1:ncpus=4:mem=16GB -l walltime=04:00:00
 
-    # 2. (Once per home dir) Fetch the VS Code CLI
-    curl -Lk 'https://code.visualstudio.com/sha/download?build=stable&os=cli-alpine-x64' \
-      --output vscode_cli.tar.gz
-    mkdir -p ~/bin
-    tar -xf vscode_cli.tar.gz -C ~/bin/
-    rm vscode_cli.tar.gz
+# 2. (Once per home dir) Fetch the VS Code CLI
+curl -Lk 'https://code.visualstudio.com/sha/download?build=stable&os=cli-alpine-x64' \
+  --output vscode_cli.tar.gz
+mkdir -p ~/bin
+tar -xf vscode_cli.tar.gz -C ~/bin/
+rm vscode_cli.tar.gz
 
-    # 3. Start the tunnel and follow the device-code prompt
-    ~/bin/code tunnel
-    ```
+# 3. Start the tunnel and follow the device-code prompt
+~/bin/code tunnel
+```
 
-    On your local machine: open VS Code, click the green **Remote** icon (bottom-left of the status bar), choose **Connect to Tunnel**, and pick your HPC node from the list.
+On your local machine: open VS Code, click the green **Remote** icon (bottom-left of the status bar), choose **Connect to Tunnel**, and pick your HPC node from the list.
 
-=== "When the tunnel asks you to log in"
+??? info "What the tunnel asks at first login"
     ```text
     *
     * Visual Studio Code Server
@@ -111,15 +120,15 @@ graph LR
 
     Pick the account type, copy the device code (e.g. `ABCDEFGHI`), and authenticate at [microsoft.com/devicelogin](https://microsoft.com/devicelogin) or [github.com/login/device](https://github.com/login/device).
 
-=== "Shutting down"
+!!! tip "Cleanup when you're done"
     On the HPC terminal: hit ++ctrl+c++ to cancel the remote connection, then `exit` the interactive job. The tunnel stops the moment the PBS job ends.
 
-!!! tip "What's good about this"
+!!! success "Pros"
     - ==**Sanctioned**==. eRes set this up specifically so users don't reach for Remote-SSH.
     - You get the **full VS Code experience** — extensions, integrated terminal, debugger, the whole thing — without breaking server policy.
     - **No SSH config required** on the local side. Authentication is Microsoft/GitHub OAuth.
 
-!!! warning "What's not"
+!!! failure "Cons"
     - Your session lives inside an **interactive PBS job**. When the job's walltime expires, the tunnel dies.
     - Interactive jobs are capped at ==12 hours== (`cpu_inter_exec`/`gpu_inter_exec`). Not for "leave VS Code open all week" workflows.
     - First-time auth flows through Microsoft's cloud relay. If your data is sensitive enough that even the metadata worries you, talk to eResearch first.
@@ -131,7 +140,7 @@ graph LR
 
 ## :material-folder-network: 2. Fake it with SSH-mounted folders
 
-If the official Tunnel doesn't fit (you want to use a non-VS-Code editor, or you just want files to "appear" locally), mount the HPC's home directory and pretend it's local.
+If the official Tunnel doesn't fit (you want a non-VS-Code editor, or you just want files to "appear" locally), mount the HPC's home directory and pretend it's local.
 
 ### :cheese: Option A: Mount via Finder (SMB)
 
@@ -148,18 +157,24 @@ Quick guide for macOS users. Other OSes: see [QUT eResearch's file transfer guid
 
 3. Mount it, then open the folder in VS Code like it's 1999.
 
-!!! example "What you get"
-    You can edit files, but ==**no shell**==, ==**no Git**==, and no terminal tantrums. It's like eating cake without the frosting.
+!!! success "Pros"
+    - Zero install — uses Finder's built-in SMB support.
+    - Files literally appear in the macOS file picker.
+    - Good for quick file edits and shuffling.
 
-#### But ... is this method elegant?
+!!! failure "Cons"
+    - ==**No shell**, **no Git**, no terminal tantrums== — it's like eating cake without the frosting.
+    - Connection drops mid-session freeze the share.
+    - macOS leaves `.DS_Store` files everywhere on the HPC.
 
-You've mounted an SMB share to your Finder. Congratulations! You've just volunteered for the following comedy of errors:
+??? info "The full comedy of errors"
+    You've mounted an SMB share to your Finder. Congratulations! You've just volunteered for the following:
 
-1. **Git Limitations** — Your version control system becomes severely limited over SMB. Git operations that work fine locally will fail or behave unpredictably through the mounted share.
-2. **VS Code Terminal Issues** — The integrated terminal in VS Code won't work properly with mounted SMB shares. You'll get `Command not found` errors for most terminal operations.
-3. **Connection Stability** — SMB connections can drop unexpectedly, especially during longer work sessions or when the network is unstable.
-4. **HPC Dependency** — Since all your files live on the server, any HPC maintenance or downtime makes your work completely inaccessible.
-5. **The .DS_Store Problem (macOS)** — Your Mac will create `.DS_Store` files in every folder you visit through Finder. These desktop service files clutter the HPC filesystem and serve no purpose on the server.
+    1. **Git Limitations** — Your version control system becomes severely limited over SMB. Git operations that work fine locally will fail or behave unpredictably through the mounted share.
+    2. **VS Code Terminal Issues** — The integrated terminal in VS Code won't work properly with mounted SMB shares. You'll get `Command not found` errors for most terminal operations.
+    3. **Connection Stability** — SMB connections can drop unexpectedly, especially during longer work sessions or when the network is unstable.
+    4. **HPC Dependency** — Since all your files live on the server, any HPC maintenance or downtime makes your work completely inaccessible.
+    5. **The .DS_Store Problem (macOS)** — Your Mac will create `.DS_Store` files in every folder you visit through Finder. These desktop service files clutter the HPC filesystem and serve no purpose on the server.
 
 ??? tip "For macOS users only: How to fix the .DS_Store and ._* files issue"
     ![DS_Store Meme](./images/DS_Store-meme.png)
@@ -357,78 +372,84 @@ Then pick your weapon of choice:
 
 QUT eResearch hosts a managed JupyterHub at ==**[https://jupyterhub.eres.qut.edu.au](https://jupyterhub.eres.qut.edu.au)**==[^1]. You log in with your QUT username and password, click **Start My Server**, and a backing PBS job spins up automatically — default `Aqua - 1 core, 8 GB, 8 hours`.
 
-!!! tip "Why this is the easy path"
+!!! success "Pros"
     - ==**Browser-only**==. No SSH tunnel, no port forwarding, no installing anything.
     - PBS job is scheduled for you. No `qsub` line to write.
-    - First connect can take up to ~10 minutes while your job queues — patience.
 
-!!! info "When NOT to use it"
+!!! failure "Cons"
+    - First connect can take up to ~10 minutes while your job queues.
+    - You're stuck with JupyterHub's shipped envs and the default resource bundle.
+
+!!! info "When to fall back to Option B"
     - You need a **custom conda env** beyond what JupyterHub ships.
     - You need a specific GPU type, more cores, or walltime > 8 hours.
-    - In those cases, fall back to the manual port-forward approach (Options B/C below).
 
 ??? info "Full walkthrough"
     [How to use JupyterHub](https://docs.eres.qut.edu.au/how-to-use-jupyterhub)[^1] — login → start server → wait → work.
 
-### :simple-jupyter: Option B: Manual Jupyter Lab on the *Login Node*
+### :simple-jupyter: Option B: Manual Jupyter Lab (port-forwarded)
+
+For when JupyterHub's defaults don't fit. You install Jupyter yourself and tunnel the port over SSH.
 
 !!! info "Install Jupyter Lab in HPC before you start"
     The official Aqua documentation provides a [guide](https://docs.eres.qut.edu.au/hpc-accessing-available-software#install-conda)[^1] on how to install Miniconda in HPC.
 
-```bash
-# On the HPC
-# I prefer to use Jupyter Lab instead of Jupyter Notebook
-jupyter lab --no-browser --port=8888 # (1)!
+=== "On the login node (light work)"
+    Good for tiny notebooks — quick edits, a few plots. Don't run heavy code here.
 
-# On your local machine, forward the port 8888 to your local machine
-# local_port:localhost:remote_port # (2)!
-ssh -N -L 8888:localhost:8888 your-username@aqua.qut.edu.au
-```
+    ```bash
+    # On the HPC
+    # I prefer to use Jupyter Lab instead of Jupyter Notebook
+    jupyter lab --no-browser --port=8888 # (1)!
 
-1. If port 8888 is already in use, you can try another port, e.g. `8889`.
-2. `-N` means no command to run on the remote machine. `-L` means forward the local port to the remote port. Both local and remote ports are 8888 in this case.
+    # On your local machine, forward the port 8888 to your local machine
+    # local_port:localhost:remote_port # (2)!
+    ssh -N -L 8888:localhost:8888 your-username@aqua.qut.edu.au
+    ```
 
-Open in your browser:
+    1.  If port 8888 is already in use, try `8889` or any unused port.
+    2.  `-N` means no command to run on the remote machine. `-L` means forward the local port to the remote port. Both local and remote ports are 8888 in this case.
 
-```text
-http://localhost:8888/?token=...
-```
+    Open in your browser:
 
-!!! warning "Login node etiquette"
-    The login node is shared with everyone. Running long, heavy notebooks here is what got Remote-SSH banned. Keep login-node Jupyter for ==short, light== work — for anything bigger, use Option C (compute node) or Option A (JupyterHub).
+    ```text
+    http://localhost:8888/?token=...
+    ```
 
-### :simple-jupyter: Option C: Manual Jupyter Lab on the *Compute Node*
+    !!! warning "Login node etiquette"
+        The login node is shared with everyone. Running long, heavy notebooks here is what got Remote-SSH banned. Keep login-node Jupyter for ==short, light== work — for anything bigger, switch to the compute-node tab.
 
-For GPU work or anything heavy:
+=== "On a compute node (recommended for GPU / heavy)"
+    For GPU work or anything CPU-intensive — runs inside a real PBS job.
 
-```bash
-# Step 1. Request an interactive job on a compute node
-qsub -I -S /bin/bash -l select=1:ncpus=4:ngpus=1:mem=32GB -l walltime=02:00:00
+    ```bash
+    # Step 1. Request an interactive job on a compute node
+    qsub -I -S /bin/bash -l select=1:ncpus=4:ngpus=1:mem=32GB -l walltime=02:00:00
 
-# Step 2. Once inside the compute node (e.g., gpu1n005), start Jupyter Lab
-jupyter lab --no-browser --port=8889 --ip=$(hostname -i)   # (1)!
+    # Step 2. Once inside the compute node (e.g., gpu1n005), start Jupyter Lab
+    jupyter lab --no-browser --port=8889 --ip=$(hostname -i)   # (1)!
 
-# Step 3. On your local machine, forward the port via the login node
-# Replace 10.xx.xx.xx with the IP address shown in Jupyter's startup message
-ssh -N -L 8889:10.xx.xx.xx:8889 your-username@aqua.qut.edu.au   # (2)!
-```
+    # Step 3. On your local machine, forward the port via the login node
+    # Replace 10.xx.xx.xx with the IP address shown in Jupyter's startup message
+    ssh -N -L 8889:10.xx.xx.xx:8889 your-username@aqua.qut.edu.au   # (2)!
+    ```
 
-1. `--ip=$(hostname -i)` makes Jupyter listen on the compute node's internal IP (e.g., `10.13.30.24`). The port can be changed to any unused port.
-2. Use that IP in the tunnel command so the login node can route traffic.
+    1.  `--ip=$(hostname -i)` makes Jupyter listen on the compute node's internal IP (e.g., `10.13.30.24`). The port can be changed to any unused port.
+    2.  Use that IP in the tunnel command so the login node can route traffic.
 
-Open in your browser:
+    Open in your browser:
 
-```text
-http://localhost:8889/lab?token=...
-```
+    ```text
+    http://localhost:8889/lab?token=...
+    ```
 
-??? tip "Tips for Jupyter Lab on the compute node"
-    - Keep ==**both**== the Jupyter Lab session and the SSH tunnel open. Closing either disconnects the browser.
-    - Each compute node allocation gives you a different internal IP (`10.xx.xx.xx`), so update your tunnel command every time.
-    - For repeated use, simplify the tunnel with an SSH config entry (`~/.ssh/config`).
-    - See [Know Your Nodes](../scheduler/Know-Your-Nodes.md) for hostname patterns (`cpu1n00X`, `gpu0n00X`, `gpu1n00X`, `mem1n001`).
+    ??? tip "Tips for Jupyter Lab on the compute node"
+        - Keep ==**both**== the Jupyter Lab session and the SSH tunnel open. Closing either disconnects the browser.
+        - Each compute node allocation gives you a different internal IP (`10.xx.xx.xx`), so update your tunnel command every time.
+        - For repeated use, simplify the tunnel with an SSH config entry (`~/.ssh/config`).
+        - See [Know Your Nodes](../scheduler/Know-Your-Nodes.md) for hostname patterns (`cpu1n00X`, `gpu0n00X`, `gpu1n00X`, `mem1n001`).
 
-### :material-microsoft-visual-studio-code: Option D: VS Code in Browser (code-server)
+### :material-microsoft-visual-studio-code: Option C: VS Code in Browser (code-server)
 
 !!! warning "This might require a sysadmin's blessing"
     Fortunately, the server gods haven't locked *everything* down — `code-server` runs in user space.
@@ -507,7 +528,7 @@ http://localhost:8889/lab?token=...
     * :arrows_counterclockwise: code-server tried to reconnect to the crashed extension host but failed.
     * :new: code-server restarted the extension host process automatically.
 
-    **Workaround**: Run code-server inside an interactive PBS job (Section 5 Option C pattern) rather than on the login node — the SIGTERMs are the login-node guardian processes telling you not to.
+    **Workaround**: Run code-server inside an interactive PBS job (using the Option B compute-node pattern) rather than on the login node — the SIGTERMs are the login-node guardian processes telling you not to.
 
 ---
 
