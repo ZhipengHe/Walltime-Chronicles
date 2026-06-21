@@ -15,6 +15,7 @@ This guide is essentially a survival manual that:
 
 !!! tip "Companion pages"
     - :material-server-network: [Know Your Nodes](Know-Your-Nodes.md) — the hardware behind each queue (H100s, A100 MIG slices, large-mem boxes, watchdog cores).
+    - :material-chef-hat: [Walltime by Recipe](Walltime-by-Recipe.md) — eight Aqua-specific PBS recipes that put this guide's math into practice.
     - :material-book-open-variant: [PBS Brew Inspector](../pbs-scripts/PBS-Brew-Inspector.md) — extract walltime ground truth from your own job history.
     - :material-school: QUT eResearch — [Queues and limits](https://docs.eres.qut.edu.au/hpc-queue-limits)[^1], [Estimating/optimising resources](https://docs.eres.qut.edu.au/hpc-estimatingoptimising-resources-to-request-for-)[^1], [Running jobs longer than 48 hours](https://docs.eres.qut.edu.au/breaking-the-48hr-barrier)[^1], [Checkpointing](https://docs.eres.qut.edu.au/checkpointing)[^1].
 
@@ -65,7 +66,7 @@ Even if your job fits the per-job table above, the *queue* limits how many of yo
 | `cpu_inter_exec` | 8 | 8 | 34 GB | – |
 | `gpu_batch_exec` | 32 | 1024 | 7680 GB | 32 |
 | `gpu_inter_exec` | 2 | 12 | 68 GB | 2 |
-| `cpu_batch_exlm` | 4 | 180 | 6015 GB | – |
+| `cpu_batch_exlm` | 100 | 180 | 6015 GB | – |
 | `cpu_inter_pers` | 1 | 1 | 4 GB | – |
 
 PBS also rate-limits job launches at **60/min/queue** — if you fire 200 jobs at once, the first batch starts immediately and the rest trickle in over the next few minutes.
@@ -178,6 +179,9 @@ When your real job *is* compute and won't fit in 48 hours, the structural answer
 ## :material-chef-hat: Walltime Recipes
 
 Pick the closest profile to your job and copy-paste. All recipes assume you've already read [Know Your Nodes](Know-Your-Nodes.md) so you know which hardware you're landing on.
+
+!!! tip "Want the full worked-example treatment?"
+    These five recipes are deliberately short — pick one, tweak walltime/cores/GPUs to taste. For eight longer worked examples with scaling math, full PBS scripts (preamble, checkpoint traps, dependency chains) and live-validated resource shapes, see [Walltime by Recipe](Walltime-by-Recipe.md).
 
 ```mermaid
 flowchart TD
@@ -448,6 +452,8 @@ Deterministic estimate: $2\text{ h} \times 7.1 = 14.2 \text{ h}$.
 Apply the 1.5× convergence buffer: $14.2 \times 1.5 \approx 21.3 \text{ h}$.
 
 Round up and add a safety margin: **walltime 24 h, queue `gpu_batch_exec`**. Comfortably inside the 48 h cap with room to spare. Drop `#PBS -c w=60` if you want PBS to auto-resubmit on the off chance you blew the estimate.
+
+For more worked examples — heavy CPU MPI, LargeMem above 1.5 TB, multi-H100 at the 8-GPU ceiling, A100 fallback, MIG sanity check, and chained jobs that bypass the 48 h cap — see [Walltime by Recipe](Walltime-by-Recipe.md).
 
 ---
 

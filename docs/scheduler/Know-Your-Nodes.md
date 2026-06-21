@@ -185,8 +185,8 @@ qsub -l select=1:ncpus=180:mem=4000GB -l walltime=24:00:00 script.pbs
 !!! tip "It auto-routes — but only above the threshold"
     Request `mem ≥ 1479 GB` and PBS sends you here without `-q`. Request less and you'll land in `cpu_batch_exec` instead (which is fine, but you don't get the 6 TB ceiling).
 
-!!! warning "One node, four concurrent jobs cluster-wide"
-    `cpu_batch_exlm`'s per-queue limit is ==4 running jobs total==, summed across all users. If someone else has 4 × 48 h sessions running, you wait. Plan accordingly.
+!!! warning "One node — the physical ceiling, not the queue cap, is what bites"
+    `cpu_batch_exlm`'s per-user run cap is ==100 jobs==, but only **one physical node** exists (180 cores, 6 TB RAM) and the per-job minimum is 1479 GB. In practice **~4 simultaneous large-mem jobs saturate the node** — if others are already running, you wait.
 
 #### GPU H100 Batch — chef's special (13 nodes)
 
@@ -407,7 +407,7 @@ Aqua wraps the raw PBS admin tools in user-friendly scripts. They live in `/usr/
     | `cpu_inter_exec`   | 8            | 34 GB      | 8     | 0    |
     | `gpu_batch_exec`   | 32           | 7680 GB    | 1024  | 32   |
     | `gpu_inter_exec`   | 2            | 68 GB      | 12    | 2    |
-    | `cpu_batch_exlm`   | 4            | 6015 GB    | 180   | 0    |
+    | `cpu_batch_exlm`   | 100          | 6015 GB    | 180   | 0    |
 
     All queues share a ==rate cap of 60 job launches per minute== — relevant if you submit 1000-subjob arrays and want to know how fast they actually start.
 
@@ -537,6 +537,7 @@ For the broader picture:
 
 - :material-book-open-page-variant: [Lesson 0: HPC Fundamentals](../tutorials/lesson-0.md) — clusters, nodes, cores, file systems at a beginner level.
 - :material-clock-outline: [Guess, Request, Regret: The Art of Walltime](The-Art-of-Walltime.md) — how to size walltime so you don't overshoot or undershoot.
+- :material-chef-hat: [Walltime by Recipe](Walltime-by-Recipe.md) — eight copy-paste PBS recipes (queue caps and hardware shapes from this page in action).
 - :material-link-variant: [About Aqua](https://docs.eres.qut.edu.au/about-aqua)[^1] — QUT eResearch's authoritative cluster description (vendor specs, pricing, maintenance schedule).
 - :material-link-variant: [Queues and limits](https://docs.eres.qut.edu.au/hpc-queue-limits)[^1] — the source-of-truth tables that underlie House Rules above.
 
