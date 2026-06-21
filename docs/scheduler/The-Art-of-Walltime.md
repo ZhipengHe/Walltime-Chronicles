@@ -2,399 +2,517 @@
 
 ## :material-timer-sand: The Great Walltime Dilemma
 
-So, you're staring at the PBS script prompt, cursor blinking accusingly at `#PBS -l walltime=??:??:??`, and you're playing that familiar game: "How long will this actually take?" Welcome to **The Art of Walltime** — where every estimate is a guess, every request is a prayer, and every job termination is potential regret.
+So, you're staring at the PBS script prompt, cursor blinking accusingly at `#PBS -l walltime=??:??:??`, and you're playing that familiar game: *"How long will this actually take?"* Welcome to **The Art of Walltime** — where every estimate is a guess, every request is a prayer, and every job termination is potential regret.
 
 This guide is essentially a survival manual that:
 
-- Helps you interpret your historical job data (like reading tea leaves, but with actual numbers).
-- Shows you how to make walltime decisions that won't keep you up at night.
-- Teaches you to balance between "too short and doomed to fail" and "so long you'll die of old age in the queue".
-- Respects the sacred 48-hour limit (except for the mythical persistent queue).
+- :material-tea: Helps you interpret your historical job data (like reading tea leaves, but with actual numbers).
+- :material-scale-balance: Shows you how to make walltime decisions that won't keep you up at night.
+- :material-clock-alert: Teaches you to balance between "too short and doomed to fail" and "so long you'll die of old age in the queue".
+- :material-shield-clock: Respects the sacred 48-hour limit (with one tiny escape hatch — see below).
 
 **Result:** *Jobs that actually finish, queue priority that doesn't make you weep, and the sweet, sweet feeling of resource efficiency.*
+
+!!! tip "Companion pages"
+    - :material-server-network: [Know Your Nodes](Know-Your-Nodes.md) — the hardware behind each queue (H100s, A100 MIG slices, large-mem boxes, watchdog cores).
+    - :material-book-open-variant: [PBS Brew Inspector](../pbs-scripts/PBS-Brew-Inspector.md) — extract walltime ground truth from your own job history.
+    - :material-school: QUT eResearch — [Queues and limits](https://docs.eres.qut.edu.au/hpc-queue-limits)[^1], [Estimating/optimising resources](https://docs.eres.qut.edu.au/hpc-estimatingoptimising-resources-to-request-for-)[^1], [Running jobs longer than 48 hours](https://docs.eres.qut.edu.au/breaking-the-48hr-barrier)[^1], [Checkpointing](https://docs.eres.qut.edu.au/checkpointing)[^1].
+
+---
+
+## :material-clipboard-list-outline: Know Your Cluster: Queue Limits
+
+The walltime number you write is *only valid inside the queue it lands in*. Pick the wrong queue and the same number means different things — or means nothing, because PBS rejects the job before it starts.
+
+### The six execution queues
+
+| Queue | Walltime cap | CPUs / job | Memory / job | GPUs / job | Best for |
+|---|---|---|---|---|---|
+| `cpu_inter_exec` | **12 h** | 1–8 | 1–34 GB | – | Quick interactive testing, building conda envs, sanity-checking scripts |
+| `gpu_inter_exec` | **12 h** | 1–12 | 1–68 GB | 1–2 | Interactive GPU debugging, single-card experiments |
+| `cpu_batch_exec` | **48 h** | 1–2048 | 1 GB–16 TB | – | The default workhorse: most CPU jobs land here |
+| `gpu_batch_exec` | **48 h** | 1–256 | 1 GB–1920 GB | 1–8 | Multi-GPU training, finetuning, inference at scale |
+| `cpu_batch_exlm` | **48 h** | 1–180 | **1479 GB**–6015 GB | – | Single-node large-memory CPU jobs (request ≥1479 GB to land here) |
+| `cpu_inter_pers` | **368 h (≈15.3 days)** | **1** | **1–4 GB** | – | Pipeline coordinators, persistent SSH sessions, Nextflow controllers — **not compute** |
+
+!!! info "Where these numbers came from"
+    Live from `qstat -Qf` on Aqua, cross-checked with [eResearch's Queues and limits page](https://docs.eres.qut.edu.au/hpc-queue-limits)[^1]. The `cpu_inter_pers` row isn't on the eResearch page — it's a tiny watchdog queue intended for orchestration, and this is one of the few public references that names its caps. See [Know Your Nodes](Know-Your-Nodes.md) for which physical hardware backs each queue.
+
+### The two queues that actually trap people
+
+??? warning "`cpu_inter_pers` is not a long-runtime compute queue"
+    The 368-hour cap looks like a backdoor for "I need 10 days of GPU training". It is not. The queue is hard-capped at **1 CPU and 4 GB of RAM**. It exists for:
+
+    - Nextflow / Snakemake / Airflow controllers that *submit* compute jobs and wait
+    - Persistent SSH tunnels and `tmux` sessions
+    - Long-running monitors and watchdog scripts
+
+    If you need real compute beyond 48 h, the answer is checkpointing, array jobs, or dependent jobs (see [§ Recovery toolkit](#step-3-recovery-toolkit-when-walltime-kills-the-job) below and eResearch's [Running jobs longer than 48 hours](https://docs.eres.qut.edu.au/breaking-the-48hr-barrier)[^1]).
+
+??? warning "Batch vs interactive — who holds the resources?"
+    - **Batch jobs** (`*_batch_*`) release resources the moment they finish, even if your walltime request had hours left over. Be generous with the estimate; you pay only for what you use.
+    - **Interactive jobs** (`*_inter_*`) hold every requested CPU, GB and GPU for the *entire* walltime — even if your task finished at minute three. Be tight with the estimate; you pay for the whole envelope.
+
+    *The longer the walltime, the longer the queue wait. It's not just policy — it's physics. Or politics. Or both.*
+
+### Per-user run caps (the other limit you forgot about)
+
+Even if your job fits the per-job table above, the *queue* limits how many of your jobs can run at once:
+
+| Queue | Concurrent running jobs | Total CPUs across your jobs | Total memory | Total GPUs |
+|---|---|---|---|---|
+| `cpu_batch_exec` | 3072 | 3072 | 24 576 GB | – |
+| `cpu_inter_exec` | 8 | 8 | 34 GB | – |
+| `gpu_batch_exec` | 32 | 1024 | 7680 GB | 32 |
+| `gpu_inter_exec` | 2 | 12 | 68 GB | 2 |
+| `cpu_batch_exlm` | 4 | 180 | 6015 GB | – |
+| `cpu_inter_pers` | 1 | 1 | 4 GB | – |
+
+PBS also rate-limits job launches at **60/min/queue** — if you fire 200 jobs at once, the first batch starts immediately and the rest trickle in over the next few minutes.
 
 ---
 
 ## :material-scale-balance: The Walltime Calculation Ritual
 
-### 1. Check Your Job History (Know Yourself)
+### Step 1 — Check your history (know yourself)
 
-!!! info "See `pbs_brew_inspector.sh` recipe from [PBS Brew Inspector: Tasting Notes from Your Job History](../pbs-scripts/PBS-Brew-Inspector.md)."
+Before you guess, see what your past jobs tell you. Two complementary tools:
 
-Before you guess, see what your past jobs tell you. Use the `pbs_brew_inspector.sh` script to get wisdom from the past:
+=== ":material-glass-mug-variant: pbs_brew_inspector.sh"
 
-```bash
-./pbs_brew_inspector.sh -g  # For GPU jobs
-./pbs_brew_inspector.sh -c  # For CPU jobs
-```
+    Project-local script — gives you *aggregate* patterns across many jobs.
 
-What to look for:
+    ```bash
+    ./pbs_brew_inspector.sh -g   # GPU jobs
+    ./pbs_brew_inspector.sh -c   # CPU jobs
+    ```
 
-- **True Runtime vs Requested Walltime** - How much of your requested time are you actually using?
-- **Walltime Usage %** - If this is consistently low, you're being wasteful!
-- **Job patterns** - Are similar jobs taking consistent time?
+    What to read:
 
-### 2. The Golden Ratio: The 2x Rule
+    - **True runtime vs requested walltime** — how much of your envelope did you actually use?
+    - **Walltime usage %** — consistently low means you're hoarding. Aim for 75–85%.
+    - **Job consistency** — are similar jobs taking similar time, or wildly variable?
+
+    Full recipe: [PBS Brew Inspector](../pbs-scripts/PBS-Brew-Inspector.md).
+
+=== ":material-magnify-scan: qstat -fx"
+
+    Vendor-blessed per-job accounting. Drop this at the end of your script:
+
+    ```bash
+    qstat -fx $PBS_JOBID > resource_usage_$PBS_JOBID
+    ```
+
+    The file captures every `resources_used.*` field — `walltime`, `cpupercent`, `cput`, `mem`, `vmem`, `ncpus` — alongside what you *requested* (`Resources_List.*`). Compare the two and you'll see exactly where the slack is.
+
+    Useful even on a single job; doesn't need a history. Source: [eResearch's Estimating/optimising resources page](https://docs.eres.qut.edu.au/hpc-estimatingoptimising-resources-to-request-for-)[^1].
+
+=== ":material-radar: Live monitoring"
+
+    For long jobs, watch them breathe in real time:
+
+    - [eResearch Grafana dashboard](https://hpc-monitoring.eres.qut.edu.au/)[^1] — per-job CPU, memory, GPU utilisation.
+    - `qstat -f $PBS_JOBID` while running — same fields as `-fx` but for live jobs.
+
+### Step 2 — The Golden Ratio: the 2× rule
 
 Take your best guess at how long your job will run. Now double it. This isn't pessimism; it's realism with a safety cushion.
 
-Why this works:
+Why it works:
 
-- Accounts for unexpected dataset quirks
-- Covers random slowdowns from shared resources
-- Gives you time to notice if something's gone horribly wrong
+- :material-database-alert: Accounts for dataset quirks you haven't seen yet
+- :material-account-multiple: Covers random slowdowns from shared resources
+- :material-eye-check: Gives you time to *notice* something has gone horribly wrong
 
-### 3. Queue Sensitivity Analysis (Know Your Environment)
-
-#### Queue Walltime Limits
-
-!!! info "See detailed queue limits in [QUT Aqua HPC Documentation](https://docs.eres.qut.edu.au/hpc-queue-limits)."
-
-QUT Aqua HPC system has specific queue limits you should know intimately:
-
-- **12:00:00 (12 hours)**
-    - CPU Interactive Jobs (`cpu_inter_exec`)
-    - GPU Interactive Jobs (`gpu_inter_exec`)
-
-- **48:00:00 (2 days)**
-    - CPU Batch Jobs (`cpu_batch_exec`)
-    - GPU Batch Jobs (`gpu_batch_exec`)
-    - CPU Batch Large Memory Jobs (`cpu_batch_exlm`)
-
-- **368:00:00 (15 days)**
-    - Interactive Persistent Jobs (`cpu_inter_pers`)
-
-#### Critical distinction
-
-- **Batch jobs** release resources as soon as they finish (even if they finish early).
-- **Interactive jobs** hold their resources for the entire walltime (even if your task is done).
-
-> *The longer your walltime request, the longer you'll wait in the queue. It's not just policy; it's physics. Or politics. Or both.*
-
----
-
-## :material-flask-outline: Practical Walltime Science
-
-### The Walltime Estimation Formula
+A small formal version, for when you want to scale a baseline:
 
 $$ T_{\text{estimated}} = T_{\text{baseline}} \times S + M $$
 
-Where:
+- $T_{\text{baseline}}$ — runtime of a similar job you already ran
+- $S$ — scaling factor (see § Practical Walltime Science below for the full menu)
+- $M$ — safety margin (1 h for short jobs, 4+ h for multi-day runs)
 
-- **$T_{\text{baseline}}$**: From similar jobs or early testing (in hours)
-- **$S$**: Scaling factor representing the ratio of computational workload between new and baseline jobs
-- **$M$**: Safety margin (e.g., 1 hour for short jobs, 4+ hours for multi-day runs)
+### Step 3 — Recovery toolkit (when walltime kills the job)
 
-The scaling factor $S$ can be expressed as:
+PBS does not deliver an apology email. When the walltime expires, the job is signal-9'd, your output ends mid-line, and you get to debug with the corpse. Three habits make this survivable:
 
-$$ S = \frac{\text{Computational workload of new job}}{\text{Computational workload of baseline job}} $$
+#### Trace the crime scene with `set -x`
 
-This ratio depends on algorithm complexity, data size, model architecture, and hardware configuration, as detailed in the formulas below.
-
-### Scaling Rules for Different Workloads
-
-#### CPU-Based Workloads
-
-- **$O(n)$ Linear Algorithms:**
-    - $S \approx \frac{n_{\text{new}}}{n_{\text{baseline}}}$
-    - Examples: data parsing, point-wise operations, streaming analytics
-    - Doubling data size doubles runtime with constant resources
-
-- **$O(n\log n)$ Log-Linear Algorithms:**
-    - $S \approx \frac{n_{\text{new}}}{n_{\text{baseline}}} \times \frac{\log n_{\text{new}}}{\log n_{\text{baseline}}}$
-    - Examples: sorting, FFTs, divide and conquer algorithms, heap operations
-    - Doubling data size slightly more than doubles runtime (2.1-2.3×)
-
-- **$O(n^2)$ Quadratic Algorithms:**
-    - $S \approx \frac{n_{\text{new}}^2}{n_{\text{baseline}}^2}$
-    - Examples: pairwise distance matrices, naive string matching, simple nested loops
-    - Doubling data size quadruples runtime (4×)
-
-- **$O(n^3)$ Cubic Algorithms:**
-    - $S \approx \frac{n_{\text{new}}^3}{n_{\text{baseline}}^3}$
-    - Examples: 3D simulations, molecular dynamics, sparse matrix operations
-    - Doubling data size increases runtime by 8× (rapidly becomes impractical)
-
-- **$O(n^k)$ Polynomial Algorithms:**
-    - $S \approx \frac{n_{\text{new}}^k}{n_{\text{baseline}}^k}, \text{where } k > 3$
-    - Examples: k-clique finding, certain dynamic programming solutions, naive polynomial evaluation
-    - Scaling becomes prohibitive for large datasets as $k$ increases
-
-- **$O(2^n)$ Exponential Algorithms:**
-    - $S \approx \frac{2^{n_{\text{new}}}}{2^{n_{\text{baseline}}}}$
-    - Examples: traveling salesman via brute force, power set generation, exhaustive combinatorial search
-    - Even small increases in problem size can cause astronomical runtime increases
-
-- **$O(n!)$ Factorial Algorithms:**
-    - $S \approx \frac{n_{\text{new}}!}{n_{\text{baseline}}!}$
-    - Examples: exact combinatorial optimisation, brute-force search in NP-complete problems
-    - Practical only for very small problem sizes (typically $n < 12$)
-
-#### GPU-Based Workloads (Deep Learning)
-
-- **Simplified Practical Formula** (when detailed architecture changes are unknown):
-    - $S \approx \frac{b_{\text{new}} \times p_{\text{new}} \times s_{\text{new}} \times e_{\text{new}}}{b_{\text{baseline}} \times p_{\text{baseline}} \times s_{\text{baseline}} \times e_{\text{baseline}}}$ where $p=\text{parameters}$, $s=\text{input size}$, $e=\text{epochs}$
-
-- **Data Size Scaling**:
-    - Linear models: $S \approx \frac{N_{\text{new}}}{N_{\text{baseline}}}$ where $N=\text{samples}$
-    - Neural networks: $S \approx \left(\frac{N_{\text{new}}}{N_{\text{baseline}}}\right)^c$ where $c \approx 0.8\text{-}0.9$ due to:
-        - Vectorisation benefits with larger datasets
-        - GPU kernel efficiency at scale
-        - Potential for convergence in fewer epochs with more diverse data
-
-- **Batch Size Considerations**:
-    - Theoretical throughput: $S \approx \frac{b_{\text{baseline}}}{b_{\text{new}}}$ where $b=\text{batch size}$
-    - Reality (throughput): $S \approx \left(\frac{b_{\text{baseline}}}{b_{\text{new}}}\right)^c$ where $c \approx 0.8\text{-}0.9$ due to:
-        - Memory bandwidth limitations
-        - Kernel launch overhead
-        - Diminishing efficiency gains at large batch sizes
-    - Reality (convergence): Larger batches may require more epochs to reach the same accuracy, adding an additional factor of $\left(\frac{b_{\text{new}}}{b_{\text{history}}}\right)^{0.1\text{-}0.3}$
-
-- **Model Size Effects**:
-    - Parameter count scaling:
-        - Dense models: $S \approx \frac{p_{\text{new}}}{p_{\text{baseline}}}$ where $p=\text{parameters}$
-        - Sparse models: $S \approx \left(\frac{p_{\text{new}}}{p_{\text{baseline}}}\right)^c$ where $c < 1$
-        - Very large models: $S \approx \left(\frac{p_{\text{new}}}{p_{\text{baseline}}}\right)^d$ where $d > 1$ due to cache effects and memory access patterns
-        - Note: When model size exceeds GPU memory, performance drops dramatically due to gradient checkpointing or model parallelism
-
-- **Architecture-Specific Computation** (Forward + Backward Pass):
-    - Feedforward NNs: $S \approx \frac{b_{\text{new}} \times N_{\text{new}} \times \sum_i (n_i \times n_{i+1})}{b_{\text{baseline}} \times N_{\text{baseline}} \times \sum_i (n_i \times n_{i+1})_{\text{baseline}}}$ where $b=\text{batch size}$, $N=\text{samples}$, $n_i=\text{neurons in layer i}$
-
-    - CNNs: $S \approx \frac{b_{\text{new}} \times \sum_i (h_i \times w_i) \times \sum_j (k_j^2 \times c_{j,\text{in}} \times c_{j,\text{out}})}{b_{\text{baseline}} \times \sum_i (h_i \times w_i)_{\text{baseline}} \times \sum_j (k_j^2 \times c_{j,\text{in}} \times c_{j,\text{out}})_{\text{baseline}}}$ where $h,w=\text{height,width}$, $k=\text{kernel size}$, $c=\text{channels}$
-
-    - RNNs: $S \approx \frac{b_{\text{new}} \times s_{\text{new}} \times h_{\text{new}}^2 \times l_{\text{new}} \times (1+d_{\text{new}})}{b_{\text{baseline}} \times s_{\text{baseline}} \times h_{\text{baseline}}^2 \times l_{\text{baseline}} \times (1+d_{\text{baseline}})}$ where $s=\text{sequence length}$, $h=\text{hidden dimension}$, $l=\text{layers}$, $d=\text{bidirectional (0/1)}$
-
-    - Transformers: $S \approx \frac{b_{\text{new}} \times s_{\text{new}}^2 \times d_{\text{new}} \times l_{\text{new}}}{b_{\text{baseline}} \times s_{\text{baseline}}^2 \times d_{\text{baseline}} \times l_{\text{baseline}}}$ where $s=\text{sequence length}$, $d=\text{embedding dimension}$, $l=\text{layers}$, $b=\text{batch size}$
-
-- **Convergence Variability**:
-    - Stochastic factors can cause training to require 0.5-2× the expected number of epochs
-    - Always include a buffer factor of at least 1.5× for convergence uncertainty
-
-#### Hardware Scaling Effects (Optional)
-
-> **Note:** The following scaling rules are based on the assumption that the hardware is the limiting factor for the new job and more resources are required. If the same resources are used for the new job, the scaling rules may not be applicable.
-
-- **CPU Multi-Threading**:
-    - Ideal scaling: $S \approx \frac{C_{\text{baseline}}}{C_{\text{new}}}$ where $C$ = number of cores
-    - Typical reality: $S \approx \frac{C_{\text{baseline}}}{C_{\text{new}} \times e}$ where $e \approx 0.7-0.9$ is efficiency factor
-    - Amdahl's Law: $S \approx \frac{1}{(1-p) + \frac{p \times C_{\text{baseline}}}{C_{\text{new}}}}$ where $p$ is parallelisable fraction
-
-- **GPU Scaling**:
-    - Multi-GPU data parallelism: $S \approx \frac{G_{\text{baseline}}}{G_{\text{new}} \times e}$ where $G$ = number of GPUs, $e \approx 0.7-0.9$
-    - Model Parallelism: Generally worse efficiency than data parallelism
-    - Multi-node penalty: $S_{\text{multi-node}} \approx S_{\text{single-node}} \times e_{\text{comm}}$ where $e_{\text{comm}} < 1$ is communication efficiency
-
-    ??? warning "Consider the balance between walltime and GPUs"
-        There's often a trade-off between walltime and resource requests (GPUs). A job that uses more resources may finish faster but wait longer in the queue and consume more of your allocation. Consider these alternatives:
-
-        | Approach | Walltime | Resources | Queue Time | Total Time |
-        |----------|----------|-----------|------------|------------|
-        | High-resource | 12h | 4× H100 GPUs | 24h+ | 36h+ |
-        | Balanced | 24h | 2× H100 GPUs | 8h | 32h |
-        | Low-resource | 36h | 1× H100 GPU | 2h | 38h |
-
-        **Key considerations:**
-
-        * **Queue congestion**: More resources generally means longer queue wait times
-        * **Allocation efficiency**: Using fewer resources over longer times is often more efficient
-        * **Urgency factor**: If results are needed quickly, higher resource requests may be justified
-        * **Scalability**: Not all workloads scale efficiently with more resources
-        * **Checkpoint frequency**: Longer jobs should implement more frequent checkpoints
-
-- **Memory**:
-    - Memory bandwidth scaling: $S \approx \frac{M_{\text{new}}}{M_{\text{baseline}}} \times e$ where $e \approx 0.6-0.8$ for memory-bound tasks
-    - Swapping penalty: If memory requirements exceed available RAM, expect 10-100× slowdown
-    - Large memory jobs: Request just enough memory to avoid OOM errors, but not excessively more
-    - Memory locality: Tasks with good cache locality scale better with cores than pure memory bandwidth
-    - NUMA effects: Multiple CPU sockets can reduce scaling efficiency by 5-15% due to non-uniform memory access
-
-    ??? info "Memory-bound vs Compute-bound Jobs"
-        - **Memory-bound jobs** (e.g., large data processing) benefit more from increased memory bandwidth than additional CPU cores
-        - **Compute-bound jobs** (e.g., numerical simulations) benefit more from additional CPU/GPU cores than memory
-        - Identifying which category your job falls into helps make better resource requests
-
-!!! example "Here provides some examples of how to use the scaling rules to estimate the walltime for different types of jobs. (TODO)"
-
----
-
-## :material-alert-circle-outline: Warning Signs You're Doing It Wrong
-
-### Walltime Sins and Their Punishments
-
-- **The Miniaturist**: Requesting 1 hour for a 50-epoch training job. *Punishment: Endless cycle of failed jobs and lost progress.*
-
-- **The Hoarder**: Requesting 7 days for a 4-hour job. *Punishment: Your job ages like fine wine in the queue while your deadline approaches like a freight train.*
-
-- **The Queue Mismatched**: Putting a 24-hour job in a 12-hour interactive queue. *Punishment: Guaranteed failure halfway through, with bonus frustration.*
-
-- **The Copy-Paster**: Using the same walltime for every job without thought. *Punishment: Developing a reputation with the HPC admins, who will tell stories about you at their holiday parties.*
-
-- **The Optimist**: "It'll definitely be faster this time!" *Punishment: Explaining to your supervisor why you have no results for the meeting.*
-
-- **The Resource Hog**: Running minor tasks in batch queues with max resources. *Punishment: Everyone in the Uni quietly resenting you.*
-
----
-
-## :material-tools: Troubleshooting Your Walltime Woes
-
-Even the best walltime artists occasionally create masterpieces of miscalculation. Here's how to recover:
-
-### When Jobs Die Too Young
-
-If your jobs keep hitting walltime limits:
-
-- **Emergency Checkpoint**: Implement regular checkpoints in your code
-- **Divide and Conquer**: Split work into smaller chunks with job dependencies
-- **Post-mortem Analysis**: Review the last few output lines before termination
-- **Run Time Estimation**: Add progress tracking with estimated completion time
-- **Queue Migration**: Consider moving from interactive (12h limit) to batch (48h limit)
-
-### When You're Stuck in Queue Purgatory
-
-If your jobs never seem to start:
-
-- **Queue Status Check**: Use `qstat -q` to see all queue loads
-- **Right-sizing**: Consider if you can use a different queue with different limits
-- **Time vs Resources Trade**: Sometimes less RAM/GPUs but longer walltime is the better choice
-- **Memory Reality Check**: Are you requesting more than the queue's memory range allows?
-- **Batch vs Interactive**: Remember batch jobs release resources early; interactive jobs don't
-
-### The Interactive Job Conundrum
-
-When using interactive queues, remember:
-
-- They hold resources for the full walltime even if your code finishes early
-- They have much shorter walltime limits (12h vs 48h)
-- They typically have lower resource limits (e.g., 2 GPUs vs 8 GPUs)
-- Use `cpu_inter_pers` only when you really need 7+ days of runtime
-
----
-
-## :material-chef-hat: Walltime Recipes for Common Scenarios
-
-### Recipe: The Quick Test Run
+Add `set -x` near the top of every job script. Every command and variable expansion gets echoed to the log, so even a sudden termination leaves a breadcrumb trail of "we got to step N before the executioner arrived".
 
 ```bash
-#PBS -l walltime=01:00:00
-#PBS -q cpu_inter_exec  # or gpu_inter_exec if you need GPUs
+#!/bin/bash -l
+set -eoux pipefail   # exit on error, undefined var, pipe failure; print every command
+cd $PBS_O_WORKDIR
+# ... your work here ...
 ```
 
-**Best for:**
+#### Checkpoint with PBS's built-in mechanism
 
-- Checking if your code runs at all
-- Testing on small subsets of data
-- Debugging startup issues
-- When you'll be actively monitoring
+PBS will auto-resubmit a checkpointable job when its walltime expires. Two pieces:
 
-### Recipe: The Standard Training Run
-
-```bash
-#PBS -l walltime=24:00:00
-#PBS -q gpu_batch_exec  # For ML workloads
+```bash title="In the PBS directives"
+#PBS -c w=30        # ask PBS to signal a checkpoint every 30 min of walltime
+# Alternatives:
+#PBS -c c=600       # every 600 min of cputime
+#PBS -c s           # only on node shutdown
 ```
 
-**Best for:**
-
-- Most ML model training
-- Medium-sized data processing
-- Jobs with established completion patterns
-- When you need those precious GPUs
-
-### Recipe: The "I Have No Idea" Special
-
-```bash
-#PBS -l walltime=04:00:00
-#PBS -q cpu_batch_exec
+```bash title="In the script body — handle the signals"
+checkpoint() { :; }          # save your state here
+checkpoint_abort() { :; }    # save and exit cleanly here
+trap checkpoint USR1
+trap checkpoint_abort USR2
 ```
 
-**Best for:**
+Without those `trap`s, the default action for `USR1`/`USR2` is to terminate the shell before your handler can save state — your job dies *during* the checkpoint instead of surviving it.
 
-- First runs of new code
-- Exploratory analysis
-- When you truly can't estimate (but don't want to clog the queue)
-- When you know it needs more than interactive time
+Full reference: [eResearch Checkpointing](https://docs.eres.qut.edu.au/checkpointing)[^1] and [Implementing checkpointing](https://docs.eres.qut.edu.au/implementing-checkpointing)[^1].
 
-### Recipe: The Weekend Warrior
+#### Outrun the 48-hour cap without `cpu_inter_pers`
 
-```bash
-#PBS -l walltime=48:00:00  # The max for most queues
-#PBS -q gpu_batch_exec  # Or cpu_batch_exec
-```
-
-**Best for:**
-
-- Jobs submitted Friday that you want done by Monday
-- Large-scale computations you've already tested
-- When you won't be available to restart failures
-- Hitting the maximum walltime and hoping for the best
-
-### Recipe: The Pipeline Master
-
-```bash
-#PBS -l walltime=168:00:00  # 7 days
-#PBS -q cpu_inter_pers
-```
-
-**Best for:**
-
-- Workflow pipelines that need to persist
-- Long-running services that coordinate other jobs
-- Jobs where you truly need more than 48 hours
-- When you're willing to sacrifice cores for time (only 1 core is needed)
+When your real job *is* compute and won't fit in 48 hours, the structural answers are array jobs (split inputs across many short jobs) and dependent jobs (chain stages on the command line with `qsub -W depend=afterok:<upstream_jobid> stage2.pbs`, substituting the ID returned by the previous `qsub`). Both bypass the 48-hour wall without burning a watchdog slot. Recipes: [eResearch — Running jobs longer than 48 hours](https://docs.eres.qut.edu.au/breaking-the-48hr-barrier)[^1].
 
 ---
 
-## :material-lightbulb-on: Additional Tips From the Walltime Whisperers
+## :material-chef-hat: Walltime Recipes
 
-- **Progress Bars are Your Friend**: Add `tqdm` or similar progress tracking to your scripts - they help you make better estimates next time.
+Pick the closest profile to your job and copy-paste. All recipes assume you've already read [Know Your Nodes](Know-Your-Nodes.md) so you know which hardware you're landing on.
 
-- **Walltime Poetry**: Different queues, different rules. Learn the poetry of your specific HPC system.
+```mermaid
+flowchart TD
+    Start([Need a walltime number]) --> Hist{Similar job in history?}
+    Hist -->|yes| Brew[Read pbs_brew_inspector.sh<br/>or qstat -fx]
+    Hist -->|no| Probe[Probe with a small interactive job<br/>cpu_inter_exec or gpu_inter_exec]
+    Brew --> Mult[true_runtime × 2 + safety margin]
+    Probe --> Mult
+    Mult --> Q12{Estimate ≤ 12 h?}
+    Q12 -->|yes| Int[Interactive queue<br/>OK if you'll be watching]
+    Q12 -->|no| Q48{Estimate ≤ 48 h?}
+    Q48 -->|yes| Batch[Batch queue<br/>releases resources early]
+    Q48 -->|no| Kind{Compute or<br/>coordination?}
+    Kind -->|compute| Split[Checkpoint, array jobs,<br/>or dependent jobs]
+    Kind -->|coordination| Pers[cpu_inter_pers<br/>1 CPU 4 GB 368 h]
+```
 
-- **The Batch Advantage**: Batch jobs release resources as soon as they finish. If your job might finish early, always use batch over interactive.
+=== ":material-flash: Quick Test"
 
-- **Two-Phase Approach**: Run a small version of your job first in an interactive queue to establish a baseline, then scale your walltime request accordingly for the batch queue.
+    ```bash
+    #PBS -l walltime=01:00:00
+    #PBS -l select=1:ncpus=4:mem=8gb
+    #PBS -q cpu_inter_exec
 
-- **Checkpoint Everything**: Your future self will thank you when that 47-hour job crashes at hour 46.
+    # GPU variant — swap the resource line + queue:
+    # -l select=1:ncpus=4:mem=8gb:ngpus=1
+    # -q gpu_inter_exec
+    ```
 
-- **The "Kill Switch"**: Always have a way to gracefully terminate your job early if you realise you've made a horrible walltime mistake. Use `qhold <job_id>` to pause your job and `qdel <job_id>` to cancel it.
+    **Best for:** checking the code runs at all, debugging startup, building conda envs, trying module combinations. You'll be watching.
 
-- **Analyse Your Usage**: Using `pbs_brew_inspector.sh`, track your average walltime efficiency. Aim for 75-85% usage of requested time.
+=== ":material-school: Standard Training"
+
+    ```bash
+    #PBS -l walltime=24:00:00
+    #PBS -l select=1:ncpus=12:mem=64gb:ngpus=1
+    #PBS -q gpu_batch_exec
+    ```
+
+    **Best for:** most ML model training, medium-sized data processing, jobs with established completion patterns. Batch releases the GPU early if you finish at hour 18.
+
+=== ":material-help-circle: I Have No Idea"
+
+    ```bash
+    #PBS -l walltime=04:00:00
+    #PBS -l select=1:ncpus=4:mem=16gb
+    #PBS -q cpu_batch_exec
+    ```
+
+    **Best for:** first runs of new code, exploratory analysis, when you genuinely can't estimate but don't want to clog the interactive queue. Long enough to be useful, short enough to schedule fast.
+
+=== ":material-calendar-weekend: Weekend Warrior"
+
+    ```bash
+    #PBS -l walltime=48:00:00
+    #PBS -l select=1:ncpus=16:mem=128gb:ngpus=2
+    #PBS -q gpu_batch_exec
+    ```
+
+    **Best for:** Friday submissions you want done by Monday, large jobs you've already tested, runs where you won't be available to restart failures. Hit the cap and hope. (Better: combine with `#PBS -c w=60` so PBS auto-resubmits.)
+
+=== ":material-pipe: Pipeline Master"
+
+    ```bash
+    #PBS -l walltime=168:00:00     # 7 days; the queue allows up to 368 h
+    #PBS -l select=1:ncpus=1:mem=2gb
+    #PBS -q cpu_inter_pers
+    ```
+
+    **Best for:** Nextflow / Snakemake controllers that submit and wait, persistent `tmux` orchestrators, long-lived monitoring scripts. **One CPU and 4 GB max** — do *not* try to compute here, just coordinate.
 
 ---
 
-## :material-flag-triangle: The Walltime Warrior's Creed
+## :material-flask-outline: Practical Walltime Science (The Math)
 
-1. I shall not request more time than I need.
-2. I shall not trust my first estimate.
-3. I shall checkpoint regularly and defensively.
-4. I shall learn from each job's runtime.
-5. I shall remember interactive jobs hold resources until the bitter end.
-6. I shall respect the 48-hour limit of most queues.
-7. I shall curse quietly when my perfect estimate is still wrong.
+For when the 2× rule isn't enough and you need to scale a baseline rigorously. The scaling factor $S$ in $T_{\text{est}} = T_{\text{baseline}} \cdot S + M$ depends on what changed.
+
+### Symbol legend
+
+| Symbol | Meaning | Where it appears |
+|---|---|---|
+| $n$ | Input data size (generic) | CPU complexity classes |
+| $N$ | Number of training samples | GPU data scaling |
+| $b$ | Batch size | GPU training |
+| $x$ | Input dimension (features, pixels) | Simplified GPU formula |
+| $s$ | Sequence length | RNN, Transformer |
+| $d$ | Embedding / hidden dimension | Transformer, RNN |
+| $h$ | Hidden state size | RNN |
+| $l$ | Number of layers | Transformer, RNN |
+| $p$ | Parameter count | Model size scaling |
+| $k$ | Convolution kernel size | CNN |
+| $c$ | Channel count (in / out) | CNN |
+| $e$ | Efficiency factor (0.7–0.9 typical) | Hardware scaling |
+| $C, G$ | CPU cores, GPU count | Hardware scaling |
+
+### CPU-bound: scale by complexity class
+
+=== "$O(n)$ Linear"
+
+    $$ S \approx \frac{n_{\text{new}}}{n_{\text{baseline}}} $$
+
+    Examples: data parsing, point-wise operations, streaming analytics. **Doubling data doubles runtime.**
+
+=== "$O(n \log n)$ Log-linear"
+
+    $$ S \approx \frac{n_{\text{new}}}{n_{\text{baseline}}} \times \frac{\log n_{\text{new}}}{\log n_{\text{baseline}}} $$
+
+    Examples: sorting, FFTs, divide-and-conquer, heap operations. **Doubling data ≈ 2.1–2.3× runtime.**
+
+=== "$O(n^2)$ Quadratic"
+
+    $$ S \approx \left(\frac{n_{\text{new}}}{n_{\text{baseline}}}\right)^2 $$
+
+    Examples: pairwise distance matrices, naive string matching, nested loops. **Doubling data quadruples runtime.**
+
+=== "$O(n^3)$ Cubic"
+
+    $$ S \approx \left(\frac{n_{\text{new}}}{n_{\text{baseline}}}\right)^3 $$
+
+    Examples: 3D simulations, molecular dynamics, dense matrix ops. **Doubling data → 8× runtime — gets impractical fast.**
+
+=== "$O(n^k)$ Polynomial"
+
+    $$ S \approx \left(\frac{n_{\text{new}}}{n_{\text{baseline}}}\right)^k, \quad k > 3 $$
+
+    Examples: k-clique finding, some dynamic programming, naive polynomial evaluation. **Avoid for large datasets unless you've simplified.**
+
+=== "$O(2^n)$ Exponential"
+
+    $$ S \approx \frac{2^{n_{\text{new}}}}{2^{n_{\text{baseline}}}} $$
+
+    Examples: brute-force TSP, power set generation, exhaustive combinatorial search. **Small input increases → astronomical runtime.** Reach for approximations.
+
+=== "$O(n!)$ Factorial"
+
+    $$ S \approx \frac{n_{\text{new}}!}{n_{\text{baseline}}!} $$
+
+    Examples: exact combinatorial optimisation, NP-complete brute force. **Practical only for $n < 12$.**
+
+### GPU deep-learning workloads
+
+#### Quick-and-dirty: the multiplicative formula
+
+When you don't know the architecture details, multiply everything you changed:
+
+$$ S \approx \frac{b_{\text{new}} \cdot p_{\text{new}} \cdot x_{\text{new}} \cdot E_{\text{new}}}{b_{\text{baseline}} \cdot p_{\text{baseline}} \cdot x_{\text{baseline}} \cdot E_{\text{baseline}}} $$
+
+where $p =$ parameters, $x =$ input dimension, $E =$ epochs (distinct from the efficiency factor $e$ in the legend). Fine for sanity checks; for production planning, use the sharper rules below.
+
+#### Data-size scaling
+
+- **Linear models:** $S \approx N_{\text{new}} / N_{\text{baseline}}$
+- **Neural networks:** $S \approx \left(N_{\text{new}} / N_{\text{baseline}}\right)^c$ with $c \approx 0.8$–$0.9$
+
+The sub-linear exponent comes from vectorisation gains, GPU kernel efficiency at scale, and the fact that diverse data sometimes converges in fewer epochs.
+
+#### Batch-size scaling
+
+Two effects fight each other:
+
+- **Throughput** (work per wall second) improves with batch size:
+  $$ S_{\text{throughput}} \approx \left(\frac{b_{\text{baseline}}}{b_{\text{new}}}\right)^c, \quad c \approx 0.8\text{–}0.9 $$
+  (Sub-linear because memory bandwidth and kernel launch overhead bite.)
+- **Convergence** often *worsens* — larger batches need more epochs to hit the same accuracy:
+  $$ S_{\text{epochs}} \approx \left(\frac{b_{\text{new}}}{b_{\text{baseline}}}\right)^{0.1\text{–}0.3} $$
+
+Multiply both for the net effect.
+
+#### Model-size scaling
+
+| Regime | Scaling | Notes |
+|---|---|---|
+| Dense, model fits in GPU memory | $S \approx p_{\text{new}} / p_{\text{baseline}}$ | Linear in parameters |
+| Sparse (MoE, pruning) | $S \approx (p_{\text{new}} / p_{\text{baseline}})^c, \ c < 1$ | Sub-linear |
+| Very large, memory-bound | $S \approx (p_{\text{new}} / p_{\text{baseline}})^d, \ d > 1$ | Cache and access-pattern penalties |
+| **Doesn't fit in GPU memory** | 10–100× | Gradient checkpointing or model parallelism kicks in |
+
+If you're near the memory limit, see [Know Your Nodes](Know-Your-Nodes.md) for MIG slicing on A100 (sometimes a 1/7 slice is enough and arrives faster than a full card).
+
+### Architecture-specific FLOPs (forward + backward)
+
+??? math "Click for the per-architecture scaling factors"
+
+    === "Feedforward NN"
+
+        $$ S \approx \frac{b_{\text{new}} \cdot N_{\text{new}} \cdot \sum_i n_i n_{i+1}}{b_{\text{baseline}} \cdot N_{\text{baseline}} \cdot \left(\sum_i n_i n_{i+1}\right)_{\text{baseline}}} $$
+
+        $n_i$ = neurons in layer $i$.
+
+    === "CNN"
+
+        $$ S \approx \frac{b_{\text{new}} \cdot \sum_i (h_i w_i) \cdot \sum_j (k_j^2 c_{j,\text{in}} c_{j,\text{out}})}{\text{(same expression, baseline values)}} $$
+
+        $h, w$ = feature-map height/width, $k$ = kernel size, $c$ = channels.
+
+    === "RNN / LSTM / GRU"
+
+        $$ S \approx \frac{b_{\text{new}} \cdot s_{\text{new}} \cdot h_{\text{new}}^2 \cdot l_{\text{new}} \cdot (1 + d_{\text{new}})}{\text{(same expression, baseline values)}} $$
+
+        $s$ = sequence length, $h$ = hidden dim, $l$ = layers, $d \in \{0,1\}$ = bidirectional flag.
+
+    === "Transformer"
+
+        $$ S \approx \frac{b_{\text{new}} \cdot s_{\text{new}}^2 \cdot d_{\text{new}} \cdot l_{\text{new}}}{b_{\text{baseline}} \cdot s_{\text{baseline}}^2 \cdot d_{\text{baseline}} \cdot l_{\text{baseline}}} $$
+
+        This captures the **attention** term ($b \cdot s^2 \cdot d \cdot l$). For wide-but-short-context models ($d \gtrsim s$), the **feed-forward** term $4 \cdot b \cdot s \cdot d^2 \cdot l$ dominates instead. A more complete approximation is:
+
+        $$ \text{FLOPs} \propto b \cdot l \cdot \left(4 \cdot s \cdot d^2 + 2 \cdot s^2 \cdot d\right) $$
+
+        Use whichever term is bigger for your model.
+
+!!! tip "Convergence variability"
+    Stochastic training takes 0.5–2× the expected number of epochs. Always include a buffer of at least **1.5×** on top of the deterministic estimate.
+
+### Hardware scaling (when you're changing the box, not the workload)
+
+??? note "CPU multi-threading"
+    - **Ideal:** $S \approx C_{\text{baseline}} / C_{\text{new}}$
+    - **Reality:** $S \approx C_{\text{baseline}} / (C_{\text{new}} \cdot e)$ with $e \approx 0.7$–$0.9$
+    - **Amdahl:** $S \approx \dfrac{1}{(1-p) + p \cdot C_{\text{baseline}} / C_{\text{new}}}$ where $p$ is the parallelisable fraction
+
+??? note "GPU scaling"
+    - **Data parallelism:** $S \approx G_{\text{baseline}} / (G_{\text{new}} \cdot e)$ with $e \approx 0.7$–$0.9$
+    - **Model parallelism:** typically worse efficiency than data parallelism
+    - **Multi-node:** $S_{\text{multi}} \approx S_{\text{single}} \cdot e_{\text{comm}}$ with $e_{\text{comm}} < 1$ from inter-node communication
+
+??? note "Memory and I/O"
+    - **Memory bandwidth (memory-bound jobs):** $S \approx B_{\text{baseline}} / (B_{\text{new}} \cdot e)$ with $e \approx 0.6$–$0.8$ — *more bandwidth shrinks $S$, i.e. runs faster*
+    - **Swapping:** if memory requirements exceed RAM, expect **10–100× slowdown**
+    - **NUMA:** multi-socket access can lose 5–15% efficiency
+    - **Cache locality:** good locality means cores scale better than raw bandwidth
+
+??? info "Memory-bound vs compute-bound — which are you?"
+    - **Memory-bound** (large data processing, sparse linear algebra): more memory bandwidth helps more than more cores.
+    - **Compute-bound** (dense numerical simulations, training small models): more cores / GPUs help more than more memory.
+
+    Run a small profile (`qstat -fx`, Grafana dashboard, `nvidia-smi` during a training step) to see which side of the line you're on before you scale up.
+
+### :material-rocket-launch: Resource vs walltime trade-off
+
+There's almost always a tension between resources requested (which shorten compute time) and queue wait (which lengthens it).
+
+| Approach | Walltime | Resources | Queue wait (illustrative) | Total time |
+|---|---|---|---|---|
+| High-resource | 12 h | 4× H100 | 24 h+ | 36 h+ |
+| Balanced | 24 h | 2× H100 | 8 h | 32 h |
+| Low-resource | 36 h | 1× H100 | 2 h | 38 h |
+
+!!! note "Numbers above are illustrative — check live load"
+    Wait times depend on cluster state. Read the [eResearch Grafana dashboard](https://hpc-monitoring.eres.qut.edu.au/)[^1] or run `qstat -B` / `qstat -Q` before you commit. The relative ordering (more resources → longer wait) holds; the absolute numbers swing day to day.
+
+**Things to weigh:**
+
+- :material-account-group: **Queue congestion** — bigger asks wait longer
+- :material-piggy-bank: **Allocation efficiency** — fewer resources for longer is usually cheaper
+- :material-fire: **Urgency** — if the deadline is in 6 h, throw resources at it
+- :material-trending-up: **Scalability** — not every workload scales with more cards
+- :material-content-save: **Checkpoint cost** — longer jobs need more frequent checkpoints
+
+### :material-lightbulb-on: Worked example: scaling a ResNet finetune
+
+You ran ResNet-50 on **10 000 images** with a single H100 in **2 hours**. Now you want to scale to **100 000 images** on the same card. Apply the neural-net data-scaling rule ($c = 0.85$):
+
+$$ S \approx \left(\frac{100\,000}{10\,000}\right)^{0.85} \approx 10^{0.85} \approx 7.1 $$
+
+Deterministic estimate: $2\text{ h} \times 7.1 = 14.2 \text{ h}$.
+
+Apply the 1.5× convergence buffer: $14.2 \times 1.5 \approx 21.3 \text{ h}$.
+
+Round up and add a safety margin: **walltime 24 h, queue `gpu_batch_exec`**. Comfortably inside the 48 h cap with room to spare. Drop `#PBS -c w=60` if you want PBS to auto-resubmit on the off chance you blew the estimate.
 
 ---
 
-## :material-rocket-launch: When All Else Fails: The Emergency Protocols
+## :material-alert-circle-outline: Warning Signs and Troubleshooting
 
-- **The HPC Whisperer**: Make friends with your HPC admin. They know secrets of the queues you can only dream of.
+### Walltime sins and their punishments
 
-- **The Queue Switcher**: If your job won't fit in a 48-hour window, break it up or adapt it for the persistent queue.
+- :material-emoticon-cool-outline: **The Miniaturist** — requesting 1 h for a 50-epoch training run. *Punishment: endless cycle of failed jobs and lost progress.*
+- :material-archive: **The Hoarder** — requesting 7 days for a 4-hour job. *Punishment: your job ages like fine wine in the queue while your deadline approaches like a freight train.*
+- :material-puzzle-remove: **The Queue Mismatched** — a 24-hour job into a 12-hour interactive queue. *Punishment: guaranteed failure halfway through, bonus frustration.*
+- :material-content-copy: **The Copy-Paster** — same walltime for every job, regardless of work. *Punishment: a reputation with HPC admins who tell stories about you at holiday parties.*
+- :material-emoticon-happy-outline: **The Optimist** — *"it'll definitely be faster this time!"* *Punishment: explaining to your supervisor why there are no results for the meeting.*
+- :material-pig-variant: **The Resource Hog** — minor tasks in batch queues with max resources. *Punishment: everyone at the Uni quietly resenting you.*
 
-- **The Late-Night Submission**: Some say submitting at 2 AM magically improves queue position. We can neither confirm nor deny.
+### When jobs die too young
 
-- **The "Please Don't Die" Ritual**: This involves staring anxiously at your job's progress while muttering "just finish already" under your breath.
+| Symptom | First thing to try |
+|---|---|
+| Hit walltime on every run | Add `#PBS -c w=N` + USR1/USR2 traps so PBS auto-resubmits |
+| Job dies with no diagnosis | Add `set -x` at the top of the script |
+| 47 h job needs 49 h | Split the work into stages with `qsub -W depend=afterok:<upstream_jobid> stage2.pbs` |
+| Many similar runs | Use a job array (`#PBS -J 1-100`) — see [eResearch — Breaking the 48hr barrier](https://docs.eres.qut.edu.au/breaking-the-48hr-barrier)[^1] |
+| Maintenance window is near | Check `time_until_outage.sh` (see [Know Your Nodes](Know-Your-Nodes.md)) before submitting a long batch |
 
-- **The 47:30 Panic Attack**: When you realize your 48-hour job might actually need 48:30, and you start frantically implementing checkpointing.
+### When you're stuck in queue purgatory
 
-> **Remember:** Walltime isn't just a number – it's a relationship between you, your code, your data, the specific queue limits, and the cruel mistress of computational fate.
+| Symptom | First thing to try |
+|---|---|
+| Job never starts | `qstat -q` for queue depth, `qstat -B` for server view |
+| Requested more than the queue allows | Re-check the [queue table above](#the-six-execution-queues) — over-spec auto-routes elsewhere or fails |
+| Many GPUs requested, few available | Drop to a smaller card / MIG slice — see [Know Your Nodes](Know-Your-Nodes.md) |
+| Need to control a running job | `qhold <jobid>` to pause, `qrls <jobid>` to resume, `qdel <jobid>` to cancel |
+
+### The interactive queue conundrum
+
+Things to remember before you `qsub -I`:
+
+- Resources are held for the **entire** walltime — finish early and you still pay for the slot
+- 12-hour cap vs 48-hour batch — choose deliberately
+- Lower per-job resource limits than the batch sibling (e.g. 2 vs 8 GPUs)
+- `cpu_inter_pers` is *one* CPU and 4 GB — only for orchestration, never for compute
+
+---
+
+## :material-lightbulb-multiple: Tips From the Walltime Whisperers
+
+- :material-progress-clock: **Progress bars are your friend** — add `tqdm` (or equivalent) so the next estimate comes from data, not vibes.
+- :material-rotate-360: **Two-phase approach** — run a small interactive probe first, get a real baseline, then scale up for batch.
+- :material-content-save-all: **Checkpoint everything** — your future self will thank you when the 47-hour job crashes at hour 46.
+- :material-stop-circle: **Have a kill switch** — `qhold` pauses, `qdel` cancels. Learn both before you need them.
+- :material-chart-line-variant: **Track your efficiency** — aim for 75–85% walltime usage on average. Below 50% and you're hoarding; consistently above 95% and you're flirting with disaster.
+- :material-poll: **Different queues, different rules** — what's true on `gpu_batch_exec` may be wrong on `gpu_inter_exec`. Read the limits.
+- :material-account-tie: **Make friends with the HPC admin** — they know things `qstat` will never tell you.
+
+> **Remember:** Walltime isn't just a number — it's a relationship between you, your code, your data, the specific queue limits, and the cruel mistress of computational fate.
 
 ---
 
 ## :material-egg-easter: Coming Soon
 
 - A guide to interpreting cryptic error messages when your job dies with 5 seconds of walltime remaining.
-- The psychological impact of watching your perfectly estimated job finish with exactly 00:00:01 remaining.
+- The psychological impact of watching your perfectly estimated job finish with exactly `00:00:01` remaining.
 - Advanced negotiations with the queue scheduler: bargaining, pleading, and acceptance.
 - Walltime support group: sharing stories of that time you asked for 48 hours and it took 48 hours and 3 minutes.
 
-Remember, the perfect walltime doesn't exist. But the perfect walltime estimate does.
+The perfect walltime doesn't exist. But the perfect walltime *estimate* does.
+
+[^1]: Access only in QUT network. Please use VPN to access the documentation when off-campus.

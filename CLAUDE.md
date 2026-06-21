@@ -17,8 +17,8 @@ uv sync
 # Build documentation
 uv run mkdocs build
 
-# Serve documentation locally (default: http://127.0.0.1:8000)
-uv run mkdocs serve
+# Serve documentation locally on a non-default port (avoid 8000 — it's often busy)
+uv run mkdocs serve -a 127.0.0.1:8765
 
 # Deploy to GitHub Pages (if configured)
 uv run mkdocs gh-deploy
