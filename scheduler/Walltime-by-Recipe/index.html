@@ -1,0 +1,2022 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="My personal survival log of mysterious errors, queueing oddities, and PBS quirks encountered on QUT Aqua">
+      
+      
+        <meta name="author" content="Zhipeng He">
+      
+      
+        <link rel="canonical" href="https://zhipenghe.me/walltime-chronicles/scheduler/Walltime-by-Recipe/">
+      
+      
+        <link rel="prev" href="../The-Art-of-Walltime/">
+      
+      
+        <link rel="next" href="../../pbs-scripts/Batch-Cooking-PBS-Scripts-with-a-Bash-Pan/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Walltime by Recipe: Worked Examples for Aqua - Walltime Chronicles</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="https://unpkg.com/katex@0/dist/katex.min.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Walltime by Recipe: Worked Examples for Aqua - Walltime Chronicles" />
+<meta property="og:description" content="My personal survival log of mysterious errors, queueing oddities, and PBS quirks encountered on QUT Aqua" />
+<meta property="og:image" content="https://zhipenghe.me/walltime-chronicles/assets/images/social/scheduler/Walltime-by-Recipe.png" />
+<meta property="og:image:type" content="image/png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:url" content="https://zhipenghe.me/walltime-chronicles/scheduler/Walltime-by-Recipe/" />
+<meta property="twitter:card" content="summary_large_image" />
+<meta property="twitter:title" content="Walltime by Recipe: Worked Examples for Aqua - Walltime Chronicles" />
+<meta property="twitter:description" content="My personal survival log of mysterious errors, queueing oddities, and PBS quirks encountered on QUT Aqua" />
+<meta property="twitter:image" content="https://zhipenghe.me/walltime-chronicles/assets/images/social/scheduler/Walltime-by-Recipe.png" />
+</head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#walltime-by-recipe-worked-examples-for-aqua" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Walltime Chronicles" class="md-header__button md-logo" aria-label="Walltime Chronicles" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.75 8h6.5a.75.75 0 0 1 .75.75v6.5a.75.75 0 0 1-.75.75h-6.5a.75.75 0 0 1-.75-.75v-6.5A.75.75 0 0 1 8.75 8m.75 6.5h5v-5h-5Z"/><path d="M15.25 1a.75.75 0 0 1 .75.75V4h2.25c.966 0 1.75.784 1.75 1.75V8h2.25a.75.75 0 0 1 0 1.5H20v5h2.25a.75.75 0 0 1 0 1.5H20v2.25A1.75 1.75 0 0 1 18.25 20H16v2.25a.75.75 0 0 1-1.5 0V20h-5v2.25a.75.75 0 0 1-1.5 0V20H5.75A1.75 1.75 0 0 1 4 18.25V16H1.75a.75.75 0 0 1 0-1.5H4v-5H1.75a.75.75 0 0 1 0-1.5H4V5.75C4 4.784 4.784 4 5.75 4H8V1.75a.75.75 0 0 1 1.5 0V4h5V1.75a.75.75 0 0 1 .75-.75m3 17.5a.25.25 0 0 0 .25-.25V5.75a.25.25 0 0 0-.25-.25H5.75a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Walltime Chronicles
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Walltime by Recipe: Worked Examples for Aqua
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/ZhipengHe/Walltime-Chronicles" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Walltime Chronicles" class="md-nav__button md-logo" aria-label="Walltime Chronicles" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.75 8h6.5a.75.75 0 0 1 .75.75v6.5a.75.75 0 0 1-.75.75h-6.5a.75.75 0 0 1-.75-.75v-6.5A.75.75 0 0 1 8.75 8m.75 6.5h5v-5h-5Z"/><path d="M15.25 1a.75.75 0 0 1 .75.75V4h2.25c.966 0 1.75.784 1.75 1.75V8h2.25a.75.75 0 0 1 0 1.5H20v5h2.25a.75.75 0 0 1 0 1.5H20v2.25A1.75 1.75 0 0 1 18.25 20H16v2.25a.75.75 0 0 1-1.5 0V20h-5v2.25a.75.75 0 0 1-1.5 0V20H5.75A1.75 1.75 0 0 1 4 18.25V16H1.75a.75.75 0 0 1 0-1.5H4v-5H1.75a.75.75 0 0 1 0-1.5H4V5.75C4 4.784 4.784 4 5.75 4H8V1.75a.75.75 0 0 1 1.5 0V4h5V1.75a.75.75 0 0 1 .75-.75m3 17.5a.25.25 0 0 0 .25-.25V5.75a.25.25 0 0 0-.25-.25H5.75a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25Z"/></svg>
+
+    </a>
+    Walltime Chronicles
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/ZhipengHe/Walltime-Chronicles" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ~/welcome
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crash Course Café
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Crash Course Café
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/get-start/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/prerequisites/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prerequisites Checklist
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/lesson-0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 0: HPC Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/lesson-1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 1: Environment Setup & First Interactive Session
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cmd+Opt+Remote
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Cmd+Opt+Remote
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../remote-dev/Surviving-without-VS-Code-Remote-SSH/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Surviving without VS Code Remote SSH
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../remote-dev/The-DS_Store-Strikes-Back/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The .DS_Store Strikes Back: Finder Edition
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Scheduler's Gambit
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    The Scheduler's Gambit
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Know-Your-Nodes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Know Your Nodes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../The-Art-of-Walltime/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guess, Request, Regret: The Art of Walltime
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Walltime by Recipe: Worked Examples for Aqua
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Walltime by Recipe: Worked Examples for Aqua
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-standard-pbs-preamble" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The standard PBS preamble
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pick-your-recipe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pick your recipe
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-recipes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The recipes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The recipes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#recipe-1-quick-cpu-test-cpu_inter_exec" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recipe 1 — Quick CPU test (cpu_inter_exec)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recipe-2-heavy-cpu-mpi-on-cpu_batch_exec" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recipe 2 — Heavy CPU MPI on cpu_batch_exec
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recipe-3-large-memory-analysis-on-cpu_batch_exlm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recipe 3 — Large-memory analysis on cpu_batch_exlm
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recipe-4-single-h100-training" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recipe 4 — Single H100 training
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recipe-5-multi-gpu-h100-at-the-per-job-ceiling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recipe 5 — Multi-GPU H100 at the per-job ceiling
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recipe-6-a100-fallback-when-the-h100-queue-is-busy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recipe 6 — A100 fallback when the H100 queue is busy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recipe-7-mig-slice-sanity-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recipe 7 — MIG slice sanity check
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recipe-8-long-pipeline-with-chained-jobs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recipe 8 — Long pipeline with chained jobs
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#special-case-convergence-unpredictable-workloads" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Special case — convergence-unpredictable workloads
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Special case — convergence-unpredictable workloads">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#phase-1-probe-in-mig" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 1 — probe in MIG
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phase-2-production-with-checkpointing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 2 — production with checkpointing
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#where-next" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where next
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PBS Cookbook
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    PBS Cookbook
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../pbs-scripts/Batch-Cooking-PBS-Scripts-with-a-Bash-Pan/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Batch-Cooking PBS Scripts with a Bash Pan
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../pbs-scripts/PBS-Brew-Inspector/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PBS Brew Inspector: Tasting Notes from Your Job History
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../LICENSE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    License
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-standard-pbs-preamble" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The standard PBS preamble
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pick-your-recipe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pick your recipe
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-recipes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The recipes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The recipes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#recipe-1-quick-cpu-test-cpu_inter_exec" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recipe 1 — Quick CPU test (cpu_inter_exec)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recipe-2-heavy-cpu-mpi-on-cpu_batch_exec" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recipe 2 — Heavy CPU MPI on cpu_batch_exec
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recipe-3-large-memory-analysis-on-cpu_batch_exlm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recipe 3 — Large-memory analysis on cpu_batch_exlm
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recipe-4-single-h100-training" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recipe 4 — Single H100 training
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recipe-5-multi-gpu-h100-at-the-per-job-ceiling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recipe 5 — Multi-GPU H100 at the per-job ceiling
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recipe-6-a100-fallback-when-the-h100-queue-is-busy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recipe 6 — A100 fallback when the H100 queue is busy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recipe-7-mig-slice-sanity-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recipe 7 — MIG slice sanity check
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recipe-8-long-pipeline-with-chained-jobs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recipe 8 — Long pipeline with chained jobs
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#special-case-convergence-unpredictable-workloads" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Special case — convergence-unpredictable workloads
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Special case — convergence-unpredictable workloads">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#phase-1-probe-in-mig" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 1 — probe in MIG
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phase-2-production-with-checkpointing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 2 — production with checkpointing
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#where-next" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where next
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+                
+
+
+
+  
+
+
+  <nav class="md-path" aria-label="Navigation" >
+    <ol class="md-path__list">
+      
+        
+  
+  
+    <li class="md-path__item">
+      <a href="../.." class="md-path__link">
+        
+  <span class="md-ellipsis">
+    ~/welcome
+  </span>
+
+      </a>
+    </li>
+  
+
+      
+      
+        
+  
+  
+    
+    
+      <li class="md-path__item">
+        <a href="../Know-Your-Nodes/" class="md-path__link">
+          
+  <span class="md-ellipsis">
+    The Scheduler's Gambit
+  </span>
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ol>
+  </nav>
+
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/ZhipengHe/Walltime-Chronicles/edit/main/docs/scheduler/Walltime-by-Recipe.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+    
+      
+    
+    <a href="https://github.com/ZhipengHe/Walltime-Chronicles/raw/main/docs/scheduler/Walltime-by-Recipe.md" title="View source of this page" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"/></svg>
+    </a>
+  
+
+
+<h1 id="walltime-by-recipe-worked-examples-for-aqua">Walltime by Recipe: Worked Examples for Aqua</h1>
+<p>So you've read <a href="../The-Art-of-Walltime/">The Art of Walltime</a> and you understand the rules of the game. Now you need an answer for <em>your</em> job — and you don't want to derive scaling factors from first principles every time. Welcome to the <strong>recipe book</strong>: eight Aqua-specific worked examples, each one a copy-paste starting point you can adapt.</p>
+<p>Every recipe respects the live queue caps. If a number here looks wrong, the cluster's specs probably changed — re-probe with <code>qstat -Qf</code> and update.</p>
+<div class="admonition tip">
+<p class="admonition-title">Companion pages</p>
+<ul>
+<li><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 20a8 8 0 0 0 8-8 8 8 0 0 0-8-8 8 8 0 0 0-8 8 8 8 0 0 0 8 8m0-18a10 10 0 0 1 10 10 10 10 0 0 1-10 10C6.47 22 2 17.5 2 12A10 10 0 0 1 12 2m.5 5v5.25l4.5 2.67-.75 1.23L11 13V7z"/></svg></span> <a href="../The-Art-of-Walltime/">The Art of Walltime</a> — the theory: queue limits, the 2× rule, scaling-factor menu, recovery toolkit.</li>
+<li><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 19h1a1 1 0 0 1 1 1h7v2h-7a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1H2v-2h7a1 1 0 0 1 1-1h1v-2H4a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-7zM4 3h16a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1m5 4h1V5H9zm0 8h1v-2H9zM5 5v2h2V5zm0 8v2h2v-2z"/></svg></span> <a href="../Know-Your-Nodes/">Know Your Nodes</a> — the hardware behind each queue (H100s, A100 MIG slices, large-mem boxes, watchdog cores).</li>
+<li><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3C7.56 3 5.85 4.24 5.23 6.08A3.996 3.996 0 0 0 6 14v8h11v-2h3c.55 0 1-.45 1-1v-8c0-.55-.45-1-1-1h-2V8c0-2.21-1.79-4-4-4h-1.68c-.82-.65-1.79-1-2.82-1m0 2c.79 0 1.53.37 2 1H14a2 2 0 0 1 2 2h-4c-2 0-2.68 1.13-3.5 2.63S6 12 6 12c-1.11 0-2-.89-2-2a2 2 0 0 1 2-2h1v-.5A2.5 2.5 0 0 1 9.5 5m7.5 7h2v6h-2Z"/></svg></span> <a href="../../pbs-scripts/PBS-Brew-Inspector/">PBS Brew Inspector</a> — extract walltime ground truth from your own job history.</li>
+<li><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3 1 9l11 6 9-4.91V17h2V9M5 13.18v4L12 21l7-3.82v-4L12 17z"/></svg></span> QUT eResearch — <a href="https://docs.eres.qut.edu.au/hpc-queue-limits">Queues and limits</a><sup id="fnref4:1"><a class="footnote-ref" href="#fn:1">1</a></sup>, <a href="https://docs.eres.qut.edu.au/hpc-estimatingoptimising-resources-to-request-for-">Estimating/optimising resources</a><sup id="fnref5:1"><a class="footnote-ref" href="#fn:1">1</a></sup>, <a href="https://docs.eres.qut.edu.au/breaking-the-48hr-barrier">Running jobs longer than 48 hours</a><sup id="fnref6:1"><a class="footnote-ref" href="#fn:1">1</a></sup>, <a href="https://docs.eres.qut.edu.au/checkpointing">Checkpointing</a><sup id="fnref7:1"><a class="footnote-ref" href="#fn:1">1</a></sup>.</li>
+</ul>
+</div>
+<div class="admonition info">
+<p class="admonition-title">Notation</p>
+<p>Every recipe uses the same notation as Art of Walltime: <span class="arithmatex">\(T_{\text{est}} = T_{\text{baseline}} \cdot S + \Delta\)</span>, where <span class="arithmatex">\(T_{\text{baseline}}\)</span> is your prior runtime, <span class="arithmatex">\(S\)</span> the scaling factor, and <span class="arithmatex">\(\Delta\)</span> a safety margin (1 h short jobs, 4+ h multi-day). Memory request is written <strong>R</strong> (to avoid colliding with the margin). The full symbol legend lives in <a href="../The-Art-of-Walltime/#symbol-legend">Art of Walltime § Symbol legend</a>.</p>
+</div>
+<hr />
+<h2 id="the-standard-pbs-preamble"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17.8 20c-.4 1.2-1.5 2-2.8 2H5c-1.7 0-3-1.3-3-3v-1h12.2c.4 1.2 1.5 2 2.8 2zM19 2c1.7 0 3 1.3 3 3v1h-2V5c0-.6-.4-1-1-1s-1 .4-1 1v13h-1c-.6 0-1-.4-1-1v-1H5V5c0-1.7 1.3-3 3-3zM8 6v2h7V6zm0 4v2h6v-2z"/></svg></span> The standard PBS preamble</h2>
+<p>Every recipe below assumes this skeleton — only the <code>#PBS -l</code> resource lines and the body change.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="ch">#!/bin/bash -l</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="c1">#PBS -N my_job              # rename per job</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c1">#PBS -j oe                  # join stderr into stdout for one log</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1">#PBS -m abe                 # email on abort / begin / end (optional)</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="c1"># --- per-recipe resource lines go here ---</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="nb">set</span><span class="w"> </span>-eoux<span class="w"> </span>pipefail<span class="w">          </span><span class="c1"># exit on error, undef var, pipe failure; trace every command</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="nb">cd</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PBS_O_WORKDIR</span><span class="s2">&quot;</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="c1"># --- your work here ---</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>qstat<span class="w"> </span>-fx<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PBS_JOBID</span><span class="s2">&quot;</span><span class="w"> </span>&gt;<span class="w"> </span><span class="s2">&quot;resource_usage_</span><span class="si">${</span><span class="nv">PBS_JOBID</span><span class="si">}</span><span class="s2">&quot;</span><span class="w">   </span><span class="c1"># post-mortem for future walltime tuning</span>
+</span></code></pre></div>
+<p>What this buys you:</p>
+<ul>
+<li><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 8h-2.81c-.45-.8-1.07-1.5-1.82-2L17 4.41 15.59 3l-2.17 2.17a6 6 0 0 0-2.83 0L8.41 3 7 4.41 8.62 6c-.75.5-1.36 1.21-1.81 2H4v2h2.09c-.06.33-.09.66-.09 1v1H4v2h2v1c0 .34.03.67.09 1H4v2h2.81A5.99 5.99 0 0 0 15 20.18c.91-.52 1.67-1.28 2.19-2.18H20v-2h-2.09c.06-.33.09-.66.09-1v-1h2v-2h-2v-1c0-.34-.03-.67-.09-1H20zm-4 7a4 4 0 0 1-4 4 4 4 0 0 1-4-4v-4a4 4 0 0 1 4-4 4 4 0 0 1 4 4zm-2-5v2h-4v-2zm-4 4h4v2h-4z"/></svg></span> <strong><code>set -x</code></strong> — every command and its variable expansion echoed to the log. When walltime kills the job mid-line, you know exactly where you were.</li>
+<li><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m10 17-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9m-6-8L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5z"/></svg></span> <strong><code>set -eou pipefail</code></strong> — the script aborts on the first error instead of carrying on with garbage.</li>
+<li><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2M9 17H7v-7h2zm4 0h-2V7h2zm4 0h-2v-4h2z"/></svg></span> <strong><code>qstat -fx</code> postlude</strong> — captures <code>resources_used.walltime</code>, <code>cpupercent</code>, <code>mem</code>, <code>vmem</code>. Drop this file beside your output and the next time you submit a similar job, you'll know exactly how much slack the last one had. Same idea as <a href="../../pbs-scripts/PBS-Brew-Inspector/">PBS Brew Inspector</a> but for a single job. Recommended by <a href="https://docs.eres.qut.edu.au/hpc-estimatingoptimising-resources-to-request-for-">eResearch's Estimating/optimising resources</a><sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup>.</li>
+</ul>
+<p>For checkpointable jobs, add <code>#PBS -c w=N</code> plus USR1/USR2 traps — see <a href="../The-Art-of-Walltime/#step-3-recovery-toolkit-when-walltime-kills-the-job">Art of Walltime § Recovery toolkit</a>.</p>
+<hr />
+<h2 id="pick-your-recipe"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m15 19-6-2.11V5l6 2.11M20.5 3h-.16L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5a.5.5 0 0 0 .5.5c.05 0 .11 0 .16-.03L9 18.9l6 2.1 5.64-1.9c.21-.1.36-.25.36-.48V3.5a.5.5 0 0 0-.5-.5"/></svg></span> Pick your recipe</h2>
+<pre class="mermaid"><code>flowchart TD
+    Start([What are you running?])
+    Start --&gt; A{Interactive,&lt;br/&gt;will be watching?}
+    A --&gt;|"Yes, CPU"| R1[Recipe 1&lt;br/&gt;cpu_inter_exec]
+    A --&gt;|"Yes, GPU"| R7[Recipe 7&lt;br/&gt;MIG sanity]
+    A --&gt;|No| B{Need GPUs?}
+    B --&gt;|No| C{Memory&lt;br/&gt;&amp;ge; 1479 GB?}
+    C --&gt;|Yes| R3[Recipe 3&lt;br/&gt;cpu_batch_exlm]
+    C --&gt;|No| R2[Recipe 2&lt;br/&gt;cpu_batch_exec MPI]
+    B --&gt;|Yes| D{How many GPUs?}
+    D --&gt;|"1 H100"| R4[Recipe 4&lt;br/&gt;single H100]
+    D --&gt;|"2-8 H100s"| R5[Recipe 5&lt;br/&gt;multi H100 at cap]
+    D --&gt;|"40 GB VRAM OK,&lt;br/&gt;H100 queue busy"| R6[Recipe 6&lt;br/&gt;A100 fallback]
+    Start --&gt; E{Total compute&lt;br/&gt;&gt; 48 h?}
+    E --&gt;|Yes| R8[Recipe 8&lt;br/&gt;chained jobs]</code></pre>
+<!-- markdownlint-disable MD033 MD051 -->
+<div class="grid cards">
+<ul>
+<li>
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg></span> <strong>Recipe 1 — Quick CPU test</strong></p>
+<hr />
+<p>A shell on a real compute node. Build conda envs, debug scripts, try module combos.</p>
+<p><a href="#recipe-1-quick-cpu-test-cpu_inter_exec"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"/></svg></span> Jump to recipe</a></p>
+</li>
+<li>
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 15.5A3.5 3.5 0 0 1 8.5 12 3.5 3.5 0 0 1 12 8.5a3.5 3.5 0 0 1 3.5 3.5 3.5 3.5 0 0 1-3.5 3.5m7.43-2.53c.04-.32.07-.64.07-.97s-.03-.66-.07-1l2.11-1.63c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.31-.61-.22l-2.49 1c-.52-.39-1.06-.73-1.69-.98l-.37-2.65A.506.506 0 0 0 14 2h-4c-.25 0-.46.18-.5.42l-.37 2.65c-.63.25-1.17.59-1.69.98l-2.49-1c-.22-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64L4.57 11c-.04.34-.07.67-.07 1s.03.65.07.97l-2.11 1.66c-.19.15-.25.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1.01c.52.4 1.06.74 1.69.99l.37 2.65c.04.24.25.42.5.42h4c.25 0 .46-.18.5-.42l.37-2.65c.63-.26 1.17-.59 1.69-.99l2.49 1.01c.22.08.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64z"/></svg></span> <strong>Recipe 2 — Heavy CPU MPI</strong></p>
+<hr />
+<p>Genoa-pinned multi-chunk MPI on <code>cpu_batch_exec</code>. The cluster workhorse.</p>
+<p><a href="#recipe-2-heavy-cpu-mpi-on-cpu_batch_exec"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"/></svg></span> Jump to recipe</a></p>
+</li>
+<li>
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3C7.58 3 4 4.79 4 7s3.58 4 8 4 8-1.79 8-4-3.58-4-8-4M4 9v3c0 2.21 3.58 4 8 4s8-1.79 8-4V9c0 2.21-3.58 4-8 4s-8-1.79-8-4m0 5v3c0 2.21 3.58 4 8 4s8-1.79 8-4v-3c0 2.21-3.58 4-8 4s-8-1.79-8-4"/></svg></span> <strong>Recipe 3 — Large memory</strong></p>
+<hr />
+<p>Single-node analysis above 1.5 TB. Auto-routes to <code>cpu_batch_exlm</code> (the 6 TB node).</p>
+<p><a href="#recipe-3-large-memory-analysis-on-cpu_batch_exlm"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"/></svg></span> Jump to recipe</a></p>
+</li>
+<li>
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m20 22-3.86-1.55c.7-1.53 1.2-3.11 1.51-4.72zM7.86 20.45 4 22l2.35-6.27c.31 1.61.81 3.19 1.51 4.72M12 2s5 2 5 10c0 3.1-.75 5.75-1.67 7.83A2 2 0 0 1 13.5 21h-3a2 2 0 0 1-1.83-1.17C7.76 17.75 7 15.1 7 12c0-8 5-10 5-10m0 10c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2"/></svg></span> <strong>Recipe 4 — Single H100</strong></p>
+<hr />
+<p>The bread-and-butter ML training job. One full 80 GB H100 card, hours-to-days.</p>
+<p><a href="#recipe-4-single-h100-training"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"/></svg></span> Jump to recipe</a></p>
+</li>
+<li>
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m13.13 22.19-1.63-3.83c1.57-.58 3.04-1.36 4.4-2.27zM5.64 12.5l-3.83-1.63 6.1-2.77C7 9.46 6.22 10.93 5.64 12.5M21.61 2.39S16.66.269 11 5.93c-2.19 2.19-3.5 4.6-4.35 6.71-.28.75-.09 1.57.46 2.13l2.13 2.12c.55.56 1.37.74 2.12.46A19.1 19.1 0 0 0 18.07 13c5.66-5.66 3.54-10.61 3.54-10.61m-7.07 7.07c-.78-.78-.78-2.05 0-2.83s2.05-.78 2.83 0c.77.78.78 2.05 0 2.83s-2.05.78-2.83 0m-5.66 7.07-1.41-1.41zM6.24 22l3.64-3.64c-.34-.09-.67-.24-.97-.45L4.83 22zM2 22h1.41l4.77-4.76-1.42-1.41L2 20.59zm0-2.83 4.09-4.08c-.21-.3-.36-.62-.45-.97L2 17.76z"/></svg></span> <strong>Recipe 5 — Multi-GPU H100</strong></p>
+<hr />
+<p>Up to 8 H100s across 1–2 nodes (the per-job ceiling). Knows when to stop.</p>
+<p><a href="#recipe-5-multi-gpu-h100-at-the-per-job-ceiling"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"/></svg></span> Jump to recipe</a></p>
+</li>
+<li>
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m21 9-4-4v3h-7v2h7v3M7 11l-4 4 4 4v-3h7v-2H7z"/></svg></span> <strong>Recipe 6 — A100 fallback</strong></p>
+<hr />
+<p>40 GB VRAM cards on the cheaper-to-queue A100 nodes. When H100 wait isn't worth it.</p>
+<p><a href="#recipe-6-a100-fallback-when-the-h100-queue-is-busy"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"/></svg></span> Jump to recipe</a></p>
+</li>
+<li>
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.46 6.28 11.05 9c-2.58.26-4.55 2.41-4.55 5a5 5 0 0 0 5 5c2.05 0 3.81-1.23 4.58-3H13.5v-2h8v2h-2.25a8.05 8.05 0 0 1-2.46 4h2.71v2h-16v-2h2.71a8 8 0 0 1-2.71-6c0-3.63 2.46-6.8 5.96-7.72m3.28-4.21.76 1.3.86-.5 3.5 6.06-3.47 2-3.5-6.06.87-.5-.76-1.3z"/></svg></span> <strong>Recipe 7 — MIG sanity check</strong></p>
+<hr />
+<p>One 1g.10gb MIG slice (≈ 1/7 of an H100, ~10 GB VRAM). "Does my model load?"</p>
+<p><a href="#recipe-7-mig-slice-sanity-check"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"/></svg></span> Jump to recipe</a></p>
+</li>
+<li>
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10.59 13.41c.41.39.41 1.03 0 1.42-.39.39-1.03.39-1.42 0a5.003 5.003 0 0 1 0-7.07l3.54-3.54a5.003 5.003 0 0 1 7.07 0 5.003 5.003 0 0 1 0 7.07l-1.49 1.49c.01-.82-.12-1.64-.4-2.42l.47-.48a2.98 2.98 0 0 0 0-4.24 2.98 2.98 0 0 0-4.24 0l-3.53 3.53a2.98 2.98 0 0 0 0 4.24m2.82-4.24c.39-.39 1.03-.39 1.42 0a5.003 5.003 0 0 1 0 7.07l-3.54 3.54a5.003 5.003 0 0 1-7.07 0 5.003 5.003 0 0 1 0-7.07l1.49-1.49c-.01.82.12 1.64.4 2.43l-.47.47a2.98 2.98 0 0 0 0 4.24 2.98 2.98 0 0 0 4.24 0l3.53-3.53a2.98 2.98 0 0 0 0-4.24.973.973 0 0 1 0-1.42"/></svg></span> <strong>Recipe 8 — Chained jobs</strong></p>
+<hr />
+<p>Total compute beyond 48 h. Split into stages, chain with <code>qsub -W depend=afterok</code>.</p>
+<p><a href="#recipe-8-long-pipeline-with-chained-jobs"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"/></svg></span> Jump to recipe</a></p>
+</li>
+</ul>
+</div>
+<!-- markdownlint-enable MD033 MD051 -->
+
+<hr />
+<h2 id="the-recipes"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4"/></svg></span> The recipes</h2>
+<h3 id="recipe-1-quick-cpu-test-cpu_inter_exec"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg></span> Recipe 1 — Quick CPU test (<code>cpu_inter_exec</code>)</h3>
+<p>Interactive shell on a real compute node for setup work — building conda envs, sanity-checking that a script runs, trying module combinations.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:4"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Scenario</label><label for="__tabbed_1_2">Scaling</label><label for="__tabbed_1_3">PBS script</label><label for="__tabbed_1_4">Bottom line</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>You need a real CPU shell for an hour or two to:</p>
+<ul>
+<li>Build a new conda environment and verify the install</li>
+<li>Run a short script with a test input to check it doesn't crash</li>
+<li>Try a few <code>module load</code> combinations to find the working set</li>
+</ul>
+<p>You'll be <strong>at the keyboard the whole time</strong>. Interactive jobs hold their resources for the <em>full</em> walltime even if you exit early — be tight with the number.</p>
+</div>
+<div class="tabbed-block">
+<p>Interactive walltime is paced by <em>you</em>, not the script. The 2× rule still helps:</p>
+<ul>
+<li>Estimate how long you'll actually need (e.g. 1 h to set up + 30 min buffer for thinking)</li>
+<li>Round up to the nearest sensible block (1 h or 2 h)</li>
+<li>Keep it well under the 12 h queue cap so the queue doesn't think you've gone away</li>
+</ul>
+<p>No formal scaling factor needed.</p>
+</div>
+<div class="tabbed-block">
+<p>Submit directly from the command line, no script file needed:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>qsub<span class="w"> </span>-I<span class="w"> </span>-l<span class="w"> </span><span class="k">select</span><span class="o">=</span><span class="m">1</span>:ncpus<span class="o">=</span><span class="m">4</span>:mem<span class="o">=</span>16gb<span class="w"> </span>-l<span class="w"> </span><span class="nv">walltime</span><span class="o">=</span><span class="m">02</span>:00:00
+</span></code></pre></div>
+<p>Lands you in a shell on <code>cpu1n001</code> (the only interactive CPU node). Exit with <span class="keys"><kbd class="key-control">Ctrl</kbd><span>+</span><kbd class="key-d">D</kbd></span> when done.</p>
+</div>
+<div class="tabbed-block">
+<div class="admonition success">
+<p class="admonition-title">Walltime: 02:00:00 — queue: <code>cpu_inter_exec</code></p>
+<ul>
+<li>4 cores, 16 GB RAM, 2 h interactive</li>
+<li>Caps: 1–8 cores, 1–34 GB, ≤ 12 h</li>
+<li>One physical node, shared cluster-wide — <strong>don't book 12 h and walk away</strong></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<h3 id="recipe-2-heavy-cpu-mpi-on-cpu_batch_exec"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 15.5A3.5 3.5 0 0 1 8.5 12 3.5 3.5 0 0 1 12 8.5a3.5 3.5 0 0 1 3.5 3.5 3.5 3.5 0 0 1-3.5 3.5m7.43-2.53c.04-.32.07-.64.07-.97s-.03-.66-.07-1l2.11-1.63c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.31-.61-.22l-2.49 1c-.52-.39-1.06-.73-1.69-.98l-.37-2.65A.506.506 0 0 0 14 2h-4c-.25 0-.46.18-.5.42l-.37 2.65c-.63.25-1.17.59-1.69.98l-2.49-1c-.22-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64L4.57 11c-.04.34-.07.67-.07 1s.03.65.07.97l-2.11 1.66c-.19.15-.25.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1.01c.52.4 1.06.74 1.69.99l.37 2.65c.04.24.25.42.5.42h4c.25 0 .46-.18.5-.42l.37-2.65c.63-.26 1.17-.59 1.69-.99l2.49 1.01c.22.08.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64z"/></svg></span> Recipe 2 — Heavy CPU MPI on <code>cpu_batch_exec</code></h3>
+<p>Multi-chunk MPI job pinned to AMD Genoa silicon. The workhorse pattern from <a href="../Know-Your-Nodes/#cpu-batch-the-workhorse-49-nodes">Know Your Nodes</a>.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:4"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><input id="__tabbed_2_3" name="__tabbed_2" type="radio" /><input id="__tabbed_2_4" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Scenario</label><label for="__tabbed_2_2">Scaling</label><label for="__tabbed_2_3">PBS script</label><label for="__tabbed_2_4">Bottom line</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p><strong>Baseline:</strong> A Monte Carlo simulation with 10 M particles took 4 h on 16 cores (1 node, no MPI). Almost-fully parallelisable (only the final reduction is serial).</p>
+<p><strong>New job:</strong> scale up to 80 M particles across 64 cores (4 chunks × 16 cores) using MPI for the work-stealing scheduler.</p>
+</div>
+<div class="tabbed-block">
+<p>Two scaling factors: <strong>problem</strong> (linear in particles) and <strong>CPU</strong> (Amdahl's law as cores go 16 → 64 with parallel fraction <span class="arithmatex">\(p \approx 0.95\)</span>).</p>
+<details class="math">
+<summary>Amdahl derivation</summary>
+<p>Speedup going from <span class="arithmatex">\(C_{\text{baseline}}\)</span> to <span class="arithmatex">\(C_{\text{new}}\)</span> cores when fraction <span class="arithmatex">\(p\)</span> is parallelisable:</p>
+<div class="arithmatex">\[ \text{Speedup} = \frac{1}{(1-p) + p \cdot C_{\text{baseline}} / C_{\text{new}}} = \frac{1}{0.05 + 0.95 \cdot \tfrac{16}{64}} = \frac{1}{0.2875} = 3.48\times \]</div>
+<p>So runtime shrinks to <span class="arithmatex">\(S_{\text{cpu}} = 1/3.48 \approx 0.29\times\)</span> baseline.</p>
+</details>
+<div class="arithmatex">\[
+\begin{aligned}
+S_{\text{problem}} &amp;\approx \frac{80\,\text{M}}{10\,\text{M}} = 8\times \\
+S_{\text{cpu}}     &amp;\approx 0.29\times \quad (\text{Amdahl, see derivation}) \\
+S                  &amp;= S_{\text{problem}} \times S_{\text{cpu}} = 2.3\times \\
+T_{\text{est}}     &amp;= 4\,\text{h} \times 2.3 + 1\,\text{h margin} = 10.2\,\text{h} \to \text{request } 12\,\text{h}
+\end{aligned}
+\]</div>
+</div>
+<div class="tabbed-block">
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1">#PBS -l walltime=12:00:00</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="c1">#PBS -l select=4:ncpus=16:mpiprocs=16:mem=32gb:cpu_id=AMD-25-17</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="c1">#PBS -l place=scatter</span>
+</span></code></pre></div>
+<p>Why each piece:</p>
+<ul>
+<li><strong><code>select=4</code></strong> — four chunks; <code>scatter</code> places them on four distinct nodes so ranks don't fight for memory bandwidth.</li>
+<li><strong><code>cpu_id=AMD-25-17</code></strong> — pin every chunk to AMD Genoa-X silicon. Mixed CPU families (Genoa + Sapphire Rapids + Milan) break MPI in subtle ways.</li>
+<li><strong><code>mpiprocs=16</code></strong> — 16 MPI ranks per chunk = 64 ranks total. Match to <code>ncpus</code> for full-node parallelism.</li>
+</ul>
+</div>
+<div class="tabbed-block">
+<div class="admonition success">
+<p class="admonition-title">Walltime: 12:00:00 — queue: <code>cpu_batch_exec</code> (auto-routed)</p>
+<ul>
+<li>64 cores total across 4 nodes, 128 GB RAM total</li>
+<li>Caps: ≤ 2048 cores, ≤ 16384 GB, ≤ 48 h</li>
+<li>Run <a href="../../pbs-scripts/PBS-Brew-Inspector/"><code>pbs_brew_inspector.sh -c</code></a> after to see if the next one can shrink</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<h3 id="recipe-3-large-memory-analysis-on-cpu_batch_exlm"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3C7.58 3 4 4.79 4 7s3.58 4 8 4 8-1.79 8-4-3.58-4-8-4M4 9v3c0 2.21 3.58 4 8 4s8-1.79 8-4V9c0 2.21-3.58 4-8 4s-8-1.79-8-4m0 5v3c0 2.21 3.58 4 8 4s8-1.79 8-4v-3c0 2.21-3.58 4-8 4s-8-1.79-8-4"/></svg></span> Recipe 3 — Large-memory analysis on <code>cpu_batch_exlm</code></h3>
+<p>The 6 TB single-node analysis case. Auto-routes to the large-memory box when you request enough RAM.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:4"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><input id="__tabbed_3_3" name="__tabbed_3" type="radio" /><input id="__tabbed_3_4" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Scenario</label><label for="__tabbed_3_2">Scaling</label><label for="__tabbed_3_3">PBS script</label><label for="__tabbed_3_4">Bottom line</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p><strong>Baseline:</strong> Loaded a 1.2 TB protein-interaction graph fully into memory, computed all-pairs shortest paths on 96 cores in 8 h. Single-node, no MPI (the algorithm is shared-memory only).</p>
+<p><strong>New job:</strong> 3 TB graph (2.5× more nodes/edges) on 180 cores (the full LargeMem node).</p>
+</div>
+<div class="tabbed-block">
+<p>Both the algorithm and memory scale <strong>linearly</strong> in graph size. CPU scaling at 180 cores carries a reduced efficiency (<span class="arithmatex">\(e \approx 0.7\)</span>) from NUMA across sockets.</p>
+<div class="arithmatex">\[
+\begin{aligned}
+S_{\text{data}} &amp;\approx \frac{3\,\text{TB}}{1.2\,\text{TB}} = 2.5\times \\
+S_{\text{cpu}}  &amp;\approx \frac{96}{180 \times 0.7} = 0.76\times \\
+S              &amp;= S_{\text{data}} \times S_{\text{cpu}} = 1.9\times \\
+T_{\text{est}} &amp;= 8\,\text{h} \times 1.9 + 3\,\text{h margin} = 18.2\,\text{h} \to \text{request } 24\,\text{h}
+\end{aligned}
+\]</div>
+<p><strong>Memory</strong> request: <span class="arithmatex">\(R \approx 1.2\,\text{TB} \times 2.5 = 3.0\,\text{TB}\)</span>, round up to <strong>3200 GB</strong> (clears the 1479 GB threshold for <code>cpu_batch_exlm</code> auto-routing).</p>
+</div>
+<div class="tabbed-block">
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1">#PBS -l walltime=24:00:00</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="c1">#PBS -l select=1:ncpus=180:mem=3200gb</span>
+</span></code></pre></div>
+<p>No <code>-q</code> needed: PBS auto-routes anything with <code>mem ≥ 1479 GB</code> to <code>cpu_batch_exlm</code>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Below 1479 GB lands you in <code>cpu_batch_exec</code> instead</p>
+<p>Request <code>mem=1000gb</code> and you'll go to the regular CPU batch queue (which is fine — it allows up to 16 TB anyway, just not on a single node). Auto-routing only triggers above the threshold. Recipe 2's <code>select=N:mem=M</code> pattern is the multi-node alternative when you need more RAM than one regular node has but don't want exlm.</p>
+</div>
+</div>
+<div class="tabbed-block">
+<div class="admonition success">
+<p class="admonition-title">Walltime: 24:00:00 — queue: <code>cpu_batch_exlm</code> (auto-routed)</p>
+<ul>
+<li>180 cores, 3200 GB RAM on <code>mem1n001</code></li>
+<li>Caps: 1–180 cores, <strong>1479–6015 GB</strong>, ≤ 48 h</li>
+<li>Single node only (no MPI between LargeMem nodes — there's just one)</li>
+<li>Per-queue concurrent-running cap is generous now (<code>max_run=100</code>), but only one node exists physically</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<h3 id="recipe-4-single-h100-training"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m20 22-3.86-1.55c.7-1.53 1.2-3.11 1.51-4.72zM7.86 20.45 4 22l2.35-6.27c.31 1.61.81 3.19 1.51 4.72M12 2s5 2 5 10c0 3.1-.75 5.75-1.67 7.83A2 2 0 0 1 13.5 21h-3a2 2 0 0 1-1.83-1.17C7.76 17.75 7 15.1 7 12c0-8 5-10 5-10m0 10c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2"/></svg></span> Recipe 4 — Single H100 training</h3>
+<p>The default ML training pattern. One whole H100 (80 GB HBM3), measured hours-to-days. This is the same scenario as the worked example in <a href="../The-Art-of-Walltime/#worked-example-scaling-a-resnet-finetune">Art of Walltime § Worked example: scaling a ResNet finetune</a> — that one walks through the math, this one shows the full PBS script.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="4:4"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><input id="__tabbed_4_3" name="__tabbed_4" type="radio" /><input id="__tabbed_4_4" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">Scenario</label><label for="__tabbed_4_2">Scaling</label><label for="__tabbed_4_3">PBS script</label><label for="__tabbed_4_4">Bottom line</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p><strong>Baseline:</strong> ResNet-50 finetune on 10 K images, single H100 80 GB, 30 epochs, <strong>2 h</strong>. GPU VRAM peak: ~16 GB.</p>
+<p><strong>New job:</strong> 100 K images (10× data) on the same single H100, 30 epochs unchanged.</p>
+</div>
+<div class="tabbed-block">
+<p>Neural networks scale <strong>sub-linearly</strong> in data: <span class="arithmatex">\(S \approx (N_{\text{new}}/N_{\text{baseline}})^{c}\)</span> with <span class="arithmatex">\(c \approx 0.85\)</span> (Art of Walltime convention — vectorisation, kernel efficiency, occasional convergence improvements). Apply the 1.5× <strong>convergence buffer</strong> since stochastic training takes 0.5–2× the deterministic estimate.</p>
+<div class="arithmatex">\[
+\begin{aligned}
+S              &amp;\approx \left(\frac{100\,000}{10\,000}\right)^{0.85} = 10^{0.85} \approx 7.1\times \\
+T_{\text{est}} &amp;= 2\,\text{h} \times 7.1 \approx 14.2\,\text{h} \\
+T_{\text{est}} \times 1.5 &amp;\approx 21.3\,\text{h} \to \text{request } 24\,\text{h}
+\end{aligned}
+\]</div>
+<p><strong>Host RAM</strong> (<span class="arithmatex">\(R\)</span>) doesn't scale with the dataset — 16 GB GPU VRAM is used by the model; host memory covers the Python interpreter and data loaders only. 64 GB is generous.</p>
+</div>
+<div class="tabbed-block">
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1">#PBS -l walltime=24:00:00</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="c1">#PBS -l select=1:ncpus=12:ngpus=1:mem=64gb:gpu_id=H100</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="c1">#PBS -c w=60                                          # optional: checkpoint every 60 min</span>
+</span></code></pre></div>
+<p>Why each piece:</p>
+<ul>
+<li><strong><code>ngpus=1:gpu_id=H100</code></strong> — one whole H100 80 GB card (not a MIG slice; MIG only happens in <code>gpu_inter_exec</code>).</li>
+<li><strong><code>ncpus=12</code></strong> — generous for data-loader workers. H100 hosts are Sapphire Rapids; 12 cores out of 168 is a small slice.</li>
+<li><strong><code>mem=64gb</code></strong> — host RAM (Python, data pipeline). GPU VRAM is fixed at 80 GB per card by hardware.</li>
+<li><strong><code>#PBS -c w=60</code></strong> — if your training loop checkpoints periodically (PyTorch Lightning, Hugging Face Trainer with <code>save_strategy</code>, etc.), this lets PBS auto-resubmit if you bust the walltime. Pair with USR1/USR2 traps in the script body — see <a href="../The-Art-of-Walltime/#step-3-recovery-toolkit-when-walltime-kills-the-job">Art of Walltime</a>.</li>
+</ul>
+</div>
+<div class="tabbed-block">
+<div class="admonition success">
+<p class="admonition-title">Walltime: 24:00:00 — queue: <code>gpu_batch_exec</code> (auto-routed)</p>
+<ul>
+<li>1 H100 80 GB, 12 cores host, 64 GB host RAM</li>
+<li>Caps: 1–8 GPUs/job, ≤ 1920 GB, ≤ 48 h</li>
+<li>Batch releases the GPU early if you finish at hour 18 — no penalty for over-estimating</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<h3 id="recipe-5-multi-gpu-h100-at-the-per-job-ceiling"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m13.13 22.19-1.63-3.83c1.57-.58 3.04-1.36 4.4-2.27zM5.64 12.5l-3.83-1.63 6.1-2.77C7 9.46 6.22 10.93 5.64 12.5M21.61 2.39S16.66.269 11 5.93c-2.19 2.19-3.5 4.6-4.35 6.71-.28.75-.09 1.57.46 2.13l2.13 2.12c.55.56 1.37.74 2.12.46A19.1 19.1 0 0 0 18.07 13c5.66-5.66 3.54-10.61 3.54-10.61m-7.07 7.07c-.78-.78-.78-2.05 0-2.83s2.05-.78 2.83 0c.77.78.78 2.05 0 2.83s-2.05.78-2.83 0m-5.66 7.07-1.41-1.41zM6.24 22l3.64-3.64c-.34-.09-.67-.24-.97-.45L4.83 22zM2 22h1.41l4.77-4.76-1.42-1.41L2 20.59zm0-2.83 4.09-4.08c-.21-.3-.36-.62-.45-.97L2 17.76z"/></svg></span> Recipe 5 — Multi-GPU H100 at the per-job ceiling</h3>
+<p>The hard wall is <strong>8 GPUs per job</strong> (<code>gpu_batch_exec</code> per-job cap). H100 nodes have 4 cards each, so 8 GPUs = 2 nodes scatter.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="5:4"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><input id="__tabbed_5_2" name="__tabbed_5" type="radio" /><input id="__tabbed_5_3" name="__tabbed_5" type="radio" /><input id="__tabbed_5_4" name="__tabbed_5" type="radio" /><div class="tabbed-labels"><label for="__tabbed_5_1">Scenario</label><label for="__tabbed_5_2">Scaling</label><label for="__tabbed_5_3">PBS script</label><label for="__tabbed_5_4">Bottom line</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p><strong>Baseline:</strong> ResNet-50 finetune on 10 K images, single H100, 2 h (same as Recipe 4).</p>
+<p><strong>New job:</strong> scale to 8 H100s spanning 2 nodes, run on 1 M images, 30 epochs.</p>
+</div>
+<div class="tabbed-block">
+<p>Data sub-linear (neural net, <span class="arithmatex">\(c = 0.85\)</span>); GPU scaling across 8 cards spanning 2 nodes uses <span class="arithmatex">\(e_{\text{multi-node}} \approx 0.8\)</span>. Apply the 1.5× <strong>convergence buffer</strong> as in Recipe 4.</p>
+<div class="arithmatex">\[
+\begin{aligned}
+S_{\text{data}} &amp;\approx \left(\frac{1\,000\,000}{10\,000}\right)^{0.85} = 100^{0.85} \approx 50\times \\
+S_{\text{gpu}}  &amp;\approx \frac{G_{\text{baseline}}}{G_{\text{new}} \cdot e} = \frac{1}{8 \times 0.8} = 0.16\times \\
+S              &amp;= S_{\text{data}} \times S_{\text{gpu}} = 8\times \\
+T_{\text{est}} &amp;= 2\,\text{h} \times 8 + 2\,\text{h margin} = 18\,\text{h} \\
+T_{\text{est}} \times 1.5 &amp;= 27\,\text{h} \to \text{request } 30\,\text{h}
+\end{aligned}
+\]</div>
+<p><strong>Memory</strong> per GPU: ~32 GB (larger batches per device). Request 240 GB host RAM per chunk → 60 GB per GPU.</p>
+</div>
+<div class="tabbed-block">
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1">#PBS -l walltime=30:00:00</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="c1">#PBS -l select=2:ncpus=16:ngpus=4:mem=240gb:gpu_id=H100</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="c1">#PBS -l place=scatter:excl</span>
+</span></code></pre></div>
+<p>Why each piece:</p>
+<ul>
+<li><strong><code>select=2:ngpus=4</code></strong> — 2 chunks × 4 GPUs/chunk = 8 GPUs total. H100 nodes have 4 cards each, so 4 GPUs/chunk is the per-node ceiling.</li>
+<li><strong><code>place=scatter:excl</code></strong> — <code>scatter</code> places the two chunks on distinct nodes (essential for multi-node training); <code>excl</code> keeps the entire node dedicated to your job (no noisy neighbour on the same host).</li>
+<li><strong><code>mem=240gb</code></strong> per chunk = 480 GB total host RAM. Well under the 1920 GB per-job cap.</li>
+</ul>
+<div class="admonition danger">
+<p class="admonition-title">8 GPUs is the hard ceiling for one job</p>
+<p><code>gpu_batch_exec</code> per-job: <strong>max 8 GPUs</strong>. PBS rejects <code>select=4:ngpus=4</code> (16 GPUs) at submit time. For more than 8 GPUs, you split across multiple jobs — see <a href="#recipe-8-long-pipeline-with-chained-jobs">Recipe 8</a>.</p>
+<p>Per-user concurrent-running cap on the queue is 32 GPUs across all your jobs. So 4 simultaneous 8-GPU jobs is the cluster-wide ceiling.</p>
+</div>
+</div>
+<div class="tabbed-block">
+<div class="admonition success">
+<p class="admonition-title">Walltime: 30:00:00 — queue: <code>gpu_batch_exec</code> (auto-routed)</p>
+<ul>
+<li>8 H100 80 GB across 2 nodes, 32 cores host total, 480 GB host RAM total</li>
+<li>Caps: 1–8 GPUs/job, ≤ 1920 GB, ≤ 48 h</li>
+<li>Use <code>nccl-tests</code> to verify inter-node bandwidth on first run</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<h3 id="recipe-6-a100-fallback-when-the-h100-queue-is-busy"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m21 9-4-4v3h-7v2h7v3M7 11l-4 4 4 4v-3h7v-2H7z"/></svg></span> Recipe 6 — A100 fallback when the H100 queue is busy</h3>
+<p>A100 nodes are usually less contested. If your model fits in 40 GB VRAM and you don't need FP8 acceleration, A100 gets you running faster than waiting for H100.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="6:4"><input checked="checked" id="__tabbed_6_1" name="__tabbed_6" type="radio" /><input id="__tabbed_6_2" name="__tabbed_6" type="radio" /><input id="__tabbed_6_3" name="__tabbed_6" type="radio" /><input id="__tabbed_6_4" name="__tabbed_6" type="radio" /><div class="tabbed-labels"><label for="__tabbed_6_1">Scenario</label><label for="__tabbed_6_2">Scaling</label><label for="__tabbed_6_3">PBS script</label><label for="__tabbed_6_4">Bottom line</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p><strong>Baseline (single H100):</strong> 10 K images, ResNet-50, 1×H100, 2 h.</p>
+<p><strong>New job:</strong> Same data + model, but you check <code>qstat -B</code> and the H100 queue is deep — switch to 8×A100 on one node.</p>
+</div>
+<div class="tabbed-block">
+<p>Rough A100 vs H100 throughput per card (non-FP8 FP16 workloads): <strong>A100 ≈ 0.5× H100</strong> — so the single-A100 baseline is <span class="arithmatex">\(T_{\text{A100 single}} \approx 2\,\text{h} \times 2 = 4\,\text{h}\)</span>. Eight A100s in one node use the full NVLink mesh (<span class="arithmatex">\(e \approx 0.9\)</span>); data unchanged. Apply the 1.5× <strong>convergence buffer</strong>.</p>
+<div class="arithmatex">\[
+\begin{aligned}
+S_{\text{gpu}} &amp;= \frac{1}{8 \times 0.9} = 0.139\times \\
+S              &amp;= 1 \times S_{\text{gpu}} = 0.139\times \\
+T_{\text{est}} &amp;= 4\,\text{h} \times 0.139 + 1\,\text{h margin} = 1.6\,\text{h} \\
+T_{\text{est}} \times 1.5 &amp;\approx 2.4\,\text{h} \to \text{request } 4\,\text{h}
+\end{aligned}
+\]</div>
+<p><strong>Memory check:</strong> model peaks at 16 GB VRAM (per Recipe 4 baseline) → comfortably under 40 GB per A100.</p>
+</div>
+<div class="tabbed-block">
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1">#PBS -l walltime=04:00:00</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="c1">#PBS -l select=1:ncpus=32:ngpus=8:mem=480gb:gpu_id=A100</span>
+</span></code></pre></div>
+<p>Why each piece:</p>
+<ul>
+<li><strong><code>gpu_id=A100</code></strong> — explicit A100 selection. Without this, PBS picks any GPU model. With H100s in demand, this is the whole point of the recipe.</li>
+<li><strong><code>ngpus=8</code></strong> — A100 nodes (<code>gpu0n005</code>–<code>gpu0n009</code>) have 8 cards each; one node holds the whole job. No <code>place=scatter</code> needed.</li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Some A100 nodes are oddballs</p>
+<ul>
+<li><strong><code>gpu0n002</code></strong> has only <strong>4 A100s</strong> and <strong>470 GB RAM</strong> (half-populated). Ask for <code>ngpus=8</code> and the scheduler can't land you here.</li>
+<li><strong><code>gpu0n004</code></strong> has <strong>16 A100s</strong>, 974 GB RAM (double-density). The only place <code>ngpus=16</code> lands in one chunk.</li>
+</ul>
+<p>See <a href="../Know-Your-Nodes/#a100-batch">Know Your Nodes § GPU A100 Batch</a>.</p>
+</div>
+</div>
+<div class="tabbed-block">
+<div class="admonition success">
+<p class="admonition-title">Walltime: 04:00:00 — queue: <code>gpu_batch_exec</code> (auto-routed)</p>
+<ul>
+<li>8 A100 40 GB on one node, 32 cores host, 480 GB host RAM</li>
+<li><strong>40 GB VRAM ceiling</strong> per card — measure first; if your model overflows, you're back to H100</li>
+<li>When H100 wait time &gt; A100 runtime, this wins on total time</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<h3 id="recipe-7-mig-slice-sanity-check"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.46 6.28 11.05 9c-2.58.26-4.55 2.41-4.55 5a5 5 0 0 0 5 5c2.05 0 3.81-1.23 4.58-3H13.5v-2h8v2h-2.25a8.05 8.05 0 0 1-2.46 4h2.71v2h-16v-2h2.71a8 8 0 0 1-2.71-6c0-3.63 2.46-6.8 5.96-7.72m3.28-4.21.76 1.3.86-.5 3.5 6.06-3.47 2-3.5-6.06.87-.5-.76-1.3z"/></svg></span> Recipe 7 — MIG slice sanity check</h3>
+<p>The fastest way to confirm your model actually loads on a real Aqua GPU before you queue a real training job. One MIG slice = ~10 GB VRAM, lands almost immediately.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="7:4"><input checked="checked" id="__tabbed_7_1" name="__tabbed_7" type="radio" /><input id="__tabbed_7_2" name="__tabbed_7" type="radio" /><input id="__tabbed_7_3" name="__tabbed_7" type="radio" /><input id="__tabbed_7_4" name="__tabbed_7" type="radio" /><div class="tabbed-labels"><label for="__tabbed_7_1">Scenario</label><label for="__tabbed_7_2">Scaling</label><label for="__tabbed_7_3">PBS script</label><label for="__tabbed_7_4">Bottom line</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>You've ported a model to a new framework version, or you're using a checkpoint from someone else's run, or you just want <code>nvidia-smi</code> to confirm the build environment is sane. The goal is <strong>"does it not crash"</strong>, not "does it train fast".</p>
+</div>
+<div class="tabbed-block">
+<p>No scaling — this is a one-off check, not a workload to scale. Walltime needed is "as long as it takes you to load and run one forward pass". Usually 30 min to 2 h.</p>
+</div>
+<div class="tabbed-block">
+<p>Submit from the command line:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>qsub<span class="w"> </span>-I<span class="w"> </span>-l<span class="w"> </span><span class="k">select</span><span class="o">=</span><span class="m">1</span>:ncpus<span class="o">=</span><span class="m">6</span>:ngpus<span class="o">=</span><span class="m">1</span>:mem<span class="o">=</span>32gb<span class="w"> </span>-l<span class="w"> </span><span class="nv">walltime</span><span class="o">=</span><span class="m">02</span>:00:00
+</span></code></pre></div>
+<p>What <code>ngpus=1</code> means in the interactive queue: <strong>one 1g.10gb MIG slice</strong> — roughly 1/7 of an H100, ~10 GB VRAM. The full card is sliced into 28 such instances on <code>gpu1n001</code>.</p>
+<div class="admonition danger">
+<p class="admonition-title">Don't ask for <code>ngpus=2</code> interactively</p>
+<p>Two MIG slices in one job aren't supported — the slices don't share memory or talk to each other without specialised code. PBS may accept the submit (per-job cap is 1–2), but the workload won't actually distribute across the slices. See <a href="../Know-Your-Nodes/#gpu-interactive-the-tasting-flight-2-nodes-mig-sliced">Know Your Nodes § MIG, not a whole GPU</a>.</p>
+<p>For real multi-GPU work, use Recipe 5 (batch H100) or Recipe 6 (batch A100).</p>
+</div>
+</div>
+<div class="tabbed-block">
+<div class="admonition success">
+<p class="admonition-title">Walltime: 02:00:00 — queue: <code>gpu_inter_exec</code> (auto-routed)</p>
+<ul>
+<li>1 MIG slice (~10 GB VRAM), 6 cores host, 32 GB host RAM, 2 h interactive</li>
+<li>Caps: 1–2 slices/job (but use 1), 1–12 cores, 1–68 GB, ≤ 12 h</li>
+<li>Don't book the full 12 h then walk away — the queue holds resources the whole time</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<h3 id="recipe-8-long-pipeline-with-chained-jobs"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10.59 13.41c.41.39.41 1.03 0 1.42-.39.39-1.03.39-1.42 0a5.003 5.003 0 0 1 0-7.07l3.54-3.54a5.003 5.003 0 0 1 7.07 0 5.003 5.003 0 0 1 0 7.07l-1.49 1.49c.01-.82-.12-1.64-.4-2.42l.47-.48a2.98 2.98 0 0 0 0-4.24 2.98 2.98 0 0 0-4.24 0l-3.53 3.53a2.98 2.98 0 0 0 0 4.24m2.82-4.24c.39-.39 1.03-.39 1.42 0a5.003 5.003 0 0 1 0 7.07l-3.54 3.54a5.003 5.003 0 0 1-7.07 0 5.003 5.003 0 0 1 0-7.07l1.49-1.49c-.01.82.12 1.64.4 2.43l-.47.47a2.98 2.98 0 0 0 0 4.24 2.98 2.98 0 0 0 4.24 0l3.53-3.53a2.98 2.98 0 0 0 0-4.24.973.973 0 0 1 0-1.42"/></svg></span> Recipe 8 — Long pipeline with chained jobs</h3>
+<p>Total compute exceeds 48 h. The structural answer is <strong>split into ≤ 48 h stages and chain with dependencies</strong> — <em>not</em> the persistent queue (which is for coordination only, capped at 1 CPU / 4 GB).</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="8:4"><input checked="checked" id="__tabbed_8_1" name="__tabbed_8" type="radio" /><input id="__tabbed_8_2" name="__tabbed_8" type="radio" /><input id="__tabbed_8_3" name="__tabbed_8" type="radio" /><input id="__tabbed_8_4" name="__tabbed_8" type="radio" /><div class="tabbed-labels"><label for="__tabbed_8_1">Scenario</label><label for="__tabbed_8_2">Scaling</label><label for="__tabbed_8_3">PBS script</label><label for="__tabbed_8_4">Bottom line</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>Full LLM finetune estimated at 7 days (168 h). The cluster's hard cap is 48 h per job. You split into four 48 h stages and chain them.</p>
+</div>
+<div class="tabbed-block">
+<p>Per-stage estimate (divide total compute by stage count, add per-stage margin for checkpoint reload):</p>
+<div class="arithmatex">\[ T_{\text{per stage}} \approx \frac{168\,\text{h}}{4} + 2\,\text{h reload margin} = 44\,\text{h} \to \text{request } 48\,\text{h} \]</div>
+<p>Each stage gets the same resource request — the data location and the checkpoint dir thread the pipeline together.</p>
+</div>
+<div class="tabbed-block">
+<p>Two files: a <strong>wrapper script</strong> that submits the chain, and <strong>stage.pbs</strong> (used by all four stages).</p>
+<div class="admonition example">
+<p class="admonition-title"><code>run_chain.sh</code> — the wrapper</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="ch">#!/usr/bin/env bash</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="nb">set</span><span class="w"> </span>-eoux<span class="w"> </span>pipefail
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="c1"># Submit stage 1 and capture its full job ID</span>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="nv">JOB1</span><span class="o">=</span><span class="k">$(</span>qsub<span class="w"> </span>stage.pbs<span class="k">)</span>
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Stage 1: </span><span class="nv">$JOB1</span><span class="s2">&quot;</span>
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>
+</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="c1"># Each subsequent stage depends on the previous one finishing successfully</span>
+</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="nv">JOB2</span><span class="o">=</span><span class="k">$(</span>qsub<span class="w"> </span>-W<span class="w"> </span><span class="nv">depend</span><span class="o">=</span>afterok:<span class="s2">&quot;</span><span class="nv">$JOB1</span><span class="s2">&quot;</span><span class="w"> </span>stage.pbs<span class="k">)</span>
+</span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Stage 2: </span><span class="nv">$JOB2</span><span class="s2">&quot;</span>
+</span><span id="__span-8-11"><a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a>
+</span><span id="__span-8-12"><a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a><span class="nv">JOB3</span><span class="o">=</span><span class="k">$(</span>qsub<span class="w"> </span>-W<span class="w"> </span><span class="nv">depend</span><span class="o">=</span>afterok:<span class="s2">&quot;</span><span class="nv">$JOB2</span><span class="s2">&quot;</span><span class="w"> </span>stage.pbs<span class="k">)</span>
+</span><span id="__span-8-13"><a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Stage 3: </span><span class="nv">$JOB3</span><span class="s2">&quot;</span>
+</span><span id="__span-8-14"><a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a>
+</span><span id="__span-8-15"><a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a><span class="nv">JOB4</span><span class="o">=</span><span class="k">$(</span>qsub<span class="w"> </span>-W<span class="w"> </span><span class="nv">depend</span><span class="o">=</span>afterok:<span class="s2">&quot;</span><span class="nv">$JOB3</span><span class="s2">&quot;</span><span class="w"> </span>stage.pbs<span class="k">)</span>
+</span><span id="__span-8-16"><a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Stage 4: </span><span class="nv">$JOB4</span><span class="s2">&quot;</span>
+</span></code></pre></div>
+<p>Run with <code>./run_chain.sh</code> — <em>not</em> <code>qsub run_chain.sh</code>. The wrapper itself isn't a PBS job.</p>
+</div>
+<div class="admonition example">
+<p class="admonition-title"><code>stage.pbs</code> — used by every stage</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="ch">#!/bin/bash -l</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="c1">#PBS -N llm_finetune_stage</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="c1">#PBS -j oe</span>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="c1">#PBS -l walltime=48:00:00</span>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="c1">#PBS -l select=2:ncpus=16:ngpus=4:mem=240gb:gpu_id=H100</span>
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="c1">#PBS -l place=scatter:excl</span>
+</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="c1">#PBS -c w=60                                          # checkpoint every 60 min</span>
+</span><span id="__span-9-8"><a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>
+</span><span id="__span-9-9"><a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="nb">set</span><span class="w"> </span>-eoux<span class="w"> </span>pipefail
+</span><span id="__span-9-10"><a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="nb">cd</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PBS_O_WORKDIR</span><span class="s2">&quot;</span>
+</span><span id="__span-9-11"><a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>
+</span><span id="__span-9-12"><a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a><span class="c1"># Trap PBS&#39;s checkpoint signals — must be set BEFORE the work starts</span>
+</span><span id="__span-9-13"><a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a>checkpoint<span class="o">()</span><span class="w">       </span><span class="o">{</span><span class="w"> </span>:<span class="p">;</span><span class="w"> </span><span class="o">}</span><span class="w">   </span><span class="c1"># save current state (framework-specific)</span>
+</span><span id="__span-9-14"><a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a>checkpoint_abort<span class="o">()</span><span class="w"> </span><span class="o">{</span><span class="w"> </span>:<span class="p">;</span><span class="w"> </span><span class="o">}</span><span class="w">   </span><span class="c1"># save and exit cleanly</span>
+</span><span id="__span-9-15"><a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a><span class="nb">trap</span><span class="w"> </span>checkpoint<span class="w"> </span>USR1
+</span><span id="__span-9-16"><a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a><span class="nb">trap</span><span class="w"> </span>checkpoint_abort<span class="w"> </span>USR2
+</span><span id="__span-9-17"><a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a>
+</span><span id="__span-9-18"><a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a><span class="c1"># Your training launcher reads CHECKPOINT_DIR and resumes from latest</span>
+</span><span id="__span-9-19"><a id="__codelineno-9-19" name="__codelineno-9-19" href="#__codelineno-9-19"></a>torchrun<span class="w"> </span>--nnodes<span class="o">=</span><span class="m">2</span><span class="w"> </span>--nproc_per_node<span class="o">=</span><span class="m">4</span><span class="w"> </span>train.py<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-9-20"><a id="__codelineno-9-20" name="__codelineno-9-20" href="#__codelineno-9-20"></a><span class="w">    </span>--resume-from<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">CHECKPOINT_DIR</span><span class="k">:-</span><span class="nv">checkpoints</span><span class="p">/latest</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-9-21"><a id="__codelineno-9-21" name="__codelineno-9-21" href="#__codelineno-9-21"></a><span class="w">    </span>--out-dir<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">CHECKPOINT_DIR</span><span class="k">:-</span><span class="nv">checkpoints</span><span class="p">/latest</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span id="__span-9-22"><a id="__codelineno-9-22" name="__codelineno-9-22" href="#__codelineno-9-22"></a>
+</span><span id="__span-9-23"><a id="__codelineno-9-23" name="__codelineno-9-23" href="#__codelineno-9-23"></a>qstat<span class="w"> </span>-fx<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PBS_JOBID</span><span class="s2">&quot;</span><span class="w"> </span>&gt;<span class="w"> </span><span class="s2">&quot;resource_usage_</span><span class="si">${</span><span class="nv">PBS_JOBID</span><span class="si">}</span><span class="s2">&quot;</span>
+</span></code></pre></div>
+</div>
+<p>Why the wrapper instead of <code>#PBS -W depend=afterok:...</code> inside the script:</p>
+<div class="admonition failure">
+<p class="admonition-title">What does <strong>NOT</strong> work</p>
+<p>Putting the dependency in the script as a PBS directive:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1">#PBS -W depend=afterok:${JOB1}   # WRONG — JOB1 is empty at submit time</span>
+</span></code></pre></div>
+<p>PBS directives are parsed <strong>before</strong> any shell variable expansion. The placeholder is empty when PBS reads the line — dependency silently dropped. Pass the dependency at <code>qsub</code> time on the command line, like the wrapper does.</p>
+</div>
+<p>See <a href="https://docs.eres.qut.edu.au/breaking-the-48hr-barrier">eResearch — Running jobs longer than 48 hours</a><sup id="fnref8:1"><a class="footnote-ref" href="#fn:1">1</a></sup> for the canonical dependency-chaining pattern, plus the <a href="https://docs.eres.qut.edu.au/breaking-the-48hr-barrier#array-job-that-splits-each-input-file">array jobs</a><sup id="fnref9:1"><a class="footnote-ref" href="#fn:1">1</a></sup> alternative when stages are independent inputs rather than sequential.</p>
+</div>
+<div class="tabbed-block">
+<div class="admonition success">
+<p class="admonition-title">Walltime per stage: 48:00:00 — queue: <code>gpu_batch_exec</code></p>
+<ul>
+<li>4 sequential 48 h jobs, each 8 H100s across 2 nodes</li>
+<li>Total wall-clock: ~8 d (jobs queue between stages too)</li>
+<li>Each stage checkpoints every 60 min, traps USR1/USR2 so PBS auto-resubmits within stage</li>
+<li>For coordination-only workloads (Nextflow controllers, persistent SSH tunnels), use <code>cpu_inter_pers</code> (1 CPU, 4 GB, up to 368 h) — see <a href="../The-Art-of-Walltime/#walltime-recipes">Art of Walltime § Pipeline Master</a></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<hr />
+<h2 id="special-case-convergence-unpredictable-workloads"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19.78 3h-8.56C10.55 3 10 3.55 10 4.22V8h6v6h3.78c.67 0 1.22-.55 1.22-1.22V4.22C21 3.55 20.45 3 19.78 3m-7.34 3.67a1.23 1.23 0 1 1 0-2.46 1.23 1.23 0 0 1 1.23 1.23c0 .68-.55 1.23-1.23 1.23m6.12 6.11a1.23 1.23 0 1 1-.02-2.46c.68-.01 1.23.54 1.24 1.24-.01.67-.55 1.21-1.22 1.22m0-6.11a1.23 1.23 0 1 1-.02-2.46 1.231 1.231 0 0 1 .02 2.46M4.22 10h8.56A1.22 1.22 0 0 1 14 11.22v8.56c0 .67-.55 1.22-1.22 1.22H4.22C3.55 21 3 20.45 3 19.78v-8.56c0-.67.55-1.22 1.22-1.22m4.28 4.28c-.67 0-1.22.55-1.22 1.22s.55 1.22 1.22 1.22 1.22-.55 1.22-1.22a1.22 1.22 0 0 0-1.22-1.22m-3.06-3.06c-.67 0-1.22.55-1.22 1.22a1.22 1.22 0 0 0 1.22 1.22c.67 0 1.22-.55 1.22-1.22s-.55-1.22-1.22-1.22m6.11 6.11c-.67 0-1.22.55-1.22 1.22s.55 1.22 1.22 1.22a1.22 1.22 0 0 0 1.22-1.22c0-.67-.54-1.21-1.21-1.22z"/></svg></span> Special case — convergence-unpredictable workloads</h2>
+<p>Reinforcement learning, hyperparameter searches, anything where the runtime depends on a stochastic convergence signal. You don't know in advance how long it takes. Two-phase approach:</p>
+<h3 id="phase-1-probe-in-mig">Phase 1 — probe in MIG</h3>
+<!-- markdownlint-disable-next-line MD051 -->
+<p>Use <a href="#recipe-7-mig-slice-sanity-check">Recipe 7</a> to load the environment + run a short training (10–30 min). Measure:</p>
+<ul>
+<li>Wall time per training step</li>
+<li>Steps per checkpoint</li>
+<li>Approximate reward / loss slope</li>
+</ul>
+<p>You're not training to convergence here — you're calibrating the <em>rate</em>.</p>
+<h3 id="phase-2-production-with-checkpointing">Phase 2 — production with checkpointing</h3>
+<p>Extrapolate from the probe rate. If 10 min got you 1000 steps and prior runs converged in ~50 K steps, project ~500 min ≈ 8 h. Apply the convergence variability rule (Art of Walltime line ~393): <strong>stochastic training takes 0.5–2× the deterministic estimate</strong>, so 8 h × 1.5 = 12 h, round up to 16 h for safety. Implement checkpointing every 30 min so a walltime miss costs at most 30 min of progress.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1">#PBS -l walltime=16:00:00</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="c1">#PBS -l select=1:ncpus=16:ngpus=4:mem=240gb:gpu_id=H100</span>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="c1">#PBS -c w=30</span>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="c1"># ... trap USR1/USR2 as in Recipe 8 ...</span>
+</span></code></pre></div>
+<p>If convergence happens early, the batch queue releases the GPUs at exit — no waste. If it doesn't, PBS auto-resubmits from the last checkpoint when walltime expires.</p>
+<p>For full RL pipelines that orchestrate many short rollouts, the coordinator can live on <code>cpu_inter_pers</code> (1 CPU / 4 GB / up to 368 h) and submit the GPU rollout jobs as it goes. Don't put GPU compute on the persistent queue itself.</p>
+<hr />
+<h2 id="where-next"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M22 12a10 10 0 0 1-10 10A10 10 0 0 1 2 12 10 10 0 0 1 12 2a10 10 0 0 1 10 10M6 13h8l-3.5 3.5 1.42 1.42L17.84 12l-5.92-5.92L10.5 7.5 14 11H6z"/></svg></span> Where next</h2>
+<p>When the recipe doesn't fit:</p>
+<ul>
+<li><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 20a8 8 0 0 0 8-8 8 8 0 0 0-8-8 8 8 0 0 0-8 8 8 8 0 0 0 8 8m0-18a10 10 0 0 1 10 10 10 10 0 0 1-10 10C6.47 22 2 17.5 2 12A10 10 0 0 1 12 2m.5 5v5.25l4.5 2.67-.75 1.23L11 13V7z"/></svg></span> <a href="../The-Art-of-Walltime/">The Art of Walltime</a> — full scaling-factor menu (7 CPU complexity classes, 4 GPU architectures with FLOP formulas), the recovery toolkit, the resource-vs-walltime trade-off table.</li>
+<li><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 19h1a1 1 0 0 1 1 1h7v2h-7a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1H2v-2h7a1 1 0 0 1 1-1h1v-2H4a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-7zM4 3h16a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1m5 4h1V5H9zm0 8h1v-2H9zM5 5v2h2V5zm0 8v2h2v-2z"/></svg></span> <a href="../Know-Your-Nodes/">Know Your Nodes</a> — hardware specs for every node tier, <code>cpu_id</code>/<code>gpu_id</code> selectors, MIG internals, the auto-routing flowchart.</li>
+<li><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3C7.56 3 5.85 4.24 5.23 6.08A3.996 3.996 0 0 0 6 14v8h11v-2h3c.55 0 1-.45 1-1v-8c0-.55-.45-1-1-1h-2V8c0-2.21-1.79-4-4-4h-1.68c-.82-.65-1.79-1-2.82-1m0 2c.79 0 1.53.37 2 1H14a2 2 0 0 1 2 2h-4c-2 0-2.68 1.13-3.5 2.63S6 12 6 12c-1.11 0-2-.89-2-2a2 2 0 0 1 2-2h1v-.5A2.5 2.5 0 0 1 9.5 5m7.5 7h2v6h-2Z"/></svg></span> <a href="../../pbs-scripts/PBS-Brew-Inspector/">PBS Brew Inspector</a> — pull your own job history and see where the slack is.</li>
+<li><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3 1 9l11 6 9-4.91V17h2V9M5 13.18v4L12 21l7-3.82v-4L12 17z"/></svg></span> <a href="https://docs.eres.qut.edu.au/hpc-estimatingoptimising-resources-to-request-for-">eResearch — Estimating/optimising resources</a><sup id="fnref2:1"><a class="footnote-ref" href="#fn:1">1</a></sup> — the vendor's <code>qstat -fx</code> + looped-parameter-sweep workflow.</li>
+<li><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m19.07 4.93-1.41 1.41A8.01 8.01 0 0 1 20 12a8 8 0 0 1-8 8 8 8 0 0 1-8-8c0-4.08 3.05-7.44 7-7.93v2.02C8.16 6.57 6 9.03 6 12a6 6 0 0 0 6 6 6 6 0 0 0 6-6c0-1.66-.67-3.16-1.76-4.24l-1.41 1.41C15.55 9.9 16 10.9 16 12a4 4 0 0 1-4 4 4 4 0 0 1-4-4c0-1.86 1.28-3.41 3-3.86v2.14c-.6.35-1 .98-1 1.72a2 2 0 0 0 2 2 2 2 0 0 0 2-2c0-.74-.4-1.38-1-1.72V2h-1A10 10 0 0 0 2 12a10 10 0 0 0 10 10 10 10 0 0 0 10-10c0-2.76-1.12-5.26-2.93-7.07"/></svg></span> <a href="https://hpc-monitoring.eres.qut.edu.au/">eResearch Grafana dashboard</a><sup id="fnref3:1"><a class="footnote-ref" href="#fn:1">1</a></sup> — per-job CPU, memory, GPU utilisation in real time.</li>
+</ul>
+<div class="admonition tip">
+<p class="admonition-title">When in doubt: probe first</p>
+<p>The fastest way to a correct walltime is <strong>one short interactive run on real Aqua hardware</strong> (Recipe 1 or Recipe 7), then scale up. Two hours of empirical measurement beats two days of formula-based estimation.</p>
+</div>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p>Access only in QUT network. Please use VPN to access the documentation when off-campus.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref2:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref3:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref4:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref5:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref6:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref7:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref8:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref9:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+
+
+
+
+
+
+
+  
+    
+  
+  
+    
+  
+
+
+  <aside class="md-source-file">
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="Last update">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="June 22, 2026 01:23:16 AEST">June 22, 2026</span>
+  </span>
+
+    
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="Created">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="June 22, 2026 01:23:16 AEST">June 22, 2026</span>
+  </span>
+
+    
+    
+    
+  </aside>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2025 Zhipeng He
+
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://zhipenghe.me" target="_blank" rel="noopener" title="zhipenghe.me" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M234.2 8.6c12.3-11.4 31.3-11.4 43.5 0L368 92.3V80c0-17.7 14.3-32 32-32h32c17.7 0 32 14.3 32 32v101.5l37.8 35.1c9.6 9 12.8 22.9 8 35.1S493.2 272 480 272h-16v176c0 35.3-28.7 64-64 64H112c-35.3 0-64-28.7-64-64V272H32c-13.2 0-25-8.1-29.8-20.3s-1.6-26.2 8-35.1zM240 320c-26.5 0-48 21.5-48 48v96h128v-96c0-26.5-21.5-48-48-48z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/zhipenghe" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["search.suggest", "search.highlight", "search.share", "navigation.instant", "navigation.instant.progress", "navigation.path", "navigation.top", "navigation.expand", "content.action.view", "content.action.edit", "content.code.copy", "content.code.select", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../javascripts/katex.js"></script>
+      
+        <script src="https://unpkg.com/katex@0/dist/katex.min.js"></script>
+      
+        <script src="https://unpkg.com/katex@0/dist/contrib/auto-render.min.js"></script>
+      
+    
+  </body>
+</html>
