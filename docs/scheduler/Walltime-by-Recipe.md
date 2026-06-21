@@ -2,7 +2,7 @@
 
 So you've read [The Art of Walltime](The-Art-of-Walltime.md) and you understand the rules of the game. Now you need an answer for *your* job — and you don't want to derive scaling factors from first principles every time. Welcome to the **recipe book**: eight Aqua-specific worked examples, each one a copy-paste starting point you can adapt.
 
-Every recipe respects the live queue caps (probed 2026-06-22). If a number here looks wrong, the cluster's specs probably changed — re-probe with `qstat -Qf` and update.
+Every recipe respects the live queue caps. If a number here looks wrong, the cluster's specs probably changed — re-probe with `qstat -Qf` and update.
 
 !!! tip "Companion pages"
     - :material-clock-outline: [The Art of Walltime](The-Art-of-Walltime.md) — the theory: queue limits, the 2× rule, scaling-factor menu, recovery toolkit.
