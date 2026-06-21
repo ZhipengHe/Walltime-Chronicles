@@ -16,7 +16,7 @@ This guide is essentially a survival manual that:
 !!! tip "Companion pages"
     - :material-server-network: [Know Your Nodes](Know-Your-Nodes.md) — the hardware behind each queue (H100s, A100 MIG slices, large-mem boxes, watchdog cores).
     - :material-book-open-variant: [PBS Brew Inspector](../pbs-scripts/PBS-Brew-Inspector.md) — extract walltime ground truth from your own job history.
-    - :material-school: QUT eResearch — [Queues and limits](https://docs.eres.qut.edu.au/hpc-queue-limits), [Estimating/optimising resources](https://docs.eres.qut.edu.au/hpc-estimatingoptimising-resources-to-request-for-), [Running jobs longer than 48 hours](https://docs.eres.qut.edu.au/breaking-the-48hr-barrier), [Checkpointing](https://docs.eres.qut.edu.au/checkpointing).
+    - :material-school: QUT eResearch — [Queues and limits](https://docs.eres.qut.edu.au/hpc-queue-limits)[^1], [Estimating/optimising resources](https://docs.eres.qut.edu.au/hpc-estimatingoptimising-resources-to-request-for-)[^1], [Running jobs longer than 48 hours](https://docs.eres.qut.edu.au/breaking-the-48hr-barrier)[^1], [Checkpointing](https://docs.eres.qut.edu.au/checkpointing)[^1].
 
 ---
 
@@ -36,7 +36,7 @@ The walltime number you write is *only valid inside the queue it lands in*. Pick
 | `cpu_inter_pers` | **368 h (≈15.3 days)** | **1** | **1–4 GB** | – | Pipeline coordinators, persistent SSH sessions, Nextflow controllers — **not compute** |
 
 !!! info "Where these numbers came from"
-    Live from `qstat -Qf` on Aqua, cross-checked with [eResearch's Queues and limits page](https://docs.eres.qut.edu.au/hpc-queue-limits). The `cpu_inter_pers` row isn't on the eResearch page — it's a tiny watchdog queue intended for orchestration, and this is one of the few public references that names its caps. See [Know Your Nodes](Know-Your-Nodes.md) for which physical hardware backs each queue.
+    Live from `qstat -Qf` on Aqua, cross-checked with [eResearch's Queues and limits page](https://docs.eres.qut.edu.au/hpc-queue-limits)[^1]. The `cpu_inter_pers` row isn't on the eResearch page — it's a tiny watchdog queue intended for orchestration, and this is one of the few public references that names its caps. See [Know Your Nodes](Know-Your-Nodes.md) for which physical hardware backs each queue.
 
 ### The two queues that actually trap people
 
@@ -47,7 +47,7 @@ The walltime number you write is *only valid inside the queue it lands in*. Pick
     - Persistent SSH tunnels and `tmux` sessions
     - Long-running monitors and watchdog scripts
 
-    If you need real compute beyond 48 h, the answer is checkpointing, array jobs, or dependent jobs (see [§ Recovery toolkit](#step-3-recovery-toolkit-when-walltime-kills-the-job) below and eResearch's [Running jobs longer than 48 hours](https://docs.eres.qut.edu.au/breaking-the-48hr-barrier)).
+    If you need real compute beyond 48 h, the answer is checkpointing, array jobs, or dependent jobs (see [§ Recovery toolkit](#step-3-recovery-toolkit-when-walltime-kills-the-job) below and eResearch's [Running jobs longer than 48 hours](https://docs.eres.qut.edu.au/breaking-the-48hr-barrier)[^1]).
 
 ??? warning "Batch vs interactive — who holds the resources?"
     - **Batch jobs** (`*_batch_*`) release resources the moment they finish, even if your walltime request had hours left over. Be generous with the estimate; you pay only for what you use.
@@ -105,13 +105,13 @@ Before you guess, see what your past jobs tell you. Two complementary tools:
 
     The file captures every `resources_used.*` field — `walltime`, `cpupercent`, `cput`, `mem`, `vmem`, `ncpus` — alongside what you *requested* (`Resources_List.*`). Compare the two and you'll see exactly where the slack is.
 
-    Useful even on a single job; doesn't need a history. Source: [eResearch's Estimating/optimising resources page](https://docs.eres.qut.edu.au/hpc-estimatingoptimising-resources-to-request-for-).
+    Useful even on a single job; doesn't need a history. Source: [eResearch's Estimating/optimising resources page](https://docs.eres.qut.edu.au/hpc-estimatingoptimising-resources-to-request-for-)[^1].
 
 === ":material-radar: Live monitoring"
 
     For long jobs, watch them breathe in real time:
 
-    - [eResearch Grafana dashboard](https://hpc-monitoring.eres.qut.edu.au/) — per-job CPU, memory, GPU utilisation.
+    - [eResearch Grafana dashboard](https://hpc-monitoring.eres.qut.edu.au/)[^1] — per-job CPU, memory, GPU utilisation.
     - `qstat -f $PBS_JOBID` while running — same fields as `-fx` but for live jobs.
 
 ### Step 2 — The Golden Ratio: the 2× rule
@@ -165,13 +165,13 @@ trap checkpoint USR1
 trap checkpoint_abort USR2
 ```
 
-Without those `trap`s, bash treats `USR1`/`USR2` as `SIGINT` and quits — your job dies *during* the checkpoint instead of surviving it.
+Without those `trap`s, the default action for `USR1`/`USR2` is to terminate the shell before your handler can save state — your job dies *during* the checkpoint instead of surviving it.
 
-Full reference: [eResearch Checkpointing](https://docs.eres.qut.edu.au/checkpointing) and [Implementing checkpointing](https://docs.eres.qut.edu.au/implementing-checkpointing).
+Full reference: [eResearch Checkpointing](https://docs.eres.qut.edu.au/checkpointing)[^1] and [Implementing checkpointing](https://docs.eres.qut.edu.au/implementing-checkpointing)[^1].
 
 #### Outrun the 48-hour cap without `cpu_inter_pers`
 
-When your real job *is* compute and won't fit in 48 hours, the structural answers are array jobs (split inputs across many short jobs) and dependent jobs (chain stages with `#PBS -W depend=afterok:$JOBID`). Both bypass the 48-hour wall without burning a watchdog slot. Recipes: [eResearch — Running jobs longer than 48 hours](https://docs.eres.qut.edu.au/breaking-the-48hr-barrier).
+When your real job *is* compute and won't fit in 48 hours, the structural answers are array jobs (split inputs across many short jobs) and dependent jobs (chain stages on the command line with `qsub -W depend=afterok:<upstream_jobid> stage2.pbs`, substituting the ID returned by the previous `qsub`). Both bypass the 48-hour wall without burning a watchdog slot. Recipes: [eResearch — Running jobs longer than 48 hours](https://docs.eres.qut.edu.au/breaking-the-48hr-barrier)[^1].
 
 ---
 
@@ -200,7 +200,11 @@ flowchart TD
     ```bash
     #PBS -l walltime=01:00:00
     #PBS -l select=1:ncpus=4:mem=8gb
-    #PBS -q cpu_inter_exec   # or gpu_inter_exec if you need a GPU
+    #PBS -q cpu_inter_exec
+
+    # GPU variant — swap the resource line + queue:
+    # -l select=1:ncpus=4:mem=8gb:ngpus=1
+    # -q gpu_inter_exec
     ```
 
     **Best for:** checking the code runs at all, debugging startup, building conda envs, trying module combinations. You'll be watching.
@@ -319,9 +323,9 @@ For when the 2× rule isn't enough and you need to scale a baseline rigorously. 
 
 When you don't know the architecture details, multiply everything you changed:
 
-$$ S \approx \frac{b_{\text{new}} \cdot p_{\text{new}} \cdot x_{\text{new}} \cdot e_{\text{new}}}{b_{\text{baseline}} \cdot p_{\text{baseline}} \cdot x_{\text{baseline}} \cdot e_{\text{baseline}}} $$
+$$ S \approx \frac{b_{\text{new}} \cdot p_{\text{new}} \cdot x_{\text{new}} \cdot E_{\text{new}}}{b_{\text{baseline}} \cdot p_{\text{baseline}} \cdot x_{\text{baseline}} \cdot E_{\text{baseline}}} $$
 
-where $p =$ parameters, $x =$ input dimension, $e =$ epochs. Fine for sanity checks; for production planning, use the sharper rules below.
+where $p =$ parameters, $x =$ input dimension, $E =$ epochs (distinct from the efficiency factor $e$ in the legend). Fine for sanity checks; for production planning, use the sharper rules below.
 
 #### Data-size scaling
 
@@ -423,7 +427,7 @@ There's almost always a tension between resources requested (which shorten compu
 | Low-resource | 36 h | 1× H100 | 2 h | 38 h |
 
 !!! note "Numbers above are illustrative — check live load"
-    Wait times depend on cluster state. Read the [eResearch Grafana dashboard](https://hpc-monitoring.eres.qut.edu.au/) or run `qstat -B` / `qstat -Q` before you commit. The relative ordering (more resources → longer wait) holds; the absolute numbers swing day to day.
+    Wait times depend on cluster state. Read the [eResearch Grafana dashboard](https://hpc-monitoring.eres.qut.edu.au/)[^1] or run `qstat -B` / `qstat -Q` before you commit. The relative ordering (more resources → longer wait) holds; the absolute numbers swing day to day.
 
 **Things to weigh:**
 
@@ -465,7 +469,7 @@ Round up and add a safety margin: **walltime 24 h, queue `gpu_batch_exec`**. Com
 | Hit walltime on every run | Add `#PBS -c w=N` + USR1/USR2 traps so PBS auto-resubmits |
 | Job dies with no diagnosis | Add `set -x` at the top of the script |
 | 47 h job needs 49 h | Split the work into stages with `#PBS -W depend=afterok:$JOBID` |
-| Many similar runs | Use a job array (`#PBS -J 1-100`) — see [eResearch — Breaking the 48hr barrier](https://docs.eres.qut.edu.au/breaking-the-48hr-barrier) |
+| Many similar runs | Use a job array (`#PBS -J 1-100`) — see [eResearch — Breaking the 48hr barrier](https://docs.eres.qut.edu.au/breaking-the-48hr-barrier)[^1] |
 | Maintenance window is near | Check `time_until_outage.sh` (see [Know Your Nodes](Know-Your-Nodes.md)) before submitting a long batch |
 
 ### When you're stuck in queue purgatory
@@ -510,3 +514,5 @@ Things to remember before you `qsub -I`:
 - Walltime support group: sharing stories of that time you asked for 48 hours and it took 48 hours and 3 minutes.
 
 The perfect walltime doesn't exist. But the perfect walltime *estimate* does.
+
+[^1]: Access only in QUT network. Please use VPN to access the documentation when off-campus.
