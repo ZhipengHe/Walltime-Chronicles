@@ -1,5 +1,10 @@
 # Batch-Cooking PBS Scripts with a Bash Pan
 
+!!! tip "Companion pages"
+    - :material-microscope: [PBS Brew Inspector](PBS-Brew-Inspector.md) — after the batch runs, use this to read the resource-usage tea leaves and tune the next batch.
+    - :material-timer-sand: [Guess, Request, Regret: The Art of Walltime](../scheduler/The-Art-of-Walltime.md) — size the `walltime=` line below from real data instead of from vibes.
+    - :material-server-network: [Know Your Nodes](../scheduler/Know-Your-Nodes.md) — pick the GPU tier (H100 / A100 / MIG slice) before you commit to a `gpu_id`.
+
 ## :material-pot-mix: What's Cooking?
 
 So, you have multiple experiments, each with their own little quirks, and you want to run them one after another on the HPC without babysitting each one like a helicopter parent hovering over a toddler's first steps? Welcome to **batch-cooking PBS jobs** — where bash scripts are your pan, experiments are the ingredients, and you're the chef who's finally learned to prep everything in advance.
@@ -14,331 +19,269 @@ This script is basically a recipe that saves your sanity:
 
 **Result:** *one tidy `.pbs` file, logs clearly marked, and no more waking up at 2 a.m. in a cold sweat wondering if you accidentally ran `Example_Experiment_1.sh` twice.*
 
-!!! question "Why Not PBS Arrays?"
-    You might be wondering: "Why not use PBS job arrays instead of this sequential approach?" Fair question! This method makes more sense when:
+!!! question "Why not PBS arrays?"
+    You might be wondering: "Why not use PBS job arrays instead of this sequential approach?" Fair question — both patterns have their place.
 
-    **Sequential is Better:**
+    **Sequential (this recipe) is better when:**
 
-    - **Experiment dependencies** - Later experiments need results from earlier ones
-    - **Resource sharing** - All experiments share the same loaded environment and data
-    - **Simpler debugging** - One log file to rule them all, easier to trace issues
-    - **Memory efficiency** - Load large datasets once, reuse across experiments
-    - **Queue limitations** - Some systems limit concurrent array jobs, especially for GPU resources
+    - **Experiment dependencies** — later experiments need results from earlier ones
+    - **Resource sharing** — all experiments share the same loaded environment and data
+    - **Simpler debugging** — one log file to rule them all, easier to trace issues
+    - **Memory efficiency** — load large datasets once, reuse across experiments
+    - **Queue limitations** — some systems limit concurrent array jobs, especially for GPU resources
 
-    **PBS Arrays Win When:**
+    **PBS arrays win when:**
 
-    - **True parallelization** - Independent experiments running simultaneously
-    - **Fault tolerance** - One failed experiment doesn't kill the others
-    - **Resource flexibility** - Different experiments need different resources
+    - **True parallelisation** — independent experiments running simultaneously
+    - **Fault tolerance** — one failed experiment doesn't kill the others
+    - **Resource flexibility** — different experiments need different resources
 
-    Think of it as assembly line cooking (this method) vs. having multiple chefs working simultaneously (PBS arrays).
+    Think of it as assembly-line cooking (this method) vs. multiple chefs working simultaneously (PBS arrays).
 
 ---
 
 ## :material-notebook-edit-outline: How To Customise
 
-Want to make it your own? Let's break down each part of the recipe:
+Six steps to fit the recipe to your kitchen. Each tab covers one piece of the script you'll most likely want to change.
 
-### 1. Selecting Your Ingredients (Experiments)
+=== ":material-format-list-bulleted: 1. Ingredients"
 
-Add or remove experiment scripts in the `EXPERIMENTS=(...)` array. This is your tasting menu — change it freely.
+    **Selecting your experiments.** Add or remove experiment scripts in the `EXPERIMENTS=(...)` array. This is your tasting menu — change it freely.
 
-```bash
-#!/bin/bash
+    ```bash
+    #!/bin/bash
 
-# List of experiments to run
-# Add or remove experiments by modifying this array
-EXPERIMENTS=(
-    "exp_script/Example_Experiment_0.sh"
-    "exp_script/Example_Experiment_1.sh"
-    "exp_script/Example_Experiment_2.sh"
-    # "exp_script/My_New_Experiment.sh"  # Uncomment to add new experiments
-    # "path/to/another/experiment.sh"
-)
-```
+    # List of experiments to run
+    # Add or remove experiments by modifying this array
+    EXPERIMENTS=(
+        "exp_script/Example_Experiment_0.sh"
+        "exp_script/Example_Experiment_1.sh"
+        "exp_script/Example_Experiment_2.sh"
+        # "exp_script/My_New_Experiment.sh"  # Uncomment to add new experiments
+        # "path/to/another/experiment.sh"
+    )
+    ```
 
-### 2. Setting Up Unique Job Names
+=== ":material-tag: 2. Naming"
 
-Creating a timestamp ensures your job names are unique and don't step on each other's toes.
+    **Unique job names so runs don't collide.** A timestamp guarantees uniqueness.
 
-```bash
-# Create a unique timestamp once
-TIMESTAMP=$(date +%Y%m%d_%H%M%S)
-JOB_NAME="task_${TIMESTAMP}"
-PBS_SCRIPT="submit_job_${TIMESTAMP}.pbs"
-```
+    ```bash
+    # Create a unique timestamp once
+    TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+    JOB_NAME="task_${TIMESTAMP}"
+    PBS_SCRIPT="submit_job_${TIMESTAMP}.pbs"
+    ```
 
-You can customize the format:
+    Customisations:
 
-- Change `task_` to something meaningful like `training_` or `analysis_`
-- Modify the timestamp format by changing `%Y%m%d_%H%M%S`
+    - Change `task_` to something meaningful like `training_` or `analysis_`
+    - Modify the timestamp format by changing `%Y%m%d_%H%M%S`
 
-### 3. Crafting Your PBS Header
+=== ":material-cog: 3. PBS header"
 
-Adjust the PBS directives to match your computational appetite and resource budget — because nobody wants their job to starve in the queue or get kicked out for hogging resources.
+    **Adjust the directives** to match your computational appetite and resource budget. Hardware ceilings live in [Know Your Nodes](../scheduler/Know-Your-Nodes.md); walltime sizing lives in [Art of Walltime](../scheduler/The-Art-of-Walltime.md).
 
-```bash
-# Create PBS script
-cat > ${PBS_SCRIPT} << EOF
-#!/bin/bash
-#PBS -N ${JOB_NAME}
-#PBS -l select=1:ncpus=8:ngpus=1:mem=64GB:gpu_id=H100  # Adjust resources here
-#PBS -M $USER@qut.edu.au  # Your email for notifications
-#PBS -l walltime=48:00:00  # Maximum runtime - format is HH:MM:SS
-#PBS -q gpu_batch_exec  # Queue to submit to - adjust based on your HPC
-#PBS -j oe  # Join output and error files
-#PBS -m abe  # Mail on abort, begin, and end
-#PBS -o ${JOB_NAME}_output.log  # Output log filename
-EOF
-```
+    ```bash
+    # Create PBS script
+    cat > ${PBS_SCRIPT} << EOF
+    #!/bin/bash
+    #PBS -N ${JOB_NAME}
+    #PBS -l select=1:ncpus=8:ngpus=1:mem=64GB:gpu_id=H100  # see GPU note below
+    #PBS -M $USER@qut.edu.au  # Your QUT email for notifications
+    #PBS -l walltime=48:00:00  # Maximum runtime — HH:MM:SS, 48h is the batch cap
+    #PBS -q gpu_batch_exec
+    #PBS -j oe
+    #PBS -m abe  # Mail on abort, begin, end
+    #PBS -o ${JOB_NAME}_output.log
+    EOF
+    ```
 
-Common modifications:
+    Common modifications:
 
-- Change `select=1:ncpus=8:ngpus=1:mem=64GB:gpu_id=H100` for different resource needs
-- Adjust `walltime=48:00:00` for jobs that need more or less time
-- Change `gpu_batch_exec` to another queue if needed (e.g., `cpu_batch_exec`, `cpu_batch_exlm`, etc.)
+    - **Resource line.** Adjust `ncpus`, `ngpus`, `mem` per the queue's per-job ceilings.
+    - **Walltime.** `48:00:00` is the batch-queue cap. Drop it for shorter runs.
+    - **Queue.** `gpu_batch_exec`, `cpu_batch_exec`, `cpu_batch_exlm`, `gpu_inter_exec`, `cpu_inter_exec`, `cpu_inter_pers` — see the queue limits in [Art of Walltime](../scheduler/The-Art-of-Walltime.md).
 
-### 4. Setting Up Your Environment
+    !!! info "Pick a `gpu_id` deliberately"
+        `gpu_id=H100` targets the H100 hosts (busiest queue, fastest cards). Other valid values from a live `pbsnodes` probe: **`A100`**, **`P100`**, **`MI100`**. For inference or smaller models, an A100 (or even a [MIG slice](../scheduler/Know-Your-Nodes.md) on a `gpu_inter_exec` node) often dispatches sooner than an H100.
 
-Configure the paths and modules for your computational kitchen (because even HPC needs its ingredients properly organized):
+=== ":material-package-variant-closed: 4. Environment"
 
-```bash
-# Add environment setup to the PBS script
-cat >> ${PBS_SCRIPT} << EOF
-# Set paths
-WORK_DIR=\${PBS_O_WORKDIR}
-DATASET_DIR=\${WORK_DIR}/dataset  # Adjust dataset path if needed
+    **Modules + virtualenv** for the compute job. The escapes (`\${...}`) are intentional — they expand on the compute node at runtime, not when this script runs locally.
 
-cd \${PBS_O_WORKDIR}
+    ```bash
+    # Add environment setup to the PBS script
+    cat >> ${PBS_SCRIPT} << EOF
+    # Set paths
+    WORK_DIR=\${PBS_O_WORKDIR}
+    DATASET_DIR=\${WORK_DIR}/dataset
 
-# Load required modules - customize these based on your needs
-module load GCCcore/13.3.0
-module load Python/3.12.3
-module load libffi/3.4.5
-module load CUDA/11.8.0  # Change version based on your GPU requirements
+    cd \${PBS_O_WORKDIR}
 
-# Create and activate virtual environment
-python -m venv env
-source env/bin/activate
-python -m pip install -r requirements.txt  # Make sure this file exists!
+    # Load required modules
+    module load GCCcore/13.3.0
+    module load Python/3.12.3
+    module load libffi/3.4.5
+    module load CUDA/11.8.0
 
-# Run experiments
-cd \${WORK_DIR}
-EOF
-```
+    # Create and activate virtual environment
+    python -m venv env
+    source env/bin/activate
+    python -m pip install -r requirements.txt
 
-You can modify this to:
+    # Run experiments
+    cd \${WORK_DIR}
+    EOF
+    ```
 
-- Change the path prefix (`\${WORK_DIR}/scripts/`) if your scripts are stored elsewhere
-- Add experiment-specific parameters
-- Add timing information by adding commands like:
+    !!! info "Module versions are pinned, not necessarily current"
+        The example pins (`CUDA/11.8.0`, `GCCcore/13.3.0`) for reproducibility — these were the versions the recipe was first tested against, and they're known-good. Defaults on the cluster drift over time; run `module avail CUDA GCCcore` (or `module spider`) to see what's available right now, and `module load CUDA` with no version grabs whatever the environment currently exposes as default.
 
-  ```bash
-  echo "echo 'Start time: $(date)'" >> ${PBS_SCRIPT}
-  # ... experiment command ...
-  echo "echo 'End time: $(date)'" >> ${PBS_SCRIPT}
-  ```
+=== ":material-repeat: 5. Experiment loop"
 
-### 5. Adding Experiment Loops
+    **Append each experiment with a header banner.** Makes the resulting log skimmable.
 
-This part adds each experiment to the PBS script with nice formatting:
+    ```bash
+    # Add each experiment to the PBS script
+    for exp in "${EXPERIMENTS[@]}"; do
+        # Section header
+        echo "echo '=============================================='" >> ${PBS_SCRIPT}
+        echo "echo 'Running experiment: ${exp}'" >> ${PBS_SCRIPT}
+        echo "echo '=============================================='" >> ${PBS_SCRIPT}
 
-```bash
-# Add each experiment to the PBS script
-for exp in "${EXPERIMENTS[@]}"; do
-    # Add a section header for each experiment
-    echo "echo '=============================================='" >> ${PBS_SCRIPT}
-    echo "echo 'Running experiment: ${exp}'" >> ${PBS_SCRIPT}
-    echo "echo '=============================================='" >> ${PBS_SCRIPT}
+        # The experiment command itself
+        echo "bash \${WORK_DIR}/scripts/${exp}" >> ${PBS_SCRIPT}
 
-    # Add the experiment command (run directly)
-    echo "bash \${WORK_DIR}/scripts/${exp}" >> ${PBS_SCRIPT}
+        # Spacer
+        echo "echo ''" >> ${PBS_SCRIPT}
+        echo "echo '=============================================='" >> ${PBS_SCRIPT}
+        echo "echo ''" >> ${PBS_SCRIPT}
+    done
+    ```
 
-    # Add a separator between experiments
-    echo "echo ''" >> ${PBS_SCRIPT}
-    echo "echo '=============================================='" >> ${PBS_SCRIPT}
-    echo "echo ''" >> ${PBS_SCRIPT}
-done
-```
+=== ":material-rocket-launch: 6. Submit"
 
-### 6. Finalizing and Submitting
+    **Make executable, submit, report.**
 
-Make the script executable and submit it:
+    ```bash
+    # Make the PBS script executable
+    chmod +x ${PBS_SCRIPT}
 
-```bash
-# Make the PBS script executable
-chmod +x ${PBS_SCRIPT}
+    # Submit the job
+    qsub ${PBS_SCRIPT}
 
-# Submit the job
-qsub ${PBS_SCRIPT}
+    # Provide helpful feedback to the user
+    echo "Job submitted with name: ${JOB_NAME}"
+    echo "You can monitor the job using: qstat -u \$USER"
+    echo "Output will be saved in: ${JOB_NAME}_output.log"
+    ```
 
-# Provide helpful feedback to the user
-echo "Job submitted with name: ${JOB_NAME}"
-echo "You can monitor the job using: qstat -u \$USER"
-echo "Output will be saved in: ${JOB_NAME}_output.log"
-```
+    Optional additions:
 
-You can add additional commands here to:
-
-- Copy the PBS script to an archive location
-- Add the job ID to a tracking file
-- Set up monitoring or notifications
+    - Copy the generated `.pbs` to an archive directory
+    - Append the returned job ID to a tracking file
+    - Trigger a Slack / email webhook
 
 ---
 
 ## :material-chef-hat: The Complete Recipe
 
-Here's the full script that you can copy, paste, and modify to suit your needs:
+The script below is single-sourced from `docs/pbs-scripts/scripts/pbs_batch_cook.sh` in this repo — the version you see here is exactly the version you can download.
 
-```bash
-#!/bin/bash
+!!! tip "Download directly on the server"
+    ```bash
+    # by wget
+    wget https://raw.githubusercontent.com/ZhipengHe/Walltime-Chronicles/main/docs/pbs-scripts/scripts/pbs_batch_cook.sh
+    # by curl
+    curl -O https://raw.githubusercontent.com/ZhipengHe/Walltime-Chronicles/main/docs/pbs-scripts/scripts/pbs_batch_cook.sh
+    chmod +x pbs_batch_cook.sh
+    ```
 
-# Author: Zhipeng He
-# Email: zhipeng.he@hdr.qut.edu.au
+    Or download from [this link](scripts/pbs_batch_cook.sh) directly.
 
-# List of experiments to run
-# Add or remove experiments by modifying this array
-EXPERIMENTS=(
-    "exp_script/Example_Experiment_0.sh"
-    "exp_script/Example_Experiment_1.sh"
-    "exp_script/Example_Experiment_2.sh"
-)
+???+ note "Click to expand the full script"
 
-# Create a unique timestamp once
-TIMESTAMP=$(date +%Y%m%d_%H%M%S)
-JOB_NAME="task_${TIMESTAMP}"
-PBS_SCRIPT="submit_job_${TIMESTAMP}.pbs"
-
-# Create PBS script
-cat > ${PBS_SCRIPT} << EOF
-#!/bin/bash
-#PBS -N ${JOB_NAME}
-#PBS -l select=1:ncpus=8:ngpus=1:mem=64GB:gpu_id=H100
-#PBS -M $USER@qut.edu.au
-#PBS -l walltime=48:00:00
-#PBS -q gpu_batch_exec
-#PBS -j oe
-#PBS -m abe
-#PBS -o ${JOB_NAME}_output.log
-
-# Set paths
-WORK_DIR=\${PBS_O_WORKDIR}
-DATASET_DIR=\${WORK_DIR}/dataset
-
-cd \${PBS_O_WORKDIR}
-
-module load GCCcore/13.3.0
-module load Python/3.12.3
-module load libffi/3.4.5
-module load CUDA/11.8.0
-
-python -m venv env
-source env/bin/activate
-python -m pip install -r requirements.txt
-
-# Run experiments
-cd \${WORK_DIR}
-EOF
-
-# Add each experiment to the PBS script
-for exp in "${EXPERIMENTS[@]}"; do
-    # Add a section header for each experiment
-    echo "echo '=============================================='" >> ${PBS_SCRIPT}
-    echo "echo 'Running experiment: ${exp}'" >> ${PBS_SCRIPT}
-    echo "echo '=============================================='" >> ${PBS_SCRIPT}
-
-    # Add the experiment command (run directly)
-    echo "bash \${WORK_DIR}/scripts/${exp}" >> ${PBS_SCRIPT}
-
-    # Add a separator between experiments
-    echo "echo ''" >> ${PBS_SCRIPT}
-    echo "echo '=============================================='" >> ${PBS_SCRIPT}
-    echo "echo ''" >> ${PBS_SCRIPT}
-done
-
-# Make the PBS script executable
-chmod +x ${PBS_SCRIPT}
-
-# Submit the job
-qsub ${PBS_SCRIPT}
-
-echo "Job submitted with name: ${JOB_NAME}"
-echo "You can monitor the job using: qstat -u \$USER"
-echo "Output will be saved in: ${JOB_NAME}_output.log"
-```
+    ```bash title="pbs_batch_cook.sh"
+    --8<-- "docs/pbs-scripts/scripts/pbs_batch_cook.sh"
+    ```
 
 ---
 
 ## :material-lightbulb-on: Tips from the Bash Kitchen
 
-- Use descriptive experiment script names — “exp1.sh” and “exp2.sh” are fine, but "exp_doomed_to_fail.sh" will save you time.
-- Want to run things in parallel instead of sequentially? That's another recipe... and it involves GNU `parallel`, job arrays, and possibly a small ritual.
-- Always `echo` your steps. Your future self, trying to debug at midnight, will thank you.
-- Mind your dollar signs in heredocs! Escape PBS variables like `\${PBS_O_WORKDIR}` but leave `${TIMESTAMP}` naked. The difference? One's for the future, one's for right now — like prepping tomorrow's lunch vs. tonight's dinner.
+- :material-text-box-check: **Descriptive script names.** "exp1.sh" and "exp2.sh" are fine, but "exp_doomed_to_fail.sh" will save you time later.
+- :material-arrow-decision: **Want parallel instead of sequential?** That's a different recipe — involves GNU `parallel`, PBS job arrays, and possibly a small ritual.
+- :material-printer-pos-network: **Always `echo` your steps.** Your future self, debugging at midnight, will thank you.
+- :material-currency-usd: **Mind your dollar signs in heredocs.** Escape PBS variables like `\${PBS_O_WORKDIR}` but leave `${TIMESTAMP}` naked. One's for the future (job runtime), one's for right now (script-write time). Like prepping tomorrow's lunch vs. cooking tonight's dinner.
 
 ## :material-tools: Troubleshooting Tips
 
-Even the best chefs have kitchen mishaps — and computational cooking is no exception. Here's how to handle the inevitable disasters:
+Even the best chefs have kitchen mishaps. Here's how to handle the inevitable disasters:
 
-- **Path Problems**: If your experiments aren't running, check that the paths in the `EXPERIMENTS` array match your actual directory structure.
-
-- **Script Permissions**: Ensure your individual experiment scripts have execute permissions:
+- **Path Problems** — if experiments aren't running, check that paths in the `EXPERIMENTS` array match your actual directory structure (under `${PBS_O_WORKDIR}/scripts/`).
+- **Script Permissions** — give the individual experiment scripts execute permission:
 
   ```bash
   chmod +x scripts/exp_script/Example_Experiment_*.sh
   ```
 
-- **Dependency Hell**: If your experiments have different Python package requirements, consider:
-    - Using separate virtual environments for each experiment
-    - Creating a unified `requirements.txt` with all dependencies
-    - Adding `pip install -r specific_requirements.txt` in each experiment script
-
-- **Resource Conflicts**: If your experiments need different amounts of resources, consider making separate submission scripts rather than running them sequentially.
+- **Dependency Hell** — if experiments have different Python requirements, consider:
+    - Separate virtual environments per experiment
+    - A unified `requirements.txt` covering everything
+    - `pip install -r specific_requirements.txt` inside each experiment script
+- **Resource Conflicts** — if experiments need wildly different resources, make separate PBS scripts instead of running them sequentially under a one-size-fits-all header.
+- **Inspect after the fact** — once the job finishes, use [PBS Brew Inspector](PBS-Brew-Inspector.md) to see which experiments actually used the resources you asked for.
 
 ## :material-application-variable: Environment Variables
 
-Your experiment scripts can access these PBS environment variables:
+Inside each experiment script, these PBS-provided variables are available:
 
-- `$PBS_O_WORKDIR`: The directory from which the job was submitted
-- `$PBS_JOBID`: The job's unique identifier
-- `$PBS_JOBNAME`: The name of the job (in this case, `task_TIMESTAMP`)
-- `$PBS_NODEFILE`: A file containing the nodes assigned to the job
-- `$PBS_QUEUE`: The queue the job was submitted to
+| Variable | What it is |
+|---|---|
+| `$PBS_O_WORKDIR` | Directory from which the job was submitted |
+| `$PBS_JOBID` | The job's unique identifier (e.g. `12345.aqua`) |
+| `$PBS_JOBNAME` | The job's name (in this recipe, `task_${TIMESTAMP}`) |
+| `$PBS_NODEFILE` | Path to a file listing the nodes assigned to the job |
+| `$PBS_QUEUE` | The queue the job is running in |
 
 ## :material-fire: Advanced Techniques
 
 Ready to level up your cooking skills?
 
-### Handling Failures Gracefully
+### Handling failures gracefully
 
-To prevent later experiments from failing if an earlier one crashes:
+To prevent later experiments from being killed by an earlier crash, wrap each call in an `if`:
 
 ```bash
 # Add to each experiment loop iteration
 echo "if bash \${WORK_DIR}/scripts/${exp}; then" >> ${PBS_SCRIPT}
 echo "  echo 'Experiment ${exp} completed successfully'" >> ${PBS_SCRIPT}
 echo "else" >> ${PBS_SCRIPT}
-echo "  echo 'WARNING: Experiment ${exp} failed with exit code $?'" >> ${PBS_SCRIPT}
+echo "  echo 'WARNING: Experiment ${exp} failed with exit code '\$?" >> ${PBS_SCRIPT}
 echo "  # Continue anyway" >> ${PBS_SCRIPT}
 echo "fi" >> ${PBS_SCRIPT}
 ```
 
-### Experiment Status Tracking
+!!! warning "Why `'\$?` and not `$?`"
+    Inside a double-quoted `echo`, `$?` would expand **at script-write time** — when the last command was the previous `echo` (always exit code `0`). Result: the generated PBS script literally contains `exit code 0` regardless of what happened. By closing the single quote and writing `'\$?`, the literal `$?` lands in the PBS script and resolves at *job runtime* to the failed command's actual exit code.
 
-Create a summary of completed experiments at the end:
+### Experiment status tracking
+
+Collect a SUCCESS/FAILED summary at the end of the job:
 
 ```bash
-# Add before the experiments loop
+# Before the experiments loop
 echo "declare -A experiment_status" >> ${PBS_SCRIPT}
 
-# Add within the loop (replacing the direct bash command)
+# Inside the loop (replacing the direct bash command)
 echo "if bash \${WORK_DIR}/scripts/${exp}; then" >> ${PBS_SCRIPT}
 echo "  experiment_status[\"${exp}\"]=\"SUCCESS\"" >> ${PBS_SCRIPT}
 echo "else" >> ${PBS_SCRIPT}
 echo "  experiment_status[\"${exp}\"]=\"FAILED\"" >> ${PBS_SCRIPT}
 echo "fi" >> ${PBS_SCRIPT}
 
-# Add after the experiments loop
+# After the experiments loop
 echo "echo '============== EXPERIMENT SUMMARY ==============='" >> ${PBS_SCRIPT}
 echo "for exp in \"${EXPERIMENTS[@]}\"; do" >> ${PBS_SCRIPT}
 echo "  echo \"\$exp: \${experiment_status[\"\$exp\"]}\"" >> ${PBS_SCRIPT}
@@ -346,14 +289,17 @@ echo "done" >> ${PBS_SCRIPT}
 echo "echo '================================================'" >> ${PBS_SCRIPT}
 ```
 
-### Email Notifications with Results
+### Email notifications with results
 
-Add result summaries to your email notifications:
+`#PBS -m abe` already covers abort/begin/end. If you want the contents of the output log in the message body too:
 
 ```bash
-# Add at the end of the script (before submission)
+# Add at the end of the generated PBS script
 echo "mail -s \"Job ${JOB_NAME} Complete\" $USER@qut.edu.au < ${JOB_NAME}_output.log" >> ${PBS_SCRIPT}
 ```
+
+!!! warning "`mail` availability depends on the node"
+    `mail(1)` needs a configured MTA. On Aqua compute nodes this isn't guaranteed; if you don't see the result email, stick with the built-in `#PBS -m abe` notifications and review the log file directly. Your mileage may vary by queue and node tier.
 
 ---
 
@@ -363,10 +309,12 @@ With this script, you can set up a batch of experiments, hit submit, and let the
 
 > **Remember:** A watched pot never boils, and a watched HPC job doesn't finish any faster. But at least with proper logging, you'll know exactly when it fails spectacularly.
 
+After the job finishes, point [PBS Brew Inspector](PBS-Brew-Inspector.md) at the history to see whether you sized the resources right — that's how the next batch gets cheaper.
+
 ## :material-egg-easter: Coming Soon
 
 - A version that uses PBS job arrays (aka "batch-cooking with timers").
-- Error catching and handling — building on our "Handling Failures Gracefully" section.
-- Log file management like a pro (or at least, like someone who doesn't grep 10GB files manually).
+- Error catching and handling — building on the "Handling failures gracefully" section above.
+- Log file management like a pro (or at least, like someone who doesn't `grep` 10 GB files manually).
 - Experiment templating — for when you need to run the same experiment with different flavors (parameters).
 - Resource optimisation — making sure you're not using a sledgehammer to crack a nut.
