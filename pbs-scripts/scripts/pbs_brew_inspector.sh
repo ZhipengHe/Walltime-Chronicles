@@ -2,9 +2,9 @@
 
 ################################################################################
 # Author: Zhipeng He
-# Email: zhipeng.he@hdr.qut.edu.au
-# Last Modified: May 14, 2025
+# Email: zippo.he@qut.edu.au
 # Created Date: May 14, 2025
+# Last Modified: June 21, 2026
 #
 # This script is used to extract the details of the jobs from the PBS system.
 # It is used to understand the resource usage of the historical jobs.
@@ -165,12 +165,15 @@ for job in $jobs; do
     queue=$(echo "$output" | awk '/queue/ {print $3}')
 
     # Skip if queue doesn't match filter
+    # Queue names must match what PBS actually returns from `qstat -fx`:
+    #   cpu_batch_exec, cpu_inter_exec, gpu_batch_exec, gpu_inter_exec,
+    #   cpu_batch_exlm, cpu_inter_pers
     if [[ "$queue" == "cpu_batch_exec" && "$SHOW_CPU_BATCH" != "true" ]] || \
        [[ "$queue" == "gpu_batch_exec" && "$SHOW_GPU_BATCH" != "true" ]] || \
-       [[ "$queue" == "cpu_interactive_exec" && "$SHOW_CPU_INTER" != "true" ]] || \
-       [[ "$queue" == "gpu_interactive_exec" && "$SHOW_GPU_INTER" != "true" ]] || \
-       [[ "$queue" == "cpu_batch_large_exec" && "$SHOW_CPU_BATCH_LARGE" != "true" ]] || \
-       [[ "$queue" == "cpu_interactive_persistent_exec" && "$SHOW_CPU_INTER_PERS" != "true" ]]; then
+       [[ "$queue" == "cpu_inter_exec" && "$SHOW_CPU_INTER" != "true" ]] || \
+       [[ "$queue" == "gpu_inter_exec" && "$SHOW_GPU_INTER" != "true" ]] || \
+       [[ "$queue" == "cpu_batch_exlm" && "$SHOW_CPU_BATCH_LARGE" != "true" ]] || \
+       [[ "$queue" == "cpu_inter_pers" && "$SHOW_CPU_INTER_PERS" != "true" ]]; then
         total_jobs=$((total_jobs - 1))
         continue
     fi
