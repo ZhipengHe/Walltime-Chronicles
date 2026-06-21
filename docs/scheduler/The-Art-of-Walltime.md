@@ -468,7 +468,7 @@ Round up and add a safety margin: **walltime 24 h, queue `gpu_batch_exec`**. Com
 |---|---|
 | Hit walltime on every run | Add `#PBS -c w=N` + USR1/USR2 traps so PBS auto-resubmits |
 | Job dies with no diagnosis | Add `set -x` at the top of the script |
-| 47 h job needs 49 h | Split the work into stages with `#PBS -W depend=afterok:$JOBID` |
+| 47 h job needs 49 h | Split the work into stages with `qsub -W depend=afterok:<upstream_jobid> stage2.pbs` |
 | Many similar runs | Use a job array (`#PBS -J 1-100`) — see [eResearch — Breaking the 48hr barrier](https://docs.eres.qut.edu.au/breaking-the-48hr-barrier)[^1] |
 | Maintenance window is near | Check `time_until_outage.sh` (see [Know Your Nodes](Know-Your-Nodes.md)) before submitting a long batch |
 
