@@ -64,23 +64,38 @@ python -m pip install -r requirements.txt
 cd \${WORK_DIR}
 EOF
 
-# Add each experiment to the PBS script with a clear log banner
+# Preflight — fail fast if any experiment script is missing, so the PBS
+# script isn't generated (and never qsub'd) with broken paths.
 for exp in "${EXPERIMENTS[@]}"; do
-    echo "echo '=============================================='" >> ${PBS_SCRIPT}
-    echo "echo 'Running experiment: ${exp}'" >> ${PBS_SCRIPT}
-    echo "echo '=============================================='" >> ${PBS_SCRIPT}
-
-    echo "bash \${WORK_DIR}/scripts/${exp}" >> ${PBS_SCRIPT}
-
-    echo "echo ''" >> ${PBS_SCRIPT}
-    echo "echo '=============================================='" >> ${PBS_SCRIPT}
-    echo "echo ''" >> ${PBS_SCRIPT}
+    if [[ ! -f "scripts/${exp}" ]]; then
+        echo "Missing experiment script: scripts/${exp}" >&2
+        exit 1
+    fi
 done
 
-# Make the PBS script executable and submit
-chmod +x ${PBS_SCRIPT}
-qsub ${PBS_SCRIPT}
+# Add each experiment to the PBS script with a clear log banner
+for exp in "${EXPERIMENTS[@]}"; do
+    echo "echo '=============================================='" >> "${PBS_SCRIPT}"
+    echo "echo 'Running experiment: ${exp}'" >> "${PBS_SCRIPT}"
+    echo "echo '=============================================='" >> "${PBS_SCRIPT}"
 
-echo "Job submitted with name: ${JOB_NAME}"
+    echo "bash \${WORK_DIR}/scripts/${exp}" >> "${PBS_SCRIPT}"
+
+    echo "echo ''" >> "${PBS_SCRIPT}"
+    echo "echo '=============================================='" >> "${PBS_SCRIPT}"
+    echo "echo ''" >> "${PBS_SCRIPT}"
+done
+
+# Make the PBS script executable, submit, and capture the real PBS job id.
+# `qsub` prints e.g. "12345.aqua" on success; on failure (bad directive,
+# resource over-cap, queue closed) we want to surface that, not pretend it
+# worked.
+chmod +x "${PBS_SCRIPT}"
+job_id=$(qsub "${PBS_SCRIPT}") || {
+    echo "qsub submission failed for ${PBS_SCRIPT}" >&2
+    exit 1
+}
+
+echo "Job submitted: ${job_id} (name: ${JOB_NAME})"
 echo "You can monitor the job using: qstat -u \$USER"
 echo "Output will be saved in: ${JOB_NAME}_output.log"

@@ -135,8 +135,8 @@ Six steps to fit the recipe to your kitchen. Each tab covers one piece of the sc
     EOF
     ```
 
-    !!! info "Module versions are pinned, not current"
-        The example pins old versions (`CUDA/11.8.0`, `GCCcore/13.3.0`) that the recipe was originally tested against. The current cluster defaults are `CUDA/12.8.0` and `GCCcore/15.2.0`. Pinning is good practice — *unless* your code can use a newer toolchain, in which case `module avail CUDA` (and friends) will show what's available, and `module load CUDA` (no version) grabs the current default.
+    !!! info "Module versions are pinned, not necessarily current"
+        The example pins (`CUDA/11.8.0`, `GCCcore/13.3.0`) for reproducibility — these were the versions the recipe was first tested against, and they're known-good. Defaults on the cluster drift over time; run `module avail CUDA GCCcore` (or `module spider`) to see what's available right now, and `module load CUDA` with no version grabs whatever the environment currently exposes as default.
 
 === ":material-repeat: 5. Experiment loop"
 
