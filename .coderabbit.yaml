@@ -17,15 +17,18 @@ reviews:
   review_status: true
   collapse_walkthrough: false
 
+  # Manual reviews only — docs repo, auto-review on every PR is more noise
+  # than signal. Trigger a review by commenting `@coderabbitai review` on a PR.
+  # The block below is kept (commented) so it's easy to re-enable later.
   auto_review:
-    enabled: true
-    drafts: false
-    ignore_title_keywords:
-      - "WIP"
-      - "DO NOT MERGE"
-      - "[skip ci]"
-    base_branches:
-      - "main"
+    enabled: false
+    # drafts: false
+    # ignore_title_keywords:
+    #   - "WIP"
+    #   - "DO NOT MERGE"
+    #   - "[skip ci]"
+    # base_branches:
+    #   - "main"
 
   suggested_labels: true
 
