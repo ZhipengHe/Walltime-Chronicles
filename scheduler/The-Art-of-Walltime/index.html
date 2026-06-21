@@ -1772,6 +1772,7 @@
 <p class="admonition-title">Companion pages</p>
 <ul>
 <li><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 19h1a1 1 0 0 1 1 1h7v2h-7a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1H2v-2h7a1 1 0 0 1 1-1h1v-2H4a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-7zM4 3h16a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1m5 4h1V5H9zm0 8h1v-2H9zM5 5v2h2V5zm0 8v2h2v-2z"/></svg></span> <a href="../Know-Your-Nodes/">Know Your Nodes</a> — the hardware behind each queue (H100s, A100 MIG slices, large-mem boxes, watchdog cores).</li>
+<li><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12.5 1.5c-1.77 0-3.33 1.17-3.83 2.87C8.14 4.13 7.58 4 7 4a4 4 0 0 0-4 4 4.01 4.01 0 0 0 3 3.87V19h13v-7.13c1.76-.46 3-2.05 3-3.87a4 4 0 0 0-4-4c-.58 0-1.14.13-1.67.37-.5-1.7-2.06-2.87-3.83-2.87m-.5 9h1v7h-1zm-3 2h1v5H9zm6 0h1v5h-1zM6 20v1a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-1z"/></svg></span> <a href="../Walltime-by-Recipe/">Walltime by Recipe</a> — eight Aqua-specific PBS recipes that put this guide's math into practice.</li>
 <li><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 21.5c-1.35-.85-3.8-1.5-5.5-1.5-1.65 0-3.35.3-4.75 1.05-.1.05-.15.05-.25.05-.25 0-.5-.25-.5-.5V6c.6-.45 1.25-.75 2-1 1.11-.35 2.33-.5 3.5-.5 1.95 0 4.05.4 5.5 1.5 1.45-1.1 3.55-1.5 5.5-1.5 1.17 0 2.39.15 3.5.5.75.25 1.4.55 2 1v14.6c0 .25-.25.5-.5.5-.1 0-.15 0-.25-.05-1.4-.75-3.1-1.05-4.75-1.05-1.7 0-4.15.65-5.5 1.5M12 8v11.5c1.35-.85 3.8-1.5 5.5-1.5 1.2 0 2.4.15 3.5.5V7c-1.1-.35-2.3-.5-3.5-.5-1.7 0-4.15.65-5.5 1.5m1 3.5c1.11-.68 2.6-1 4.5-1 .91 0 1.76.09 2.5.28V9.23c-.87-.15-1.71-.23-2.5-.23q-2.655 0-4.5.84zm4.5.17c-1.71 0-3.21.26-4.5.79v1.69c1.11-.65 2.6-.99 4.5-.99 1.04 0 1.88.08 2.5.24v-1.5c-.87-.16-1.71-.23-2.5-.23m2.5 2.9c-.87-.16-1.71-.24-2.5-.24-1.83 0-3.33.27-4.5.8v1.69c1.11-.66 2.6-.99 4.5-.99 1.04 0 1.88.08 2.5.24z"/></svg></span> <a href="../../pbs-scripts/PBS-Brew-Inspector/">PBS Brew Inspector</a> — extract walltime ground truth from your own job history.</li>
 <li><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3 1 9l11 6 9-4.91V17h2V9M5 13.18v4L12 21l7-3.82v-4L12 17z"/></svg></span> QUT eResearch — <a href="https://docs.eres.qut.edu.au/hpc-queue-limits">Queues and limits</a><sup id="fnref7:1"><a class="footnote-ref" href="#fn:1">1</a></sup>, <a href="https://docs.eres.qut.edu.au/hpc-estimatingoptimising-resources-to-request-for-">Estimating/optimising resources</a><sup id="fnref8:1"><a class="footnote-ref" href="#fn:1">1</a></sup>, <a href="https://docs.eres.qut.edu.au/breaking-the-48hr-barrier">Running jobs longer than 48 hours</a><sup id="fnref9:1"><a class="footnote-ref" href="#fn:1">1</a></sup>, <a href="https://docs.eres.qut.edu.au/checkpointing">Checkpointing</a><sup id="fnref10:1"><a class="footnote-ref" href="#fn:1">1</a></sup>.</li>
 </ul>
@@ -1908,7 +1909,7 @@
 </tr>
 <tr>
 <td><code>cpu_batch_exlm</code></td>
-<td>4</td>
+<td>100</td>
 <td>180</td>
 <td>6015 GB</td>
 <td>–</td>
@@ -2001,6 +2002,10 @@
 <hr />
 <h2 id="walltime-recipes"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12.5 1.5c-1.77 0-3.33 1.17-3.83 2.87C8.14 4.13 7.58 4 7 4a4 4 0 0 0-4 4 4.01 4.01 0 0 0 3 3.87V19h13v-7.13c1.76-.46 3-2.05 3-3.87a4 4 0 0 0-4-4c-.58 0-1.14.13-1.67.37-.5-1.7-2.06-2.87-3.83-2.87m-.5 9h1v7h-1zm-3 2h1v5H9zm6 0h1v5h-1zM6 20v1a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-1z"/></svg></span> Walltime Recipes</h2>
 <p>Pick the closest profile to your job and copy-paste. All recipes assume you've already read <a href="../Know-Your-Nodes/">Know Your Nodes</a> so you know which hardware you're landing on.</p>
+<div class="admonition tip">
+<p class="admonition-title">Want the full worked-example treatment?</p>
+<p>These five recipes are deliberately short — pick one, tweak walltime/cores/GPUs to taste. For eight longer worked examples with scaling math, full PBS scripts (preamble, checkpoint traps, dependency chains) and live-validated resource shapes, see <a href="../Walltime-by-Recipe/">Walltime by Recipe</a>.</p>
+</div>
 <pre class="mermaid"><code>flowchart TD
     Start([Need a walltime number]) --&gt; Hist{Similar job in history?}
     Hist --&gt;|yes| Brew[Read pbs_brew_inspector.sh&lt;br/&gt;or qstat -fx]
@@ -2342,6 +2347,7 @@
 <p>Deterministic estimate: <span class="arithmatex">\(2\text{ h} \times 7.1 = 14.2 \text{ h}\)</span>.</p>
 <p>Apply the 1.5× convergence buffer: <span class="arithmatex">\(14.2 \times 1.5 \approx 21.3 \text{ h}\)</span>.</p>
 <p>Round up and add a safety margin: <strong>walltime 24 h, queue <code>gpu_batch_exec</code></strong>. Comfortably inside the 48 h cap with room to spare. Drop <code>#PBS -c w=60</code> if you want PBS to auto-resubmit on the off chance you blew the estimate.</p>
+<p>For more worked examples — heavy CPU MPI, LargeMem above 1.5 TB, multi-H100 at the 8-GPU ceiling, A100 fallback, MIG sanity check, and chained jobs that bypass the 48 h cap — see <a href="../Walltime-by-Recipe/">Walltime by Recipe</a>.</p>
 <hr />
 <h2 id="warning-signs-and-troubleshooting"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11 15h2v2h-2zm0-8h2v6h-2zm1-5C6.47 2 2 6.5 2 12a10 10 0 0 0 10 10 10 10 0 0 0 10-10A10 10 0 0 0 12 2m0 18a8 8 0 0 1-8-8 8 8 0 0 1 8-8 8 8 0 0 1 8 8 8 8 0 0 1-8 8"/></svg></span> Warning Signs and Troubleshooting</h2>
 <h3 id="walltime-sins-and-their-punishments">Walltime sins and their punishments</h3>
@@ -2472,7 +2478,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="June 21, 2026 22:06:19 AEST">June 21, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="June 22, 2026 01:30:01 AEST">June 22, 2026</span>
   </span>
 
     
