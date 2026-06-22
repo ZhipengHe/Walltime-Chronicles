@@ -101,7 +101,6 @@ nav:
   - "~/welcome": index.md
   - "Crash Course Café":
     - tutorials/index.md
-    - "Getting Started": tutorials/get-start.md
     - "Prerequisites Checklist": tutorials/prerequisites.md
     - "Lesson 0: HPC Fundamentals": tutorials/lesson-0.md
     - "Lesson 1: Environment Setup & First Interactive Session": tutorials/lesson-1.md
