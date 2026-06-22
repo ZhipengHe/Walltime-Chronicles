@@ -26,6 +26,7 @@ theme:
     - navigation.path
     - navigation.top
     - navigation.expand
+    - navigation.indexes
     - content.action.view
     - content.action.edit
     - content.code.copy
@@ -99,19 +100,23 @@ extra_css:
 nav:
   - "~/welcome": index.md
   - "Crash Course Café":
+    - tutorials/index.md
     - "Getting Started": tutorials/get-start.md
     - "Prerequisites Checklist": tutorials/prerequisites.md
     - "Lesson 0: HPC Fundamentals": tutorials/lesson-0.md
     - "Lesson 1: Environment Setup & First Interactive Session": tutorials/lesson-1.md
 
   - "Cmd+Opt+Remote":
+    - remote-dev/index.md
     - "Surviving without VS Code Remote SSH": remote-dev/Surviving-without-VS-Code-Remote-SSH.md
     - "The .DS_Store Strikes Back: Finder Edition": remote-dev/The-DS_Store-Strikes-Back.md
   - "The Scheduler's Gambit":
+    - scheduler/index.md
     - "Know Your Nodes": scheduler/Know-Your-Nodes.md
     - "Guess, Request, Regret: The Art of Walltime": scheduler/The-Art-of-Walltime.md
     - "Walltime by Recipe: Worked Examples for Aqua": scheduler/Walltime-by-Recipe.md
   - "PBS Cookbook":
+    - pbs-scripts/index.md
     - "Batch-Cooking PBS Scripts with a Bash Pan": pbs-scripts/Batch-Cooking-PBS-Scripts-with-a-Bash-Pan.md
     - "PBS Brew Inspector: Tasting Notes from Your Job History": pbs-scripts/PBS-Brew-Inspector.md
   - License: LICENSE.md
