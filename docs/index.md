@@ -14,7 +14,7 @@ If you have ever:
 Then this is the right place.
 
 !!! tip "Crash Course Café — opinionated onboarding for newcomers"
-    Lessons 0 and 1 of the [Crash Course Café](tutorials/get-start.md) are now shipped — prerequisites checklist, HPC fundamentals, and your first interactive session. More lessons land as I write them; no promises on completion dates.
+    Lessons 0 and 1 of the [Crash Course Café](tutorials/index.md) are now shipped — prerequisites checklist, HPC fundamentals, and your first interactive session. More lessons land as I write them; no promises on completion dates.
 
 ---
 
@@ -31,7 +31,7 @@ Pick your entry point. Each card is one shipped page.
 
     Start with the prerequisites checklist, then walk through HPC fundamentals (L0) and your first interactive session (L1).
 
-    [:octicons-arrow-right-24: Crash Course Café](tutorials/get-start.md)
+    [:octicons-arrow-right-24: Crash Course Café](tutorials/index.md)
 
 - :material-server-network: **Picking hardware?**
 
