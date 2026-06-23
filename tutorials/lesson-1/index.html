@@ -15,10 +15,10 @@
         <link rel="canonical" href="https://zhipenghe.me/walltime-chronicles/tutorials/lesson-1/">
       
       
-        <link rel="prev" href="../lesson-0/">
+        <link rel="prev" href="../prerequisites/">
       
       
-        <link rel="next" href="../../remote-dev/">
+        <link rel="next" href="../lesson-2/">
       
       
         
@@ -29,7 +29,7 @@
     
     
       
-        <title>Lesson 1: Environment Setup & First Interactive Session - Walltime Chronicles</title>
+        <title>Lesson 1: HPC Fundamentals - Walltime Chronicles</title>
       
     
     
@@ -62,7 +62,7 @@
     
   
 <meta property="og:type" content="website" />
-<meta property="og:title" content="Lesson 1: Environment Setup & First Interactive Session - Walltime Chronicles" />
+<meta property="og:title" content="Lesson 1: HPC Fundamentals - Walltime Chronicles" />
 <meta property="og:description" content="My personal survival log of mysterious errors, queueing oddities, and PBS quirks encountered on QUT Aqua" />
 <meta property="og:image" content="https://zhipenghe.me/walltime-chronicles/assets/images/social/tutorials/lesson-1.png" />
 <meta property="og:image:type" content="image/png" />
@@ -70,7 +70,7 @@
 <meta property="og:image:height" content="630" />
 <meta property="og:url" content="https://zhipenghe.me/walltime-chronicles/tutorials/lesson-1/" />
 <meta property="twitter:card" content="summary_large_image" />
-<meta property="twitter:title" content="Lesson 1: Environment Setup & First Interactive Session - Walltime Chronicles" />
+<meta property="twitter:title" content="Lesson 1: HPC Fundamentals - Walltime Chronicles" />
 <meta property="twitter:description" content="My personal survival log of mysterious errors, queueing oddities, and PBS quirks encountered on QUT Aqua" />
 <meta property="twitter:image" content="https://zhipenghe.me/walltime-chronicles/assets/images/social/tutorials/lesson-1.png" />
 </head>
@@ -85,7 +85,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#lesson-1-environment-setup-first-interactive-session" class="md-skip">
+        <a href="#lesson-1-hpc-fundamentals" class="md-skip">
           Skip to content
         </a>
       
@@ -121,7 +121,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Lesson 1: Environment Setup & First Interactive Session
+              Lesson 1: HPC Fundamentals
             
           </span>
         </div>
@@ -289,6 +289,16 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -370,34 +380,6 @@
                 
   
   
-  
-  
-    <li class="md-nav__item">
-      <a href="../lesson-0/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Lesson 0: HPC Fundamentals
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
     
   
   
@@ -417,7 +399,7 @@
   <span class="md-ellipsis">
     
   
-    Lesson 1: Environment Setup & First Interactive Session
+    Lesson 1: HPC Fundamentals
   
 
     
@@ -435,7 +417,7 @@
   <span class="md-ellipsis">
     
   
-    Lesson 1: Environment Setup & First Interactive Session
+    Lesson 1: HPC Fundamentals
   
 
     
@@ -472,34 +454,34 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#part-1-python-environment-setup-8-minutes" class="md-nav__link">
+  <a href="#part-1-understanding-qut-aqua-architecture-7-minutes" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Part 1: Python Environment Setup (8 minutes)
+        🏗️ Part 1: Understanding QUT Aqua Architecture (7 minutes)
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Part 1: Python Environment Setup (8 minutes)">
+    <nav class="md-nav" aria-label="🏗️ Part 1: Understanding QUT Aqua Architecture (7 minutes)">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#installing-miniconda-5-minutes" class="md-nav__link">
+  <a href="#scale-comparison-personal-to-supercomputing" class="md-nav__link">
     <span class="md-ellipsis">
       
-        🐍 Installing Miniconda (5 minutes)
+        Scale Comparison: Personal to Supercomputing
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="🐍 Installing Miniconda (5 minutes)">
+    <nav class="md-nav" aria-label="Scale Comparison: Personal to Supercomputing">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#why-miniconda-on-hpc" class="md-nav__link">
+  <a href="#your-laptop" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Why Miniconda on HPC?
+        Your Laptop
       
     </span>
   </a>
@@ -507,10 +489,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#installation-steps" class="md-nav__link">
+  <a href="#a-compute-node" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Installation Steps
+        A Compute Node
       
     </span>
   </a>
@@ -518,10 +500,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#quick-environment-test" class="md-nav__link">
+  <a href="#qut-aqua-the-complete-infrastructure" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Quick Environment Test
+        QUT Aqua: The Complete Infrastructure
       
     </span>
   </a>
@@ -534,63 +516,13 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#installing-uv-3-minutes" class="md-nav__link">
+  <a href="#file-systems" class="md-nav__link">
     <span class="md-ellipsis">
       
-        ⚡ Installing UV (3 minutes)
+        File Systems
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="⚡ Installing UV (3 minutes)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#why-uv" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Why UV?
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#installation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Installation
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#verify-installation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Verify Installation
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#quick-test-drive" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Quick Test Drive
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
         
@@ -600,22 +532,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#part-2-your-first-interactive-session-7-minutes" class="md-nav__link">
+  <a href="#part-2-what-pbs-actually-does-for-you-8-minutes" class="md-nav__link">
     <span class="md-ellipsis">
       
-        🖥️ Part 2: Your First Interactive Session (7 minutes)
+        🧠 Part 2: What PBS Actually Does for You (8 minutes)
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="🖥️ Part 2: Your First Interactive Session (7 minutes)">
+    <nav class="md-nav" aria-label="🧠 Part 2: What PBS Actually Does for You (8 minutes)">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#understanding-the-architecture" class="md-nav__link">
+  <a href="#the-problem-pbs-solves" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Understanding the Architecture
+        The Problem PBS Solves
       
     </span>
   </a>
@@ -623,10 +555,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#starting-an-interactive-session" class="md-nav__link">
+  <a href="#pbs-your-digital-resource-manager" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Starting an Interactive Session
+        PBS: Your Digital Resource Manager
       
     </span>
   </a>
@@ -634,10 +566,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#what-happens-next" class="md-nav__link">
+  <a href="#how-pbs-works" class="md-nav__link">
     <span class="md-ellipsis">
       
-        What Happens Next
+        How PBS Works?
       
     </span>
   </a>
@@ -645,10 +577,22 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#testing-your-new-environment" class="md-nav__link">
+  <a href="#types-of-pbs-jobs-youll-use" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Testing Your New Environment
+        Types of PBS Jobs You'll Use
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Types of PBS Jobs You&#39;ll Use">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#interactive-jobs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Interactive Jobs
       
     </span>
   </a>
@@ -656,10 +600,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#quick-python-environment-test" class="md-nav__link">
+  <a href="#batch-jobs" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Quick Python Environment Test
+        Batch Jobs
       
     </span>
   </a>
@@ -667,21 +611,26 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#understanding-resource-usage" class="md-nav__link">
+  <a href="#job-arrays" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Understanding Resource Usage
+        Job Arrays
       
     </span>
   </a>
   
 </li>
         
+      </ul>
+    </nav>
+  
+</li>
+        
           <li class="md-nav__item">
-  <a href="#ending-your-interactive-session" class="md-nav__link">
+  <a href="#why-job-scheduling-exists" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Ending Your Interactive Session
+        Why Job Scheduling Exists?
       
     </span>
   </a>
@@ -715,21 +664,178 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#quick-reference" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        📝 Quick Reference
-      
-    </span>
-  </a>
-  
-</li>
-      
     </ul>
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lesson-2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 2: Environment Setup & First Interactive Session
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lesson-3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 3: Your First Batch Job
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lesson-4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 4: When Jobs Fail
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lesson-5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 5: Right-sizing Requests
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lesson-6/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 6: Job Arrays
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lesson-7/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 7: Long Jobs — Dependencies & Checkpointing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -1230,34 +1336,34 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#part-1-python-environment-setup-8-minutes" class="md-nav__link">
+  <a href="#part-1-understanding-qut-aqua-architecture-7-minutes" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Part 1: Python Environment Setup (8 minutes)
+        🏗️ Part 1: Understanding QUT Aqua Architecture (7 minutes)
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Part 1: Python Environment Setup (8 minutes)">
+    <nav class="md-nav" aria-label="🏗️ Part 1: Understanding QUT Aqua Architecture (7 minutes)">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#installing-miniconda-5-minutes" class="md-nav__link">
+  <a href="#scale-comparison-personal-to-supercomputing" class="md-nav__link">
     <span class="md-ellipsis">
       
-        🐍 Installing Miniconda (5 minutes)
+        Scale Comparison: Personal to Supercomputing
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="🐍 Installing Miniconda (5 minutes)">
+    <nav class="md-nav" aria-label="Scale Comparison: Personal to Supercomputing">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#why-miniconda-on-hpc" class="md-nav__link">
+  <a href="#your-laptop" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Why Miniconda on HPC?
+        Your Laptop
       
     </span>
   </a>
@@ -1265,10 +1371,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#installation-steps" class="md-nav__link">
+  <a href="#a-compute-node" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Installation Steps
+        A Compute Node
       
     </span>
   </a>
@@ -1276,10 +1382,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#quick-environment-test" class="md-nav__link">
+  <a href="#qut-aqua-the-complete-infrastructure" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Quick Environment Test
+        QUT Aqua: The Complete Infrastructure
       
     </span>
   </a>
@@ -1292,63 +1398,13 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#installing-uv-3-minutes" class="md-nav__link">
+  <a href="#file-systems" class="md-nav__link">
     <span class="md-ellipsis">
       
-        ⚡ Installing UV (3 minutes)
+        File Systems
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="⚡ Installing UV (3 minutes)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#why-uv" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Why UV?
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#installation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Installation
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#verify-installation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Verify Installation
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#quick-test-drive" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Quick Test Drive
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
         
@@ -1358,22 +1414,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#part-2-your-first-interactive-session-7-minutes" class="md-nav__link">
+  <a href="#part-2-what-pbs-actually-does-for-you-8-minutes" class="md-nav__link">
     <span class="md-ellipsis">
       
-        🖥️ Part 2: Your First Interactive Session (7 minutes)
+        🧠 Part 2: What PBS Actually Does for You (8 minutes)
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="🖥️ Part 2: Your First Interactive Session (7 minutes)">
+    <nav class="md-nav" aria-label="🧠 Part 2: What PBS Actually Does for You (8 minutes)">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#understanding-the-architecture" class="md-nav__link">
+  <a href="#the-problem-pbs-solves" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Understanding the Architecture
+        The Problem PBS Solves
       
     </span>
   </a>
@@ -1381,10 +1437,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#starting-an-interactive-session" class="md-nav__link">
+  <a href="#pbs-your-digital-resource-manager" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Starting an Interactive Session
+        PBS: Your Digital Resource Manager
       
     </span>
   </a>
@@ -1392,10 +1448,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#what-happens-next" class="md-nav__link">
+  <a href="#how-pbs-works" class="md-nav__link">
     <span class="md-ellipsis">
       
-        What Happens Next
+        How PBS Works?
       
     </span>
   </a>
@@ -1403,10 +1459,22 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#testing-your-new-environment" class="md-nav__link">
+  <a href="#types-of-pbs-jobs-youll-use" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Testing Your New Environment
+        Types of PBS Jobs You'll Use
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Types of PBS Jobs You&#39;ll Use">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#interactive-jobs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Interactive Jobs
       
     </span>
   </a>
@@ -1414,10 +1482,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#quick-python-environment-test" class="md-nav__link">
+  <a href="#batch-jobs" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Quick Python Environment Test
+        Batch Jobs
       
     </span>
   </a>
@@ -1425,21 +1493,26 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#understanding-resource-usage" class="md-nav__link">
+  <a href="#job-arrays" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Understanding Resource Usage
+        Job Arrays
       
     </span>
   </a>
   
 </li>
         
+      </ul>
+    </nav>
+  
+</li>
+        
           <li class="md-nav__item">
-  <a href="#ending-your-interactive-session" class="md-nav__link">
+  <a href="#why-job-scheduling-exists" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Ending Your Interactive Session
+        Why Job Scheduling Exists?
       
     </span>
   </a>
@@ -1467,17 +1540,6 @@
     <span class="md-ellipsis">
       
         🔗 What's Next?
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#quick-reference" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        📝 Quick Reference
       
     </span>
   </a>
@@ -1565,397 +1627,376 @@
   
 
 
-<h1 id="lesson-1-environment-setup-first-interactive-session">Lesson 1: Environment Setup &amp; First Interactive Session</h1>
+<h1 id="lesson-1-hpc-fundamentals">Lesson 1: HPC Fundamentals</h1>
+<div class="admonition info">
+<p class="admonition-title">Pre-rewrite content — restructure in progress</p>
+<p>This page contains the previous <strong>Lesson 0</strong> material. The course is migrating to a 7-lesson workflow-driven outline; this lesson will be rewritten as <strong>Lesson 1: Welcome to Aqua</strong> in an upcoming release — keeping the concept overview but adding a hands-on first SSH connection + 5-minute interactive job at the end. The current content remains accurate; only the structure is changing. See the <a href="../">course outline</a> for the full plan.</p>
+</div>
 <div class="admonition quote">
 <p class="admonition-title">Mission Statement</p>
-<p><em>"Getting your tools ready and taking the cluster for a test drive"</em> 🚗💨</p>
+<p><em>"What is this magical compute cluster anyway?"</em> 🏗️✨</p>
 </div>
-<p>Welcome to your first hands-on lesson! Think of this as setting up your workshop before building anything. We'll get your Python environment sorted, install some essential tools, and take QUT Aqua for a test drive with an interactive session.</p>
+<p>Welcome to your introduction to High-Performance Computing! Before we start submitting jobs and using compute resources, let's understand what we're actually working with. Think of this as getting to know the neighborhood before you start visiting.</p>
 <h2 id="what-youll-accomplish">📋 What You'll Accomplish</h2>
 <p>By the end of this 15-minute lesson, you'll have:</p>
 <ul class="task-list">
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>Python environment setup</strong> - Miniconda or UV installed</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>First interactive session running</strong> - Actually using compute resources</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>Clear understanding</strong> of login vs compute nodes</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>HPC architecture understanding</strong> - from your laptop to QUT Aqua infrastructure</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>File systems knowledge</strong> - where to store different types of data</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>PBS job types mastery</strong> - interactive, batch, and array jobs</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>Resource request basics</strong> - cores, memory, walltime, and hardware IDs</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>Job scheduling context</strong> - why PBS exists and its benefits</li>
 </ul>
 <div class="admonition tip">
-<p class="admonition-title">Open Your Favourite Terminal Simulator!</p>
-<p>Keep a terminal window open to QUT Aqua throughout this lesson. You'll be running commands as we go!</p>
+<p class="admonition-title">Keep It Conceptual</p>
+<p>This lesson is all about understanding - no commands to run yet! We're building the mental model you'll need for everything that follows.</p>
 </div>
 <hr />
-<h2 id="part-1-python-environment-setup-8-minutes"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.25.18.9.2.73.26.59.3.45.32.34.34.25.34.16.33.1.3.04.26.02.2-.01.13V8.5l-.05.63-.13.55-.21.46-.26.38-.3.31-.33.25-.35.19-.35.14-.33.1-.3.07-.26.04-.21.02H8.77l-.69.05-.59.14-.5.22-.41.27-.33.32-.27.35-.2.36-.15.37-.1.35-.07.32-.04.27-.02.21v3.06H3.17l-.21-.03-.28-.07-.32-.12-.35-.18-.36-.26-.36-.36-.35-.46-.32-.59-.28-.73-.21-.88-.14-1.05-.05-1.23.06-1.22.16-1.04.24-.87.32-.71.36-.57.4-.44.42-.33.42-.24.4-.16.36-.1.32-.05.24-.01h.16l.06.01h8.16v-.83H6.18l-.01-2.75-.02-.37.05-.34.11-.31.17-.28.25-.26.31-.23.38-.2.44-.18.51-.15.58-.12.64-.1.71-.06.77-.04.84-.02 1.27.05zm-6.3 1.98-.23.33-.08.41.08.41.23.34.33.22.41.09.41-.09.33-.22.23-.34.08-.41-.08-.41-.23-.33-.33-.22-.41-.09-.41.09zm13.09 3.95.28.06.32.12.35.18.36.27.36.35.35.47.32.59.28.73.21.88.14 1.04.05 1.23-.06 1.23-.16 1.04-.24.86-.32.71-.36.57-.4.45-.42.33-.42.24-.4.16-.36.09-.32.05-.24.02-.16-.01h-8.22v.82h5.84l.01 2.76.02.36-.05.34-.11.31-.17.29-.25.25-.31.24-.38.2-.44.17-.51.15-.58.13-.64.09-.71.07-.77.04-.84.01-1.27-.04-1.07-.14-.9-.2-.73-.25-.59-.3-.45-.33-.34-.34-.25-.34-.16-.33-.1-.3-.04-.25-.02-.2.01-.13v-5.34l.05-.64.13-.54.21-.46.26-.38.3-.32.33-.24.35-.2.35-.14.33-.1.3-.06.26-.04.21-.02.13-.01h5.84l.69-.05.59-.14.5-.21.41-.28.33-.32.27-.35.2-.36.15-.36.1-.35.07-.32.04-.28.02-.21V6.07h2.09l.14.01zm-6.47 14.25-.23.33-.08.41.08.41.23.33.33.23.41.08.41-.08.33-.23.23-.33.08-.41-.08-.41-.23-.33-.33-.23-.41-.08-.41.08z"/></svg></span> Part 1: Python Environment Setup (8 minutes)</h2>
-<div class="admonition tip">
-<p class="admonition-title">Choose Your Path</p>
-<p>You can use either <strong>Miniconda</strong> OR <strong>UV</strong> for Python environment management. Both are excellent choices --
- pick the one that appeals to you! Learning one is perfectly sufficient for HPC work.</p>
-</div>
-<h3 id="installing-miniconda-5-minutes">🐍 Installing Miniconda (5 minutes)</h3>
-<p>Miniconda is your Python environment lifesaver on HPC systems. No more "it works on my laptop" nightmares!</p>
-<h4 id="why-miniconda-on-hpc">Why Miniconda on HPC?</h4>
+<h2 id="part-1-understanding-qut-aqua-architecture-7-minutes">🏗️ Part 1: Understanding QUT Aqua Architecture (7 minutes)</h2>
 <div class="admonition info">
-<p class="admonition-title">The Problem</p>
-<p>HPC Python requires you to load modules before use, which can be cumbersome for development. Miniconda gives you:</p>
+<p class="admonition-title">What Is a Compute Cluster?</p>
+<p>A compute cluster is like a <strong>digital apartment building</strong> full of powerful computers, all connected and working together under one management system.</p>
+</div>
+<h3 id="scale-comparison-personal-to-supercomputing">Scale Comparison: Personal to Supercomputing</h3>
+<h4 id="your-laptop">Your Laptop</h4>
+<p>This is what you're working with right now - a single computer with limited resources:</p>
+<pre class="mermaid"><code>graph TB
+    A[Your Laptop] --&gt; B[1 CPU]
+    B --&gt; C[4-8 cores]
+    B --&gt; D[8-64 GB RAM]
+    A --&gt; F[1 GPU]
+    A --&gt; E[1 storage drive]
+
+    style A fill:#e1f5fe</code></pre>
+<h4 id="a-compute-node">A Compute Node</h4>
+<p>Now imagine scaling up to a single node in the HPC cluster - much more powerful hardware in one machine:</p>
+<pre class="mermaid"><code>graph TB
+    A[Compute Node] --&gt; B[2-4 CPUs]
+    B --&gt; C[24-128 cores total]
+    B --&gt; D[128-512 GB RAM]
+    A --&gt; G[1-4 GPUs]
+    A --&gt; E[Local storage]
+    A --&gt; F[Network storage access]
+
+
+    style A fill:#fff3e0</code></pre>
+<h4 id="qut-aqua-the-complete-infrastructure">QUT Aqua: The Complete Infrastructure</h4>
+<p>Finally, here's how hundreds of these powerful nodes work together as a complete system:</p>
+<pre class="mermaid"><code>graph TD
+    subgraph "External Access"
+        Client[Your Laptop]
+        Internet[Internet/VPN]
+    end
+
+    subgraph "Management Layer"
+        Login[Login Nodes]
+        JobScheduler[PBS Job Scheduler]
+    end
+
+    subgraph "Compute Resources"
+        CPUNodes[CPU Nodes&lt;br/&gt;AMD EPYC cores]
+        GPUNodes[GPU Nodes&lt;br/&gt;H100/A100 cards]
+        MemNodes[High-Memory Nodes&lt;br/&gt;Up to 6TB RAM]
+    end
+
+    subgraph "File Systems"
+        Home[Home Storage&lt;br/&gt;Personal workspace]
+        Scratch[Scratch Storage&lt;br/&gt;High-performance]
+        Work[Work Storage&lt;br/&gt;Project data]
+    end
+
+    subgraph "Network"
+        IB[InfiniBand Network&lt;br/&gt;200-400 Gbit/s]
+    end
+
+    Client --&gt; Internet
+    Internet --&gt; Login
+    Login --&gt; JobScheduler
+    JobScheduler --&gt; CPUNodes
+    JobScheduler --&gt; GPUNodes
+    JobScheduler --&gt; MemNodes
+
+    CPUNodes --&gt; IB
+    GPUNodes --&gt; IB
+    MemNodes --&gt; IB
+    IB --&gt; Home
+    IB --&gt; Scratch
+    IB --&gt; Work
+
+    style Client fill:#e1f5fe
+    style Login fill:#fff3e0
+    style CPUNodes fill:#f3e5f5
+    style GPUNodes fill:#e8f5e8
+    style MemNodes fill:#fce4ec</code></pre>
+<div class="admonition info">
+<p class="admonition-title">QUT Aqua Specifications</p>
 <ul>
-<li><strong>Full control</strong> over Python versions</li>
-<li><strong>Isolated environments</strong> for different projects</li>
-<li><strong>No permission headaches</strong> when installing packages</li>
+<li><strong>70+ compute nodes</strong> with different capabilities</li>
+<li><strong>10,000+ CPU cores</strong> across the cluster</li>
+<li><strong>100+ GPU cards</strong> (H100, A100) for AI/ML workloads</li>
+<li><strong>High-speed InfiniBand</strong> interconnect for parallel jobs</li>
+<li><strong>Petabyte-scale storage</strong> accessible from all nodes</li>
 </ul>
+<p>For detailed hardware specifications, see <a href="https://docs.eres.qut.edu.au/about-aqua#hardware">QUT eResearch Aqua Hardware Documentation</a><sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup>.</p>
 </div>
-<h4 id="installation-steps">Installation Steps</h4>
-<div class="admonition tip">
-<p class="admonition-title">Shortcut: use the QUT-provided Miniconda module instead</p>
-<p>If you don't need a specific Miniconda version, QUT eResearch already ships one. You can skip the install-yourself steps below and just:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>module<span class="w"> </span>load<span class="w"> </span>Miniconda3/24.9.2-0
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>conda<span class="w"> </span>init
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nb">source</span><span class="w"> </span>~/.bashrc
-</span></code></pre></div>
-<p>Verify with <code>conda --version</code>. An <code>Anaconda3/2024.02-1</code> module is also available if you want the full Anaconda distribution. See <a href="https://docs.eres.qut.edu.au/hpc-conda-package-and-environment-manager">QUT eResearch — Conda package and environment manager</a><sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> for details.</p>
-</div>
+<h3 id="file-systems">File Systems</h3>
 <div class="admonition info">
-<p class="admonition-title">Want to install Miniconda yourself? Follow QUT's official steps</p>
-<p>For the install-yourself path, see <a href="https://docs.eres.qut.edu.au/hpc-accessing-available-software#install-conda">Accessing available software — Install Conda</a> from QUT eResearch<sup id="fnref2:1"><a class="footnote-ref" href="#fn:1">1</a></sup>. The steps below mirror that guide.</p>
+<p class="admonition-title">Complete Documentation</p>
+<p>For detailed filesystem specifications, quotas, and usage guidelines, see <a href="https://docs.eres.qut.edu.au/hpc-filesystem#summary-of-important-filesystems-mounted-on-aqua">QUT eResearch Filesystem Documentation</a><sup id="fnref2:1"><a class="footnote-ref" href="#fn:1">1</a></sup>.</p>
 </div>
-<ol>
-<li>
-<p><strong>Download the installer</strong> (from your home directory):</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nb">cd</span><span class="w"> </span>~
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="c1"># create the directory if it doesn&#39;t exist</span>
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>~/miniconda3
-</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1"># download the installer and rename it to miniconda.sh</span>
-</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>wget<span class="w"> </span>https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh<span class="w"> </span>-O<span class="w"> </span>~/miniconda3/miniconda.sh
+<p>Files on Aqua are stored in different locations depending on their purpose and access requirements:</p>
+<p><strong>Home Directory (<code>/home/$USER</code> or <code>~</code>):</strong></p>
+<ul>
+<li><strong>Your personal workspace</strong> - only you can access it</li>
+<li><strong>Lustre filesystem</strong> - reliable storage with good performance</li>
+<li><strong>Regularly backed up</strong> - safe for important files</li>
+<li><strong>Use for</strong>: Scripts, configuration files, small personal data</li>
+<li><strong>Created automatically</strong> when you first log in</li>
+</ul>
+<p><strong>Scratch Storage (<code>/scratch</code>):</strong></p>
+<ul>
+<li><strong>High-performance temporary workspace</strong> for active computations</li>
+<li><strong>Weka filesystem</strong> - extremely fast I/O (17 million IOPS, 500GB/s)</li>
+<li><strong>Not backed up</strong> - data can be lost!</li>
+<li><strong>Cleaned automatically</strong> - files deleted if inactive after 30 days</li>
+<li><strong>Use for</strong>: Large datasets during analysis, temporary job files</li>
+<li><strong>Create project folders</strong>: <code>mkdir -p /scratch/$USER/project_name</code></li>
+</ul>
+<p><strong>Work Storage (<code>/work</code>):</strong></p>
+<ul>
+<li><strong>Shared project storage</strong> for research groups</li>
+<li><strong>Lustre filesystem</strong> - reliable and backed up</li>
+<li><strong>Request via eResearch ticket</strong> - not automatically available</li>
+<li><strong>Use for</strong>: Long-term research data, shared datasets</li>
+</ul>
+<p><strong>Temporary Storage (<code>$TMPDIR</code>):</strong></p>
+<ul>
+<li><strong>Job-specific fast storage</strong> - only available during job execution</li>
+<li><strong>Weka filesystem</strong> - ultra-fast for temporary files</li>
+<li><strong>Automatically cleaned</strong> when job finishes</li>
+<li><strong>Use for</strong>: Intermediate calculations, temporary outputs</li>
+</ul>
+<div class="admonition tip">
+<p class="admonition-title">File system best practice: avoid millions of small files in <code>/home</code></p>
+<p>The Lustre-backed <code>/home/$USER</code> filesystem slows down when a single user accumulates millions of small files. QUT eResearch asks users to keep file counts in home reasonable, and to archive folders that aren't in active use<sup id="fnref3:1"><a class="footnote-ref" href="#fn:1">1</a></sup>.</p>
+<p><strong>If a workflow generates many small files</strong> (extracting large archives, compiling software with many intermediates, large dependency installs), prefer either of:</p>
+<ul>
+<li><strong>Run it on <code>/scratch</code></strong> and copy the finished output back to <code>/home</code>:</li>
+</ul>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>/scratch/<span class="nv">$USER</span>/project_work
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nb">cd</span><span class="w"> </span>/scratch/<span class="nv">$USER</span>/project_work
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c1"># ... do the build / extract here ...</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>cp<span class="w"> </span>-r<span class="w"> </span>&lt;results&gt;<span class="w"> </span>~/<span class="w">                  </span><span class="c1"># back to home when done</span>
 </span></code></pre></div>
-</li>
-<li>
-<p><strong>Run the installer</strong>:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># run the installer</span>
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="c1"># batch mode &quot;-b&quot;</span>
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="c1"># update &quot;-u&quot;</span>
-</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="c1"># install to ~/miniconda3 &quot;-p&quot;</span>
-</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>bash<span class="w"> </span>~/miniconda3/miniconda.sh<span class="w"> </span>-b<span class="w"> </span>-u<span class="w"> </span>-p<span class="w"> </span>~/miniconda3
-</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="c1"># remove the installer</span>
-</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>rm<span class="w"> </span>~/miniconda3/miniconda.sh
-</span></code></pre></div>
-</li>
-<li>
-<p><strong>Activate the Base Environment</strong>:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># activate the base environment</span>
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nb">source</span><span class="w"> </span>~/miniconda3/bin/activate
-</span></code></pre></div>
-<div class="admonition example">
-<p class="admonition-title">Installation Prompts</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>Do you accept the license terms? [yes|no] → yes
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>Miniconda3 will now be installed into this location:
-</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>/home/your-username/miniconda3 → Press ENTER
-</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>Do you wish the installer to initialize Miniconda3? → yes
-</span></code></pre></div>
-</div>
-</li>
-<li>
-<p><strong>Activate the installation</strong>:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nb">source</span><span class="w"> </span>~/.bashrc
-</span></code></pre></div>
-</li>
-<li>
-<p><strong>Verify it worked</strong>:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>conda<span class="w"> </span>--version
-</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>which<span class="w"> </span>python
-</span></code></pre></div>
-<div class="admonition success">
-<p class="admonition-title">Expected Output</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>conda 25.x  # whatever the latest installer ships
-</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>/home/your-username/miniconda3/bin/python
-</span></code></pre></div>
-</div>
-</li>
-</ol>
-<h4 id="quick-environment-test">Quick Environment Test</h4>
-<p>Create a test environment to make sure everything works:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>test-env<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.11<span class="w"> </span>-y
-</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>conda<span class="w"> </span>activate<span class="w"> </span>test-env
-</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>python<span class="w"> </span>--version
-</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>conda<span class="w"> </span>deactivate
+<ul>
+<li><strong>Archive completed folders</strong> with <code>tar</code> once you're finished with them:</li>
+</ul>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>tar<span class="w"> </span>-cvf<span class="w"> </span>&lt;foldername&gt;.tar<span class="w"> </span>&lt;foldername&gt;
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>rm<span class="w"> </span>-rf<span class="w"> </span>&lt;foldername&gt;
 </span></code></pre></div>
 <div class="admonition warning">
-<p class="admonition-title">Troubleshooting</p>
-<p>If <code>conda</code> command isn't found after installation:
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;/home/</span><span class="nv">$USER</span><span class="s2">/miniconda3/bin:</span><span class="nv">$PATH</span><span class="s2">&quot;</span>
-</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;export PATH=&quot;/home/$USER/miniconda3/bin:$PATH&quot;&#39;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>~/.bashrc
-</span></code></pre></div></p>
+<p class="admonition-title">Warning</p>
+<p><code>/scratch</code> files are deleted after 30 days of inactivity, so move anything you want to keep into <code>/home</code> (or shared <code>/work</code>) before then.</p>
 </div>
-<h3 id="installing-uv-3-minutes">⚡ Installing UV (3 minutes)</h3>
-<p>UV is the new hotness in Python package management - it's blazingly fast and perfect for HPC environments where every second counts.</p>
-<h4 id="why-uv">Why UV?</h4>
-<div class="admonition abstract">
-<p class="admonition-title">Speed Comparison</p>
+<p>Reference: <a href="https://docs.eres.qut.edu.au/hpc-filesystem#summary-of-important-filesystems-mounted-on-aqua">QUT eResearch — Filesystem and data management</a><sup id="fnref4:1"><a class="footnote-ref" href="#fn:1">1</a></sup>.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Storage Performance Comparison</p>
 <table>
 <thead>
 <tr>
-<th>Tool</th>
-<th>Time to install requests</th>
+<th>Filesystem</th>
+<th>Speed</th>
+<th>Backup</th>
+<th>Use Case</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>pip</td>
-<td>~15 seconds</td>
+<td><strong>Home</strong></td>
+<td>Good</td>
+<td>✅ Yes</td>
+<td>Scripts, configs</td>
 </tr>
 <tr>
-<td>conda</td>
-<td>~30 seconds</td>
+<td><strong>Scratch</strong></td>
+<td>Ultra-fast</td>
+<td>❌ No</td>
+<td>Active analysis, many small files</td>
 </tr>
 <tr>
-<td><strong>uv</strong></td>
-<td><strong>~2 seconds</strong> ⚡</td>
+<td><strong>Work</strong></td>
+<td>Good</td>
+<td>✅ Yes</td>
+<td>Project data</td>
+</tr>
+<tr>
+<td><strong>TMPDIR</strong></td>
+<td>Ultra-fast</td>
+<td>❌ No</td>
+<td>Job temporaries</td>
 </tr>
 </tbody>
 </table>
 </div>
-<h4 id="installation">Installation</h4>
-<p>If you set up conda above, you can drop UV into the base env. If you skipped conda, UV has a one-line standalone installer that doesn't need it:</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Inside conda base</label><label for="__tabbed_1_2">Standalone (no conda needed)</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>conda<span class="w"> </span>activate<span class="w"> </span>base
-</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>pip<span class="w"> </span>install<span class="w"> </span>uv
-</span></code></pre></div>
-</div>
-<div class="tabbed-block">
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>curl<span class="w"> </span>-LsSf<span class="w"> </span>https://astral.sh/uv/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>sh
-</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="nb">source</span><span class="w"> </span>~/.bashrc
-</span></code></pre></div>
-</div>
-</div>
-</div>
-<h4 id="verify-installation">Verify Installation</h4>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>uv<span class="w"> </span>--version
-</span></code></pre></div>
-<div class="admonition success">
-<p class="admonition-title">Expected Output</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>uv 0.5.x  # or newer
-</span></code></pre></div>
-</div>
-<h4 id="quick-test-drive">Quick Test Drive</h4>
-<p>Let's see UV in action:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="c1"># Create a temporary directory</span>
-</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>mkdir<span class="w"> </span>~/uv-test<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>~/uv-test
-</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>
-</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="c1"># Create a virtual environment with UV (super fast!)</span>
-</span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>uv<span class="w"> </span>venv<span class="w"> </span>test-venv
-</span><span id="__span-14-6"><a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>
-</span><span id="__span-14-7"><a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="c1"># Activate it</span>
-</span><span id="__span-14-8"><a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a><span class="nb">source</span><span class="w"> </span>test-venv/bin/activate
-</span><span id="__span-14-9"><a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a>
-</span><span id="__span-14-10"><a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a><span class="c1"># Install a package (watch the speed!)</span>
-</span><span id="__span-14-11"><a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a>uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>requests
-</span><span id="__span-14-12"><a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a>
-</span><span id="__span-14-13"><a id="__codelineno-14-13" name="__codelineno-14-13" href="#__codelineno-14-13"></a><span class="c1"># Test it works</span>
-</span><span id="__span-14-14"><a id="__codelineno-14-14" name="__codelineno-14-14" href="#__codelineno-14-14"></a>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import requests; print(&#39;UV works! 🎉&#39;)&quot;</span>
-</span><span id="__span-14-15"><a id="__codelineno-14-15" name="__codelineno-14-15" href="#__codelineno-14-15"></a>
-</span><span id="__span-14-16"><a id="__codelineno-14-16" name="__codelineno-14-16" href="#__codelineno-14-16"></a><span class="c1"># Clean up</span>
-</span><span id="__span-14-17"><a id="__codelineno-14-17" name="__codelineno-14-17" href="#__codelineno-14-17"></a>deactivate
-</span><span id="__span-14-18"><a id="__codelineno-14-18" name="__codelineno-14-18" href="#__codelineno-14-18"></a><span class="nb">cd</span><span class="w"> </span>~<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>rm<span class="w"> </span>-rf<span class="w"> </span>~/uv-test
-</span></code></pre></div>
 <hr />
-<h2 id="part-2-your-first-interactive-session-7-minutes">🖥️ Part 2: Your First Interactive Session (7 minutes)</h2>
-<p>Now for the fun part - let's actually use some compute resources! Interactive sessions are perfect for testing, debugging, and exploring.</p>
-<h3 id="understanding-the-architecture">Understanding the Architecture</h3>
+<h2 id="part-2-what-pbs-actually-does-for-you-8-minutes">🧠 Part 2: What PBS Actually Does for You (8 minutes)</h2>
+<h3 id="the-problem-pbs-solves">The Problem PBS Solves</h3>
+<p>Imagine trying to organize shared use of a car among 500 people without any system. Chaos, right?</p>
 <div class="admonition info">
-<p class="admonition-title">HPC Node Types</p>
+<p class="admonition-title">Without Job Scheduling</p>
 <pre class="mermaid"><code>graph TB
-    A[Your Laptop] --&gt;|SSH| B[Login Node]
-    B --&gt;|qsub -I| C[Compute Node]
-    B --&gt;|File Management| D[Storage]
-    C --&gt;|Heavy Computing| D
+    A[500 Users] --&gt; B[Physical Hardware]
+    C[User 1: Needs all memory] --&gt; B
+    D[User 2: Needs all cores] --&gt; B
+    E[User 3: Long running job] --&gt; B
+    F[...498 more users] --&gt; B
 
-    style B fill:#e1f5fe
-    style C fill:#fff3e0
-    style D fill:#f3e5f5</code></pre>
+    B --&gt; G[Complete chaos! 🔥]
+
+    style G fill:#ffebee</code></pre>
 </div>
-<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Login Nodes</label><label for="__tabbed_2_2">Compute Nodes</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
+<h3 id="pbs-your-digital-resource-manager">PBS: Your Digital Resource Manager</h3>
+<p><strong>PBS (Portable Batch System)</strong> is like having a really smart building manager who handles all the resource allocation and scheduling automatically.</p>
+<h3 id="how-pbs-works">How PBS Works?</h3>
+<p>Here's the basic flow of how PBS manages your job from submission to completion:</p>
+<pre class="mermaid"><code>sequenceDiagram
+    participant You
+    participant PBS
+    participant Cluster
+
+    You-&gt;&gt;PBS: "I need 4 cores for 2 hours"
+    PBS-&gt;&gt;PBS: Checks available resources
+    PBS-&gt;&gt;You: "Job queued, position #23"
+    PBS-&gt;&gt;Cluster: Allocates resources when available
+    PBS-&gt;&gt;You: "Job started on node aqua-01"
+    Cluster-&gt;&gt;PBS: Job completed
+    PBS-&gt;&gt;You: "Your results are ready!"</code></pre>
+<h3 id="types-of-pbs-jobs-youll-use">Types of PBS Jobs You'll Use</h3>
+<p>There are three essential types of PBS jobs, each designed for different workflows:</p>
+<h4 id="interactive-jobs">Interactive Jobs</h4>
+<p>When you need to work directly on compute nodes in real-time, interactive jobs give you immediate access:</p>
+<pre class="mermaid"><code>sequenceDiagram
+    participant You
+    participant PBS
+    participant Node
+
+    You-&gt;&gt;PBS: qsub -I (request interactive session)
+    PBS-&gt;&gt;PBS: Find available resources
+    PBS-&gt;&gt;Node: Allocate compute node
+    Node-&gt;&gt;You: Direct terminal access
+    You-&gt;&gt;Node: Run commands interactively
+    Node-&gt;&gt;You: See results immediately
+    You-&gt;&gt;Node: exit (when done)
+    Node-&gt;&gt;PBS: Release resources</code></pre>
 <ul>
-<li><strong>Purpose</strong>: File management, job submission, light editing</li>
-<li><strong>Resources</strong>: Shared with all users</li>
-<li><strong>Rules</strong>: NO heavy computation allowed</li>
-<li><strong>Think of it as</strong>: The reception desk</li>
+<li><strong>Real-time access</strong> to compute nodes - like SSH into a powerful computer</li>
+<li><strong>Perfect for</strong>: Testing code, debugging, exploring data interactively</li>
+<li><strong>Command</strong>: <code>qsub -I -l walltime=02:00:00 -l select=1:ncpus=4:mem=8GB</code></li>
+<li><strong>Use when</strong>: You need to run commands and see results immediately</li>
 </ul>
-</div>
-<div class="tabbed-block">
+<h4 id="batch-jobs">Batch Jobs</h4>
+<p>When you need to run longer tasks without staying connected, batch jobs are the solution:</p>
+<pre class="mermaid"><code>sequenceDiagram
+    participant You
+    participant PBS
+    participant Node
+    participant Files
+
+    You-&gt;&gt;Files: Create script.pbs
+    You-&gt;&gt;PBS: qsub script.pbs
+    PBS-&gt;&gt;PBS: Queue job, wait for resources
+    PBS-&gt;&gt;Node: Allocate when available
+    Node-&gt;&gt;Files: Read and execute script
+    Node-&gt;&gt;Files: Write output files
+    Node-&gt;&gt;PBS: Job completed
+    PBS-&gt;&gt;You: Email notification (optional)</code></pre>
 <ul>
-<li><strong>Purpose</strong>: Your actual work happens here</li>
-<li><strong>Resources</strong>: Dedicated to your job</li>
-<li><strong>Rules</strong>: This is where you run everything</li>
-<li><strong>Think of it as</strong>: Your private office</li>
+<li><strong>Submit and wait</strong> - your script runs when resources become available</li>
+<li><strong>Perfect for</strong>: Long-running analysis, production workflows, overnight jobs</li>
+<li><strong>Command</strong>: <code>qsub my_script.pbs</code> (submit a script file)</li>
+<li><strong>Use when</strong>: You have a defined workflow that can run unattended</li>
 </ul>
-</div>
-</div>
-</div>
-<h3 id="starting-an-interactive-session">Starting an Interactive Session</h3>
-<p>Time to request some compute resources:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>qsub<span class="w"> </span>-I<span class="w"> </span>-l<span class="w"> </span><span class="nv">walltime</span><span class="o">=</span><span class="m">00</span>:30:00<span class="w"> </span>-l<span class="w"> </span><span class="k">select</span><span class="o">=</span><span class="m">1</span>:ncpus<span class="o">=</span><span class="m">2</span>:mem<span class="o">=</span>4GB
-</span></code></pre></div>
-<div class="admonition example">
-<p class="admonition-title">Command Breakdown</p>
+<h4 id="job-arrays">Job Arrays</h4>
+<p>For processing multiple similar tasks efficiently, job arrays let you scale up your work:</p>
+<pre class="mermaid"><code>sequenceDiagram
+    participant You
+    participant PBS
+    participant Node1
+    participant NodeN
+    participant Files
+
+    You-&gt;&gt;Files: Create array_script.pbs
+    You-&gt;&gt;PBS: qsub -J 1-100 array_script.pbs
+    PBS-&gt;&gt;PBS: Create 100 individual jobs
+
+    par Job 1
+        PBS-&gt;&gt;Node1: Run script with PBS_ARRAY_INDEX=1
+        Node1-&gt;&gt;Files: Write output files
+    and Job N
+        PBS-&gt;&gt;NodeN: Run script with PBS_ARRAY_INDEX=N
+        NodeN-&gt;&gt;Files: Write output files
+    end
+
+    Node1-&gt;&gt;PBS: Job 1 complete
+    NodeN-&gt;&gt;PBS: Job N complete</code></pre>
 <ul>
-<li><code>qsub -I</code> → Request an <strong>interactive</strong> session</li>
-<li><code>-l walltime=00:30:00</code> → Maximum 30 minutes</li>
-<li><code>-l select=1:ncpus=2:mem=4GB</code> → 1 node, 2 cores, 4GB RAM</li>
+<li><strong>Many similar jobs</strong> running the same script with different inputs</li>
+<li><strong>Perfect for</strong>: Processing multiple files, parameter sweeps, Monte Carlo simulations</li>
+<li><strong>Command</strong>: <code>qsub -J 1-100 array_script.pbs</code> (runs 100 copies)</li>
+<li><strong>Use when</strong>: You need to repeat the same analysis on different datasets</li>
 </ul>
+<p><strong>Common Resource Requests:</strong></p>
+<ul>
+<li><strong>Walltime</strong>: <code>walltime=02:00:00</code> (how long your job will run)</li>
+<li><strong>Cores</strong>: <code>ncpus=4</code> (number of CPU cores)</li>
+<li><strong>Memory</strong>: <code>mem=8GB</code> (amount of RAM)</li>
+<li><strong>GPU</strong>: <code>ngpus=1</code> (number of GPU cards for AI/ML work)</li>
+<li><strong>CPU Type</strong>: <code>cpu_id=AMD-25-17</code> (AMD EPYC processors)</li>
+<li><strong>GPU Type</strong>: <code>gpu_id=H100</code> or <code>gpu_id=A100</code> (specify GPU model)</li>
+</ul>
+<h3 id="why-job-scheduling-exists">Why Job Scheduling Exists?</h3>
+<p>Without PBS, 500+ users would compete for the same hardware simultaneously - complete chaos!</p>
+<div class="admonition success">
+<p class="admonition-title">PBS Benefits</p>
+<p>✅ <strong>Fair resource sharing</strong> - Everyone gets their turn based on priority</p>
+<p>✅ <strong>Predictable access</strong> - You get exactly the resources you request</p>
+<p>✅ <strong>Efficient usage</strong> - No wasted idle time or resource conflicts</p>
 </div>
-<h3 id="what-happens-next">What Happens Next</h3>
-<div class="admonition note">
-<p class="admonition-title">The Waiting Game</p>
-<p>You'll see something like:
-<div class="language-text highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>qsub: waiting for job 12345.aqua-head to start
-</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>qsub: job 12345.aqua-head ready
-</span></code></pre></div></p>
-<p>Then your prompt changes to indicate you're on a compute node (Aqua names compute nodes by type: <code>cpu1n001</code>, <code>cpu1n002</code>, ..., <code>gpu1n001</code>, ..., <code>mem1n001</code>):
-<div class="language-text highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>[your-username@cpu1n001 ~]$
-</span></code></pre></div></p>
-</div>
-<h3 id="testing-your-new-environment">Testing Your New Environment</h3>
-<p>Once you're on a compute node, let's test our setup:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="c1"># Check where you are</span>
-</span><span id="__span-18-2"><a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>hostname
-</span><span id="__span-18-3"><a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;I&#39;m on a compute node! 🎯&quot;</span>
-</span><span id="__span-18-4"><a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>
-</span><span id="__span-18-5"><a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a><span class="c1"># Test conda</span>
-</span><span id="__span-18-6"><a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a>conda<span class="w"> </span>--version
-</span><span id="__span-18-7"><a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a>
-</span><span id="__span-18-8"><a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a><span class="c1"># Test UV</span>
-</span><span id="__span-18-9"><a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a>uv<span class="w"> </span>--version
-</span><span id="__span-18-10"><a id="__codelineno-18-10" name="__codelineno-18-10" href="#__codelineno-18-10"></a>
-</span><span id="__span-18-11"><a id="__codelineno-18-11" name="__codelineno-18-11" href="#__codelineno-18-11"></a><span class="c1"># Check your resources</span>
-</span><span id="__span-18-12"><a id="__codelineno-18-12" name="__codelineno-18-12" href="#__codelineno-18-12"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;CPU info:&quot;</span>
-</span><span id="__span-18-13"><a id="__codelineno-18-13" name="__codelineno-18-13" href="#__codelineno-18-13"></a>lscpu<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">&quot;CPU(s):&quot;</span>
-</span><span id="__span-18-14"><a id="__codelineno-18-14" name="__codelineno-18-14" href="#__codelineno-18-14"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Memory info:&quot;</span>
-</span><span id="__span-18-15"><a id="__codelineno-18-15" name="__codelineno-18-15" href="#__codelineno-18-15"></a>free<span class="w"> </span>-h
-</span></code></pre></div>
-<h3 id="quick-python-environment-test">Quick Python Environment Test</h3>
-<p>Let's create a project-specific environment and test it:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="c1"># Create a new conda environment for a hypothetical project</span>
-</span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>hpc-project<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.11<span class="w"> </span>numpy<span class="w"> </span>pandas<span class="w"> </span>-y
-</span><span id="__span-19-3"><a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>
-</span><span id="__span-19-4"><a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="c1"># Activate it</span>
-</span><span id="__span-19-5"><a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a>conda<span class="w"> </span>activate<span class="w"> </span>hpc-project
-</span><span id="__span-19-6"><a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a>
-</span><span id="__span-19-7"><a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a><span class="c1"># Use UV to add more packages quickly</span>
-</span><span id="__span-19-8"><a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a>uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>matplotlib<span class="w"> </span>seaborn
-</span><span id="__span-19-9"><a id="__codelineno-19-9" name="__codelineno-19-9" href="#__codelineno-19-9"></a>
-</span><span id="__span-19-10"><a id="__codelineno-19-10" name="__codelineno-19-10" href="#__codelineno-19-10"></a><span class="c1"># Quick test</span>
-</span><span id="__span-19-11"><a id="__codelineno-19-11" name="__codelineno-19-11" href="#__codelineno-19-11"></a>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;</span>
-</span><span id="__span-19-12"><a id="__codelineno-19-12" name="__codelineno-19-12" href="#__codelineno-19-12"></a><span class="s2">import numpy as np</span>
-</span><span id="__span-19-13"><a id="__codelineno-19-13" name="__codelineno-19-13" href="#__codelineno-19-13"></a><span class="s2">import pandas as pd</span>
-</span><span id="__span-19-14"><a id="__codelineno-19-14" name="__codelineno-19-14" href="#__codelineno-19-14"></a><span class="s2">import matplotlib</span>
-</span><span id="__span-19-15"><a id="__codelineno-19-15" name="__codelineno-19-15" href="#__codelineno-19-15"></a><span class="s2">print(&#39;All packages imported successfully! 📦✅&#39;)</span>
-</span><span id="__span-19-16"><a id="__codelineno-19-16" name="__codelineno-19-16" href="#__codelineno-19-16"></a><span class="s2">print(f&#39;NumPy version: {np.__version__}&#39;)</span>
-</span><span id="__span-19-17"><a id="__codelineno-19-17" name="__codelineno-19-17" href="#__codelineno-19-17"></a><span class="s2">print(f&#39;Pandas version: {pd.__version__}&#39;)</span>
-</span><span id="__span-19-18"><a id="__codelineno-19-18" name="__codelineno-19-18" href="#__codelineno-19-18"></a><span class="s2">print(f&#39;Matplotlib version: {matplotlib.__version__}&#39;)</span>
-</span><span id="__span-19-19"><a id="__codelineno-19-19" name="__codelineno-19-19" href="#__codelineno-19-19"></a><span class="s2">&quot;</span>
-</span></code></pre></div>
-<h3 id="understanding-resource-usage">Understanding Resource Usage</h3>
-<div class="admonition tip">
-<p class="admonition-title">Monitoring Your Usage</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="c1"># Check your job details</span>
-</span><span id="__span-20-2"><a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>qstat<span class="w"> </span>-f<span class="w"> </span><span class="nv">$PBS_JOBID</span>
-</span><span id="__span-20-3"><a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a>
-</span><span id="__span-20-4"><a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="c1"># Monitor resource usage</span>
-</span><span id="__span-20-5"><a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a>htop<span class="w">  </span><span class="c1"># If available, or use &#39;top&#39;</span>
-</span></code></pre></div>
-</div>
-<h3 id="ending-your-interactive-session">Ending Your Interactive Session</h3>
-<p>When you're done exploring:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="c1"># Deactivate your environment</span>
-</span><span id="__span-21-2"><a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>conda<span class="w"> </span>deactivate
-</span><span id="__span-21-3"><a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a>
-</span><span id="__span-21-4"><a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a><span class="c1"># Exit the interactive session</span>
-</span><span id="__span-21-5"><a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a><span class="nb">exit</span>
-</span></code></pre></div>
-<p>You'll be back on the login node, and your compute resources are released.</p>
 <hr />
 <h2 id="key-takeaways">🎯 Key Takeaways</h2>
 <div class="admonition success">
-<p class="admonition-title">You've Successfully Learned</p>
-<p>✅ <strong>Environment Management</strong>: Miniconda gives you Python superpowers on HPC</p>
-<p>✅ <strong>Fast Package Installation</strong>: UV makes package management lightning quick</p>
-<p>✅ <strong>Interactive Computing</strong>: You can test and debug directly on compute nodes</p>
-<p>✅ <strong>Node Architecture</strong>: Login nodes vs compute nodes - know the difference!</p>
+<p class="admonition-title">You Now Understand</p>
+<p>🏗️ <strong>HPC Scale</strong> - From 4-8 cores on your laptop to 10,000+ cores on QUT Aqua</p>
+<p>💾 <strong>Storage Strategy</strong> - Home (backed up), Scratch (fast), Work (shared), TMPDIR (temporary)</p>
+<p>🎯 <strong>Job Types</strong> - Interactive (real-time), Batch (automated), Arrays (parallel processing)</p>
+<p>📊 <strong>Resource Requests</strong> - Walltime, cores, memory, GPU types (H100/A100), CPU types (AMD-25-17)</p>
+<p>⚖️ <strong>PBS Benefits</strong> - Fair sharing, predictable access, efficient resource usage</p>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Important Rules to Remember</p>
-<p>🚫 <strong>Never run heavy computation on login nodes</strong></p>
-<p>✅ <strong>Always use interactive sessions or jobs for real work</strong></p>
-<p>💾 <strong>Environments persist</strong> - you only need to set them up once</p>
-<p>⏰ <strong>Interactive sessions have time limits</strong> - plan accordingly</p>
+<div class="admonition info">
+<p class="admonition-title">Ready for Next Steps</p>
+<p>✅ <strong>You can choose</strong> the right job type for your work</p>
+<p>✅ <strong>You understand</strong> where to store your files safely</p>
+<p>✅ <strong>You know</strong> what resources to request from PBS</p>
+<p>✅ <strong>You appreciate</strong> why job scheduling prevents chaos</p>
 </div>
 <hr />
 <h2 id="whats-next">🔗 What's Next?</h2>
 <div class="admonition info">
 <p class="admonition-title">Coming Up in Lesson 2</p>
-<p>Now that your environment is set up, you're ready to write and submit your first PBS job script! We'll cover:</p>
+<p>Now that you understand what you're working with, let's get hands-on! We'll set up your Python environment and take the cluster for a test drive with an interactive session.</p>
 <ul>
-<li>PBS script anatomy</li>
-<li>Writing your first job</li>
-<li>Submitting and monitoring</li>
-<li>Understanding output files</li>
+<li>Environment setup (Miniconda or UV)</li>
+<li>Your first interactive session</li>
+<li>Understanding login vs compute nodes</li>
+<li>Testing your setup</li>
 </ul>
 </div>
-<div class="admonition question">
-<p class="admonition-title">Need Help?</p>
-<ul>
-<li><strong>Environment issues?</strong> Check <a href="../../remote-dev/Surviving-without-VS-Code-Remote-SSH/">Surviving without VS Code Remote SSH</a></li>
-<li><strong>Package problems?</strong> See <a href="../../remote-dev/Surviving-without-VS-Code-Remote-SSH/">Surviving without VS Code Remote SSH</a></li>
-<li><strong>Interactive session not starting?</strong> Review <a href="../../scheduler/The-Art-of-Walltime/">Guess, Request, Regret: The Art of Walltime</a></li>
-</ul>
-</div>
-<hr />
-<h2 id="quick-reference">📝 Quick Reference</h2>
-<div class="tabbed-set tabbed-alternate" data-tabs="3:3"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><input id="__tabbed_3_3" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Essential Commands</label><label for="__tabbed_3_2">File Locations</label><label for="__tabbed_3_3">Troubleshooting</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="c1"># Conda basics</span>
-</span><span id="__span-22-2"><a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>myenv<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.11
-</span><span id="__span-22-3"><a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a>conda<span class="w"> </span>activate<span class="w"> </span>myenv
-</span><span id="__span-22-4"><a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a>conda<span class="w"> </span>deactivate
-</span><span id="__span-22-5"><a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a>
-</span><span id="__span-22-6"><a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a><span class="c1"># UV basics</span>
-</span><span id="__span-22-7"><a id="__codelineno-22-7" name="__codelineno-22-7" href="#__codelineno-22-7"></a>uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>package-name
-</span><span id="__span-22-8"><a id="__codelineno-22-8" name="__codelineno-22-8" href="#__codelineno-22-8"></a>uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
-</span><span id="__span-22-9"><a id="__codelineno-22-9" name="__codelineno-22-9" href="#__codelineno-22-9"></a>
-</span><span id="__span-22-10"><a id="__codelineno-22-10" name="__codelineno-22-10" href="#__codelineno-22-10"></a><span class="c1"># Interactive session</span>
-</span><span id="__span-22-11"><a id="__codelineno-22-11" name="__codelineno-22-11" href="#__codelineno-22-11"></a>qsub<span class="w"> </span>-I<span class="w"> </span>-l<span class="w"> </span><span class="nv">walltime</span><span class="o">=</span><span class="m">00</span>:30:00<span class="w"> </span>-l<span class="w"> </span><span class="k">select</span><span class="o">=</span><span class="m">1</span>:ncpus<span class="o">=</span><span class="m">2</span>:mem<span class="o">=</span>4GB
-</span></code></pre></div>
-</div>
-<div class="tabbed-block">
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-23-1"><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="c1"># Miniconda installation</span>
-</span><span id="__span-23-2"><a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>~/miniconda3/
-</span><span id="__span-23-3"><a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a>
-</span><span id="__span-23-4"><a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a><span class="c1"># Conda environments</span>
-</span><span id="__span-23-5"><a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a>~/miniconda3/envs/
-</span><span id="__span-23-6"><a id="__codelineno-23-6" name="__codelineno-23-6" href="#__codelineno-23-6"></a>
-</span><span id="__span-23-7"><a id="__codelineno-23-7" name="__codelineno-23-7" href="#__codelineno-23-7"></a><span class="c1"># UV cache</span>
-</span><span id="__span-23-8"><a id="__codelineno-23-8" name="__codelineno-23-8" href="#__codelineno-23-8"></a>~/.cache/uv/
-</span></code></pre></div>
-</div>
-<div class="tabbed-block">
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-24-1"><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="c1"># If conda isn&#39;t found</span>
-</span><span id="__span-24-2"><a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="nb">source</span><span class="w"> </span>~/.bashrc
-</span><span id="__span-24-3"><a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;~/miniconda3/bin:</span><span class="nv">$PATH</span><span class="s2">&quot;</span>
-</span><span id="__span-24-4"><a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a>
-</span><span id="__span-24-5"><a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a><span class="c1"># If UV isn&#39;t found</span>
-</span><span id="__span-24-6"><a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a>conda<span class="w"> </span>activate<span class="w"> </span>base
-</span><span id="__span-24-7"><a id="__codelineno-24-7" name="__codelineno-24-7" href="#__codelineno-24-7"></a>which<span class="w"> </span>uv
-</span></code></pre></div>
-</div>
-</div>
-</div>
-<p>Up next: <strong>Lesson 2 — Your First PBS Job</strong> <em>(coming soon)</em>. You'll learn to write a batch script, submit it, and read the output once it's published.</p>
+<p>Ready to get your hands dirty? Let's head to <a href="../lesson-2/">Lesson 2: Environment Setup &amp; First Interactive Session</a>! 🚀</p>
 <div class="footnote">
 <hr />
 <ol>
 <li id="fn:1">
-<p>Access only in QUT network. Please use VPN to access the documentation when off-campus.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref2:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+<p>Access only in QUT network. Please use VPN to access the documentation when off-campus.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref2:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref3:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref4:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
 </li>
 </ol>
 </div>
@@ -1981,7 +2022,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="June 21, 2026 00:46:28 AEST">June 21, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="June 23, 2026 20:16:37 AEST">June 23, 2026</span>
   </span>
 
     
@@ -2012,6 +2053,11 @@
         <a href="https://github.com/ZhipengHe" class="md-author" title="@ZhipengHe">
           
           <img src="https://avatars.githubusercontent.com/u/29477872?v=4&size=72" alt="ZhipengHe">
+        </a>
+      
+        <a href="https://github.com/web-flow" class="md-author" title="@web-flow">
+          
+          <img src="https://avatars.githubusercontent.com/u/19864447?v=4&size=72" alt="web-flow">
         </a>
       
       

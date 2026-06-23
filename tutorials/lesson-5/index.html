@@ -12,28 +12,28 @@
         <meta name="author" content="Zhipeng He">
       
       
-        <link rel="canonical" href="https://zhipenghe.me/walltime-chronicles/tutorials/">
+        <link rel="canonical" href="https://zhipenghe.me/walltime-chronicles/tutorials/lesson-5/">
       
       
-        <link rel="prev" href="..">
+        <link rel="prev" href="../lesson-4/">
       
       
-        <link rel="next" href="prerequisites/">
+        <link rel="next" href="../lesson-6/">
       
       
         
       
       
-      <link rel="icon" href="../assets/images/favicon.png">
+      <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
     
     
       
-        <title>Getting Started: HPC Crash Course - Walltime Chronicles</title>
+        <title>Lesson 5: Right-sizing Requests - Walltime Chronicles</title>
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
       
       
 
@@ -54,7 +54,7 @@
     
       <link rel="stylesheet" href="https://unpkg.com/katex@0/dist/katex.min.css">
     
-    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -62,17 +62,17 @@
     
   
 <meta property="og:type" content="website" />
-<meta property="og:title" content="Getting Started: HPC Crash Course - Walltime Chronicles" />
+<meta property="og:title" content="Lesson 5: Right-sizing Requests - Walltime Chronicles" />
 <meta property="og:description" content="My personal survival log of mysterious errors, queueing oddities, and PBS quirks encountered on QUT Aqua" />
-<meta property="og:image" content="https://zhipenghe.me/walltime-chronicles/assets/images/social/tutorials/index.png" />
+<meta property="og:image" content="https://zhipenghe.me/walltime-chronicles/assets/images/social/tutorials/lesson-5.png" />
 <meta property="og:image:type" content="image/png" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
-<meta property="og:url" content="https://zhipenghe.me/walltime-chronicles/tutorials/" />
+<meta property="og:url" content="https://zhipenghe.me/walltime-chronicles/tutorials/lesson-5/" />
 <meta property="twitter:card" content="summary_large_image" />
-<meta property="twitter:title" content="Getting Started: HPC Crash Course - Walltime Chronicles" />
+<meta property="twitter:title" content="Lesson 5: Right-sizing Requests - Walltime Chronicles" />
 <meta property="twitter:description" content="My personal survival log of mysterious errors, queueing oddities, and PBS quirks encountered on QUT Aqua" />
-<meta property="twitter:image" content="https://zhipenghe.me/walltime-chronicles/assets/images/social/tutorials/index.png" />
+<meta property="twitter:image" content="https://zhipenghe.me/walltime-chronicles/assets/images/social/tutorials/lesson-5.png" />
 </head>
   
   
@@ -85,7 +85,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#getting-started-hpc-crash-course" class="md-skip">
+        <a href="#lesson-5-right-sizing-requests" class="md-skip">
           Skip to content
         </a>
       
@@ -101,7 +101,7 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href=".." title="Walltime Chronicles" class="md-header__button md-logo" aria-label="Walltime Chronicles" data-md-component="logo">
+    <a href="../.." title="Walltime Chronicles" class="md-header__button md-logo" aria-label="Walltime Chronicles" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.75 8h6.5a.75.75 0 0 1 .75.75v6.5a.75.75 0 0 1-.75.75h-6.5a.75.75 0 0 1-.75-.75v-6.5A.75.75 0 0 1 8.75 8m.75 6.5h5v-5h-5Z"/><path d="M15.25 1a.75.75 0 0 1 .75.75V4h2.25c.966 0 1.75.784 1.75 1.75V8h2.25a.75.75 0 0 1 0 1.5H20v5h2.25a.75.75 0 0 1 0 1.5H20v2.25A1.75 1.75 0 0 1 18.25 20H16v2.25a.75.75 0 0 1-1.5 0V20h-5v2.25a.75.75 0 0 1-1.5 0V20H5.75A1.75 1.75 0 0 1 4 18.25V16H1.75a.75.75 0 0 1 0-1.5H4v-5H1.75a.75.75 0 0 1 0-1.5H4V5.75C4 4.784 4.784 4 5.75 4H8V1.75a.75.75 0 0 1 1.5 0V4h5V1.75a.75.75 0 0 1 .75-.75m3 17.5a.25.25 0 0 0 .25-.25V5.75a.25.25 0 0 0-.25-.25H5.75a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25Z"/></svg>
@@ -121,7 +121,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Getting Started: HPC Crash Course
+              Lesson 5: Right-sizing Requests
             
           </span>
         </div>
@@ -218,7 +218,7 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href=".." title="Walltime Chronicles" class="md-nav__button md-logo" aria-label="Walltime Chronicles" data-md-component="logo">
+    <a href="../.." title="Walltime Chronicles" class="md-nav__button md-logo" aria-label="Walltime Chronicles" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.75 8h6.5a.75.75 0 0 1 .75.75v6.5a.75.75 0 0 1-.75.75h-6.5a.75.75 0 0 1-.75-.75v-6.5A.75.75 0 0 1 8.75 8m.75 6.5h5v-5h-5Z"/><path d="M15.25 1a.75.75 0 0 1 .75.75V4h2.25c.966 0 1.75.784 1.75 1.75V8h2.25a.75.75 0 0 1 0 1.5H20v5h2.25a.75.75 0 0 1 0 1.5H20v2.25A1.75 1.75 0 0 1 18.25 20H16v2.25a.75.75 0 0 1-1.5 0V20h-5v2.25a.75.75 0 0 1-1.5 0V20H5.75A1.75 1.75 0 0 1 4 18.25V16H1.75a.75.75 0 0 1 0-1.5H4v-5H1.75a.75.75 0 0 1 0-1.5H4V5.75C4 4.784 4.784 4 5.75 4H8V1.75a.75.75 0 0 1 1.5 0V4h5V1.75a.75.75 0 0 1 .75-.75m3 17.5a.25.25 0 0 0 .25-.25V5.75a.25.25 0 0 0-.25-.25H5.75a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25Z"/></svg>
@@ -248,7 +248,7 @@
   
   
     <li class="md-nav__item">
-      <a href=".." class="md-nav__link">
+      <a href="../.." class="md-nav__link">
         
   
   
@@ -311,7 +311,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="./" class="md-nav__link md-nav__link--active">
+            <a href="../" class="md-nav__link ">
               
   
   
@@ -329,7 +329,7 @@
             </a>
             
               
-              <label class="md-nav__link md-nav__link--active" for="__nav_2" id="__nav_2_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
@@ -355,7 +355,7 @@
   
   
     <li class="md-nav__item">
-      <a href="prerequisites/" class="md-nav__link">
+      <a href="../prerequisites/" class="md-nav__link">
         
   
   
@@ -383,7 +383,7 @@
   
   
     <li class="md-nav__item">
-      <a href="lesson-1/" class="md-nav__link">
+      <a href="../lesson-1/" class="md-nav__link">
         
   
   
@@ -411,7 +411,7 @@
   
   
     <li class="md-nav__item">
-      <a href="lesson-2/" class="md-nav__link">
+      <a href="../lesson-2/" class="md-nav__link">
         
   
   
@@ -439,7 +439,7 @@
   
   
     <li class="md-nav__item">
-      <a href="lesson-3/" class="md-nav__link">
+      <a href="../lesson-3/" class="md-nav__link">
         
   
   
@@ -467,7 +467,7 @@
   
   
     <li class="md-nav__item">
-      <a href="lesson-4/" class="md-nav__link">
+      <a href="../lesson-4/" class="md-nav__link">
         
   
   
@@ -492,10 +492,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="lesson-5/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 5: Right-sizing Requests
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -511,6 +538,48 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-youll-accomplish-planned" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📋 What You'll Accomplish (planned)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#until-this-lesson-lands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔗 Until this lesson lands
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -523,7 +592,7 @@
   
   
     <li class="md-nav__item">
-      <a href="lesson-6/" class="md-nav__link">
+      <a href="../lesson-6/" class="md-nav__link">
         
   
   
@@ -551,7 +620,7 @@
   
   
     <li class="md-nav__item">
-      <a href="lesson-7/" class="md-nav__link">
+      <a href="../lesson-7/" class="md-nav__link">
         
   
   
@@ -610,7 +679,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../remote-dev/" class="md-nav__link ">
+            <a href="../../remote-dev/" class="md-nav__link ">
               
   
   
@@ -654,7 +723,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../remote-dev/Surviving-without-VS-Code-Remote-SSH/" class="md-nav__link">
+      <a href="../../remote-dev/Surviving-without-VS-Code-Remote-SSH/" class="md-nav__link">
         
   
   
@@ -682,7 +751,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../remote-dev/The-DS_Store-Strikes-Back/" class="md-nav__link">
+      <a href="../../remote-dev/The-DS_Store-Strikes-Back/" class="md-nav__link">
         
   
   
@@ -743,7 +812,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../scheduler/" class="md-nav__link ">
+            <a href="../../scheduler/" class="md-nav__link ">
               
   
   
@@ -787,7 +856,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../scheduler/Know-Your-Nodes/" class="md-nav__link">
+      <a href="../../scheduler/Know-Your-Nodes/" class="md-nav__link">
         
   
   
@@ -815,7 +884,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../scheduler/The-Art-of-Walltime/" class="md-nav__link">
+      <a href="../../scheduler/The-Art-of-Walltime/" class="md-nav__link">
         
   
   
@@ -843,7 +912,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../scheduler/Walltime-by-Recipe/" class="md-nav__link">
+      <a href="../../scheduler/Walltime-by-Recipe/" class="md-nav__link">
         
   
   
@@ -902,7 +971,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../pbs-scripts/" class="md-nav__link ">
+            <a href="../../pbs-scripts/" class="md-nav__link ">
               
   
   
@@ -946,7 +1015,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../pbs-scripts/Batch-Cooking-PBS-Scripts-with-a-Bash-Pan/" class="md-nav__link">
+      <a href="../../pbs-scripts/Batch-Cooking-PBS-Scripts-with-a-Bash-Pan/" class="md-nav__link">
         
   
   
@@ -974,7 +1043,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../pbs-scripts/PBS-Brew-Inspector/" class="md-nav__link">
+      <a href="../../pbs-scripts/PBS-Brew-Inspector/" class="md-nav__link">
         
   
   
@@ -1009,7 +1078,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../LICENSE/" class="md-nav__link">
+      <a href="../../LICENSE/" class="md-nav__link">
         
   
   
@@ -1056,182 +1125,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#course-overview" class="md-nav__link">
+  <a href="#what-youll-accomplish-planned" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Course Overview
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Course Overview">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#what-this-course-covers" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        What This Course Covers
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#who-this-is-for" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Who This Is For
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#course-philosophy" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Course Philosophy
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Course Philosophy">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#quick-wins-over-comprehensive-theory" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Quick Wins Over Comprehensive Theory
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#practical-solutions-over-academic-explanations" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Practical Solutions Over Academic Explanations
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#qut-aqua-specific-focus" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        QUT Aqua-Specific Focus
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#what-youll-learn" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        What You'll Learn
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#what-you-need" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        What You Need
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#what-you-dont-need" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        What You DON'T Need
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#course-structure" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Course Structure
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Course Structure">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#time-commitment" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Time Commitment
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#how-this-connects-to-other-guides" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        How This Connects to Other Guides
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#next-steps-after-completion" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Next Steps After Completion
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#prerequisites" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Prerequisites
+        📋 What You'll Accomplish (planned)
       
     </span>
   </a>
@@ -1239,96 +1136,13 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#course-outline" class="md-nav__link">
+  <a href="#until-this-lesson-lands" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Course Outline
+        🔗 Until this lesson lands
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Course Outline">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#lesson-1-welcome-to-aqua-15-min" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Lesson 1: Welcome to Aqua (15 min)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#lesson-2-tooling-setup-15-min" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Lesson 2: Tooling Setup (15 min)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#lesson-3-your-first-batch-job-1520-min" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Lesson 3: Your First Batch Job (15–20 min)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#lesson-4-when-jobs-fail-15-min" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Lesson 4: When Jobs Fail (15 min)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#lesson-5-right-sizing-requests-1520-min" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Lesson 5: Right-sizing Requests (15–20 min)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#lesson-6-job-arrays-15-min" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Lesson 6: Job Arrays (15 min)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#lesson-7-long-jobs-dependencies-checkpointing-1520-min" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Lesson 7: Long Jobs — Dependencies &amp; Checkpointing (15–20 min)
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -1357,7 +1171,7 @@
   
   
     <li class="md-path__item">
-      <a href=".." class="md-path__link">
+      <a href="../.." class="md-path__link">
         
   <span class="md-ellipsis">
     ~/welcome
@@ -1375,7 +1189,7 @@
     
     
       <li class="md-path__item">
-        <a href="./" class="md-path__link">
+        <a href="../" class="md-path__link">
           
   <span class="md-ellipsis">
     Crash Course Café
@@ -1397,7 +1211,7 @@
 
 
   
-    <a href="https://github.com/ZhipengHe/Walltime-Chronicles/edit/main/docs/tutorials/index.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+    <a href="https://github.com/ZhipengHe/Walltime-Chronicles/edit/main/docs/tutorials/lesson-5.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
@@ -1406,168 +1220,42 @@
     
       
     
-    <a href="https://github.com/ZhipengHe/Walltime-Chronicles/raw/main/docs/tutorials/index.md" title="View source of this page" class="md-content__button md-icon">
+    <a href="https://github.com/ZhipengHe/Walltime-Chronicles/raw/main/docs/tutorials/lesson-5.md" title="View source of this page" class="md-content__button md-icon">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"/></svg>
     </a>
   
 
 
-<h1 id="getting-started-hpc-crash-course">Getting Started: HPC Crash Course</h1>
-<p>Welcome to the Crash Course Café! ☕ Pull up a chair and let's get you productive on QUT Aqua without the usual learning curve headaches.</p>
-<div class="admonition info">
-<p class="admonition-title">Course is mid-restructure (2026-06-23)</p>
-<p>The Crash Course is migrating from a topic-driven 0–7 outline to a <strong>workflow-driven 1–7 outline</strong>, where each lesson ends with a tangible deliverable. The new outline is below.</p>
-<ul>
-<li><strong>Lessons 1 and 2</strong> show <strong>pre-rewrite content</strong> — accurate, but the upcoming rewrites will reshape the structure (Lesson 1 absorbs a hands-on SSH/interactive-job at the end; Lesson 2 focuses purely on tooling install).</li>
-<li><strong>Lessons 3–7</strong> are <strong>stubs</strong> with scope contracts and pointers to existing deeper guides.</li>
-</ul>
-<p>Per-lesson rewrites land as they're written.</p>
+<h1 id="lesson-5-right-sizing-requests">Lesson 5: Right-sizing Requests</h1>
+<div class="admonition warning">
+<p class="admonition-title">Lesson under construction</p>
+<p>This lesson hasn't been written yet. The scope below is the planned contract; the linked guides in <strong>Until this lesson lands</strong> cover the underlying material today.</p>
 </div>
-<hr />
-<h2 id="course-overview">Course Overview</h2>
-<h3 id="what-this-course-covers">What This Course Covers</h3>
-<p>This isn't your typical academic introduction to high-performance computing. This is a practical, no-nonsense guide to getting real work done on QUT's Aqua system. We'll focus on the essential skills you need to submit jobs, avoid common mistakes, and not look like a complete newbie in your first week.</p>
-<h3 id="who-this-is-for">Who This Is For</h3>
-<ul>
-<li><strong>New to HPC/PBS</strong>: You've heard scary stories about command lines and job schedulers</li>
-<li><strong>New to QUT Aqua</strong>: You've used other HPC systems but Aqua has its own quirks</li>
-<li><strong>Impatient learners</strong>: You want to be productive today, not after reading 200 pages of documentation</li>
-</ul>
-<h3 id="course-philosophy">Course Philosophy</h3>
-<h4 id="quick-wins-over-comprehensive-theory">Quick Wins Over Comprehensive Theory</h4>
-<p>We'll teach you the 20% of knowledge that handles 80% of your daily tasks. Deep theory can wait until you actually need it.</p>
-<h4 id="practical-solutions-over-academic-explanations">Practical Solutions Over Academic Explanations</h4>
-<p>Every concept comes with copy-paste ready examples and real-world context from QUT Aqua.</p>
-<h4 id="qut-aqua-specific-focus">QUT Aqua-Specific Focus</h4>
-<p>Generic PBS tutorials are everywhere. This course is tailored specifically to QUT's configuration, quirks, and common issues.</p>
-<h3 id="what-youll-learn">What You'll Learn</h3>
-<p>By the end of this crash course, you'll be able to:</p>
-<ul>
-<li><strong>Connect to Aqua and run an interactive job</strong> without breaking anything</li>
-<li><strong>Submit your first PBS batch job</strong> — and find its output</li>
-<li><strong>Diagnose common failures</strong> before panicking</li>
-<li><strong>Right-size resource requests</strong> — cores, memory, walltime, GPU</li>
-<li><strong>Scale beyond a single job</strong> — arrays for bulk work, dependencies for long pipelines</li>
-<li><strong>Know when to dig deeper</strong> into the specialized guides</li>
-</ul>
-<h3 id="what-you-need">What You Need</h3>
-<ul>
-<li><strong>Basic command line familiarity</strong>: You can navigate directories and edit files</li>
-<li><strong>QUT account access</strong>: You can SSH into Aqua</li>
-<li><strong>A specific task in mind</strong>: Having real work to do makes learning stick</li>
-</ul>
-<h3 id="what-you-dont-need">What You DON'T Need</h3>
-<ul>
-<li>Deep understanding of parallel computing</li>
-<li>Experience with other job schedulers</li>
-<li>Perfect knowledge of every PBS directive</li>
-</ul>
-<h3 id="course-structure">Course Structure</h3>
-<h4 id="time-commitment">Time Commitment</h4>
-<ul>
-<li><strong>Total time</strong>: ~2 hours across <strong>7 focused lessons</strong></li>
-<li><strong>Lesson format</strong>: 15–20 minutes each</li>
-<li><strong>Hands-on from Lesson 1</strong>: First SSH connection and an interactive job within the opening lesson</li>
-<li><strong>Follow-up learning</strong>: Each lesson connects to detailed guides for when you need more</li>
-</ul>
-<h4 id="how-this-connects-to-other-guides">How This Connects to Other Guides</h4>
-<p>This crash course is your launching pad. When you hit specific challenges, you'll know exactly which detailed guide to consult:</p>
-<ul>
-<li><strong>Remote development issues</strong> → <a href="../remote-dev/">Cmd+Opt+Remote</a></li>
-<li><strong>Walltime estimation</strong> → <a href="../scheduler/">The Scheduler's Gambit</a></li>
-<li><strong>PBS script patterns</strong> → <a href="../pbs-scripts/">PBS Cookbook</a></li>
-</ul>
-<h4 id="next-steps-after-completion">Next Steps After Completion</h4>
-<ol>
-<li><strong>Practice with your real work</strong> — apply what you've learned immediately</li>
-<li><strong>Bookmark the troubleshooting guides</strong> — for when things inevitably go wrong</li>
-<li><strong>Join the QUT HPC community</strong> — share your own discoveries and pain points</li>
-</ol>
-<hr />
-<h2 id="prerequisites">Prerequisites</h2>
-<p><strong>Required before starting the lessons:</strong></p>
+<div class="admonition quote">
+<p class="admonition-title">Mission Statement</p>
+<p><em>"How much computer do I actually need?"</em> ⚖️</p>
+</div>
+<h2 id="what-youll-accomplish-planned">📋 What You'll Accomplish (planned)</h2>
+<p>By the end of this 15–20 minute lesson, you'll have:</p>
 <ul class="task-list">
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>QUT HPC access</strong>: Confirmed SSH access to Aqua</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>Essential Linux commands</strong>: Comfortable with <code>cd</code>, <code>ls</code>, <code>pwd</code>, <code>mkdir</code>, <code>cp</code>, <code>mv</code>, <code>rm</code>, <code>chmod</code></li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>Linux file system</strong>: Understanding absolute vs relative paths, directory structure, home directory (<code>~</code>), root (<code>/</code>), permissions</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>File transfer method</strong>: SCP, rsync, or remote editing setup complete</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>The request-then-tune loop</strong> — run small, observe, scale (instead of guessing big)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>Cores</strong> — <code>ncpus=N</code>, plus the <code>OMP_NUM_THREADS=$NCPUS</code> one-liner that bites everyone</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>Memory</strong> — <code>mem=NGB</code>, and what "OOM kill" actually means about your request</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>Walltime</strong> — the 2× rule of thumb, and when to consult the deeper estimation theory</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>GPU</strong> — <code>ngpus=1</code>, <code>CUDA_VISIBLE_DEVICES</code> set automatically; short and practical</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>One worked translation</strong> — "12 GB Python script, ~3 hr on my laptop" → a real PBS request</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>When to go deeper</strong> — explicit pointers, not duplication, into the scheduler section</li>
 </ul>
-<p><em>Need help with setup? See the <a href="prerequisites/">Prerequisites Checklist</a> for verification commands, then <a href="../remote-dev/">Cmd+Opt+Remote</a> for tooling options.</em></p>
+<h2 id="until-this-lesson-lands">🔗 Until this lesson lands</h2>
+<ul>
+<li><strong>Walltime estimation theory</strong> — the 2× rule, scaling laws, complexity classes: <a href="../../scheduler/The-Art-of-Walltime/">Guess, Request, Regret: The Art of Walltime</a></li>
+<li><strong>Hardware/queue field guide</strong> — which queue backs which silicon, per-queue ceilings: <a href="../../scheduler/Know-Your-Nodes/">Know Your Nodes</a></li>
+<li><strong>8 worked PBS resource shapes</strong> — copy-paste recipes for real Aqua scenarios: <a href="../../scheduler/Walltime-by-Recipe/">Walltime by Recipe</a></li>
+<li><strong>Post-hoc tuning</strong> — see what your job actually used: <a href="../../pbs-scripts/PBS-Brew-Inspector/">PBS Brew Inspector</a></li>
+</ul>
 <hr />
-<h2 id="course-outline">Course Outline</h2>
-<h3 id="lesson-1-welcome-to-aqua-15-min">Lesson 1: Welcome to Aqua (15 min)</h3>
-<blockquote>
-<p><em>"What is this magical compute cluster anyway?"</em></p>
-</blockquote>
-<ul>
-<li>Cluster mental model — file systems, login vs compute nodes</li>
-<li>First SSH connection and a 5-minute interactive job</li>
-<li>Where to put your files (home / scratch / work / TMPDIR)</li>
-</ul>
-<p><a href="lesson-1/">→ Lesson 1</a> — <em>pre-rewrite content (was Lesson 0: HPC Fundamentals)</em></p>
-<h3 id="lesson-2-tooling-setup-15-min">Lesson 2: Tooling Setup (15 min)</h3>
-<blockquote>
-<p><em>"Getting your Python tools ready"</em></p>
-</blockquote>
-<ul>
-<li>Pick one: Miniconda or UV</li>
-<li>Install via QUT module or direct installer</li>
-<li>Create a test environment, verify it works</li>
-</ul>
-<p><a href="lesson-2/">→ Lesson 2</a> — <em>pre-rewrite content (was Lesson 1: Environment Setup &amp; First Interactive Session)</em></p>
-<h3 id="lesson-3-your-first-batch-job-1520-min">Lesson 3: Your First Batch Job (15–20 min)</h3>
-<blockquote>
-<p><em>"Hello World, meet High Performance Computing"</em></p>
-</blockquote>
-<ul>
-<li>PBS script anatomy</li>
-<li>Submit with <code>qsub</code>, monitor with <code>qstat -u $USER</code></li>
-<li>Read <code>.o</code> / <code>.e</code> output, kill with <code>qdel</code></li>
-</ul>
-<p><a href="lesson-3/">→ Lesson 3</a> — <em>stub with scope contract and pointers</em></p>
-<h3 id="lesson-4-when-jobs-fail-15-min">Lesson 4: When Jobs Fail (15 min)</h3>
-<blockquote>
-<p><em>"Reading PBS tea leaves and error messages"</em></p>
-</blockquote>
-<ul>
-<li>Queue states, the <code>.o</code> / <code>.e</code> split, <code>tracejob</code></li>
-<li>The 5 failures you'll actually hit</li>
-<li>The "what now?" decision tree</li>
-</ul>
-<p><a href="lesson-4/">→ Lesson 4</a> — <em>stub with scope contract and pointers</em></p>
-<h3 id="lesson-5-right-sizing-requests-1520-min">Lesson 5: Right-sizing Requests (15–20 min)</h3>
-<blockquote>
-<p><em>"How much computer do I actually need?"</em></p>
-</blockquote>
-<ul>
-<li>The request-then-tune loop</li>
-<li>Cores, memory, walltime, GPU — what to ask for and why</li>
-<li>One worked translation: laptop script → PBS request</li>
-</ul>
-<p><a href="lesson-5/">→ Lesson 5</a> — <em>stub with scope contract and pointers</em></p>
-<h3 id="lesson-6-job-arrays-15-min">Lesson 6: Job Arrays (15 min)</h3>
-<blockquote>
-<p><em>"When the same script runs 100 times"</em></p>
-</blockquote>
-<ul>
-<li><code>qsub -J 1-N</code>, <code>PBS_ARRAY_INDEX</code></li>
-<li>Sub-job monitoring with <code>qstat -t</code></li>
-<li>Recovering from partial failure</li>
-</ul>
-<p><a href="lesson-6/">→ Lesson 6</a> — <em>stub with scope contract and pointers</em></p>
-<h3 id="lesson-7-long-jobs-dependencies-checkpointing-1520-min">Lesson 7: Long Jobs — Dependencies &amp; Checkpointing (15–20 min)</h3>
-<blockquote>
-<p><em>"When one walltime ceiling isn't enough"</em></p>
-</blockquote>
-<ul>
-<li>The 48-hour-barrier problem</li>
-<li>Job dependencies with <code>afterok</code> (wrapper-script idiom)</li>
-<li>Checkpointing intuition</li>
-</ul>
-<p><a href="lesson-7/">→ Lesson 7</a> — <em>stub with scope contract and pointers</em></p>
-<hr />
-<p>Ready to dive in? Start with the <a href="prerequisites/">Prerequisites Checklist</a>, then head to <a href="lesson-1/">Lesson 1</a> and get from zero to productive in record time! 🚀</p>
+<p>← <strong><a href="../lesson-4/">Lesson 4: When Jobs Fail</a></strong> · <strong><a href="../lesson-6/">Lesson 6: Job Arrays</a></strong> →</p>
 
 
 
@@ -1600,7 +1288,7 @@
     <span class="md-icon" title="Created">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="September 23, 2025 18:09:52 AEST">September 23, 2025</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="June 23, 2026 20:16:37 AEST">June 23, 2026</span>
   </span>
 
     
@@ -1717,12 +1405,12 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["search.suggest", "search.highlight", "search.share", "navigation.instant", "navigation.instant.progress", "navigation.path", "navigation.top", "navigation.expand", "navigation.indexes", "content.action.view", "content.action.edit", "content.code.copy", "content.code.select", "content.code.annotate"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["search.suggest", "search.highlight", "search.share", "navigation.instant", "navigation.instant.progress", "navigation.path", "navigation.top", "navigation.expand", "navigation.indexes", "content.action.view", "content.action.edit", "content.code.copy", "content.code.select", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
-        <script src="../javascripts/katex.js"></script>
+        <script src="../../javascripts/katex.js"></script>
       
         <script src="https://unpkg.com/katex@0/dist/katex.min.js"></script>
       
