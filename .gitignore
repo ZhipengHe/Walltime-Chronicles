@@ -20,3 +20,6 @@ site/
 
 # Local-only working dir for audits, discussions, plans (not for the published site)
 .plan/
+
+# Playwright MCP scratch (snapshots, console logs from render-check sessions)
+.playwright-mcp/
