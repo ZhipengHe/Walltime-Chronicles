@@ -1,392 +1,208 @@
-# Lesson 1: HPC Fundamentals
-
-!!! info "Pre-rewrite content — restructure in progress"
-    This page contains the previous **Lesson 0** material. The course is migrating to a 7-lesson workflow-driven outline; this lesson will be rewritten as **Lesson 1: Welcome to Aqua** in an upcoming release — keeping the concept overview but adding a hands-on first SSH connection + 5-minute interactive job at the end. The current content remains accurate; only the structure is changing. See the [course outline](index.md) for the full plan.
+# Lesson 1: Welcome to Aqua
 
 !!! quote "Mission Statement"
-    *"What is this magical compute cluster anyway?"* 🏗️✨
+    *"From your laptop to a real compute cluster — and back — in 15 minutes."* 🌊
 
-Welcome to your introduction to High-Performance Computing! Before we start submitting jobs and using compute resources, let's understand what we're actually working with. Think of this as getting to know the neighborhood before you start visiting.
+Welcome to Aqua, QUT's central HPC. The first half of this lesson is the mental model you need to stop being confused: what a cluster *is*, where your files live, and why there are two kinds of machine you'll talk to. The second half is the hands-on round-trip — SSH in, ask PBS for a compute node, do nothing useful on it, exit. Once you've done that loop end-to-end, every later lesson is just variations on the same theme.
 
 ## 📋 What You'll Accomplish
 
 By the end of this 15-minute lesson, you'll have:
 
-- [ ] **HPC architecture understanding** - from your laptop to QUT Aqua infrastructure
-- [ ] **File systems knowledge** - where to store different types of data
-- [ ] **PBS job types mastery** - interactive, batch, and array jobs
-- [ ] **Resource request basics** - cores, memory, walltime, and hardware IDs
-- [ ] **Job scheduling context** - why PBS exists and its benefits
+- [ ] **A mental model of Aqua** — what's a node, where files live, who decides when your job runs
+- [ ] **SSHed into Aqua** — and confirmed you landed on the login node (`aquarius02`)
+- [ ] **Run your first interactive job** — `qsub -I` for 5 minutes on a real compute node
+- [ ] **Felt the difference** between login and compute nodes (different hostnames, same files)
+- [ ] **Exited cleanly** — resources released back to PBS
 
-!!! tip "Keep It Conceptual"
-    This lesson is all about understanding - no commands to run yet! We're building the mental model you'll need for everything that follows.
+!!! tip "Open a terminal now"
+    Keep a terminal window handy. Part 1 is conceptual; Part 2 is fingers on keys. You don't want to be hunting for your terminal app halfway through Step 1.
 
 ---
 
-## 🏗️ Part 1: Understanding QUT Aqua Architecture (7 minutes)
+## 🌊 Part 1: What is Aqua? (~5 min)
 
-!!! info "What Is a Compute Cluster?"
-    A compute cluster is like a **digital apartment building** full of powerful computers, all connected and working together under one management system.
+**Aqua** (formally *Aquarius*) is QUT's centrally-funded supercomputer — free to use for QUT researchers. It's built for the workloads your laptop can't handle: training ML models on real datasets, running multi-day simulations, slicing genomes, modelling climate, fitting cosmologically large parameter sweeps. Anything where "let it run overnight on the M2" is no longer a serious plan.
 
-### Scale Comparison: Personal to Supercomputing
-
-#### Your Laptop
-
-This is what you're working with right now - a single computer with limited resources:
-
-```mermaid
-graph TB
-    A[Your Laptop] --> B[1 CPU]
-    B --> C[4-8 cores]
-    B --> D[8-64 GB RAM]
-    A --> F[1 GPU]
-    A --> E[1 storage drive]
-
-    style A fill:#e1f5fe
-```
-
-#### A Compute Node
-
-Now imagine scaling up to a single node in the HPC cluster - much more powerful hardware in one machine:
-
-```mermaid
-graph TB
-    A[Compute Node] --> B[2-4 CPUs]
-    B --> C[24-128 cores total]
-    B --> D[128-512 GB RAM]
-    A --> G[1-4 GPUs]
-    A --> E[Local storage]
-    A --> F[Network storage access]
-
-
-    style A fill:#fff3e0
-```
-
-#### QUT Aqua: The Complete Infrastructure
-
-Finally, here's how hundreds of these powerful nodes work together as a complete system:
+Architecturally, it's a few hundred powerful computers (**nodes**) talking to a shared storage pool over high-speed networking, all coordinated by a job scheduler called **PBS** that hands out resources fairly across the ~hundreds of users competing for them at any given moment.
 
 ```mermaid
 graph TD
-    subgraph "External Access"
-        Client[Your Laptop]
-        Internet[Internet/VPN]
-    end
+    You[Your laptop] -->|SSH<br/>via VPN if off-campus| Login[Login node<br/>aquarius02]
+    Login -->|qsub| PBS[PBS scheduler]
+    PBS -->|allocates| CPU[CPU nodes<br/>cpu1n*<br/>AMD Genoa, 192 cores]
+    PBS -->|allocates| GPU[GPU nodes<br/>gpu1n*<br/>H100, A100]
+    PBS -->|allocates| Mem[Large-memory node<br/>mem1n001<br/>6 TB RAM]
 
-    subgraph "Management Layer"
-        Login[Login Nodes]
-        JobScheduler[PBS Job Scheduler]
-    end
+    CPU -->|read/write| FS[(Shared filesystems<br/>/home, /scratch, /work)]
+    GPU -->|read/write| FS
+    Mem -->|read/write| FS
+    Login -->|read/write| FS
 
-    subgraph "Compute Resources"
-        CPUNodes[CPU Nodes<br/>AMD EPYC cores]
-        GPUNodes[GPU Nodes<br/>H100/A100 cards]
-        MemNodes[High-Memory Nodes<br/>Up to 6TB RAM]
-    end
-
-    subgraph "File Systems"
-        Home[Home Storage<br/>Personal workspace]
-        Scratch[Scratch Storage<br/>High-performance]
-        Work[Work Storage<br/>Project data]
-    end
-
-    subgraph "Network"
-        IB[InfiniBand Network<br/>200-400 Gbit/s]
-    end
-
-    Client --> Internet
-    Internet --> Login
-    Login --> JobScheduler
-    JobScheduler --> CPUNodes
-    JobScheduler --> GPUNodes
-    JobScheduler --> MemNodes
-
-    CPUNodes --> IB
-    GPUNodes --> IB
-    MemNodes --> IB
-    IB --> Home
-    IB --> Scratch
-    IB --> Work
-
-    style Client fill:#e1f5fe
+    style You fill:#e1f5fe
     style Login fill:#fff3e0
-    style CPUNodes fill:#f3e5f5
-    style GPUNodes fill:#e8f5e8
-    style MemNodes fill:#fce4ec
+    style PBS fill:#f3e5f5
+    style CPU fill:#e8f5e8
+    style GPU fill:#e8f5e8
+    style Mem fill:#fce4ec
+    style FS fill:#fff9c4
 ```
 
-!!! info "QUT Aqua Specifications"
-    - **70+ compute nodes** with different capabilities
-    - **10,000+ CPU cores** across the cluster
-    - **100+ GPU cards** (H100, A100) for AI/ML workloads
-    - **High-speed InfiniBand** interconnect for parallel jobs
-    - **Petabyte-scale storage** accessible from all nodes
+!!! info "Aqua at a glance"
+    - **~70 compute nodes** — 50 CPU (AMD Genoa), 14 H100 GPU hosts, 8 A100 GPU hosts, 1 large-memory node
+    - **~10,000 CPU cores** across the cluster
+    - **120 GPUs** total (56 H100 + 64 A100)
+    - **High-speed InfiniBand** interconnect (200–400 Gbit/s) between nodes and storage
+    - **~1 PB Weka scratch storage** on NVMe flash
 
-    For detailed hardware specifications, see [QUT eResearch Aqua Hardware Documentation](https://docs.eres.qut.edu.au/about-aqua#hardware)[^1].
+    Full hardware specs: [About Aqua](https://docs.eres.qut.edu.au/about-aqua#hardware)[^1].
 
-### File Systems
+### Where your files live
 
-!!! info "Complete Documentation"
-    For detailed filesystem specifications, quotas, and usage guidelines, see [QUT eResearch Filesystem Documentation](https://docs.eres.qut.edu.au/hpc-filesystem#summary-of-important-filesystems-mounted-on-aqua)[^1].
+Aqua mounts four filesystems on every node. Picking the right one for the right job is the difference between "my code is fast" and "my I/O is so slow the cluster operator emails me asking what I'm doing":
 
-Files on Aqua are stored in different locations depending on their purpose and access requirements:
+| Filesystem | Path | Backed up? | Speed | When to use |
+|------------|------|------------|-------|-------------|
+| **Home** | `/home/$USER` | ✅ Lustre | Good | Scripts, configs, small personal data |
+| **Scratch** | `/scratch/$USER/...` | ❌ Weka | Ultra-fast | Active analysis, large I/O, anything performance-sensitive |
+| **Work** | `/work/<project>/...` | ✅ Lustre | Good | Shared project data (request via eResearch ticket) |
+| **TMPDIR** | `$TMPDIR` (job-only) | ❌ Weka | Ultra-fast | Per-job intermediates — gone when the job exits |
 
-**Home Directory (`/home/$USER` or `~`):**
+!!! warning "Two rules to internalise now"
+    1. **Scratch isn't backed up** and files inactive for 30+ days get auto-swept. Move anything you want to keep into `/home` or `/work` before that.
+    2. **Don't dump millions of small files in `/home`.** Lustre slows to a crawl. If a workflow generates many tiny files (extracting archives, compiling, installing deps), do it on `/scratch` and copy the result back.
 
-- **Your personal workspace** - only you can access it
-- **Lustre filesystem** - reliable storage with good performance
-- **Regularly backed up** - safe for important files
-- **Use for**: Scripts, configuration files, small personal data
-- **Created automatically** when you first log in
+For the deeper take — including per-queue node assignments and which filesystem is fastest for which I/O shape — see [Know Your Nodes](../scheduler/Know-Your-Nodes.md). For the official QUT reference: [QUT eResearch — Filesystem and data management](https://docs.eres.qut.edu.au/hpc-filesystem)[^1].
 
-**Scratch Storage (`/scratch`):**
+### Login nodes vs compute nodes
 
-- **High-performance temporary workspace** for active computations
-- **Weka filesystem** - extremely fast I/O (17 million IOPS, 500GB/s)
-- **Not backed up** - data can be lost!
-- **Cleaned automatically** - files deleted if inactive after 30 days
-- **Use for**: Large datasets during analysis, temporary job files
-- **Create project folders**: `mkdir -p /scratch/$USER/project_name`
+Two distinct kinds of machine on Aqua, and the difference matters:
 
-**Work Storage (`/work`):**
+=== "Login node (`aquarius02`)"
+    - **Where you land** when you SSH in
+    - **Shared** with every other user logged in right now
+    - A single 24-core EPYC box with 187 GB RAM — easily overwhelmed
+    - Use it for: editing files, submitting jobs, checking job status, light file transfer
+    - **Don't** run heavy work here — compiling, training, multi-hour scripts, terabyte copies
+    - Think of it as: the reception desk
 
-- **Shared project storage** for research groups
-- **Lustre filesystem** - reliable and backed up
-- **Request via eResearch ticket** - not automatically available
-- **Use for**: Long-term research data, shared datasets
+=== "Compute nodes (`cpu1n*`, `gpu1n*`, `mem1n001`)"
+    - **Where PBS sends your job** when resources are free
+    - **Dedicated to your job** for its entire walltime
+    - Hundreds available, each with 24–192 cores, lots of RAM, sometimes GPUs
+    - Hostname format tells you the type: `cpu1nNNN` (CPU), `gpu1nNNN` (GPU), `mem1n001` (the 6 TB monster)
+    - This is where the real work happens
 
-**Temporary Storage (`$TMPDIR`):**
-
-- **Job-specific fast storage** - only available during job execution
-- **Weka filesystem** - ultra-fast for temporary files
-- **Automatically cleaned** when job finishes
-- **Use for**: Intermediate calculations, temporary outputs
-
-!!! tip "File system best practice: avoid millions of small files in `/home`"
-    The Lustre-backed `/home/$USER` filesystem slows down when a single user accumulates millions of small files. QUT eResearch asks users to keep file counts in home reasonable, and to archive folders that aren't in active use[^1].
-
-    **If a workflow generates many small files** (extracting large archives, compiling software with many intermediates, large dependency installs), prefer either of:
-
-    - **Run it on `/scratch`** and copy the finished output back to `/home`:
-
-    ```bash
-    mkdir -p /scratch/$USER/project_work
-    cd /scratch/$USER/project_work
-    # ... do the build / extract here ...
-    cp -r <results> ~/                  # back to home when done
-    ```
-
-    - **Archive completed folders** with `tar` once you're finished with them:
-
-    ```bash
-    tar -cvf <foldername>.tar <foldername>
-    rm -rf <foldername>
-    ```
-
-    !!! warning
-        `/scratch` files are deleted after 30 days of inactivity, so move anything you want to keep into `/home` (or shared `/work`) before then.
-
-    Reference: [QUT eResearch — Filesystem and data management](https://docs.eres.qut.edu.au/hpc-filesystem#summary-of-important-filesystems-mounted-on-aqua)[^1].
-
-!!! tip "Storage Performance Comparison"
-    | Filesystem | Speed | Backup | Use Case |
-    |------------|-------|--------|----------|
-    | **Home** | Good | ✅ Yes | Scripts, configs |
-    | **Scratch** | Ultra-fast | ❌ No | Active analysis, many small files |
-    | **Work** | Good | ✅ Yes | Project data |
-    | **TMPDIR** | Ultra-fast | ❌ No | Job temporaries |
+The hostname in your shell prompt tells you which one you're on. We'll see this in action below.
 
 ---
 
-## 🧠 Part 2: What PBS Actually Does for You (8 minutes)
+## 🛠️ Part 2: Your First Interactive Session (~10 min)
 
-### The Problem PBS Solves
+Time to SSH in and try a tiny interactive job. The goal isn't to *do* anything useful — it's to feel the **login → request → compute → exit** loop end-to-end before Lesson 3 starts introducing real PBS scripts. If you can do this round-trip, you're 80% of the way to being productive on Aqua.
 
-Imagine trying to organize shared use of a car among 500 people without any system. Chaos, right?
+### Step 1: SSH in
 
-!!! info "Without Job Scheduling"
-    ```mermaid
-    graph TB
-        A[500 Users] --> B[Physical Hardware]
-        C[User 1: Needs all memory] --> B
-        D[User 2: Needs all cores] --> B
-        E[User 3: Long running job] --> B
-        F[...498 more users] --> B
+```bash
+ssh <your-username>@aqua.qut.edu.au
+```
 
-        B --> G[Complete chaos! 🔥]
+Replace `<your-username>` with your QUT username. You'll see a login banner, then end up at a prompt that looks something like:
 
-        style G fill:#ffebee
+```text
+[your-username@aquarius02 ~]$
+```
+
+The `aquarius02` part is the **login node hostname** — that's how you know you're at the front door, not inside a compute node yet.
+
+!!! example "Sanity checks before you go further"
+    ```bash
+    hostname    # → aquarius02
+    pwd         # → /home/<your-username>
+    whoami      # → <your-username>
     ```
 
-### PBS: Your Digital Resource Manager
+!!! warning "Don't run anything heavy here"
+    The login node is shared with everyone logged in right now. Compiling a large project, running a Python script for 20 minutes, copying terabytes of data — none of that goes here. PBS exists so you don't have to. We're about to use it.
 
-**PBS (Portable Batch System)** is like having a really smart building manager who handles all the resource allocation and scheduling automatically.
+### Step 2: Ask PBS for a 5-minute interactive job
 
-### How PBS Works?
-
-Here's the basic flow of how PBS manages your job from submission to completion:
-
-```mermaid
-sequenceDiagram
-    participant You
-    participant PBS
-    participant Cluster
-
-    You->>PBS: "I need 4 cores for 2 hours"
-    PBS->>PBS: Checks available resources
-    PBS->>You: "Job queued, position #23"
-    PBS->>Cluster: Allocates resources when available
-    PBS->>You: "Job started on node aqua-01"
-    Cluster->>PBS: Job completed
-    PBS->>You: "Your results are ready!"
+```bash
+qsub -I -l walltime=00:05:00 -l select=1:ncpus=1:mem=1GB
 ```
 
-### Types of PBS Jobs You'll Use
+!!! example "Command breakdown"
+    - `qsub -I` → request an **interactive** job (PBS will give you a shell on a compute node)
+    - `-l walltime=00:05:00` → kill the job after 5 minutes if you haven't exited
+    - `-l select=1:ncpus=1:mem=1GB` → give me 1 chunk: 1 CPU core, 1 GB RAM
 
-There are three essential types of PBS jobs, each designed for different workflows:
+That's the smallest reasonable shape — just enough to see "yes, I'm somewhere different now." Real interactive sessions will ask for more (covered in Lesson 5).
 
-#### Interactive Jobs
+After submitting, you'll see something like:
 
-When you need to work directly on compute nodes in real-time, interactive jobs give you immediate access:
+```text
+qsub: waiting for job 12345678.aqua-pbs to start
+qsub: job 12345678.aqua-pbs ready
 
-```mermaid
-sequenceDiagram
-    participant You
-    participant PBS
-    participant Node
-
-    You->>PBS: qsub -I (request interactive session)
-    PBS->>PBS: Find available resources
-    PBS->>Node: Allocate compute node
-    Node->>You: Direct terminal access
-    You->>Node: Run commands interactively
-    Node->>You: See results immediately
-    You->>Node: exit (when done)
-    Node->>PBS: Release resources
+[your-username@cpu1n023 ~]$
 ```
 
-- **Real-time access** to compute nodes - like SSH into a powerful computer
-- **Perfect for**: Testing code, debugging, exploring data interactively
-- **Command**: `qsub -I -l walltime=02:00:00 -l select=1:ncpus=4:mem=8GB`
-- **Use when**: You need to run commands and see results immediately
+Two things happened:
 
-#### Batch Jobs
+1. **Job ID was assigned** (`12345678.aqua-pbs`). You'll see job IDs everywhere — they're how PBS and you refer to the same thing.
+2. **Your prompt's hostname changed** from `aquarius02` to a compute node (here, `cpu1n023` — PBS picked whichever was free).
 
-When you need to run longer tasks without staying connected, batch jobs are the solution:
+You're on a compute node now. The shell you're typing into is running on a different physical machine from the one you SSHed into.
 
-```mermaid
-sequenceDiagram
-    participant You
-    participant PBS
-    participant Node
-    participant Files
+!!! note "If the wait is long"
+    `qsub -I` blocks until PBS finds a free compute node. For a 1-core / 1 GB request it's usually seconds; for bigger asks it can take minutes or hours (peak times). If you're waiting more than 30 seconds for this tiny request, `Ctrl+C` and try again — there might be a maintenance window or an unusually busy stretch.
 
-    You->>Files: Create script.pbs
-    You->>PBS: qsub script.pbs
-    PBS->>PBS: Queue job, wait for resources
-    PBS->>Node: Allocate when available
-    Node->>Files: Read and execute script
-    Node->>Files: Write output files
-    Node->>PBS: Job completed
-    PBS->>You: Email notification (optional)
+### Step 3: Confirm you've moved
+
+```bash
+hostname    # → cpu1nNNN (different from aquarius02)
+pwd         # → /home/<your-username> (same — your home travels with you)
+nproc       # → 1 (you asked for 1 core, PBS gave you 1 core)
 ```
 
-- **Submit and wait** - your script runs when resources become available
-- **Perfect for**: Long-running analysis, production workflows, overnight jobs
-- **Command**: `qsub my_script.pbs` (submit a script file)
-- **Use when**: You have a defined workflow that can run unattended
+Notice `pwd` is unchanged: your home directory follows you across nodes, because `/home` is a shared filesystem mounted on every node. This is also why `/scratch` and `/work` work the same way — write a file from one node, read it from another.
 
-#### Job Arrays
+Try `ls ~/` — same files you'd see from the login node.
 
-For processing multiple similar tasks efficiently, job arrays let you scale up your work:
+### Step 4: Exit cleanly
 
-```mermaid
-sequenceDiagram
-    participant You
-    participant PBS
-    participant Node1
-    participant NodeN
-    participant Files
-
-    You->>Files: Create array_script.pbs
-    You->>PBS: qsub -J 1-100 array_script.pbs
-    PBS->>PBS: Create 100 individual jobs
-
-    par Job 1
-        PBS->>Node1: Run script with PBS_ARRAY_INDEX=1
-        Node1->>Files: Write output files
-    and Job N
-        PBS->>NodeN: Run script with PBS_ARRAY_INDEX=N
-        NodeN->>Files: Write output files
-    end
-
-    Node1->>PBS: Job 1 complete
-    NodeN->>PBS: Job N complete
+```bash
+exit
 ```
 
-- **Many similar jobs** running the same script with different inputs
-- **Perfect for**: Processing multiple files, parameter sweeps, Monte Carlo simulations
-- **Command**: `qsub -J 1-100 array_script.pbs` (runs 100 copies)
-- **Use when**: You need to repeat the same analysis on different datasets
+You're back at the login node prompt (`aquarius02`), and PBS has released your compute node back into the pool. The job is now `F` (finished) in queue state. If you forget to exit, the job dies on its own when walltime expires — but exiting cleanly is polite.
 
-**Common Resource Requests:**
-
-- **Walltime**: `walltime=02:00:00` (how long your job will run)
-- **Cores**: `ncpus=4` (number of CPU cores)
-- **Memory**: `mem=8GB` (amount of RAM)
-- **GPU**: `ngpus=1` (number of GPU cards for AI/ML work)
-- **CPU Type**: `cpu_id=AMD-25-17` (AMD EPYC processors)
-- **GPU Type**: `gpu_id=H100` or `gpu_id=A100` (specify GPU model)
-
-### Why Job Scheduling Exists?
-
-Without PBS, 500+ users would compete for the same hardware simultaneously - complete chaos!
-
-!!! success "PBS Benefits"
-    ✅ **Fair resource sharing** - Everyone gets their turn based on priority
-
-    ✅ **Predictable access** - You get exactly the resources you request
-
-    ✅ **Efficient usage** - No wasted idle time or resource conflicts
+!!! success "You've now done the basic round-trip"
+    Log in → request resources → work on a compute node → exit. This is the loop you'll repeat for every interactive session, forever. Batch jobs (Lesson 3) are the same pattern with a script in the middle and no human waiting around for it.
 
 ---
 
 ## 🎯 Key Takeaways
 
-!!! success "You Now Understand"
+!!! success "You now know"
 
-    🏗️ **HPC Scale** - From 4-8 cores on your laptop to 10,000+ cores on QUT Aqua
+    🌊 **What Aqua is** — QUT's centrally-funded HPC, free to researchers, ~70 nodes / 10k CPU cores / 120 GPUs
 
-    💾 **Storage Strategy** - Home (backed up), Scratch (fast), Work (shared), TMPDIR (temporary)
+    📂 **Where files live** — `/home` for code (backed up), `/scratch` for active data (fast, not backed up), `/work` for shared (backed up), `$TMPDIR` for per-job intermediates
 
-    🎯 **Job Types** - Interactive (real-time), Batch (automated), Arrays (parallel processing)
+    🚪 **Login vs compute** — login is `aquarius02` (shared reception desk, no heavy work); compute is `cpu1n*` / `gpu1n*` / `mem1n*` (dedicated to your job)
 
-    📊 **Resource Requests** - Walltime, cores, memory, GPU types (H100/A100), CPU types (AMD-25-17)
-
-    ⚖️ **PBS Benefits** - Fair sharing, predictable access, efficient resource usage
-
-!!! info "Ready for Next Steps"
-
-    ✅ **You can choose** the right job type for your work
-
-    ✅ **You understand** where to store your files safely
-
-    ✅ **You know** what resources to request from PBS
-
-    ✅ **You appreciate** why job scheduling prevents chaos
+    🛠️ **The round-trip** — `ssh` → `qsub -I` → work → `exit`. PBS handles the rest.
 
 ---
 
 ## 🔗 What's Next?
 
-!!! info "Coming Up in Lesson 2"
-    Now that you understand what you're working with, let's get hands-on! We'll set up your Python environment and take the cluster for a test drive with an interactive session.
+→ **[Lesson 2: Tooling Setup](lesson-2.md)** — install Miniconda or UV so your next interactive session has a real Python environment to play with.
 
-    - Environment setup (Miniconda or UV)
-    - Your first interactive session
-    - Understanding login vs compute nodes
-    - Testing your setup
-
-Ready to get your hands dirty? Let's head to [Lesson 2: Environment Setup & First Interactive Session](lesson-2.md)! 🚀
+!!! question "Stuck?"
+    - **SSH not working?** Revisit the [Prerequisites Checklist](prerequisites.md).
+    - **Want better tooling?** [Cmd+Opt+Remote](../remote-dev/index.md) covers SSHFS, VS Code Tunnel, JupyterHub, and friends — pick a development workflow that doesn't make you cry.
+    - **Curious about the hardware?** [Know Your Nodes](../scheduler/Know-Your-Nodes.md) is the deep field guide — per-queue node assignments, GPU/CPU families, the quirks worth knowing.
 
 [^1]: Access only in QUT network. Please use VPN to access the documentation when off-campus.
