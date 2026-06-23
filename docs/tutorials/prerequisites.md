@@ -27,7 +27,7 @@ You'll obviously need to be able to connect to QUT's Aqua system. If you can SSH
 Working on HPC systems means living in the Linux command line. You don't need to be a shell expert, but you should be comfortable with basic navigation, file operations, and understanding how the file system is organized.
 
 !!! info "Need to learn Linux fundamentals?"
-    QUT eResearch provides an excellent tutorial: [Intro to the Shell](https://docs.eres.qut.edu.au/sn-index) — covers essential commands, file systems, and more[^1].
+    QUT eResearch provides an excellent tutorial: [Intro to the Shell](https://docs.eres.qut.edu.au/sn-index)[^1] — covers essential commands, file systems, and more.
 
 #### Core Commands You'll Use Daily
 

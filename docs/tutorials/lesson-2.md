@@ -366,8 +366,7 @@ You'll be back on the login node, and your compute resources are released.
 
 !!! question "Need Help?"
 
-    - **Environment issues?** Check [Surviving without VS Code Remote SSH](../remote-dev/Surviving-without-VS-Code-Remote-SSH.md)
-    - **Package problems?** See [Surviving without VS Code Remote SSH](../remote-dev/Surviving-without-VS-Code-Remote-SSH.md)
+    - **Environment or package issues?** Check [Surviving without VS Code Remote SSH](../remote-dev/Surviving-without-VS-Code-Remote-SSH.md)
     - **Interactive session not starting?** Review [Guess, Request, Regret: The Art of Walltime](../scheduler/The-Art-of-Walltime.md)
 
 ---
