@@ -102,7 +102,7 @@ nav:
   - "Crash Course Café":
     - tutorials/index.md
     - "Prerequisites Checklist": tutorials/prerequisites.md
-    - "Lesson 1: HPC Fundamentals": tutorials/lesson-1.md
+    - "Lesson 1: Welcome to Aqua": tutorials/lesson-1.md
     - "Lesson 2: Environment Setup & First Interactive Session": tutorials/lesson-2.md
     - "Lesson 3: Your First Batch Job": tutorials/lesson-3.md
     - "Lesson 4: When Jobs Fail": tutorials/lesson-4.md
