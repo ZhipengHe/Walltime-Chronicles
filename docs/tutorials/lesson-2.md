@@ -42,15 +42,15 @@ Here's the honest comparison (the flowchart skips Miniconda — it's the one to 
 | Tool | Recommendation | Best for | Why / why not |
 |---|---|---|---|
 | **uv** | ⭐ **Default** | Pure-Python work, ML via pip (PyTorch, TensorFlow, JAX, HuggingFace) | Rust-based, single binary, **10–100× faster** than pip (per Astral's [official benchmarks](https://github.com/astral-sh/uv/blob/main/BENCHMARKS.md)). Limitation: PyPI-only. |
-| **Miniforge** | ✓ Recommended for conda needs | Anything on [conda-forge](https://conda-forge.org/) / [bioconda](https://bioconda.github.io/) (samtools, bcftools, R interop, exotic binary stacks) | Open-source, community-maintained, conda-forge default channel, **no Anaconda licensing**. Ships both `conda` and [`mamba`](https://mamba.readthedocs.io/) (mamba = drop-in for conda with the faster libmamba solver). ~80 MB installer + Python. |
+| **Miniforge** | ✓ Recommended for conda needs | Anything on [conda-forge](https://conda-forge.org/) / [bioconda](https://bioconda.github.io/) (samtools, bcftools, R interop, exotic binary stacks) | Open-source, community-maintained, conda-forge default channel, **no Anaconda licensing**. Ships both `conda` and [`mamba`](https://mamba.readthedocs.io/) (mamba = drop-in for conda with the faster [libmamba](https://mamba.readthedocs.io/en/latest/user_guide/concepts.html) solver). ~80 MB installer + Python. |
 | **micromamba** | ✓ Recommended (single-binary alternative) | Minimal install — CI pipelines, container base, or personal preference for a single binary | Same conda-forge ecosystem and libmamba solver as Miniforge's `mamba`; packaged as a single statically-linked C++ binary (~17 MB) instead of a full Python install. Commands are `micromamba` (alias to `conda` or `mamba` if you want). |
-| **Miniconda** | ✗ **Not recommended** | (Listed for awareness — you'll see it in many tutorials) | Anaconda's commercial Terms of Service applies to orgs >200 people; the `defaults` channel is being blocked by HPC sites (LLNL site-wide block scheduled for Feb 2027). Functionally identical to Miniforge once you switch to conda-forge — so just use Miniforge. |
+| **Miniconda** | ✗ **Not recommended** | (Listed for awareness — you'll see it in many tutorials) | Free for accredited universities (incl. QUT) under [Anaconda's Academic Policy](https://www.anaconda.com/legal/terms/academic), but registration + EULA + "non-commercial" restriction make it frictionful in practice. HPC sites are migrating away (LLNL site-wide block of Anaconda paid channels effective **Feb 2027**). See *A note on Miniconda* below — use Miniforge instead. |
 
 ---
 
 ## 📦 Install
 
-You've picked a tool above (if you skipped the Decide section: **uv** is the default — see the first H3 below). Each install is a single curl command, ~5 to ~30 seconds. Skip to the section for your pick.
+You've picked a tool above (if you skipped the Decide section: **uv** is the default — start there). Each install is a short upstream-installer flow, ~5 to ~30 seconds. Skip to the section for your pick.
 
 ### :material-lightning-bolt: uv (the default)
 
@@ -152,29 +152,43 @@ micromamba --version
 
 ### :material-cancel: A note on Miniconda (not recommended)
 
-You'll see Miniconda referenced everywhere — most existing Python-on-HPC tutorials (including QUT eResearch's own pages) recommend it. **We don't, for two real reasons:**
+You'll see Miniconda referenced everywhere — most existing Python-on-HPC tutorials (including [QUT eResearch's own conda guide](https://docs.eres.qut.edu.au/hpc-conda-package-and-environment-manager)[^1]) recommend it. **We don't, for two real reasons:**
 
-**1. Commercial Terms of Service.** Anaconda Inc. introduced commercial Terms of Service in 2020 — free for personal use or organisations under 200 people, paid licence required above. In **March 2024**, Anaconda removed the academic / non-profit exemption that had previously kept universities clear of the licensing requirement. ==QUT is well above 200 people, and the academic exemption is gone — Anaconda's ToS now applies.== Conda 24.x and later actively block environment operations until you accept Anaconda's ToS for `repo.anaconda.com/pkgs/main` and `pkgs/r` channels — a real wall users hit on first `conda create`.
+**1. Commercial Terms of Service — Miniconda is legal, but frictionful.** Anaconda's current [Terms of Service](https://www.anaconda.com/legal/terms/terms-of-service) (15 July 2025) allow QUT — and all accredited universities — to use the Anaconda repository free under the [Academic Policy](https://www.anaconda.com/legal/terms/academic); the 200-employee threshold for paid licensing applies only to for-profit organisations.
+
+So why not just use Miniconda? **Three points of friction:**
+
+- **Registration overhead.** Each user must register with an academic email and accept a separate Academic EULA, renewable annually.
+- **Use-case grayzone.** Free use is restricted to "non-commercial educational and research purposes" — uncertain for industry-funded research, commercialisation work, or consulting that QUT staff often do.
+- **The ToS prompt.** Recent Anaconda / Miniconda installations ship the [`conda-anaconda-tos`](https://www.anaconda.com/blog/conda-anaconda-tos-plugin) plugin (2025), which interrupts `conda create` / `install` / `search` against `pkgs/main` or `pkgs/r` to demand ToS acceptance — ==accepting it isn't proof of academic eligibility==, and the prompt fires whether you're entitled to free use or not.
+
+Miniforge sidesteps all of this. Its default channel (conda-forge) isn't governed by Anaconda's ToS at all.
 
 **2. HPC sites are migrating away.** LLNL announced a site-wide block of Anaconda's paid channels effective **February 2027** (see [LLNL Technical Bulletin 602](https://hpc.llnl.gov/technical-bulletins/bulletin-602)), recommending Miniforge as the drop-in replacement. [OLCF's Python docs](https://docs.olcf.ornl.gov/software/python/index.html) now recommend `miniforge3` modules on Frontier and Andes (as of mid-2026), targeting conda-forge by default — Anaconda modules remain loadable but aren't the documented entry point. This is the direction the HPC community is heading.
 
-???+ tip "If you've already installed Miniconda — here's the migration to Miniforge"
+??? tip "If you've already installed Miniconda — here's the migration to Miniforge"
     The migration is essentially: install Miniforge alongside (per the Install Miniforge section above), recreate your envs from scratch, then remove the old Miniconda install. The `conda` command and your scripts don't change — only the default channel does (conda-forge instead of Anaconda's `defaults`).
 
     For each env you want to keep:
 
     ```bash
-    # 1. From your existing Miniconda, snapshot the env to a YAML file
+    # 1. From your existing Miniconda, snapshot ONLY the packages you explicitly
+    #    requested (--from-history) and strip channel metadata (--ignore-channels).
+    #    This is what makes the migration actually move to conda-forge — a plain
+    #    `conda env export` would pin "channels: [defaults]" into the YAML.
     conda activate <your-env-name>
-    conda env export > <your-env-name>.yml
+    conda env export --from-history --ignore-channels > <your-env-name>.yml
     conda deactivate
 
     # 2. Switch shells / re-source so the Miniforge conda takes over
     source ~/miniforge3/bin/activate
 
-    # 3. Recreate the env on Miniforge (pulls from conda-forge this time)
+    # 3. Recreate the env on Miniforge (resolves fresh from conda-forge)
     conda env create -f <your-env-name>.yml
     ```
+
+    !!! note "Trade-off: `--from-history` loses exact pins"
+        With `--from-history`, the YAML lists only the packages you explicitly asked for, not the full dependency tree your old Miniconda had resolved. The recreated env may have **newer transitive dependency versions** than the original. That's usually fine (and is the point — you're migrating to a fresh resolve on conda-forge), but if you need bit-for-bit reproduction, export both forms (with and without `--from-history`) and reconcile differences manually.
 
     Once everything's migrated, remove the old Miniconda:
 
@@ -313,7 +327,7 @@ Now prove your install works. Pick the tab matching the tool you installed, run 
 
 !!! question "Stuck?"
     - **`uv` / `conda` / `micromamba` not found after install?** Re-source `~/.bashrc`, or open a new terminal so the shell init runs.
-    - **Hit Anaconda's Terms of Service error on first `conda create`?** You're on Miniconda (Anaconda's distribution) — switch to Miniforge per the section above.
+    - **Hit the `conda-anaconda-tos` plugin prompt on first `conda create`?** You're on Miniconda (or an Anaconda-shipped conda) accessing `pkgs/main` / `pkgs/r`. Switch to Miniforge — its conda-forge default channel isn't governed by the plugin. Migration steps in *A note on Miniconda*.
     - **Want the official QUT reference?** [QUT eResearch — Conda package and environment manager](https://docs.eres.qut.edu.au/hpc-conda-package-and-environment-manager)[^1]. Note: it recommends Miniconda; we don't, for the reasons in the *A note on Miniconda* section.
     - **Need a different tool entirely?** Aqua also has system Python via `module load Python/3.x` — but you'll be sharing it with everyone else. Stick with isolated envs.
 

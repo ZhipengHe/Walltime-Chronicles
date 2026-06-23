@@ -116,7 +116,7 @@ This crash course is your launching pad. When you hit specific challenges, you'l
 > *"Getting your Python tools ready"*
 
 - Pick one: uv (default) or Miniforge / micromamba (for conda-forge packages)
-- Install via a single curl command (upstream installers — no QUT module needed)
+- Install via upstream installers — no QUT module needed (~5 to ~30 seconds per tool)
 - Create a test environment, verify it works
 
 [→ Lesson 2](lesson-2.md) — *pre-rewrite content (was Lesson 1: Environment Setup & First Interactive Session)*
