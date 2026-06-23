@@ -102,8 +102,13 @@ nav:
   - "Crash Course Café":
     - tutorials/index.md
     - "Prerequisites Checklist": tutorials/prerequisites.md
-    - "Lesson 0: HPC Fundamentals": tutorials/lesson-0.md
-    - "Lesson 1: Environment Setup & First Interactive Session": tutorials/lesson-1.md
+    - "Lesson 1: HPC Fundamentals": tutorials/lesson-1.md
+    - "Lesson 2: Environment Setup & First Interactive Session": tutorials/lesson-2.md
+    - "Lesson 3: Your First Batch Job": tutorials/lesson-3.md
+    - "Lesson 4: When Jobs Fail": tutorials/lesson-4.md
+    - "Lesson 5: Right-sizing Requests": tutorials/lesson-5.md
+    - "Lesson 6: Job Arrays": tutorials/lesson-6.md
+    - "Lesson 7: Long Jobs — Dependencies & Checkpointing": tutorials/lesson-7.md
 
   - "Cmd+Opt+Remote":
     - remote-dev/index.md

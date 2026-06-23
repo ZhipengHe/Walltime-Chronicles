@@ -512,7 +512,7 @@ Weka is the high-performance tier — NVMe-only, 21 M IOPS underneath, designed 
     - Long-term shared data → `/work/` (request a folder via a QUT eResearch ticket).
     - In-job temporary files → `$TMPDIR` (already Weka, already cleaned on exit).
 
-For the higher-level filesystem orientation, see L0's [QUT Aqua's File Systems section](../tutorials/lesson-0.md). This page focuses on the *node-level* picture.
+For the higher-level filesystem orientation, see L1's [QUT Aqua's File Systems section](../tutorials/lesson-1.md). This page focuses on the *node-level* picture.
 
 ### :material-bug: Per-node quirks worth knowing
 
@@ -535,7 +535,7 @@ The cluster's hardware is stable but its **load** changes every minute. Before y
 
 For the broader picture:
 
-- :material-book-open-page-variant: [Lesson 0: HPC Fundamentals](../tutorials/lesson-0.md) — clusters, nodes, cores, file systems at a beginner level.
+- :material-book-open-page-variant: [Lesson 1: HPC Fundamentals](../tutorials/lesson-1.md) — clusters, nodes, cores, file systems at a beginner level.
 - :material-clock-outline: [Guess, Request, Regret: The Art of Walltime](The-Art-of-Walltime.md) — how to size walltime so you don't overshoot or undershoot.
 - :material-chef-hat: [Walltime by Recipe](Walltime-by-Recipe.md) — eight copy-paste PBS recipes (queue caps and hardware shapes from this page in action).
 - :material-link-variant: [About Aqua](https://docs.eres.qut.edu.au/about-aqua)[^1] — QUT eResearch's authoritative cluster description (vendor specs, pricing, maintenance schedule).
