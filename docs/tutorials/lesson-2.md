@@ -1,416 +1,243 @@
-# Lesson 2: Environment Setup & First Interactive Session
-
-!!! info "Pre-rewrite content — restructure in progress"
-    This page contains the previous **Lesson 1** material. In an upcoming release, this lesson will be rewritten as **Lesson 2: Tooling Setup** — focused purely on Miniconda/UV installation. The "first interactive session" content will move into **Lesson 1: Welcome to Aqua**. The current content remains accurate; only the structure is changing. See the [course outline](index.md) for the full plan.
+# Lesson 2: Tooling Setup
 
 !!! quote "Mission Statement"
-    *"Getting your tools ready and taking the cluster for a test drive"* 🚗💨
+    *"Pick a Python tool, install it once, never fight with system Python again."* 🛠️
 
-Welcome to your first hands-on lesson! Think of this as setting up your workshop before building anything. We'll get your Python environment sorted, install some essential tools, and take QUT Aqua for a test drive with an interactive session.
+You'll spend more of your HPC life inside a Python environment than anywhere else. Aqua ships system Python for the sysadmin's sake, not yours — touching it for your own work is a recipe for permission errors, version conflicts, and "it worked yesterday." This lesson picks one isolated Python tool, installs it on Aqua, and proves it works. Fifteen minutes; one terminal; done.
 
 ## 📋 What You'll Accomplish
 
 By the end of this 15-minute lesson, you'll have:
 
-- [ ] **Python environment setup** - Miniconda or UV installed
-- [ ] **First interactive session running** - Actually using compute resources
-- [ ] **Clear understanding** of login vs compute nodes
+- [ ] **Picked one** Python tool — Miniconda or UV
+- [ ] **Installed it on Aqua** (via the QUT module or a direct installer)
+- [ ] **Created a test environment** with one package
+- [ ] **Verified it works** — `python --version` + an import that doesn't crash
 
-!!! tip "Open Your Favourite Terminal Simulator!"
-    Keep a terminal window open to QUT Aqua throughout this lesson. You'll be running commands as we go!
+!!! tip "Pick one — don't install both your first time"
+    Both are good choices. Learning one is plenty for the rest of this course. You can add the other later when you have a concrete reason. Your first interactive session (Lesson 1) used whichever Python Aqua gave you by default; from this lesson onward you control your own environment.
 
 ---
 
-## :simple-python: Part 1: Python Environment Setup (8 minutes)
+## Decide: Miniconda or UV?
 
-!!! tip "Choose Your Path"
-    You can use either **Miniconda** OR **UV** for Python environment management. Both are excellent choices --
-     pick the one that appeals to you! Learning one is perfectly sufficient for HPC work.
+The choice between them is mostly about what you'll *install* into the environment, not how you'll use it day-to-day. Both give you isolated environments. Both work fine on Aqua.
 
-### 🐍 Installing Miniconda (5 minutes)
+=== "Miniconda — for ML / data science / scientific stack"
+    - **Why pick it:** Conda packages bundle their **binary / system dependencies** (CUDA runtime, MKL, glibc constraints). When you `conda install pytorch=2.2 cudatoolkit=12.1`, conda actually handles the CUDA side. pip can't do that.
+    - **Speed:** Slower than UV when you're just adding pip packages. The trade-off is conda doing real work.
+    - **Familiarity:** Industry default for HPC ML. Most QUT eResearch examples assume conda.
 
-Miniconda is your Python environment lifesaver on HPC systems. No more "it works on my laptop" nightmares!
+=== "UV — for pure-Python projects and speed"
+    - **Why pick it:** Rust-based, **10–30× faster than pip** for installs and resolves. Wonderful when you're iterating on `requirements.txt` and not waiting on big binary packages.
+    - **Limitation:** No equivalent of conda's binary-dependency handling. For CUDA-linked PyTorch you'll usually fall back to pip-installable wheels or pair UV with conda for the system bits.
+    - **Familiarity:** Newer (Astral, late 2024), gaining ground fast. Drop-in for `pip` / `venv` workflows.
 
-#### Why Miniconda on HPC?
+**Default if you can't decide:** Miniconda if your work involves PyTorch/TensorFlow/CUDA/scientific Python; UV otherwise.
 
-!!! info "The Problem"
-    HPC Python requires you to load modules before use, which can be cumbersome for development. Miniconda gives you:
+---
 
-    - **Full control** over Python versions
-    - **Isolated environments** for different projects
-    - **No permission headaches** when installing packages
+## Install Miniconda
 
-#### Installation Steps
-
-!!! tip "Shortcut: use the QUT-provided Miniconda module instead"
-    If you don't need a specific Miniconda version, QUT eResearch already ships one. You can skip the install-yourself steps below and just:
+=== "Via QUT module (recommended)"
+    Fastest path — QUT eResearch already ships Miniconda as a module. No download, no installer flags.
 
     ```bash
-    module load Miniconda3/24.9.2-0
+    module load Miniconda3/24.9.2-0   # or whatever's current — see note below
     conda init
     source ~/.bashrc
     ```
 
-    Verify with `conda --version`. An `Anaconda3/2024.02-1` module is also available if you want the full Anaconda distribution. See [QUT eResearch — Conda package and environment manager](https://docs.eres.qut.edu.au/hpc-conda-package-and-environment-manager)[^1] for details.
-
-!!! info "Want to install Miniconda yourself? Follow QUT's official steps"
-    For the install-yourself path, see [Accessing available software — Install Conda](https://docs.eres.qut.edu.au/hpc-accessing-available-software#install-conda) from QUT eResearch[^1]. The steps below mirror that guide.
-
-1. **Download the installer** (from your home directory):
+    Verify:
 
     ```bash
-    cd ~
-    # create the directory if it doesn't exist
-    mkdir -p ~/miniconda3
-    # download the installer and rename it to miniconda.sh
-    wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh
+    conda --version
     ```
 
-2. **Run the installer**:
-
-    ```bash
-    # run the installer
-    # batch mode "-b"
-    # update "-u"
-    # install to ~/miniconda3 "-p"
-    bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3
-    # remove the installer
-    rm ~/miniconda3/miniconda.sh
-    ```
-
-3. **Activate the Base Environment**:
-
-    ```bash
-    # activate the base environment
-    source ~/miniconda3/bin/activate
-    ```
-
-    !!! example "Installation Prompts"
+    !!! example "Expected output"
         ```text
-        Do you accept the license terms? [yes|no] → yes
-        Miniconda3 will now be installed into this location:
-        /home/your-username/miniconda3 → Press ENTER
-        Do you wish the installer to initialize Miniconda3? → yes
+        conda 24.9.2
         ```
 
-4. **Activate the installation**:
+    !!! note "Available Miniconda versions on Aqua"
+        Run `module avail Miniconda3` to see what's currently shipped. There's also an `Anaconda3/2024.02-1` module if you want the full Anaconda distribution. Reference: [QUT eResearch — Conda package and environment manager](https://docs.eres.qut.edu.au/hpc-conda-package-and-environment-manager)[^1].
+
+=== "Direct installer (if you need a specific version)"
+    Only do this if the QUT module versions don't match what you need. Mirrors [QUT's official install-Conda guide](https://docs.eres.qut.edu.au/hpc-accessing-available-software#install-conda)[^1].
 
     ```bash
+    # Download the installer into ~/miniconda3/
+    cd ~ && mkdir -p ~/miniconda3
+    wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh \
+         -O ~/miniconda3/miniconda.sh
+
+    # Run in batch mode (-b), update (-u), install to ~/miniconda3 (-p)
+    bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3
+    rm ~/miniconda3/miniconda.sh
+
+    # Activate base + persist for future shells
+    source ~/miniconda3/bin/activate
     source ~/.bashrc
     ```
 
-5. **Verify it worked**:
+    Verify:
 
     ```bash
     conda --version
     which python
     ```
 
-    !!! success "Expected Output"
+    !!! example "Expected output"
         ```text
-        conda 25.x  # whatever the latest installer ships
+        conda 25.x
         /home/your-username/miniconda3/bin/python
         ```
 
-#### Quick Environment Test
+!!! warning "If `conda` isn't found after you log back in"
+    Your `~/.bashrc` change may not have stuck for new shells. Re-source it, or add the PATH export explicitly:
 
-Create a test environment to make sure everything works:
-
-```bash
-conda create -n test-env python=3.11 -y
-conda activate test-env
-python --version
-conda deactivate
-```
-
-!!! warning "Troubleshooting"
-    If `conda` command isn't found after installation:
     ```bash
-    export PATH="/home/$USER/miniconda3/bin:$PATH"
+    source ~/.bashrc
+    # or, persistently:
     echo 'export PATH="/home/$USER/miniconda3/bin:$PATH"' >> ~/.bashrc
     ```
 
-### ⚡ Installing UV (3 minutes)
+---
 
-UV is the new hotness in Python package management - it's blazingly fast and perfect for HPC environments where every second counts.
+## Install UV
 
-#### Why UV?
+=== "Inside conda base (if you already have conda)"
+    Drop UV into your existing conda `base` environment — UV will sit alongside conda and you can mix-and-match later.
 
-!!! abstract "Speed Comparison"
-    | Tool | Time to install requests |
-    |------|-------------------------|
-    | pip  | ~15 seconds |
-    | conda | ~30 seconds |
-    | **uv** | **~2 seconds** ⚡ |
-
-#### Installation
-
-If you set up conda above, you can drop UV into the base env. If you skipped conda, UV has a one-line standalone installer that doesn't need it:
-
-=== "Inside conda base"
     ```bash
     conda activate base
     pip install uv
     ```
 
 === "Standalone (no conda needed)"
+    Astral's one-line installer, no Python prerequisites.
+
     ```bash
     curl -LsSf https://astral.sh/uv/install.sh | sh
     source ~/.bashrc
     ```
 
-#### Verify Installation
+Verify:
 
 ```bash
 uv --version
 ```
 
-!!! success "Expected Output"
+!!! example "Expected output"
     ```text
-    uv 0.5.x  # or newer
+    uv 0.5.x
     ```
-
-#### Quick Test Drive
-
-Let's see UV in action:
-
-```bash
-# Create a temporary directory
-mkdir ~/uv-test && cd ~/uv-test
-
-# Create a virtual environment with UV (super fast!)
-uv venv test-venv
-
-# Activate it
-source test-venv/bin/activate
-
-# Install a package (watch the speed!)
-uv pip install requests
-
-# Test it works
-python -c "import requests; print('UV works! 🎉')"
-
-# Clean up
-deactivate
-cd ~ && rm -rf ~/uv-test
-```
 
 ---
 
-## 🖥️ Part 2: Your First Interactive Session (7 minutes)
+## Test Drive: Create a Project Environment
 
-Now for the fun part - let's actually use some compute resources! Interactive sessions are perfect for testing, debugging, and exploring.
+Now prove it works. Pick the tab matching what you just installed, run the four commands, and you're done.
 
-### Understanding the Architecture
-
-!!! info "HPC Node Types"
-    ```mermaid
-    graph TB
-        A[Your Laptop] -->|SSH| B[Login Node]
-        B -->|qsub -I| C[Compute Node]
-        B -->|File Management| D[Storage]
-        C -->|Heavy Computing| D
-
-        style B fill:#e1f5fe
-        style C fill:#fff3e0
-        style D fill:#f3e5f5
-    ```
-
-=== "Login Nodes"
-    - **Purpose**: File management, job submission, light editing
-    - **Resources**: Shared with all users
-    - **Rules**: NO heavy computation allowed
-    - **Think of it as**: The reception desk
-
-=== "Compute Nodes"
-    - **Purpose**: Your actual work happens here
-    - **Resources**: Dedicated to your job
-    - **Rules**: This is where you run everything
-    - **Think of it as**: Your private office
-
-### Starting an Interactive Session
-
-Time to request some compute resources:
-
-```bash
-qsub -I -l walltime=00:30:00 -l select=1:ncpus=2:mem=4GB
-```
-
-!!! example "Command Breakdown"
-    - `qsub -I` → Request an **interactive** session
-    - `-l walltime=00:30:00` → Maximum 30 minutes
-    - `-l select=1:ncpus=2:mem=4GB` → 1 node, 2 cores, 4GB RAM
-
-### What Happens Next
-
-!!! note "The Waiting Game"
-    You'll see something like:
-    ```text
-    qsub: waiting for job 12345.aqua-head to start
-    qsub: job 12345.aqua-head ready
-    ```
-
-    Then your prompt changes to indicate you're on a compute node (Aqua names compute nodes by type: `cpu1n001`, `cpu1n002`, ..., `gpu1n001`, ..., `mem1n001`):
-    ```text
-    [your-username@cpu1n001 ~]$
-    ```
-
-### Testing Your New Environment
-
-Once you're on a compute node, let's test our setup:
-
-```bash
-# Check where you are
-hostname
-echo "I'm on a compute node! 🎯"
-
-# Test conda
-conda --version
-
-# Test UV
-uv --version
-
-# Check your resources
-echo "CPU info:"
-lscpu | grep "CPU(s):"
-echo "Memory info:"
-free -h
-```
-
-### Quick Python Environment Test
-
-Let's create a project-specific environment and test it:
-
-```bash
-# Create a new conda environment for a hypothetical project
-conda create -n hpc-project python=3.11 numpy pandas -y
-
-# Activate it
-conda activate hpc-project
-
-# Use UV to add more packages quickly
-uv pip install matplotlib seaborn
-
-# Quick test
-python -c "
-import numpy as np
-import pandas as pd
-import matplotlib
-print('All packages imported successfully! 📦✅')
-print(f'NumPy version: {np.__version__}')
-print(f'Pandas version: {pd.__version__}')
-print(f'Matplotlib version: {matplotlib.__version__}')
-"
-```
-
-### Understanding Resource Usage
-
-!!! tip "Monitoring Your Usage"
+=== "Miniconda"
     ```bash
-    # Check your job details
-    qstat -f $PBS_JOBID
+    # Create an isolated environment with Python 3.11 and one package
+    conda create -n hello-aqua python=3.11 requests -y
 
-    # Monitor resource usage
-    htop  # If available, or use 'top'
+    # Activate it — your prompt should now show (hello-aqua) at the front
+    conda activate hello-aqua
+
+    # Prove Python and the package both work
+    python -c "import requests, sys; print('Python', sys.version.split()[0], '/ requests', requests.__version__)"
+
+    # Drop back out when done (the env still exists for next time)
+    conda deactivate
     ```
 
-### Ending Your Interactive Session
+    !!! example "Expected output"
+        ```text
+        Python 3.11.10 / requests 2.32.x
+        ```
 
-When you're done exploring:
+=== "UV"
+    ```bash
+    # Make a project folder + a venv inside it
+    mkdir -p ~/hello-aqua && cd ~/hello-aqua
+    uv venv .venv
 
-```bash
-# Deactivate your environment
-conda deactivate
+    # Activate it — your prompt should now show (.venv) at the front
+    source .venv/bin/activate
 
-# Exit the interactive session
-exit
-```
+    # Install a package (watch how fast)
+    uv pip install requests
 
-You'll be back on the login node, and your compute resources are released.
+    # Prove Python and the package both work
+    python -c "import requests, sys; print('Python', sys.version.split()[0], '/ requests', requests.__version__)"
+
+    # Drop back out when done (the venv lives in ~/hello-aqua/.venv)
+    deactivate
+    ```
+
+    !!! example "Expected output"
+        ```text
+        Python 3.13.x / requests 2.32.x
+        ```
+
+!!! tip "Where to put environments"
+    For tooling like this, `/home/$USER` is fine — environments are typically MB-to-low-GB, easy to back up, and Lustre handles them OK if you don't end up with hundreds of envs each carrying thousands of files. If you'll have a *huge* conda env (multi-GB PyTorch + CUDA + scientific libs), consider creating it on `/scratch/$USER/envs/` and symlinking — see [Know Your Nodes — File systems](../scheduler/Know-Your-Nodes.md) for the trade-off.
 
 ---
 
 ## 🎯 Key Takeaways
 
-!!! success "You've Successfully Learned"
+!!! success "You now have"
 
-    ✅ **Environment Management**: Miniconda gives you Python superpowers on HPC
+    🐍 **An isolated Python** that won't conflict with the system Python or other users
 
-    ✅ **Fast Package Installation**: UV makes package management lightning quick
+    🧪 **A working test environment** with at least one package installed
 
-    ✅ **Interactive Computing**: You can test and debug directly on compute nodes
+    🛠️ **A reproducible setup** — `conda create` or `uv venv` will reproduce the same shape next time
 
-    ✅ **Node Architecture**: Login nodes vs compute nodes - know the difference!
-
-!!! warning "Important Rules to Remember"
-
-    🚫 **Never run heavy computation on login nodes**
-
-    ✅ **Always use interactive sessions or jobs for real work**
-
-    💾 **Environments persist** - you only need to set them up once
-
-    ⏰ **Interactive sessions have time limits** - plan accordingly
+    📦 **Two tools you know exist** — even if you picked one, you know what the other is good for
 
 ---
 
 ## 🔗 What's Next?
 
-!!! info "Coming Up in Lesson 3"
-    Now that your environment is set up, you're ready to write and submit your first PBS job script! We'll cover:
+→ **[Lesson 3: Your First Batch Job](lesson-3.md)** — now that you have Python ready, time to wrap a job script around it and submit to PBS for real.
 
-    - PBS script anatomy
-    - Writing your first job
-    - Submitting and monitoring
-    - Understanding output files
-
-!!! question "Need Help?"
-
-    - **Environment or package issues?** Check [Surviving without VS Code Remote SSH](../remote-dev/Surviving-without-VS-Code-Remote-SSH.md)
-    - **Interactive session not starting?** Review [Guess, Request, Regret: The Art of Walltime](../scheduler/The-Art-of-Walltime.md)
+!!! question "Stuck?"
+    - **Conda or UV not found after install?** Re-source `~/.bashrc` or check `PATH` (see the warnings above).
+    - **Want the official QUT reference?** [QUT eResearch — Conda package and environment manager](https://docs.eres.qut.edu.au/hpc-conda-package-and-environment-manager)[^1].
+    - **Need a different tool entirely?** Aqua also has system Python via `module load Python/3.x` — but you'll be sharing it with everyone else. Stick with isolated envs.
 
 ---
 
 ## 📝 Quick Reference
 
-=== "Essential Commands"
+=== "Conda basics"
     ```bash
-    # Conda basics
-    conda create -n myenv python=3.11
-    conda activate myenv
-    conda deactivate
-
-    # UV basics
-    uv pip install package-name
-    uv pip install -r requirements.txt
-
-    # Interactive session
-    qsub -I -l walltime=00:30:00 -l select=1:ncpus=2:mem=4GB
+    conda create -n <name> python=3.11    # new env
+    conda activate <name>                  # enter env
+    conda deactivate                       # leave env
+    conda env list                         # see all envs
+    conda env remove -n <name>             # delete env
     ```
 
-=== "File Locations"
+=== "UV basics"
     ```bash
-    # Miniconda installation
-    ~/miniconda3/
-
-    # Conda environments
-    ~/miniconda3/envs/
-
-    # UV cache
-    ~/.cache/uv/
+    uv venv .venv                          # new venv (in cwd)
+    source .venv/bin/activate              # enter venv
+    uv pip install <pkg>                   # add a package (fast)
+    uv pip install -r requirements.txt     # install from requirements
+    deactivate                             # leave venv
     ```
 
-=== "Troubleshooting"
+=== "File locations"
     ```bash
-    # If conda isn't found
-    source ~/.bashrc
-    export PATH="~/miniconda3/bin:$PATH"
-
-    # If UV isn't found
-    conda activate base
-    which uv
+    ~/miniconda3/         # Miniconda install (if direct-installed)
+    ~/miniconda3/envs/    # Conda environments
+    ~/.cache/uv/          # UV's package cache
     ```
-
-Up next: **Lesson 3 — Your First Batch Job** *(coming soon)*. You'll learn to write a batch script, submit it, and read the output once it's published.
 
 [^1]: Access only in QUT network. Please use VPN to access the documentation when off-campus.
