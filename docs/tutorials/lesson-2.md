@@ -106,21 +106,12 @@ The choice between them is mostly about what you'll *install* into the environme
 
 ## Install UV
 
-=== "Inside conda base (if you already have conda)"
-    Drop UV into your existing conda `base` environment — UV will sit alongside conda and you can mix-and-match later.
+Astral's one-line installer — no Python prerequisite, ~5 seconds:
 
-    ```bash
-    conda activate base
-    pip install uv
-    ```
-
-=== "Standalone (no conda needed)"
-    Astral's one-line installer, no Python prerequisites.
-
-    ```bash
-    curl -LsSf https://astral.sh/uv/install.sh | sh
-    source ~/.bashrc
-    ```
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+source ~/.bashrc
+```
 
 Verify:
 
@@ -130,7 +121,7 @@ uv --version
 
 !!! example "Expected output"
     ```text
-    uv 0.5.x
+    uv 0.11.x or newer
     ```
 
 ---
@@ -161,9 +152,9 @@ Now prove it works. Pick the tab matching what you just installed, run the four 
 
 === "UV"
     ```bash
-    # Make a project folder + a venv inside it
+    # Make a project folder + a venv inside it (with an explicit Python version)
     mkdir -p ~/hello-aqua && cd ~/hello-aqua
-    uv venv .venv
+    uv venv .venv --python 3.13
 
     # Activate it — your prompt should now show (.venv) at the front
     source .venv/bin/activate
@@ -178,9 +169,12 @@ Now prove it works. Pick the tab matching what you just installed, run the four 
     deactivate
     ```
 
+    !!! note "First-run Python download"
+        The first time you ask UV for a specific Python version (here, 3.13), it downloads a standalone CPython build (~33 MiB) into `~/.local/share/uv/python/`. Subsequent `uv venv --python 3.13` calls reuse it instantly. Without `--python`, UV picks whatever Python is on your PATH (on Aqua that's the system Python 3.9.x).
+
     !!! example "Expected output"
         ```text
-        Python 3.13.x / requests 2.32.x
+        Python 3.13.x / requests 2.34.x or newer
         ```
 
 !!! tip "Where to put environments"
@@ -226,7 +220,8 @@ Now prove it works. Pick the tab matching what you just installed, run the four 
 
 === "UV basics"
     ```bash
-    uv venv .venv                          # new venv (in cwd)
+    uv venv .venv                          # new venv (uses system Python)
+    uv venv .venv --python 3.13            # ...or pin a Python version (auto-downloads)
     source .venv/bin/activate              # enter venv
     uv pip install <pkg>                   # add a package (fast)
     uv pip install -r requirements.txt     # install from requirements
@@ -235,9 +230,11 @@ Now prove it works. Pick the tab matching what you just installed, run the four 
 
 === "File locations"
     ```bash
-    ~/miniconda3/         # Miniconda install (if direct-installed)
-    ~/miniconda3/envs/    # Conda environments
-    ~/.cache/uv/          # UV's package cache
+    ~/miniconda3/                  # Miniconda install (if direct-installed)
+    ~/miniconda3/envs/             # Conda environments
+    ~/.local/bin/uv                # UV binary (standalone install)
+    ~/.local/share/uv/python/      # UV-managed Python versions (one dir per version)
+    ~/.cache/uv/                   # UV's package cache
     ```
 
 [^1]: Access only in QUT network. Please use VPN to access the documentation when off-campus.
