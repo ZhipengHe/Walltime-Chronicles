@@ -29,7 +29,7 @@
     
     
       
-        <title>Lesson 2: Environment Setup & First Interactive Session - Walltime Chronicles</title>
+        <title>Lesson 2: Tooling Setup - Walltime Chronicles</title>
       
     
     
@@ -62,7 +62,7 @@
     
   
 <meta property="og:type" content="website" />
-<meta property="og:title" content="Lesson 2: Environment Setup & First Interactive Session - Walltime Chronicles" />
+<meta property="og:title" content="Lesson 2: Tooling Setup - Walltime Chronicles" />
 <meta property="og:description" content="My personal survival log of mysterious errors, queueing oddities, and PBS quirks encountered on QUT Aqua" />
 <meta property="og:image" content="https://zhipenghe.me/walltime-chronicles/assets/images/social/tutorials/lesson-2.png" />
 <meta property="og:image:type" content="image/png" />
@@ -70,7 +70,7 @@
 <meta property="og:image:height" content="630" />
 <meta property="og:url" content="https://zhipenghe.me/walltime-chronicles/tutorials/lesson-2/" />
 <meta property="twitter:card" content="summary_large_image" />
-<meta property="twitter:title" content="Lesson 2: Environment Setup & First Interactive Session - Walltime Chronicles" />
+<meta property="twitter:title" content="Lesson 2: Tooling Setup - Walltime Chronicles" />
 <meta property="twitter:description" content="My personal survival log of mysterious errors, queueing oddities, and PBS quirks encountered on QUT Aqua" />
 <meta property="twitter:image" content="https://zhipenghe.me/walltime-chronicles/assets/images/social/tutorials/lesson-2.png" />
 </head>
@@ -85,7 +85,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#lesson-2-environment-setup-first-interactive-session" class="md-skip">
+        <a href="#lesson-2-tooling-setup" class="md-skip">
           Skip to content
         </a>
       
@@ -121,7 +121,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Lesson 2: Environment Setup & First Interactive Session
+              Lesson 2: Tooling Setup
             
           </span>
         </div>
@@ -427,7 +427,7 @@
   <span class="md-ellipsis">
     
   
-    Lesson 2: Environment Setup & First Interactive Session
+    Lesson 2: Tooling Setup
   
 
     
@@ -445,7 +445,7 @@
   <span class="md-ellipsis">
     
   
-    Lesson 2: Environment Setup & First Interactive Session
+    Lesson 2: Tooling Setup
   
 
     
@@ -482,34 +482,33 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#part-1-python-environment-setup-8-minutes" class="md-nav__link">
+  <a href="#decide-which-tool" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Part 1: Python Environment Setup (8 minutes)
+        Decide: which tool?
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Part 1: Python Environment Setup (8 minutes)">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#install" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📦 Install
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📦 Install">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#installing-miniconda-5-minutes" class="md-nav__link">
+  <a href="#uv-the-default" class="md-nav__link">
     <span class="md-ellipsis">
       
-        🐍 Installing Miniconda (5 minutes)
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="🐍 Installing Miniconda (5 minutes)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#why-miniconda-on-hpc" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Why Miniconda on HPC?
+        uv (the default)
       
     </span>
   </a>
@@ -517,10 +516,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#installation-steps" class="md-nav__link">
+  <a href="#miniforge-when-you-need-conda" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Installation Steps
+        Miniforge (when you need conda)
       
     </span>
   </a>
@@ -528,38 +527,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#quick-environment-test" class="md-nav__link">
+  <a href="#micromamba-single-binary-miniforge-alternative" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Quick Environment Test
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#installing-uv-3-minutes" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        ⚡ Installing UV (3 minutes)
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="⚡ Installing UV (3 minutes)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#why-uv" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Why UV?
+        micromamba (single-binary Miniforge alternative)
       
     </span>
   </a>
@@ -567,40 +538,13 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#installation" class="md-nav__link">
+  <a href="#a-note-on-miniconda-not-recommended" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Installation
+        A note on Miniconda (not recommended)
       
     </span>
   </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#verify-installation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Verify Installation
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#quick-test-drive" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Quick Test Drive
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
         
@@ -610,96 +554,24 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#part-2-your-first-interactive-session-7-minutes" class="md-nav__link">
+  <a href="#where-to-put-environments-on-aqua" class="md-nav__link">
     <span class="md-ellipsis">
       
-        🖥️ Part 2: Your First Interactive Session (7 minutes)
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="🖥️ Part 2: Your First Interactive Session (7 minutes)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#understanding-the-architecture" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Understanding the Architecture
+        🗂️ Where to put environments on Aqua
       
     </span>
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#starting-an-interactive-session" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#test-drive-create-a-project-environment" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Starting an Interactive Session
+        Test Drive: Create a Project Environment
       
     </span>
   </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#what-happens-next" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        What Happens Next
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#testing-your-new-environment" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Testing Your New Environment
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#quick-python-environment-test" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Quick Python Environment Test
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#understanding-resource-usage" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Understanding Resource Usage
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#ending-your-interactive-session" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Ending Your Interactive Session
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -1380,34 +1252,33 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#part-1-python-environment-setup-8-minutes" class="md-nav__link">
+  <a href="#decide-which-tool" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Part 1: Python Environment Setup (8 minutes)
+        Decide: which tool?
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Part 1: Python Environment Setup (8 minutes)">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#install" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📦 Install
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📦 Install">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#installing-miniconda-5-minutes" class="md-nav__link">
+  <a href="#uv-the-default" class="md-nav__link">
     <span class="md-ellipsis">
       
-        🐍 Installing Miniconda (5 minutes)
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="🐍 Installing Miniconda (5 minutes)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#why-miniconda-on-hpc" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Why Miniconda on HPC?
+        uv (the default)
       
     </span>
   </a>
@@ -1415,10 +1286,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#installation-steps" class="md-nav__link">
+  <a href="#miniforge-when-you-need-conda" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Installation Steps
+        Miniforge (when you need conda)
       
     </span>
   </a>
@@ -1426,38 +1297,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#quick-environment-test" class="md-nav__link">
+  <a href="#micromamba-single-binary-miniforge-alternative" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Quick Environment Test
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#installing-uv-3-minutes" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        ⚡ Installing UV (3 minutes)
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="⚡ Installing UV (3 minutes)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#why-uv" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Why UV?
+        micromamba (single-binary Miniforge alternative)
       
     </span>
   </a>
@@ -1465,40 +1308,13 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#installation" class="md-nav__link">
+  <a href="#a-note-on-miniconda-not-recommended" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Installation
+        A note on Miniconda (not recommended)
       
     </span>
   </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#verify-installation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Verify Installation
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#quick-test-drive" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Quick Test Drive
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
         
@@ -1508,96 +1324,24 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#part-2-your-first-interactive-session-7-minutes" class="md-nav__link">
+  <a href="#where-to-put-environments-on-aqua" class="md-nav__link">
     <span class="md-ellipsis">
       
-        🖥️ Part 2: Your First Interactive Session (7 minutes)
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="🖥️ Part 2: Your First Interactive Session (7 minutes)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#understanding-the-architecture" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Understanding the Architecture
+        🗂️ Where to put environments on Aqua
       
     </span>
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#starting-an-interactive-session" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#test-drive-create-a-project-environment" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Starting an Interactive Session
+        Test Drive: Create a Project Environment
       
     </span>
   </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#what-happens-next" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        What Happens Next
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#testing-your-new-environment" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Testing Your New Environment
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#quick-python-environment-test" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Quick Python Environment Test
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#understanding-resource-usage" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Understanding Resource Usage
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#ending-your-interactive-session" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Ending Your Interactive Session
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -1715,400 +1459,408 @@
   
 
 
-<h1 id="lesson-2-environment-setup-first-interactive-session">Lesson 2: Environment Setup &amp; First Interactive Session</h1>
-<div class="admonition info">
-<p class="admonition-title">Pre-rewrite content — restructure in progress</p>
-<p>This page contains the previous <strong>Lesson 1</strong> material. In an upcoming release, this lesson will be rewritten as <strong>Lesson 2: Tooling Setup</strong> — focused purely on Miniconda/UV installation. The "first interactive session" content will move into <strong>Lesson 1: Welcome to Aqua</strong>. The current content remains accurate; only the structure is changing. See the <a href="../">course outline</a> for the full plan.</p>
-</div>
+<h1 id="lesson-2-tooling-setup">Lesson 2: Tooling Setup</h1>
 <div class="admonition quote">
 <p class="admonition-title">Mission Statement</p>
-<p><em>"Getting your tools ready and taking the cluster for a test drive"</em> 🚗💨</p>
+<p><em>"Pick a Python tool, install it once, never fight with system Python again."</em> 🛠️</p>
 </div>
-<p>Welcome to your first hands-on lesson! Think of this as setting up your workshop before building anything. We'll get your Python environment sorted, install some essential tools, and take QUT Aqua for a test drive with an interactive session.</p>
+<p>You'll spend more of your HPC life inside a Python environment than anywhere else. Aqua ships system Python for the sysadmin's sake, not yours — touching it for your own work is a recipe for permission errors, version conflicts, and "it worked yesterday." This lesson surveys the <strong>four tools</strong> you'll encounter for managing isolated Python on HPC — <a href="https://docs.astral.sh/uv/">uv</a>, <a href="https://github.com/conda-forge/miniforge">Miniforge</a>, <a href="https://mamba.readthedocs.io/en/latest/user_guide/micromamba.html">micromamba</a>, <a href="https://www.anaconda.com/docs/getting-started/miniconda/main">Miniconda</a> — picks one for your use case, installs it on Aqua, and proves it works.</p>
 <h2 id="what-youll-accomplish">📋 What You'll Accomplish</h2>
-<p>By the end of this 15-minute lesson, you'll have:</p>
+<p>By the end of this 15–20 minute lesson, you'll have:</p>
 <ul class="task-list">
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>Python environment setup</strong> - Miniconda or UV installed</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>First interactive session running</strong> - Actually using compute resources</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>Clear understanding</strong> of login vs compute nodes</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>Surveyed the four tools</strong> — uv, Miniforge, micromamba, Miniconda — and understood when each fits</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>Picked one</strong> for your work (default: <code>uv</code>; <code>conda</code>-family if you need non-PyPI packages)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>Installed it on Aqua</strong> (single command for each)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>Placed envs on the right filesystem</strong> — knowing where envs go matters more on HPC than on a laptop</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>Created and verified a test environment</strong> — <code>python --version</code> + an import that doesn't crash</li>
 </ul>
 <div class="admonition tip">
-<p class="admonition-title">Open Your Favourite Terminal Simulator!</p>
-<p>Keep a terminal window open to QUT Aqua throughout this lesson. You'll be running commands as we go!</p>
+<p class="admonition-title">You probably only need <code>uv</code></p>
+<p><mark>Most Python work on HPC runs fine on <code>uv</code> alone</mark> — including ML with PyTorch / TensorFlow / JAX, data science, anything pip-installable. The <code>conda</code>-family tools (Miniforge, micromamba) are for when you need a <strong>non-PyPI</strong> package: bioinformatics tools (samtools, bcftools), R interop, or a precisely-pinned binary stack. Skim the comparison below, install <code>uv</code> first, reach for a <code>conda</code>-family tool only if you discover you need it.</p>
 </div>
 <hr />
-<h2 id="part-1-python-environment-setup-8-minutes"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.25.18.9.2.73.26.59.3.45.32.34.34.25.34.16.33.1.3.04.26.02.2-.01.13V8.5l-.05.63-.13.55-.21.46-.26.38-.3.31-.33.25-.35.19-.35.14-.33.1-.3.07-.26.04-.21.02H8.77l-.69.05-.59.14-.5.22-.41.27-.33.32-.27.35-.2.36-.15.37-.1.35-.07.32-.04.27-.02.21v3.06H3.17l-.21-.03-.28-.07-.32-.12-.35-.18-.36-.26-.36-.36-.35-.46-.32-.59-.28-.73-.21-.88-.14-1.05-.05-1.23.06-1.22.16-1.04.24-.87.32-.71.36-.57.4-.44.42-.33.42-.24.4-.16.36-.1.32-.05.24-.01h.16l.06.01h8.16v-.83H6.18l-.01-2.75-.02-.37.05-.34.11-.31.17-.28.25-.26.31-.23.38-.2.44-.18.51-.15.58-.12.64-.1.71-.06.77-.04.84-.02 1.27.05zm-6.3 1.98-.23.33-.08.41.08.41.23.34.33.22.41.09.41-.09.33-.22.23-.34.08-.41-.08-.41-.23-.33-.33-.22-.41-.09-.41.09zm13.09 3.95.28.06.32.12.35.18.36.27.36.35.35.47.32.59.28.73.21.88.14 1.04.05 1.23-.06 1.23-.16 1.04-.24.86-.32.71-.36.57-.4.45-.42.33-.42.24-.4.16-.36.09-.32.05-.24.02-.16-.01h-8.22v.82h5.84l.01 2.76.02.36-.05.34-.11.31-.17.29-.25.25-.31.24-.38.2-.44.17-.51.15-.58.13-.64.09-.71.07-.77.04-.84.01-1.27-.04-1.07-.14-.9-.2-.73-.25-.59-.3-.45-.33-.34-.34-.25-.34-.16-.33-.1-.3-.04-.25-.02-.2.01-.13v-5.34l.05-.64.13-.54.21-.46.26-.38.3-.32.33-.24.35-.2.35-.14.33-.1.3-.06.26-.04.21-.02.13-.01h5.84l.69-.05.59-.14.5-.21.41-.28.33-.32.27-.35.2-.36.15-.36.1-.35.07-.32.04-.28.02-.21V6.07h2.09l.14.01zm-6.47 14.25-.23.33-.08.41.08.41.23.33.33.23.41.08.41-.08.33-.23.23-.33.08-.41-.08-.41-.23-.33-.33-.23-.41-.08-.41.08z"/></svg></span> Part 1: Python Environment Setup (8 minutes)</h2>
-<div class="admonition tip">
-<p class="admonition-title">Choose Your Path</p>
-<p>You can use either <strong>Miniconda</strong> OR <strong>UV</strong> for Python environment management. Both are excellent choices --
- pick the one that appeals to you! Learning one is perfectly sufficient for HPC work.</p>
-</div>
-<h3 id="installing-miniconda-5-minutes">🐍 Installing Miniconda (5 minutes)</h3>
-<p>Miniconda is your Python environment lifesaver on HPC systems. No more "it works on my laptop" nightmares!</p>
-<h4 id="why-miniconda-on-hpc">Why Miniconda on HPC?</h4>
-<div class="admonition info">
-<p class="admonition-title">The Problem</p>
-<p>HPC Python requires you to load modules before use, which can be cumbersome for development. Miniconda gives you:</p>
-<ul>
-<li><strong>Full control</strong> over Python versions</li>
-<li><strong>Isolated environments</strong> for different projects</li>
-<li><strong>No permission headaches</strong> when installing packages</li>
-</ul>
-</div>
-<h4 id="installation-steps">Installation Steps</h4>
-<div class="admonition tip">
-<p class="admonition-title">Shortcut: use the QUT-provided Miniconda module instead</p>
-<p>If you don't need a specific Miniconda version, QUT eResearch already ships one. You can skip the install-yourself steps below and just:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>module<span class="w"> </span>load<span class="w"> </span>Miniconda3/24.9.2-0
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>conda<span class="w"> </span>init
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nb">source</span><span class="w"> </span>~/.bashrc
-</span></code></pre></div>
-<p>Verify with <code>conda --version</code>. An <code>Anaconda3/2024.02-1</code> module is also available if you want the full Anaconda distribution. See <a href="https://docs.eres.qut.edu.au/hpc-conda-package-and-environment-manager">QUT eResearch — Conda package and environment manager</a><sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> for details.</p>
-</div>
-<div class="admonition info">
-<p class="admonition-title">Want to install Miniconda yourself? Follow QUT's official steps</p>
-<p>For the install-yourself path, see <a href="https://docs.eres.qut.edu.au/hpc-accessing-available-software#install-conda">Accessing available software — Install Conda</a> from QUT eResearch<sup id="fnref2:1"><a class="footnote-ref" href="#fn:1">1</a></sup>. The steps below mirror that guide.</p>
-</div>
-<ol>
-<li>
-<p><strong>Download the installer</strong> (from your home directory):</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nb">cd</span><span class="w"> </span>~
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="c1"># create the directory if it doesn&#39;t exist</span>
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>~/miniconda3
-</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1"># download the installer and rename it to miniconda.sh</span>
-</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>wget<span class="w"> </span>https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh<span class="w"> </span>-O<span class="w"> </span>~/miniconda3/miniconda.sh
-</span></code></pre></div>
-</li>
-<li>
-<p><strong>Run the installer</strong>:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># run the installer</span>
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="c1"># batch mode &quot;-b&quot;</span>
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="c1"># update &quot;-u&quot;</span>
-</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="c1"># install to ~/miniconda3 &quot;-p&quot;</span>
-</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>bash<span class="w"> </span>~/miniconda3/miniconda.sh<span class="w"> </span>-b<span class="w"> </span>-u<span class="w"> </span>-p<span class="w"> </span>~/miniconda3
-</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="c1"># remove the installer</span>
-</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>rm<span class="w"> </span>~/miniconda3/miniconda.sh
-</span></code></pre></div>
-</li>
-<li>
-<p><strong>Activate the Base Environment</strong>:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># activate the base environment</span>
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nb">source</span><span class="w"> </span>~/miniconda3/bin/activate
-</span></code></pre></div>
-<div class="admonition example">
-<p class="admonition-title">Installation Prompts</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>Do you accept the license terms? [yes|no] → yes
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>Miniconda3 will now be installed into this location:
-</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>/home/your-username/miniconda3 → Press ENTER
-</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>Do you wish the installer to initialize Miniconda3? → yes
-</span></code></pre></div>
-</div>
-</li>
-<li>
-<p><strong>Activate the installation</strong>:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nb">source</span><span class="w"> </span>~/.bashrc
-</span></code></pre></div>
-</li>
-<li>
-<p><strong>Verify it worked</strong>:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>conda<span class="w"> </span>--version
-</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>which<span class="w"> </span>python
-</span></code></pre></div>
-<div class="admonition success">
-<p class="admonition-title">Expected Output</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>conda 25.x  # whatever the latest installer ships
-</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>/home/your-username/miniconda3/bin/python
-</span></code></pre></div>
-</div>
-</li>
-</ol>
-<h4 id="quick-environment-test">Quick Environment Test</h4>
-<p>Create a test environment to make sure everything works:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>test-env<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.11<span class="w"> </span>-y
-</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>conda<span class="w"> </span>activate<span class="w"> </span>test-env
-</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>python<span class="w"> </span>--version
-</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>conda<span class="w"> </span>deactivate
-</span></code></pre></div>
-<div class="admonition warning">
-<p class="admonition-title">Troubleshooting</p>
-<p>If <code>conda</code> command isn't found after installation:
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;/home/</span><span class="nv">$USER</span><span class="s2">/miniconda3/bin:</span><span class="nv">$PATH</span><span class="s2">&quot;</span>
-</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;export PATH=&quot;/home/$USER/miniconda3/bin:$PATH&quot;&#39;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>~/.bashrc
-</span></code></pre></div></p>
-</div>
-<h3 id="installing-uv-3-minutes">⚡ Installing UV (3 minutes)</h3>
-<p>UV is the new hotness in Python package management - it's blazingly fast and perfect for HPC environments where every second counts.</p>
-<h4 id="why-uv">Why UV?</h4>
-<div class="admonition abstract">
-<p class="admonition-title">Speed Comparison</p>
+<h2 id="decide-which-tool"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m7 17 3.2-6.8L17 7l-3.2 6.8zm5-5.9a.9.9 0 0 0-.9.9.9.9 0 0 0 .9.9.9.9 0 0 0 .9-.9.9.9 0 0 0-.9-.9M12 2a10 10 0 0 1 10 10 10 10 0 0 1-10 10A10 10 0 0 1 2 12 10 10 0 0 1 12 2m0 2a8 8 0 0 0-8 8 8 8 0 0 0 8 8 8 8 0 0 0 8-8 8 8 0 0 0-8-8"/></svg></span> Decide: which tool?</h2>
+<p>You'll see four tools floating around HPC Python documentation. The flowchart below covers the decision; the table after it has the why behind each choice.</p>
+<pre class="mermaid"><code>graph TD
+    Start([Need a Python env on Aqua?]) --&gt; Q1{Need a package that's&lt;br/&gt;&lt;b&gt;not on PyPI&lt;/b&gt;?&lt;br/&gt;e.g. samtools, R, bcftools}
+    Q1 --&gt;|No — most ML / data work| uv[&lt;b&gt;uv&lt;/b&gt;&lt;br/&gt;Fast, single binary&lt;br/&gt;~5 sec install]
+    Q1 --&gt;|Yes| Q2{Want a full Python install&lt;br/&gt;with familiar &lt;code&gt;conda&lt;/code&gt; command?}
+    Q2 --&gt;|Yes| Miniforge[&lt;b&gt;Miniforge&lt;/b&gt;&lt;br/&gt;~80 MB installer&lt;br/&gt;ships both conda + mamba]
+    Q2 --&gt;|No — minimal install| micromamba[&lt;b&gt;micromamba&lt;/b&gt;&lt;br/&gt;~17 MB single binary&lt;br/&gt;no Python prereq]
+
+    style uv fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    style Miniforge fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    style micromamba fill:#e8f5e8,stroke:#1b5e20,stroke-width:2px</code></pre>
+<p>Here's the honest comparison (the flowchart skips Miniconda — it's the one to avoid; see the <em>A note on Miniconda</em> section below for why, and how to migrate off it if you've already got it):</p>
 <table>
 <thead>
 <tr>
 <th>Tool</th>
-<th>Time to install requests</th>
+<th>Recommendation</th>
+<th>Best for</th>
+<th>Why / why not</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>pip</td>
-<td>~15 seconds</td>
-</tr>
-<tr>
-<td>conda</td>
-<td>~30 seconds</td>
-</tr>
-<tr>
 <td><strong>uv</strong></td>
-<td><strong>~2 seconds</strong> ⚡</td>
+<td>⭐ <strong>Default</strong></td>
+<td>Pure-Python work, ML via pip (PyTorch, TensorFlow, JAX, HuggingFace)</td>
+<td>Rust-based, single binary, <strong>10–100× faster</strong> than pip (per Astral's <a href="https://github.com/astral-sh/uv/blob/main/BENCHMARKS.md">official benchmarks</a>). Limitation: PyPI-only.</td>
+</tr>
+<tr>
+<td><strong>Miniforge</strong></td>
+<td>✓ Recommended for conda needs</td>
+<td>Anything on <a href="https://conda-forge.org/">conda-forge</a> / <a href="https://bioconda.github.io/">bioconda</a> (samtools, bcftools, R interop, exotic binary stacks)</td>
+<td>Open-source, community-maintained, conda-forge default channel, <strong>no Anaconda licensing</strong>. Ships both <code>conda</code> and <a href="https://mamba.readthedocs.io/"><code>mamba</code></a> (mamba = drop-in for conda with the faster <a href="https://mamba.readthedocs.io/en/latest/user_guide/concepts.html">libmamba</a> solver). ~80 MB installer + Python.</td>
+</tr>
+<tr>
+<td><strong>micromamba</strong></td>
+<td>✓ Recommended (single-binary alternative)</td>
+<td>Minimal install — CI pipelines, container base, or personal preference for a single binary</td>
+<td>Same conda-forge ecosystem and libmamba solver as Miniforge's <code>mamba</code>; packaged as a single statically-linked C++ binary (~17 MB) instead of a full Python install. Commands are <code>micromamba</code> (alias to <code>conda</code> or <code>mamba</code> if you want).</td>
+</tr>
+<tr>
+<td><strong>Miniconda</strong></td>
+<td>✗ <strong>Not recommended</strong></td>
+<td>(Listed for awareness — you'll see it in many tutorials)</td>
+<td>Free for accredited universities (incl. QUT) under <a href="https://www.anaconda.com/legal/terms/academic">Anaconda's Academic Policy</a>, but registration + EULA + "non-commercial" restriction make it frictionful in practice. HPC sites are migrating away (LLNL site-wide block of Anaconda paid channels effective <strong>Feb 2027</strong>). See <em>A note on Miniconda</em> below — use Miniforge instead.</td>
 </tr>
 </tbody>
 </table>
-</div>
-<h4 id="installation">Installation</h4>
-<p>If you set up conda above, you can drop UV into the base env. If you skipped conda, UV has a one-line standalone installer that doesn't need it:</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Inside conda base</label><label for="__tabbed_1_2">Standalone (no conda needed)</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>conda<span class="w"> </span>activate<span class="w"> </span>base
-</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>pip<span class="w"> </span>install<span class="w"> </span>uv
-</span></code></pre></div>
-</div>
-<div class="tabbed-block">
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>curl<span class="w"> </span>-LsSf<span class="w"> </span>https://astral.sh/uv/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>sh
-</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="nb">source</span><span class="w"> </span>~/.bashrc
-</span></code></pre></div>
-</div>
-</div>
-</div>
-<h4 id="verify-installation">Verify Installation</h4>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>uv<span class="w"> </span>--version
-</span></code></pre></div>
-<div class="admonition success">
-<p class="admonition-title">Expected Output</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>uv 0.5.x  # or newer
-</span></code></pre></div>
-</div>
-<h4 id="quick-test-drive">Quick Test Drive</h4>
-<p>Let's see UV in action:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="c1"># Create a temporary directory</span>
-</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>mkdir<span class="w"> </span>~/uv-test<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>~/uv-test
-</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>
-</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="c1"># Create a virtual environment with UV (super fast!)</span>
-</span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>uv<span class="w"> </span>venv<span class="w"> </span>test-venv
-</span><span id="__span-14-6"><a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>
-</span><span id="__span-14-7"><a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="c1"># Activate it</span>
-</span><span id="__span-14-8"><a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a><span class="nb">source</span><span class="w"> </span>test-venv/bin/activate
-</span><span id="__span-14-9"><a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a>
-</span><span id="__span-14-10"><a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a><span class="c1"># Install a package (watch the speed!)</span>
-</span><span id="__span-14-11"><a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a>uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>requests
-</span><span id="__span-14-12"><a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a>
-</span><span id="__span-14-13"><a id="__codelineno-14-13" name="__codelineno-14-13" href="#__codelineno-14-13"></a><span class="c1"># Test it works</span>
-</span><span id="__span-14-14"><a id="__codelineno-14-14" name="__codelineno-14-14" href="#__codelineno-14-14"></a>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import requests; print(&#39;UV works! 🎉&#39;)&quot;</span>
-</span><span id="__span-14-15"><a id="__codelineno-14-15" name="__codelineno-14-15" href="#__codelineno-14-15"></a>
-</span><span id="__span-14-16"><a id="__codelineno-14-16" name="__codelineno-14-16" href="#__codelineno-14-16"></a><span class="c1"># Clean up</span>
-</span><span id="__span-14-17"><a id="__codelineno-14-17" name="__codelineno-14-17" href="#__codelineno-14-17"></a>deactivate
-</span><span id="__span-14-18"><a id="__codelineno-14-18" name="__codelineno-14-18" href="#__codelineno-14-18"></a><span class="nb">cd</span><span class="w"> </span>~<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>rm<span class="w"> </span>-rf<span class="w"> </span>~/uv-test
-</span></code></pre></div>
 <hr />
-<h2 id="part-2-your-first-interactive-session-7-minutes">🖥️ Part 2: Your First Interactive Session (7 minutes)</h2>
-<p>Now for the fun part - let's actually use some compute resources! Interactive sessions are perfect for testing, debugging, and exploring.</p>
-<h3 id="understanding-the-architecture">Understanding the Architecture</h3>
-<div class="admonition info">
-<p class="admonition-title">HPC Node Types</p>
-<pre class="mermaid"><code>graph TB
-    A[Your Laptop] --&gt;|SSH| B[Login Node]
-    B --&gt;|qsub -I| C[Compute Node]
-    B --&gt;|File Management| D[Storage]
-    C --&gt;|Heavy Computing| D
-
-    style B fill:#e1f5fe
-    style C fill:#fff3e0
-    style D fill:#f3e5f5</code></pre>
-</div>
-<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Login Nodes</label><label for="__tabbed_2_2">Compute Nodes</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<ul>
-<li><strong>Purpose</strong>: File management, job submission, light editing</li>
-<li><strong>Resources</strong>: Shared with all users</li>
-<li><strong>Rules</strong>: NO heavy computation allowed</li>
-<li><strong>Think of it as</strong>: The reception desk</li>
-</ul>
-</div>
-<div class="tabbed-block">
-<ul>
-<li><strong>Purpose</strong>: Your actual work happens here</li>
-<li><strong>Resources</strong>: Dedicated to your job</li>
-<li><strong>Rules</strong>: This is where you run everything</li>
-<li><strong>Think of it as</strong>: Your private office</li>
-</ul>
-</div>
-</div>
-</div>
-<h3 id="starting-an-interactive-session">Starting an Interactive Session</h3>
-<p>Time to request some compute resources:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>qsub<span class="w"> </span>-I<span class="w"> </span>-l<span class="w"> </span><span class="nv">walltime</span><span class="o">=</span><span class="m">00</span>:30:00<span class="w"> </span>-l<span class="w"> </span><span class="k">select</span><span class="o">=</span><span class="m">1</span>:ncpus<span class="o">=</span><span class="m">2</span>:mem<span class="o">=</span>4GB
+<h2 id="install">📦 Install</h2>
+<p>You've picked a tool above (if you skipped the Decide section: <strong>uv</strong> is the default — start there). Each install is a short upstream-installer flow, ~5 to ~30 seconds. Skip to the section for your pick.</p>
+<h3 id="uv-the-default"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11 15H6l7-14v8h5l-7 14z"/></svg></span> uv (the default)</h3>
+<p>Astral's one-line installer — no Python prerequisite, ~5 seconds:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>curl<span class="w"> </span>-LsSf<span class="w"> </span>https://astral.sh/uv/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>sh
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nb">source</span><span class="w"> </span>~/.bashrc
+</span></code></pre></div>
+<p>Verify:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>uv<span class="w"> </span>--version
 </span></code></pre></div>
 <div class="admonition example">
-<p class="admonition-title">Command Breakdown</p>
-<ul>
-<li><code>qsub -I</code> → Request an <strong>interactive</strong> session</li>
-<li><code>-l walltime=00:30:00</code> → Maximum 30 minutes</li>
-<li><code>-l select=1:ncpus=2:mem=4GB</code> → 1 node, 2 cores, 4GB RAM</li>
-</ul>
+<p class="admonition-title">Expected output</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>uv 0.11.x or newer
+</span></code></pre></div>
 </div>
-<h3 id="what-happens-next">What Happens Next</h3>
+<p>That's it. uv is now at <code>~/.local/bin/uv</code> and on your PATH.</p>
 <div class="admonition note">
-<p class="admonition-title">The Waiting Game</p>
-<p>You'll see something like:
-<div class="language-text highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>qsub: waiting for job 12345.aqua-head to start
-</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>qsub: job 12345.aqua-head ready
-</span></code></pre></div></p>
-<p>Then your prompt changes to indicate you're on a compute node (Aqua names compute nodes by type: <code>cpu1n001</code>, <code>cpu1n002</code>, ..., <code>gpu1n001</code>, ..., <code>mem1n001</code>):
-<div class="language-text highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>[your-username@cpu1n001 ~]$
-</span></code></pre></div></p>
+<p class="admonition-title">If <code>uv --version</code> says command not found</p>
+<p>Your <code>~/.bashrc</code> may have an early <code>return</code> for non-interactive shells, in which case <code>source ~/.bashrc</code> silently no-ops. <strong>Open a new terminal</strong> so the shell init runs fresh.</p>
 </div>
-<h3 id="testing-your-new-environment">Testing Your New Environment</h3>
-<p>Once you're on a compute node, let's test our setup:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="c1"># Check where you are</span>
-</span><span id="__span-18-2"><a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>hostname
-</span><span id="__span-18-3"><a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;I&#39;m on a compute node! 🎯&quot;</span>
-</span><span id="__span-18-4"><a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>
-</span><span id="__span-18-5"><a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a><span class="c1"># Test conda</span>
-</span><span id="__span-18-6"><a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a>conda<span class="w"> </span>--version
-</span><span id="__span-18-7"><a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a>
-</span><span id="__span-18-8"><a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a><span class="c1"># Test UV</span>
-</span><span id="__span-18-9"><a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a>uv<span class="w"> </span>--version
-</span><span id="__span-18-10"><a id="__codelineno-18-10" name="__codelineno-18-10" href="#__codelineno-18-10"></a>
-</span><span id="__span-18-11"><a id="__codelineno-18-11" name="__codelineno-18-11" href="#__codelineno-18-11"></a><span class="c1"># Check your resources</span>
-</span><span id="__span-18-12"><a id="__codelineno-18-12" name="__codelineno-18-12" href="#__codelineno-18-12"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;CPU info:&quot;</span>
-</span><span id="__span-18-13"><a id="__codelineno-18-13" name="__codelineno-18-13" href="#__codelineno-18-13"></a>lscpu<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">&quot;CPU(s):&quot;</span>
-</span><span id="__span-18-14"><a id="__codelineno-18-14" name="__codelineno-18-14" href="#__codelineno-18-14"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Memory info:&quot;</span>
-</span><span id="__span-18-15"><a id="__codelineno-18-15" name="__codelineno-18-15" href="#__codelineno-18-15"></a>free<span class="w"> </span>-h
+<h3 id="miniforge-when-you-need-conda"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 5v5c4.03 2.47-.56 4.97-3 6v3h15v-3c-6.41-2.73-3.53-7 1-8V5zM2 6c.81 2.13 2.42 3.5 5 4V6z"/></svg></span> Miniforge (when you need conda)</h3>
+<p>The community-maintained, open-source Miniconda alternative. Preconfigures <strong>conda-forge as the default (and only) channel</strong>, so you never touch Anaconda's <code>defaults</code> channel by accident — and therefore never hit Anaconda's ToS gate. Installs <strong>both</strong> the <code>conda</code> command and <code>mamba</code> — <code>mamba</code> is a drop-in for <code>conda</code> that uses the <a href="https://mamba.readthedocs.io/en/latest/user_guide/concepts.html">libmamba</a> solver (the same fast solver behind micromamba). Use whichever you prefer; they share the same envs.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># Download the latest Linux x86_64 installer</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nb">cd</span><span class="w"> </span>~<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>wget<span class="w"> </span>https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-x86_64.sh
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="c1"># Run the installer (-b: batch mode, -p: install path)</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>bash<span class="w"> </span>Miniforge3-Linux-x86_64.sh<span class="w"> </span>-b<span class="w"> </span>-p<span class="w"> </span>~/miniforge3
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>rm<span class="w"> </span>Miniforge3-Linux-x86_64.sh
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="c1"># Activate base + initialize shell + persist for future logins</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="nb">source</span><span class="w"> </span>~/miniforge3/bin/activate
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>conda<span class="w"> </span>init<span class="w"> </span>bash
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="nb">source</span><span class="w"> </span>~/.bashrc
 </span></code></pre></div>
-<h3 id="quick-python-environment-test">Quick Python Environment Test</h3>
-<p>Let's create a project-specific environment and test it:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="c1"># Create a new conda environment for a hypothetical project</span>
-</span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>hpc-project<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.11<span class="w"> </span>numpy<span class="w"> </span>pandas<span class="w"> </span>-y
-</span><span id="__span-19-3"><a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>
-</span><span id="__span-19-4"><a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="c1"># Activate it</span>
-</span><span id="__span-19-5"><a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a>conda<span class="w"> </span>activate<span class="w"> </span>hpc-project
-</span><span id="__span-19-6"><a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a>
-</span><span id="__span-19-7"><a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a><span class="c1"># Use UV to add more packages quickly</span>
-</span><span id="__span-19-8"><a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a>uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>matplotlib<span class="w"> </span>seaborn
-</span><span id="__span-19-9"><a id="__codelineno-19-9" name="__codelineno-19-9" href="#__codelineno-19-9"></a>
-</span><span id="__span-19-10"><a id="__codelineno-19-10" name="__codelineno-19-10" href="#__codelineno-19-10"></a><span class="c1"># Quick test</span>
-</span><span id="__span-19-11"><a id="__codelineno-19-11" name="__codelineno-19-11" href="#__codelineno-19-11"></a>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;</span>
-</span><span id="__span-19-12"><a id="__codelineno-19-12" name="__codelineno-19-12" href="#__codelineno-19-12"></a><span class="s2">import numpy as np</span>
-</span><span id="__span-19-13"><a id="__codelineno-19-13" name="__codelineno-19-13" href="#__codelineno-19-13"></a><span class="s2">import pandas as pd</span>
-</span><span id="__span-19-14"><a id="__codelineno-19-14" name="__codelineno-19-14" href="#__codelineno-19-14"></a><span class="s2">import matplotlib</span>
-</span><span id="__span-19-15"><a id="__codelineno-19-15" name="__codelineno-19-15" href="#__codelineno-19-15"></a><span class="s2">print(&#39;All packages imported successfully! 📦✅&#39;)</span>
-</span><span id="__span-19-16"><a id="__codelineno-19-16" name="__codelineno-19-16" href="#__codelineno-19-16"></a><span class="s2">print(f&#39;NumPy version: {np.__version__}&#39;)</span>
-</span><span id="__span-19-17"><a id="__codelineno-19-17" name="__codelineno-19-17" href="#__codelineno-19-17"></a><span class="s2">print(f&#39;Pandas version: {pd.__version__}&#39;)</span>
-</span><span id="__span-19-18"><a id="__codelineno-19-18" name="__codelineno-19-18" href="#__codelineno-19-18"></a><span class="s2">print(f&#39;Matplotlib version: {matplotlib.__version__}&#39;)</span>
-</span><span id="__span-19-19"><a id="__codelineno-19-19" name="__codelineno-19-19" href="#__codelineno-19-19"></a><span class="s2">&quot;</span>
+<p>Verify:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>conda<span class="w"> </span>--version
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>which<span class="w"> </span>conda
 </span></code></pre></div>
-<h3 id="understanding-resource-usage">Understanding Resource Usage</h3>
+<div class="admonition example">
+<p class="admonition-title">Expected output (versions move; the path is what matters)</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>conda 26.x       # Miniforge ships whatever conda-forge has packaged most recently
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>/home/your-username/miniforge3/bin/conda
+</span></code></pre></div>
+</div>
 <div class="admonition tip">
-<p class="admonition-title">Monitoring Your Usage</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="c1"># Check your job details</span>
-</span><span id="__span-20-2"><a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>qstat<span class="w"> </span>-f<span class="w"> </span><span class="nv">$PBS_JOBID</span>
-</span><span id="__span-20-3"><a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a>
-</span><span id="__span-20-4"><a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="c1"># Monitor resource usage</span>
-</span><span id="__span-20-5"><a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a>htop<span class="w">  </span><span class="c1"># If available, or use &#39;top&#39;</span>
+<p class="admonition-title">Miniforge gives you both <code>conda</code> and <code>mamba</code></p>
+<p>Every conda tutorial you find online uses <code>conda create</code>, <code>conda activate</code>, etc. — those work identically on Miniforge, no relearning. Miniforge <strong>also</strong> installs <code>mamba</code>, a drop-in replacement with the faster libmamba solver: <code>mamba create -n ...</code> works exactly like <code>conda create -n ...</code> but resolves dependencies faster. Use whichever you prefer; envs created with one are usable from the other.</p>
+<p>The only difference from Anaconda's Miniconda: the default channel is <code>conda-forge</code> (no Anaconda licensing) instead of <code>defaults</code>.</p>
+</div>
+<h3 id="micromamba-single-binary-miniforge-alternative"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M22 2s-7.64-.37-13.66 7.88C3.72 16.21 2 22 2 22l1.94-1c1.44-2.5 2.19-3.53 3.6-5 2.53.74 5.17.65 7.46-2-2-.56-3.6-.43-5.96-.19C11.69 12 13.5 11.6 16 12l1-2c-1.8-.34-3-.37-4.78.04C14.19 8.65 15.56 7.87 18 8l1.21-1.93c-1.56-.11-2.5.06-4.29.5 1.61-1.46 3.08-2.12 5.22-2.25 0 0 1.05-1.89 1.86-2.32"/></svg></span> micromamba (single-binary Miniforge alternative)</h3>
+<p>A single statically-linked C++ binary — ~17 MB, no Python prerequisite, fast solver (uses <a href="https://mamba.readthedocs.io/en/latest/user_guide/concepts.html">libmamba</a>, the same solver that powers mamba).</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="s2">&quot;</span><span class="si">${</span><span class="nv">SHELL</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span>&lt;<span class="o">(</span>curl<span class="w"> </span>-L<span class="w"> </span>micro.mamba.pm<span class="o">)</span>
+</span></code></pre></div>
+<p>The installer asks <strong>three to four short questions</strong> (the fourth — Prefix location — only appears if you accept shell init); defaults are sensible (press Enter through each):</p>
+<table>
+<thead>
+<tr>
+<th>Prompt</th>
+<th>Default</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>micromamba binary folder?</code></td>
+<td><code>~/.local/bin</code></td>
+<td>Where the <code>micromamba</code> binary lands</td>
+</tr>
+<tr>
+<td><code>Init shell (bash)?</code></td>
+<td><code>Y</code></td>
+<td>Adds the mamba shell-init block to <code>~/.bashrc</code> (or your equivalent rc file)</td>
+</tr>
+<tr>
+<td><code>Configure conda-forge?</code></td>
+<td><code>Y</code></td>
+<td>Sets conda-forge as the default channel (no Anaconda's ToS gate — recommended)</td>
+</tr>
+<tr>
+<td><code>Prefix location?</code></td>
+<td><code>~/micromamba</code></td>
+<td>Where envs live by default</td>
+</tr>
+</tbody>
+</table>
+<p>Then re-source your shell:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="nb">source</span><span class="w"> </span>~/.bashrc
+</span></code></pre></div>
+<p>Verify:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>micromamba<span class="w"> </span>--version
+</span></code></pre></div>
+<div class="admonition example">
+<p class="admonition-title">Expected output</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>2.x.x
 </span></code></pre></div>
 </div>
-<h3 id="ending-your-interactive-session">Ending Your Interactive Session</h3>
-<p>When you're done exploring:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="c1"># Deactivate your environment</span>
-</span><span id="__span-21-2"><a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>conda<span class="w"> </span>deactivate
-</span><span id="__span-21-3"><a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a>
-</span><span id="__span-21-4"><a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a><span class="c1"># Exit the interactive session</span>
-</span><span id="__span-21-5"><a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a><span class="nb">exit</span>
+<div class="admonition tip">
+<p class="admonition-title">micromamba commands are mostly drop-in for <code>conda</code></p>
+<p><code>micromamba create / activate / deactivate / install / remove</code> all work the same way as <code>conda</code>. If your fingers want <code>conda</code>, alias it: <code>alias conda=micromamba</code> in your <code>~/.bashrc</code>. The default channel is conda-forge (same as Miniforge, no Anaconda).</p>
+</div>
+<h3 id="a-note-on-miniconda-not-recommended"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2c5.5 0 10 4.5 10 10s-4.5 10-10 10S2 17.5 2 12 6.5 2 12 2m0 2c-1.9 0-3.6.6-4.9 1.7l11.2 11.2c1-1.4 1.7-3.1 1.7-4.9 0-4.4-3.6-8-8-8m4.9 14.3L5.7 7.1C4.6 8.4 4 10.1 4 12c0 4.4 3.6 8 8 8 1.9 0 3.6-.6 4.9-1.7"/></svg></span> A note on Miniconda (not recommended)</h3>
+<p>You'll see Miniconda referenced everywhere — most existing Python-on-HPC tutorials (including <a href="https://docs.eres.qut.edu.au/hpc-conda-package-and-environment-manager">QUT eResearch's own conda guide</a><sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup>) recommend it. <strong>We don't, for two real reasons:</strong></p>
+<p><strong>1. Commercial Terms of Service — Miniconda is legal, but frictionful.</strong> Anaconda's current <a href="https://www.anaconda.com/legal/terms/terms-of-service">Terms of Service</a> (15 July 2025) allow QUT — and all accredited universities — to use the Anaconda repository free under the <a href="https://www.anaconda.com/legal/terms/academic">Academic Policy</a>; the 200-employee threshold for paid licensing applies only to for-profit organisations.</p>
+<p>So why not just use Miniconda? <strong>Three points of friction:</strong></p>
+<ul>
+<li><strong>Registration overhead.</strong> Each user must register with an academic email and accept a separate Academic EULA, renewable annually.</li>
+<li><strong>Use-case grayzone.</strong> Free use is restricted to "non-commercial educational and research purposes" — uncertain for industry-funded research, commercialisation work, or consulting that QUT staff often do.</li>
+<li><strong>The ToS prompt.</strong> Recent Anaconda / Miniconda installations ship the <a href="https://www.anaconda.com/blog/conda-anaconda-tos-plugin"><code>conda-anaconda-tos</code></a> plugin (2025), which interrupts <code>conda create</code> / <code>install</code> / <code>search</code> against <code>pkgs/main</code> or <code>pkgs/r</code> to demand ToS acceptance — <mark>accepting it isn't proof of academic eligibility</mark>, and the prompt fires whether you're entitled to free use or not.</li>
+</ul>
+<p>Miniforge sidesteps all of this. Its default channel (conda-forge) isn't governed by Anaconda's ToS at all.</p>
+<p><strong>2. HPC sites are migrating away.</strong> LLNL announced a site-wide block of Anaconda's paid channels effective <strong>February 2027</strong> (see <a href="https://hpc.llnl.gov/technical-bulletins/bulletin-602">LLNL Technical Bulletin 602</a>), recommending Miniforge as the drop-in replacement. <a href="https://docs.olcf.ornl.gov/software/python/index.html">OLCF's Python docs</a> now recommend <code>miniforge3</code> modules on Frontier and Andes (as of mid-2026), targeting conda-forge by default — Anaconda modules remain loadable but aren't the documented entry point. This is the direction the HPC community is heading.</p>
+<details class="tip">
+<summary>If you've already installed Miniconda — here's the migration to Miniforge</summary>
+<p>The migration is essentially: install Miniforge alongside (per the Install Miniforge section above), recreate your envs from scratch, then remove the old Miniconda install. The <code>conda</code> command and your scripts don't change — only the default channel does (conda-forge instead of Anaconda's <code>defaults</code>).</p>
+<p>For each env you want to keep:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># 1. From your existing Miniconda, snapshot ONLY the packages you explicitly</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="c1">#    requested (--from-history) and strip channel metadata (--ignore-channels).</span>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="c1">#    This is what makes the migration actually move to conda-forge — a plain</span>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="c1">#    `conda env export` would pin &quot;channels: [defaults]&quot; into the YAML.</span>
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>conda<span class="w"> </span>activate<span class="w"> </span>&lt;your-env-name&gt;
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>conda<span class="w"> </span>env<span class="w"> </span><span class="nb">export</span><span class="w"> </span>--from-history<span class="w"> </span>--ignore-channels<span class="w"> </span>&gt;<span class="w"> </span>&lt;your-env-name&gt;.yml
+</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>conda<span class="w"> </span>deactivate
+</span><span id="__span-10-8"><a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>
+</span><span id="__span-10-9"><a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="c1"># 2. Switch shells / re-source so the Miniforge conda takes over</span>
+</span><span id="__span-10-10"><a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a><span class="nb">source</span><span class="w"> </span>~/miniforge3/bin/activate
+</span><span id="__span-10-11"><a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a>
+</span><span id="__span-10-12"><a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a><span class="c1"># 3. Recreate the env on Miniforge (resolves fresh from conda-forge)</span>
+</span><span id="__span-10-13"><a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a>conda<span class="w"> </span>env<span class="w"> </span>create<span class="w"> </span>-f<span class="w"> </span>&lt;your-env-name&gt;.yml
 </span></code></pre></div>
-<p>You'll be back on the login node, and your compute resources are released.</p>
+<div class="admonition note">
+<p class="admonition-title">Trade-off: <code>--from-history</code> loses exact pins</p>
+<p>With <code>--from-history</code>, the YAML lists only the packages you explicitly asked for, not the full dependency tree your old Miniconda had resolved. The recreated env may have <strong>newer transitive dependency versions</strong> than the original. That's usually fine (and is the point — you're migrating to a fresh resolve on conda-forge), but if you need bit-for-bit reproduction, export both forms (with and without <code>--from-history</code>) and reconcile differences manually.</p>
+</div>
+<p>Once everything's migrated, remove the old Miniconda:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>rm<span class="w"> </span>-rf<span class="w"> </span>~/miniconda3
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="c1"># ...and remove the &quot;# &gt;&gt;&gt; conda initialize &gt;&gt;&gt;&quot; block from ~/.bashrc</span>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="c1"># (or just restore your pre-Miniconda .bashrc from backup if you have one)</span>
+</span></code></pre></div>
+</details>
+<hr />
+<h2 id="where-to-put-environments-on-aqua">🗂️ Where to put environments on Aqua</h2>
+<p>This is where most HPC users get burned. Python environments are <strong>lots of small files</strong>, and <mark>lots of small files on <code>/home</code> (Lustre) are surprisingly slow</mark> — <a href="https://docs.olcf.ornl.gov/software/python/sbcast_conda.html">OLCF Frontier benchmarks</a> report <strong>2 seconds on node-local NVMe vs 57 seconds on Lustre</strong> (a ~28× slowdown) for the same Python import. Aqua's <code>/home</code> is also Lustre; the same physics applies.</p>
+<table>
+<thead>
+<tr>
+<th>Filesystem</th>
+<th>Best for</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/home/$USER</code></td>
+<td>✅ uv venvs, small conda envs (&lt; 1 GB)</td>
+<td>Backed up, Lustre — fine if you don't accumulate hundreds of envs</td>
+</tr>
+<tr>
+<td><code>/scratch/$USER</code></td>
+<td>✅ Large conda envs (multi-GB PyTorch + CUDA, scientific stacks)</td>
+<td>Weka (Aqua's NVMe-backed fast storage). <strong>But: auto-cleaned after 30 days of inactivity</strong></td>
+</tr>
+<tr>
+<td><code>/work/&lt;project&gt;</code></td>
+<td>✅ Long-lived shared envs</td>
+<td>Backed up, persistent, but requires a QUT eResearch ticket</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Rules of thumb:</strong></p>
+<ul>
+<li><strong>uv venvs:</strong> <code>/home</code> is fine. They live in <code>&lt;project&gt;/.venv/</code> and are typically MB to hundreds of MB.</li>
+<li><strong>Small conda env</strong> (&lt; 1 GB, scripting / data wrangling): <code>/home</code> is fine.</li>
+<li><strong>Large conda env</strong> (multi-GB, PyTorch + CUDA, scientific stack): use <code>/scratch/$USER/envs/</code>. Set a calendar reminder to <strong>touch the env directory monthly</strong> so it doesn't get purged after 30 days inactive. Or rebuild from <code>env.yml</code> when you need it.</li>
+<li><strong>Long-lived shared env</strong>: ask QUT eResearch for a <code>/work/&lt;project&gt;</code> allocation.</li>
+</ul>
+<div class="admonition tip">
+<p class="admonition-title">Redirect conda package cache off home</p>
+<p>For conda-family tools, the <strong>package cache</strong> (downloaded <code>.conda</code> / <code>.tar.bz2</code> files) can grow to multi-GB. Redirect it to scratch by creating <code>~/.condarc</code>:</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="nt">pkgs_dirs</span><span class="p">:</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/scratch/${USER}/conda/pkgs</span>
+</span></code></pre></div>
+<p>Same idea works for <code>envs_dirs</code> if you want all envs on scratch (with the 30-day caveat).</p>
+</div>
+<p>See <a href="../../scheduler/Know-Your-Nodes/">Know Your Nodes — File systems</a> for the full filesystem reference and <a href="https://docs.eres.qut.edu.au/hpc-filesystem">QUT eResearch — Filesystem and data management</a><sup id="fnref2:1"><a class="footnote-ref" href="#fn:1">1</a></sup> for the official line.</p>
+<hr />
+<h2 id="test-drive-create-a-project-environment"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 2v2h1v14a4 4 0 0 0 4 4 4 4 0 0 0 4-4V4h1V2zm4 14c-.6 0-1-.4-1-1s.4-1 1-1 1 .4 1 1-.4 1-1 1m2-4c-.6 0-1-.4-1-1s.4-1 1-1 1 .4 1 1-.4 1-1 1m1-5h-4V4h4z"/></svg></span> Test Drive: Create a Project Environment</h2>
+<p>Now prove your install works. Pick the tab matching the tool you installed, run the commands, and you're done.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">uv</label><label for="__tabbed_1_2">Miniforge</label><label for="__tabbed_1_3">micromamba</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1"># Make a project folder + a venv inside it (with an explicit Python version)</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>~/hello-aqua<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>~/hello-aqua
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>uv<span class="w"> </span>venv<span class="w"> </span>.venv<span class="w"> </span>--python<span class="w"> </span><span class="m">3</span>.13
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>
+</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="c1"># Activate it — your prompt should now show (.venv) at the front</span>
+</span><span id="__span-13-6"><a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="nb">source</span><span class="w"> </span>.venv/bin/activate
+</span><span id="__span-13-7"><a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a>
+</span><span id="__span-13-8"><a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="c1"># Install a package (watch how fast)</span>
+</span><span id="__span-13-9"><a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a>uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>requests
+</span><span id="__span-13-10"><a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a>
+</span><span id="__span-13-11"><a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a><span class="c1"># Prove Python and the package both work</span>
+</span><span id="__span-13-12"><a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import requests, sys; print(&#39;Python&#39;, sys.version.split()[0], &#39;/ requests&#39;, requests.__version__)&quot;</span>
+</span><span id="__span-13-13"><a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a>
+</span><span id="__span-13-14"><a id="__codelineno-13-14" name="__codelineno-13-14" href="#__codelineno-13-14"></a><span class="c1"># Drop back out when done (the venv lives in ~/hello-aqua/.venv)</span>
+</span><span id="__span-13-15"><a id="__codelineno-13-15" name="__codelineno-13-15" href="#__codelineno-13-15"></a>deactivate
+</span></code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">First-run Python download</p>
+<p>The first time you ask uv for a specific Python version (here, 3.13), it downloads a standalone CPython build (~33 MiB) into <code>~/.local/share/uv/python/</code>. Subsequent <code>uv venv --python 3.13</code> calls reuse it instantly. Without <code>--python</code>, uv picks whatever Python is on your PATH (on Aqua that's the system Python 3.9.x).</p>
+</div>
+<div class="admonition example">
+<p class="admonition-title">Expected output</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>Python 3.13.x / requests 2.34.x or newer
+</span></code></pre></div>
+</div>
+</div>
+<div class="tabbed-block">
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="c1"># Create an isolated environment with Python 3.13 and one package</span>
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="c1"># (or use `mamba create -n ...` — same result, faster solver)</span>
+</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>hello-aqua<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.13<span class="w"> </span>requests<span class="w"> </span>-y
+</span><span id="__span-15-4"><a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>
+</span><span id="__span-15-5"><a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="c1"># Activate it — your prompt should now show (hello-aqua) at the front</span>
+</span><span id="__span-15-6"><a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a>conda<span class="w"> </span>activate<span class="w"> </span>hello-aqua
+</span><span id="__span-15-7"><a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a>
+</span><span id="__span-15-8"><a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a><span class="c1"># Prove Python and the package both work</span>
+</span><span id="__span-15-9"><a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import requests, sys; print(&#39;Python&#39;, sys.version.split()[0], &#39;/ requests&#39;, requests.__version__)&quot;</span>
+</span><span id="__span-15-10"><a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a>
+</span><span id="__span-15-11"><a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a><span class="c1"># Drop back out when done (the env still exists for next time)</span>
+</span><span id="__span-15-12"><a id="__codelineno-15-12" name="__codelineno-15-12" href="#__codelineno-15-12"></a>conda<span class="w"> </span>deactivate
+</span></code></pre></div>
+<div class="admonition example">
+<p class="admonition-title">Expected output</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>Python 3.13.x / requests 2.34.x or newer
+</span></code></pre></div>
+</div>
+</div>
+<div class="tabbed-block">
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="c1"># Create an isolated environment with Python 3.13 and one package</span>
+</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>micromamba<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>hello-aqua<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.13<span class="w"> </span>requests<span class="w"> </span>-y
+</span><span id="__span-17-3"><a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>
+</span><span id="__span-17-4"><a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="c1"># Activate it — your prompt should now show (hello-aqua) at the front</span>
+</span><span id="__span-17-5"><a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a>micromamba<span class="w"> </span>activate<span class="w"> </span>hello-aqua
+</span><span id="__span-17-6"><a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a>
+</span><span id="__span-17-7"><a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a><span class="c1"># Prove Python and the package both work</span>
+</span><span id="__span-17-8"><a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import requests, sys; print(&#39;Python&#39;, sys.version.split()[0], &#39;/ requests&#39;, requests.__version__)&quot;</span>
+</span><span id="__span-17-9"><a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a>
+</span><span id="__span-17-10"><a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a><span class="c1"># Drop back out when done</span>
+</span><span id="__span-17-11"><a id="__codelineno-17-11" name="__codelineno-17-11" href="#__codelineno-17-11"></a>micromamba<span class="w"> </span>deactivate
+</span></code></pre></div>
+<div class="admonition example">
+<p class="admonition-title">Expected output</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>Python 3.13.x / requests 2.34.x or newer
+</span></code></pre></div>
+</div>
+</div>
+</div>
+</div>
 <hr />
 <h2 id="key-takeaways">🎯 Key Takeaways</h2>
 <div class="admonition success">
-<p class="admonition-title">You've Successfully Learned</p>
-<p>✅ <strong>Environment Management</strong>: Miniconda gives you Python superpowers on HPC</p>
-<p>✅ <strong>Fast Package Installation</strong>: UV makes package management lightning quick</p>
-<p>✅ <strong>Interactive Computing</strong>: You can test and debug directly on compute nodes</p>
-<p>✅ <strong>Node Architecture</strong>: Login nodes vs compute nodes - know the difference!</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Important Rules to Remember</p>
-<p>🚫 <strong>Never run heavy computation on login nodes</strong></p>
-<p>✅ <strong>Always use interactive sessions or jobs for real work</strong></p>
-<p>💾 <strong>Environments persist</strong> - you only need to set them up once</p>
-<p>⏰ <strong>Interactive sessions have time limits</strong> - plan accordingly</p>
+<p class="admonition-title">You now have</p>
+<p>🐍 <strong>An isolated Python</strong> that won't conflict with the system Python or other users</p>
+<p>🧪 <strong>A working test environment</strong> with at least one package installed</p>
+<p>🛠️ <strong>A reproducible setup</strong> — re-running <code>uv venv</code> / <code>conda create</code> / <code>micromamba create</code> will reproduce the same shape next time</p>
+<p>🗂️ <strong>A filesystem strategy</strong> — small envs on <code>/home</code>, big ones on <code>/scratch</code>, shared ones on <code>/work</code> (via ticket)</p>
+<p>📦 <strong>Four tools you can identify</strong> — even though you picked one, you know what each is for and which to avoid</p>
 </div>
 <hr />
 <h2 id="whats-next">🔗 What's Next?</h2>
-<div class="admonition info">
-<p class="admonition-title">Coming Up in Lesson 3</p>
-<p>Now that your environment is set up, you're ready to write and submit your first PBS job script! We'll cover:</p>
-<ul>
-<li>PBS script anatomy</li>
-<li>Writing your first job</li>
-<li>Submitting and monitoring</li>
-<li>Understanding output files</li>
-</ul>
-</div>
+<p>→ <strong><a href="../lesson-3/">Lesson 3: Your First Batch Job</a></strong> — now that you have Python ready, time to wrap a job script around it and submit to PBS for real.</p>
 <div class="admonition question">
-<p class="admonition-title">Need Help?</p>
+<p class="admonition-title">Stuck?</p>
 <ul>
-<li><strong>Environment or package issues?</strong> Check <a href="../../remote-dev/Surviving-without-VS-Code-Remote-SSH/">Surviving without VS Code Remote SSH</a></li>
-<li><strong>Interactive session not starting?</strong> Review <a href="../../scheduler/The-Art-of-Walltime/">Guess, Request, Regret: The Art of Walltime</a></li>
+<li><strong><code>uv</code> / <code>conda</code> / <code>micromamba</code> not found after install?</strong> Re-source <code>~/.bashrc</code>, or open a new terminal so the shell init runs.</li>
+<li><strong>Hit the <code>conda-anaconda-tos</code> plugin prompt on first <code>conda create</code>?</strong> You're on Miniconda (or an Anaconda-shipped conda) accessing <code>pkgs/main</code> / <code>pkgs/r</code>. Switch to Miniforge — its conda-forge default channel isn't governed by the plugin. Migration steps in <em>A note on Miniconda</em>.</li>
+<li><strong>Want the official QUT reference?</strong> <a href="https://docs.eres.qut.edu.au/hpc-conda-package-and-environment-manager">QUT eResearch — Conda package and environment manager</a><sup id="fnref3:1"><a class="footnote-ref" href="#fn:1">1</a></sup>. Note: it recommends Miniconda; we don't, for the reasons in the <em>A note on Miniconda</em> section.</li>
+<li><strong>Need a different tool entirely?</strong> Aqua also has system Python via <code>module load Python/3.x</code> — but you'll be sharing it with everyone else. Stick with isolated envs.</li>
 </ul>
 </div>
 <hr />
 <h2 id="quick-reference">📝 Quick Reference</h2>
-<div class="tabbed-set tabbed-alternate" data-tabs="3:3"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><input id="__tabbed_3_3" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Essential Commands</label><label for="__tabbed_3_2">File Locations</label><label for="__tabbed_3_3">Troubleshooting</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:4"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><input id="__tabbed_2_3" name="__tabbed_2" type="radio" /><input id="__tabbed_2_4" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">uv</label><label for="__tabbed_2_2">Miniforge (conda + mamba)</label><label for="__tabbed_2_3">micromamba</label><label for="__tabbed_2_4">File locations</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="c1"># Conda basics</span>
-</span><span id="__span-22-2"><a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>myenv<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.11
-</span><span id="__span-22-3"><a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a>conda<span class="w"> </span>activate<span class="w"> </span>myenv
-</span><span id="__span-22-4"><a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a>conda<span class="w"> </span>deactivate
-</span><span id="__span-22-5"><a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a>
-</span><span id="__span-22-6"><a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a><span class="c1"># UV basics</span>
-</span><span id="__span-22-7"><a id="__codelineno-22-7" name="__codelineno-22-7" href="#__codelineno-22-7"></a>uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>package-name
-</span><span id="__span-22-8"><a id="__codelineno-22-8" name="__codelineno-22-8" href="#__codelineno-22-8"></a>uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
-</span><span id="__span-22-9"><a id="__codelineno-22-9" name="__codelineno-22-9" href="#__codelineno-22-9"></a>
-</span><span id="__span-22-10"><a id="__codelineno-22-10" name="__codelineno-22-10" href="#__codelineno-22-10"></a><span class="c1"># Interactive session</span>
-</span><span id="__span-22-11"><a id="__codelineno-22-11" name="__codelineno-22-11" href="#__codelineno-22-11"></a>qsub<span class="w"> </span>-I<span class="w"> </span>-l<span class="w"> </span><span class="nv">walltime</span><span class="o">=</span><span class="m">00</span>:30:00<span class="w"> </span>-l<span class="w"> </span><span class="k">select</span><span class="o">=</span><span class="m">1</span>:ncpus<span class="o">=</span><span class="m">2</span>:mem<span class="o">=</span>4GB
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>uv<span class="w"> </span>venv<span class="w"> </span>.venv<span class="w">                          </span><span class="c1"># new venv (uses system Python)</span>
+</span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>uv<span class="w"> </span>venv<span class="w"> </span>.venv<span class="w"> </span>--python<span class="w"> </span><span class="m">3</span>.13<span class="w">            </span><span class="c1"># ...or pin a Python version (auto-downloads)</span>
+</span><span id="__span-19-3"><a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="nb">source</span><span class="w"> </span>.venv/bin/activate<span class="w">              </span><span class="c1"># enter venv</span>
+</span><span id="__span-19-4"><a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a>uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>&lt;pkg&gt;<span class="w">                   </span><span class="c1"># add a package (fast)</span>
+</span><span id="__span-19-5"><a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a>uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt<span class="w">     </span><span class="c1"># install from requirements</span>
+</span><span id="__span-19-6"><a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a>deactivate<span class="w">                             </span><span class="c1"># leave venv</span>
 </span></code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-23-1"><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="c1"># Miniconda installation</span>
-</span><span id="__span-23-2"><a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>~/miniconda3/
-</span><span id="__span-23-3"><a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a>
-</span><span id="__span-23-4"><a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a><span class="c1"># Conda environments</span>
-</span><span id="__span-23-5"><a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a>~/miniconda3/envs/
-</span><span id="__span-23-6"><a id="__codelineno-23-6" name="__codelineno-23-6" href="#__codelineno-23-6"></a>
-</span><span id="__span-23-7"><a id="__codelineno-23-7" name="__codelineno-23-7" href="#__codelineno-23-7"></a><span class="c1"># UV cache</span>
-</span><span id="__span-23-8"><a id="__codelineno-23-8" name="__codelineno-23-8" href="#__codelineno-23-8"></a>~/.cache/uv/
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>&lt;name&gt;<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.13<span class="w">           </span><span class="c1"># new env (or: mamba create -n ... — faster solver)</span>
+</span><span id="__span-20-2"><a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>conda<span class="w"> </span>activate<span class="w"> </span>&lt;name&gt;<span class="w">                         </span><span class="c1"># enter env</span>
+</span><span id="__span-20-3"><a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a>conda<span class="w"> </span>deactivate<span class="w">                              </span><span class="c1"># leave env</span>
+</span><span id="__span-20-4"><a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a>conda<span class="w"> </span>env<span class="w"> </span>list<span class="w">                                </span><span class="c1"># see all envs</span>
+</span><span id="__span-20-5"><a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a>conda<span class="w"> </span>env<span class="w"> </span>remove<span class="w"> </span>-n<span class="w"> </span>&lt;name&gt;<span class="w">                    </span><span class="c1"># delete env</span>
+</span><span id="__span-20-6"><a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a>conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>&lt;pkg&gt;<span class="w">            </span><span class="c1"># add a package (conda-forge default for Miniforge)</span>
+</span><span id="__span-20-7"><a id="__codelineno-20-7" name="__codelineno-20-7" href="#__codelineno-20-7"></a>mamba<span class="w"> </span>install<span class="w"> </span>&lt;pkg&gt;<span class="w">                           </span><span class="c1"># ...or `mamba` for the faster libmamba solver</span>
+</span><span id="__span-20-8"><a id="__codelineno-20-8" name="__codelineno-20-8" href="#__codelineno-20-8"></a>conda<span class="w"> </span>env<span class="w"> </span><span class="nb">export</span><span class="w"> </span>-n<span class="w"> </span>&lt;name&gt;<span class="w"> </span>&gt;<span class="w"> </span>env.yml<span class="w">          </span><span class="c1"># snapshot env to file</span>
+</span><span id="__span-20-9"><a id="__codelineno-20-9" name="__codelineno-20-9" href="#__codelineno-20-9"></a>conda<span class="w"> </span>env<span class="w"> </span>create<span class="w"> </span>-f<span class="w"> </span>env.yml<span class="w">                   </span><span class="c1"># recreate env from file (reproducibility)</span>
 </span></code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-24-1"><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="c1"># If conda isn&#39;t found</span>
-</span><span id="__span-24-2"><a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="nb">source</span><span class="w"> </span>~/.bashrc
-</span><span id="__span-24-3"><a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;~/miniconda3/bin:</span><span class="nv">$PATH</span><span class="s2">&quot;</span>
-</span><span id="__span-24-4"><a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a>
-</span><span id="__span-24-5"><a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a><span class="c1"># If UV isn&#39;t found</span>
-</span><span id="__span-24-6"><a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a>conda<span class="w"> </span>activate<span class="w"> </span>base
-</span><span id="__span-24-7"><a id="__codelineno-24-7" name="__codelineno-24-7" href="#__codelineno-24-7"></a>which<span class="w"> </span>uv
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>micromamba<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>&lt;name&gt;<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.13<span class="w">      </span><span class="c1"># new env (conda-forge by default)</span>
+</span><span id="__span-21-2"><a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>micromamba<span class="w"> </span>activate<span class="w"> </span>&lt;name&gt;<span class="w">                    </span><span class="c1"># enter env</span>
+</span><span id="__span-21-3"><a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a>micromamba<span class="w"> </span>deactivate<span class="w">                         </span><span class="c1"># leave env</span>
+</span><span id="__span-21-4"><a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a>micromamba<span class="w"> </span>env<span class="w"> </span>list<span class="w">                           </span><span class="c1"># see all envs</span>
+</span><span id="__span-21-5"><a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a>micromamba<span class="w"> </span>env<span class="w"> </span>remove<span class="w"> </span>-n<span class="w"> </span>&lt;name&gt;<span class="w">               </span><span class="c1"># delete env</span>
+</span><span id="__span-21-6"><a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a>micromamba<span class="w"> </span>install<span class="w"> </span>-n<span class="w"> </span>&lt;name&gt;<span class="w"> </span>&lt;pkg&gt;<span class="w">            </span><span class="c1"># add a package to a named env</span>
+</span></code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>~/miniforge3/<span class="w">                  </span><span class="c1"># Miniforge install</span>
+</span><span id="__span-22-2"><a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>~/miniforge3/envs/<span class="w">             </span><span class="c1"># Miniforge / conda environments</span>
+</span><span id="__span-22-3"><a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a>~/micromamba/<span class="w">                  </span><span class="c1"># micromamba install (default prefix)</span>
+</span><span id="__span-22-4"><a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a>~/micromamba/envs/<span class="w">             </span><span class="c1"># micromamba environments</span>
+</span><span id="__span-22-5"><a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a>~/.local/bin/uv<span class="w">                </span><span class="c1"># uv binary (standalone install)</span>
+</span><span id="__span-22-6"><a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a>~/.local/bin/micromamba<span class="w">        </span><span class="c1"># micromamba binary</span>
+</span><span id="__span-22-7"><a id="__codelineno-22-7" name="__codelineno-22-7" href="#__codelineno-22-7"></a>~/.local/share/uv/python/<span class="w">      </span><span class="c1"># uv-managed Python versions (one dir per version)</span>
+</span><span id="__span-22-8"><a id="__codelineno-22-8" name="__codelineno-22-8" href="#__codelineno-22-8"></a>~/.cache/uv/<span class="w">                   </span><span class="c1"># uv&#39;s package cache</span>
+</span><span id="__span-22-9"><a id="__codelineno-22-9" name="__codelineno-22-9" href="#__codelineno-22-9"></a>~/.condarc<span class="w">                     </span><span class="c1"># Conda config (channels, pkgs_dirs, envs_dirs)</span>
 </span></code></pre></div>
 </div>
 </div>
 </div>
-<p>Up next: <strong>Lesson 3 — Your First Batch Job</strong> <em>(coming soon)</em>. You'll learn to write a batch script, submit it, and read the output once it's published.</p>
 <div class="footnote">
 <hr />
 <ol>
 <li id="fn:1">
-<p>Access only in QUT network. Please use VPN to access the documentation when off-campus.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref2:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+<p>Access only in QUT network. Please use VPN to access the documentation when off-campus.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref2:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref3:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
 </li>
 </ol>
 </div>
@@ -2134,7 +1886,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="June 23, 2026 20:16:37 AEST">June 23, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="June 24, 2026 01:18:07 AEST">June 24, 2026</span>
   </span>
 
     
