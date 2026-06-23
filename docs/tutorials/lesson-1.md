@@ -198,7 +198,7 @@ You're back at the login node prompt (`aquarius02`), and PBS has released your c
 
 ## 🔗 What's Next?
 
-→ **[Lesson 2: Tooling Setup](lesson-2.md)** — install Miniconda or UV so your next interactive session has a real Python environment to play with.
+→ **[Lesson 2: Tooling Setup](lesson-2.md)** — install [uv](https://docs.astral.sh/uv/) or [Miniforge](https://github.com/conda-forge/miniforge) so your next interactive session has a real Python environment to play with.
 
 !!! question "Stuck?"
     - **SSH not working?** Revisit the [Prerequisites Checklist](prerequisites.md).

@@ -138,6 +138,6 @@ You'll also need a way to get files on and off Aqua. Pick at least one approach 
 
 ## 🚀 Ready to Start?
 
-Once you've checked off all the prerequisites, you're ready to begin with [Lesson 1: HPC Fundamentals](lesson-1.md)!
+Once you've checked off all the prerequisites, you're ready to begin with [Lesson 1: Welcome to Aqua](lesson-1.md)!
 
 [^1]: Access only in QUT network. Please use VPN to access the documentation when off-campus.

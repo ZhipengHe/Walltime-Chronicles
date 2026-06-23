@@ -115,8 +115,8 @@ This crash course is your launching pad. When you hit specific challenges, you'l
 
 > *"Getting your Python tools ready"*
 
-- Pick one: Miniconda or UV
-- Install via QUT module or direct installer
+- Pick one: uv (default) or Miniforge / micromamba (for conda-forge packages)
+- Install via a single curl command (upstream installers — no QUT module needed)
 - Create a test environment, verify it works
 
 [→ Lesson 2](lesson-2.md) — *pre-rewrite content (was Lesson 1: Environment Setup & First Interactive Session)*
