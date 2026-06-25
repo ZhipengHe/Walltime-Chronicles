@@ -1,0 +1,37 @@
+# benchmarks/uv-on-aqua/config.toml
+# Edit these knobs before running. Format: TOML.
+
+[base]
+# Which cells to measure. Drop "crossfs" if you only want the same-FS comparison.
+include_cells = ["lustre", "weka", "crossfs"]
+
+# Hyperfine reps + warmup
+cold_reps = 5
+warm_reps = 5
+hyperfine_cold_warmup = 0    # 0 = capture first-rep cold-cache outlier; report MEDIAN
+hyperfine_warm_warmup = 1    # 1 = discard the OS-page-cache first-rep; report MEAN
+
+# Intermediate output on Aqua (gitignored; lives outside the repo)
+results_base = "~/uv-bench"
+
+# Archive root, relative to this directory; tracked in git
+archive_base = "results-archive"
+
+[workload.cpu-ml]
+pbs_queue = "cpu_batch"
+pbs_ncpus = 8
+pbs_mem_gb = 64
+pbs_walltime = "01:00:00"
+pbs_ngpus = 0
+verify_cuda = false
+description = "Realistic ML stack with CPU PyTorch (~53 packages, ~25k files, ~1.2 GB)"
+
+[workload.gpu-ml]
+# Defined now for completeness; not run by default. Switch via WORKLOAD=gpu-ml.
+pbs_queue = "gpu_batch"
+pbs_ncpus = 8
+pbs_mem_gb = 64
+pbs_walltime = "01:30:00"
+pbs_ngpus = 1
+verify_cuda = true
+description = "Same stack as cpu-ml but cu126 PyTorch wheels (~5-7 GB, ~8k files)"
