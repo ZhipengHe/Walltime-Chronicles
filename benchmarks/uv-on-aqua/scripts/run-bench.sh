@@ -8,9 +8,21 @@
 
 set -uo pipefail
 
-# Locate self + bench root + repo root
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-BENCH_ROOT="$(dirname "$SCRIPT_DIR")"
+# Under PBS, BASH_SOURCE[0] points to a staged copy in the spool dir, so
+# prefer PBS_O_WORKDIR (qsub's invocation directory) when set.
+if [ -n "${PBS_O_WORKDIR:-}" ]; then
+  BENCH_ROOT="$PBS_O_WORKDIR"
+else
+  BENCH_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+fi
+
+if [ ! -f "$BENCH_ROOT/config.toml" ] || [ ! -d "$BENCH_ROOT/scripts" ]; then
+  echo "ERROR: BENCH_ROOT=$BENCH_ROOT doesn't look like the benchmark directory" >&2
+  echo "Submit from benchmarks/uv-on-aqua/:" >&2
+  echo "  cd benchmarks/uv-on-aqua && qsub scripts/run-bench.sh" >&2
+  exit 1
+fi
+
 REPO="$(cd "$BENCH_ROOT/../.." && pwd)"
 cd "$BENCH_ROOT"
 
@@ -50,7 +62,7 @@ echo "Results dir: $RESULTS_DIR"
 SESSION_SEED="${SESSION_SEED:-$$}"
 
 # Source the helpers (cell paths + per-cell measurement functions + epilogue).
-source "$SCRIPT_DIR/_lib.sh"
+source "$BENCH_ROOT/scripts/_lib.sh"
 
 # Build CELL_ORDER from INCLUDE_CELLS + seed.
 cell_randomize

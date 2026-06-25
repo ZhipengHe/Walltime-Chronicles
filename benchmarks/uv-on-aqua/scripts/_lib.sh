@@ -74,9 +74,10 @@ session_prologue() {
 
     echo "uv.lock ($WORKLOAD) sha256:          $lock_hash"
     echo "uv.lock ($WORKLOAD) sha256 expected: $LOCK_HASH_EXPECTED"
+    # Marker, not early exit — the FS/node/queue captures below are most
+    # useful exactly when the lockfile mismatch needs debugging. Gated below.
     if [ "$lock_hash" != "$LOCK_HASH_EXPECTED" ]; then
-      echo "ERROR: uv.lock sha256 mismatch — halting"
-      return 1
+      echo "ERROR: uv.lock sha256 mismatch — bench will halt after prologue"
     fi
     echo
 
@@ -99,10 +100,8 @@ session_prologue() {
     echo "execution order: ${CELL_ORDER[*]}"
   } > "$meta" 2>&1
 
-  local rc
-  rc=$(grep -c "^ERROR" "$meta" 2>/dev/null || echo 0)
   cat "$meta"
-  [ "$rc" -eq 0 ]
+  ! grep -q "^ERROR:" "$meta"
 }
 
 # Randomize INCLUDE_CELLS into CELL_ORDER using SESSION_SEED.
@@ -191,7 +190,8 @@ cell_aux() {
   rm -rf "$UV_CACHE_DIR" "$UV_PROJECT_ENVIRONMENT" && mkdir -p "$UV_CACHE_DIR"
   "$UV" sync --frozen --project "workloads/$WORKLOAD" \
     > "$RESULTS_DIR/uv-output-$cell.log" 2>&1
-  warn_count=$(grep -c "Failed to hardlink" "$RESULTS_DIR/uv-output-$cell.log" || echo 0)
+  warn_count=$(grep -c "Failed to hardlink" "$RESULTS_DIR/uv-output-$cell.log" 2>/dev/null || true)
+  warn_count="${warn_count:-0}"
 
   {
     echo "{"
