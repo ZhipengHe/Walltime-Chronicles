@@ -1,0 +1,13 @@
+# Intermediate bench output. The real location is set by `results_base` in
+# config.toml (default `~/uv-bench` on Aqua, outside the repo). Listed here as
+# a defense in case anyone ever runs with a `results/` path inside the repo.
+results/
+
+# Local Python tooling for analyze.py / plot.py
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# Mac noise
+.DS_Store
