@@ -67,11 +67,12 @@ Resource ask is uniform across all cells for cross-cell comparability. Cold inst
 
 After the job lands, `results-archive/YYYY-MM-DD-<hostname>/` contains:
 
-- `summary.md` — hand-curated summary; cites the raw bundle for every quoted number.
-- `raw.tar.zst` — every hyperfine JSON, verbose log, verify output, `time -v` capture, session-meta. zstd-compressed.
-- `manifest.sha256` — sha256 of `raw.tar.zst` for integrity verification.
+- `summary.md` — hand-curated summary; cites the redacted bundle for every quoted number.
+- `redacted.tar.zst` — public bundle (tracked in git): every hyperfine JSON, verbose log, verify output, `time -v` capture, session-meta. zstd-compressed. Username, internal cluster IPs, CVE-matchable build strings, PBS run identifiers, and the live `qstat -Q` snapshot are replaced with placeholders per `scripts/_sanitize-archive.sh`.
+- `manifest.sha256` — sha256 of `redacted.tar.zst`.
+- `raw.tar.zst` + `raw.manifest.sha256` — un-redacted bundle and its sha256, kept on disk for forensic cross-checks; gitignored.
 
-Intermediate scratch on Aqua (under `~/uv-bench/` by default — see `results_base` in `config.toml`) is gitignored. Only the curated archive lands in git.
+Intermediate scratch on Aqua (under `~/uv-bench/` by default — see `results_base` in `config.toml`) is gitignored. Only the redacted archive lands in git.
 
 ## Configuration
 

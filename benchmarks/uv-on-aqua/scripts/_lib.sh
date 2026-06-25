@@ -273,6 +273,10 @@ cell_cleanup() {
 }
 
 # Bundle results/ into a zstd archive under archive_base/<date>-<host>/.
+# Produces two bundles:
+#   raw.tar.zst        — un-redacted; gitignored; kept on disk for forensic checks.
+#   redacted.tar.zst   — public, tracked; built by scripts/_sanitize-archive.sh.
+# Plus manifests for both.
 session_epilogue() {
   local today host archive_dir
   today=$(date -u +%Y-%m-%d)
@@ -281,7 +285,8 @@ session_epilogue() {
   mkdir -p "$archive_dir"
 
   tar --use-compress-program='zstd -19' -cf "$archive_dir/raw.tar.zst" -C "$RESULTS_DIR" .
-  (cd "$archive_dir" && sha256sum raw.tar.zst > manifest.sha256)
+
+  bash "$REPO/benchmarks/uv-on-aqua/scripts/_sanitize-archive.sh" "$archive_dir"
 
   echo
   echo "=== archive ==="
