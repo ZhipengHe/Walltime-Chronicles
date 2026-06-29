@@ -81,7 +81,7 @@ warning: Failed to hardlink files; falling back to full copy. This may lead to d
          If this is intentional, set `export UV_LINK_MODE=copy` or use `--link-mode=copy` to suppress this warning.
 ```
 
-If you ever see that line in your own `uv sync` output, the same-FS rule has been broken — cache and venv are on different filesystems.
+If you see that line in your own `uv sync` output, hardlinking failed — on Aqua, that almost always means cache and venv are on different filesystems. Confirm with `df $UV_CACHE_DIR` and `df <project>/.venv`.
 
 !!! tip "Reproducing the bench"
     The harness, archives, and re-run instructions are in [`benchmarks/uv-on-aqua/`](https://github.com/ZhipengHe/Walltime-Chronicles/tree/main/benchmarks/uv-on-aqua). One `qsub` line re-runs the whole sweep in about 30 minutes on a `cpu_batch` node.
@@ -191,7 +191,7 @@ The biggest footgun. Setting `UV_CACHE_DIR=/scratch/$USER/uv/cache` while leavin
 The rule is "cache and venv together," not "cache on scratch always." If you switch the cache, switch the venv too (or use the symlink / `UV_PROJECT_ENVIRONMENT` workarounds in pattern (b)).
 
 !!! danger "How to spot this in your own runs"
-    Watch for `warning: Failed to hardlink files; falling back to full copy.` in `uv sync` output. That line is the trap firing.
+    Watch for `warning: Failed to hardlink files; falling back to full copy.` in `uv sync` output. That's almost always the cross-FS trap firing — confirm with `df` on the cache and venv paths.
 
 ### The "symlink your cache to scratch" advice
 
