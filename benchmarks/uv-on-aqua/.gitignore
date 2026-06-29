@@ -1,0 +1,18 @@
+# Intermediate bench output. The real location is set by `results_base` in
+# config.toml (default `~/uv-bench` on Aqua, outside the repo). Listed here as
+# a defense in case anyone ever runs with a `results/` path inside the repo.
+results/
+
+# Per-run archives: raw bundles stay private (kept on disk for forensic
+# cross-checks); only the redacted bundle + its manifest are tracked.
+results-archive/**/raw.tar.zst
+results-archive/**/raw.manifest.sha256
+
+# Local Python tooling for analyze.py / plot.py
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# Mac noise
+.DS_Store
