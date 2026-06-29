@@ -5,10 +5,15 @@
 #   COLD_REPS, WARM_REPS, HYPERFINE_COLD_WARMUP, HYPERFINE_WARM_WARMUP
 #   INCLUDE_CELLS (array), SESSION_SEED, VERIFY_CUDA
 
-# Pinned tool + lockfile identities. Override via env if the binaries are rotated.
+# Pinned tool identities. Override via env if the binaries are rotated.
 UV_HASH_EXPECTED="${UV_HASH_EXPECTED:-8bec1053d461e6b62f062419e62daa65ab7430884829d6fafcb7157b76edb7a2}"
 HYPERFINE_HASH_EXPECTED="${HYPERFINE_HASH_EXPECTED:-a298729daf3b670198b6988a0489289e0044174c8734a172659495dd09d080b6}"
-LOCK_HASH_EXPECTED="${LOCK_HASH_EXPECTED:-b64e55eee8c28496d2cafd82ec1e5c6d998bcb3d38072c3853efca5c1a99b98f}"
+
+# The workload's expected uv.lock sha256 comes from config.toml's
+# [workload.<WORKLOAD>].lock_hash_expected — kept per-workload so swapping
+# WORKLOAD (e.g. cpu-ml → gpu-ml) doesn't validate against the wrong pin.
+# session_prologue refuses to run if LOCK_HASH_EXPECTED is empty.
+LOCK_HASH_EXPECTED="${LOCK_HASH_EXPECTED:-}"
 
 # Resolve cell label to (CACHE, VENV) paths. Sets $CACHE and $VENV.
 cell_paths() {
@@ -73,10 +78,12 @@ session_prologue() {
     echo
 
     echo "uv.lock ($WORKLOAD) sha256:          $lock_hash"
-    echo "uv.lock ($WORKLOAD) sha256 expected: $LOCK_HASH_EXPECTED"
-    # Marker, not early exit — the FS/node/queue captures below are most
-    # useful exactly when the lockfile mismatch needs debugging. Gated below.
-    if [ "$lock_hash" != "$LOCK_HASH_EXPECTED" ]; then
+    echo "uv.lock ($WORKLOAD) sha256 expected: ${LOCK_HASH_EXPECTED:-<empty>}"
+    # Markers, not early exit — the FS/node/queue captures below are most
+    # useful exactly when the lockfile check needs debugging. Gated below.
+    if [ -z "$LOCK_HASH_EXPECTED" ]; then
+      echo "ERROR: lock_hash_expected is empty for workload '$WORKLOAD' — pin it in config.toml"
+    elif [ "$lock_hash" != "$LOCK_HASH_EXPECTED" ]; then
       echo "ERROR: uv.lock sha256 mismatch — bench will halt after prologue"
     fi
     echo
@@ -185,7 +192,9 @@ cell_aux() {
     ratio="null"
   fi
   bytes_no_deref=$(du -sb "$VENV" 2>/dev/null | awk '{print $1}')
+  bytes_no_deref="${bytes_no_deref:-0}"
   bytes_deref=$(du -sLb "$VENV" 2>/dev/null | awk '{print $1}')
+  bytes_deref="${bytes_deref:-0}"
 
   rm -rf "$UV_CACHE_DIR" "$UV_PROJECT_ENVIRONMENT" && mkdir -p "$UV_CACHE_DIR"
   "$UV" sync --frozen --project "workloads/$WORKLOAD" \
@@ -276,7 +285,8 @@ cell_cleanup() {
 # Produces two bundles:
 #   raw.tar.zst        — un-redacted; gitignored; kept on disk for forensic checks.
 #   redacted.tar.zst   — public, tracked; built by scripts/_sanitize-archive.sh.
-# Plus manifests for both.
+# Plus manifests for both. Returns non-zero on any failure so the caller can
+# halt the bench rather than report a phantom "complete".
 session_epilogue() {
   local today host archive_dir
   today=$(date -u +%Y-%m-%d)
@@ -284,9 +294,16 @@ session_epilogue() {
   archive_dir="$REPO/benchmarks/uv-on-aqua/$ARCHIVE_BASE/${today}-${host}"
   mkdir -p "$archive_dir"
 
-  tar --use-compress-program='zstd -19' -cf "$archive_dir/raw.tar.zst" -C "$RESULTS_DIR" .
+  if ! tar --use-compress-program='zstd -19' \
+           -cf "$archive_dir/raw.tar.zst" -C "$RESULTS_DIR" .; then
+    echo "ERROR: failed to bundle raw archive at $archive_dir/raw.tar.zst" >&2
+    return 1
+  fi
 
-  bash "$REPO/benchmarks/uv-on-aqua/scripts/_sanitize-archive.sh" "$archive_dir"
+  if ! bash "$REPO/benchmarks/uv-on-aqua/scripts/_sanitize-archive.sh" "$archive_dir"; then
+    echo "ERROR: archive sanitization failed; redacted bundle not produced" >&2
+    return 1
+  fi
 
   echo
   echo "=== archive ==="

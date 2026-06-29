@@ -32,7 +32,7 @@ trap 'rm -rf "$TMP"' EXIT
 cd "$TMP"
 
 echo "Downloading $URL"
-curl -fL -o "$TARBALL" "$URL"
+curl -fL --retry 3 --retry-delay 5 --connect-timeout 30 --max-time 300 -o "$TARBALL" "$URL"
 tar xzf "$TARBALL"
 cp "hyperfine-${VERSION}-${ARCH}/hyperfine" "$TARGET"
 chmod +x "$TARGET"

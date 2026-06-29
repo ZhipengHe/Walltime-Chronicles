@@ -30,7 +30,10 @@ def main() -> int:
             v = str(value)
         if any(c in v for c in " \t\"'"):
             v = "'" + v.replace("'", "'\\''") + "'"
-        print(f"export {key.upper()}={v}")
+        # Normalize hyphenated keys (e.g. `extra-flags`) to a valid shell
+        # identifier — `export EXTRA-FLAGS=...` is a parse error.
+        shell_key = key.upper().replace("-", "_")
+        print(f"export {shell_key}={v}")
     return 0
 
 

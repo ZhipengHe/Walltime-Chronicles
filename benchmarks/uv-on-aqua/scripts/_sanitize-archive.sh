@@ -74,11 +74,14 @@ tar --use-compress-program=unzstd -xf "$RAW" -C "$EXTRACTED"
 cd "$EXTRACTED"
 META="$EXTRACTED/session-meta.txt"
 
-# Auto-detect runtime values (env overrides win)
+# Auto-detect runtime values (env overrides win).
+# Pipelines wrapped in `{ ... } || true` so a missing match doesn't trip
+# pipefail and abort the script before the fallback paths run.
 USER_NAME="${REDACT_USER:-}"
 if [ -z "$USER_NAME" ] && [ -f "$META" ]; then
-  USER_NAME=$(grep -oE '/(home|scratch)/[a-zA-Z0-9_]+' "$META" 2>/dev/null \
-              | head -1 | sed -E 's|/(home\|scratch)/||')
+  USER_NAME=$( { grep -oE '/(home|scratch)/[a-zA-Z0-9_]+' "$META" \
+                 | head -1 \
+                 | sed -E 's|/(home\|scratch)/||'; } 2>/dev/null || true)
 fi
 USER_NAME="${USER_NAME:-$(whoami 2>/dev/null || true)}"
 
@@ -129,7 +132,9 @@ fi
 if [ -n "$WEKA_CLIENT" ]; then
   WEKA_ESC=$(sed_escape "$WEKA_CLIENT")
   find . -type f -print0 | while IFS= read -r -d '' f; do
-    sed_inplace -E -e "s|^\\* $WEKA_ESC\$|* <weka-client>|g" "$f"
+    # Match anywhere — the original `^* X$` anchor missed the version when it
+    # appeared on other captured lines (e.g. a `weka status` echo).
+    sed_inplace -e "s|$WEKA_ESC|<weka-client>|g" "$f"
   done
 fi
 
@@ -154,18 +159,25 @@ if [ -f session-meta.txt ]; then
   sed_inplace -E '/^Queue +Max +Tot/,/^=== seed/{/^=== seed/!d;}' session-meta.txt
 fi
 
-# PBS run identifiers (generic patterns — no QUT-specific server name)
+# PBS run identifiers. The jobid regex covers digits, optional FQDN/uppercase/
+# hyphen/dot/underscore suffix, and optional `[N]` array-job suffix.
 find . -type f -print0 | while IFS= read -r -d '' f; do
   sed_inplace -E \
-    -e 's|PBS_JOBID:[ ]+[0-9]+\.[a-z]+|PBS_JOBID: <jobid>|g' \
+    -e 's|PBS_JOBID:[ \t]+[0-9]+(\.[a-zA-Z0-9._-]+)?(\[[0-9]+\])?|PBS_JOBID: <jobid>|g' \
     -e 's|session seed:[ ]+[0-9]+|session seed: <seed>|g' \
     -e 's|^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$|<utc>|g' \
     "$f"
 done
 
-# Re-bundle to an absolute path
+# Re-bundle with normalized owner/group metadata. Without this, every file
+# entry in the tar carries the redactor's host uid/gid (e.g. `hez5/default`
+# on Aqua) — a leak surface that survives content redaction. `--owner=0
+# --group=0 --numeric-owner` is GNU-tar syntax and is also accepted by
+# modern bsdtar on macOS.
 NEW="$TMP/redacted.tar.zst"
-tar --use-compress-program='zstd -19' -cf "$NEW" -C "$EXTRACTED" .
+tar --use-compress-program='zstd -19' \
+    --owner=0 --group=0 --numeric-owner \
+    -cf "$NEW" -C "$EXTRACTED" .
 mv "$NEW" "$REDACTED"
 
 (cd "$ARCHIVE_DIR" && sha256sum redacted.tar.zst > manifest.sha256)
@@ -178,29 +190,32 @@ mkdir -p "$VERIFY"
 tar --use-compress-program=unzstd -xf "$REDACTED" -C "$VERIFY"
 cd "$VERIFY"
 
-count_hits() {
-  ( eval "$1" 2>/dev/null || true ) | wc -l | tr -d ' '
+# Pass grep args directly — no eval on strings assembled from runtime values.
+count_hits_grep() {
+  ( grep "$@" 2>/dev/null || true ) | wc -l | tr -d ' '
 }
 
 user_hits=0
 if [ -n "$USER_NAME" ]; then
   USER_ESC_GREP=$(sed_escape "$USER_NAME")
-  user_hits=$(count_hits "grep -rE '\\b$USER_ESC_GREP\\b' .")
+  user_hits=$(count_hits_grep -rE "\\b$USER_ESC_GREP\\b" .)
 fi
-ip_hits=$(count_hits "grep -rE '\\b[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\b' .")
+ip_hits=$(count_hits_grep -rE '\b[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\b' .)
 kernel_hits=0
 if [ -n "$KERNEL_BUILD" ]; then
-  kernel_hits=$(count_hits "grep -rF -- \"$KERNEL_BUILD\" .")
+  kernel_hits=$(count_hits_grep -rF -- "$KERNEL_BUILD" .)
 fi
 lustre_hits=0
 if [ -n "$LUSTRE_CLIENT" ]; then
-  lustre_hits=$(count_hits "grep -rF -- \"$LUSTRE_CLIENT\" .")
+  lustre_hits=$(count_hits_grep -rF -- "$LUSTRE_CLIENT" .)
 fi
 weka_hits=0
 if [ -n "$WEKA_CLIENT" ]; then
-  weka_hits=$(count_hits "grep -rE \"^\\* $(sed_escape "$WEKA_CLIENT")\$\" .")
+  # Broader-than-original: any occurrence of the version string, not just the
+  # `* X` bullet line — must match the redaction policy above.
+  weka_hits=$(count_hits_grep -rF -- "$WEKA_CLIENT" .)
 fi
-jobid_hits=$(count_hits "grep -rE 'PBS_JOBID:[ ]+[0-9]+\\.[a-z]+' .")
+jobid_hits=$(count_hits_grep -rE 'PBS_JOBID:[ \t]+[0-9]+(\.[a-zA-Z0-9._-]+)?(\[[0-9]+\])?' .)
 
 echo "=== sanitize verification (each must be 0) ==="
 echo "  username occurrences:    $user_hits"

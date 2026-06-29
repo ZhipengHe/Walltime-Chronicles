@@ -30,6 +30,19 @@ cd "$BENCH_ROOT"
 UV="${UV:-$HOME/.local/bin/uv}"
 HF="${HF:-$HOME/.local/bin/hyperfine}"
 
+# Fail fast if a required binary is missing so we don't burn a PBS slot
+# before the per-cell work tries to run.
+for tool_entry in "uv:$UV" "hyperfine:$HF"; do
+  tool_name="${tool_entry%%:*}"
+  tool_path="${tool_entry#*:}"
+  if [ ! -x "$tool_path" ]; then
+    echo "ERROR: $tool_name not executable at $tool_path" >&2
+    echo "  Install hyperfine via scripts/install-hyperfine.sh," >&2
+    echo "  and ensure uv is at \$HOME/.local/bin/uv (or override via UV=...)." >&2
+    exit 1
+  fi
+done
+
 # Pick a workload. v1 ships cpu-ml only; gpu-ml is defined in config.toml for later.
 WORKLOAD="${WORKLOAD:-cpu-ml}"
 
@@ -88,8 +101,13 @@ for cell in "${CELL_ORDER[@]}"; do
   cell_cleanup  "$cell"
 done
 
-# Bundle results into the tracked archive.
-session_epilogue
+# Bundle results into the tracked archive. session_epilogue propagates tar
+# and sanitize failures — if either step fails the bench exits non-zero
+# rather than printing "complete" with no usable archive.
+if ! session_epilogue; then
+  echo "ERROR: archive bundling/sanitization failed" >&2
+  exit 1
+fi
 
 echo
 echo "=== bench complete ==="
