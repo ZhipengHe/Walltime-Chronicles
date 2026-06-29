@@ -229,6 +229,20 @@ This is where most HPC users get burned. Python environments are **lots of small
 
 See [Know Your Nodes — File systems](../scheduler/Know-Your-Nodes.md) for the full filesystem reference and [QUT eResearch — Filesystem and data management](https://docs.eres.qut.edu.au/hpc-filesystem)[^1] for the official line.
 
+### :material-link-variant: For uv users — same-FS rule
+
+uv hardlinks files from its cache into every virtual environment, and cross-filesystem hardlinks aren't allowed. Keep your cache and your venv on the **same filesystem**. Easiest setup — both on `/scratch`:
+
+```bash
+# Once, in ~/.bashrc:
+export UV_CACHE_DIR="/scratch/${USER}/uv/cache"
+
+# Then any uv project you run from /scratch satisfies the rule:
+cd /scratch/${USER}/my-project && uv venv && uv sync
+```
+
+Full deep dive (capability matrix, all three placement patterns, the empirical numbers, common traps): **[uv on Aqua: Cache + Envs Placement](../scheduler/uv-on-aqua.md)**.
+
 ---
 
 ## :material-test-tube: Test Drive: Create a Project Environment
