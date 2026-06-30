@@ -114,6 +114,7 @@ nav:
     - remote-dev/index.md
     - "Surviving without VS Code Remote SSH": remote-dev/Surviving-without-VS-Code-Remote-SSH.md
     - "The .DS_Store Strikes Back: Finder Edition": remote-dev/The-DS_Store-Strikes-Back.md
+    - "Permissions Don't Move: A /work/group Survival Guide": remote-dev/Permissions-Dont-Move.md
   - "The Scheduler's Gambit":
     - scheduler/index.md
     - "Know Your Nodes": scheduler/Know-Your-Nodes.md
