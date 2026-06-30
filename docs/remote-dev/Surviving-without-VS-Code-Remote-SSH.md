@@ -120,6 +120,22 @@ On your local machine: open VS Code, click the green **Remote** icon (bottom-lef
 
     Pick the account type, copy the device code (e.g. `ABCDEFGHI`), and authenticate at [microsoft.com/devicelogin](https://microsoft.com/devicelogin) or [github.com/login/device](https://github.com/login/device).
 
+??? tip "If the up/down arrow keys don't move the selector"
+    Over some SSH/terminal combinations (notably macOS Terminal.app over plain `ssh`) the up/down arrow-key escape sequences don't reach the picker, leaving you stuck on `Microsoft Account`. Two workarounds:
+
+    1. **Vim navigation at the prompt** — `k` to move up, `j` to move down, Enter to select.
+    2. **Skip the picker entirely** by pre-authenticating with an explicit provider:
+
+        ```bash
+        # Run once — device-code flow caches credentials
+        ~/bin/code tunnel user login --provider github     # or: --provider microsoft
+
+        # Subsequent tunnel starts skip the picker
+        ~/bin/code tunnel
+        ```
+
+    The `--provider` flag is documented in `code tunnel user login --help` (see [microsoft/vscode-remote-release#10615](https://github.com/microsoft/vscode-remote-release/issues/10615)).
+
 !!! tip "Cleanup when you're done"
     On the HPC terminal: hit ++ctrl+c++ to cancel the remote connection, then `exit` the interactive job. The tunnel stops the moment the PBS job ends.
 
