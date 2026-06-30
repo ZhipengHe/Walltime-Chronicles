@@ -1,0 +1,2047 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="My personal survival log of mysterious errors, queueing oddities, and PBS quirks encountered on QUT Aqua">
+      
+      
+        <meta name="author" content="Zhipeng He">
+      
+      
+        <link rel="canonical" href="https://zhipenghe.me/walltime-chronicles/remote-dev/Permissions-Dont-Move/">
+      
+      
+        <link rel="prev" href="../The-DS_Store-Strikes-Back/">
+      
+      
+        <link rel="next" href="../../scheduler/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Permissions Don't Move: A /work/group Survival Guide - Walltime Chronicles</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="https://unpkg.com/katex@0/dist/katex.min.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Permissions Don't Move: A /work/group Survival Guide - Walltime Chronicles" />
+<meta property="og:description" content="My personal survival log of mysterious errors, queueing oddities, and PBS quirks encountered on QUT Aqua" />
+<meta property="og:image" content="https://zhipenghe.me/walltime-chronicles/assets/images/social/remote-dev/Permissions-Dont-Move.png" />
+<meta property="og:image:type" content="image/png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:url" content="https://zhipenghe.me/walltime-chronicles/remote-dev/Permissions-Dont-Move/" />
+<meta property="twitter:card" content="summary_large_image" />
+<meta property="twitter:title" content="Permissions Don't Move: A /work/group Survival Guide - Walltime Chronicles" />
+<meta property="twitter:description" content="My personal survival log of mysterious errors, queueing oddities, and PBS quirks encountered on QUT Aqua" />
+<meta property="twitter:image" content="https://zhipenghe.me/walltime-chronicles/assets/images/social/remote-dev/Permissions-Dont-Move.png" />
+</head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#permissions-dont-move-a-workgroup-survival-guide" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Walltime Chronicles" class="md-header__button md-logo" aria-label="Walltime Chronicles" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.75 8h6.5a.75.75 0 0 1 .75.75v6.5a.75.75 0 0 1-.75.75h-6.5a.75.75 0 0 1-.75-.75v-6.5A.75.75 0 0 1 8.75 8m.75 6.5h5v-5h-5Z"/><path d="M15.25 1a.75.75 0 0 1 .75.75V4h2.25c.966 0 1.75.784 1.75 1.75V8h2.25a.75.75 0 0 1 0 1.5H20v5h2.25a.75.75 0 0 1 0 1.5H20v2.25A1.75 1.75 0 0 1 18.25 20H16v2.25a.75.75 0 0 1-1.5 0V20h-5v2.25a.75.75 0 0 1-1.5 0V20H5.75A1.75 1.75 0 0 1 4 18.25V16H1.75a.75.75 0 0 1 0-1.5H4v-5H1.75a.75.75 0 0 1 0-1.5H4V5.75C4 4.784 4.784 4 5.75 4H8V1.75a.75.75 0 0 1 1.5 0V4h5V1.75a.75.75 0 0 1 .75-.75m3 17.5a.25.25 0 0 0 .25-.25V5.75a.25.25 0 0 0-.25-.25H5.75a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Walltime Chronicles
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Permissions Don't Move: A /work/group Survival Guide
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/ZhipengHe/Walltime-Chronicles" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Walltime Chronicles" class="md-nav__button md-logo" aria-label="Walltime Chronicles" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.75 8h6.5a.75.75 0 0 1 .75.75v6.5a.75.75 0 0 1-.75.75h-6.5a.75.75 0 0 1-.75-.75v-6.5A.75.75 0 0 1 8.75 8m.75 6.5h5v-5h-5Z"/><path d="M15.25 1a.75.75 0 0 1 .75.75V4h2.25c.966 0 1.75.784 1.75 1.75V8h2.25a.75.75 0 0 1 0 1.5H20v5h2.25a.75.75 0 0 1 0 1.5H20v2.25A1.75 1.75 0 0 1 18.25 20H16v2.25a.75.75 0 0 1-1.5 0V20h-5v2.25a.75.75 0 0 1-1.5 0V20H5.75A1.75 1.75 0 0 1 4 18.25V16H1.75a.75.75 0 0 1 0-1.5H4v-5H1.75a.75.75 0 0 1 0-1.5H4V5.75C4 4.784 4.784 4 5.75 4H8V1.75a.75.75 0 0 1 1.5 0V4h5V1.75a.75.75 0 0 1 .75-.75m3 17.5a.25.25 0 0 0 .25-.25V5.75a.25.25 0 0 0-.25-.25H5.75a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25Z"/></svg>
+
+    </a>
+    Walltime Chronicles
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/ZhipengHe/Walltime-Chronicles" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ~/welcome
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../tutorials/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crash Course Café
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Crash Course Café
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/prerequisites/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prerequisites Checklist
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/lesson-1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 1: Welcome to Aqua
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/lesson-2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 2: Tooling Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/lesson-3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 3: Your First Batch Job
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/lesson-4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 4: When Jobs Fail
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/lesson-5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 5: Right-sizing Requests
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/lesson-6/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 6: Job Arrays
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/lesson-7/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 7: Long Jobs — Dependencies & Checkpointing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cmd+Opt+Remote
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Cmd+Opt+Remote
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Surviving-without-VS-Code-Remote-SSH/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Surviving without VS Code Remote SSH
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../The-DS_Store-Strikes-Back/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The .DS_Store Strikes Back: Finder Edition
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Permissions Don't Move: A /work/group Survival Guide
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Permissions Don't Move: A /work/group Survival Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-mental-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The mental model
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The mental model">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-workgroup-gives-you-and-doesnt-automatically" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What /work/&lt;group&gt;/ gives you — and doesn't — automatically
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-mv-from-breaks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What mv from ~/ breaks
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#decide-your-intent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Decide your intent
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#shared-edit-transfers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Shared-edit transfers
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#read-only-sharing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Read-only sharing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#moving-within-work" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Moving within /work/&lt;group&gt;
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#if-you-got-it-wrong" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        If you got it wrong
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-qut-eresearch-documents-and-doesnt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What QUT eResearch documents (and doesn't)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#where-next" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where next
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../scheduler/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Scheduler's Gambit
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    The Scheduler's Gambit
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../scheduler/Know-Your-Nodes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Know Your Nodes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../scheduler/The-Art-of-Walltime/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guess, Request, Regret: The Art of Walltime
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../scheduler/Walltime-by-Recipe/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Walltime by Recipe: Worked Examples for Aqua
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../scheduler/uv-on-aqua/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    uv on Aqua: Cache + Envs Placement
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../pbs-scripts/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PBS Cookbook
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    PBS Cookbook
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../pbs-scripts/Batch-Cooking-PBS-Scripts-with-a-Bash-Pan/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Batch-Cooking PBS Scripts with a Bash Pan
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../pbs-scripts/PBS-Brew-Inspector/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PBS Brew Inspector: Tasting Notes from Your Job History
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../LICENSE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    License
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-mental-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The mental model
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The mental model">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-workgroup-gives-you-and-doesnt-automatically" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What /work/&lt;group&gt;/ gives you — and doesn't — automatically
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-mv-from-breaks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What mv from ~/ breaks
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#decide-your-intent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Decide your intent
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#shared-edit-transfers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Shared-edit transfers
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#read-only-sharing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Read-only sharing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#moving-within-work" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Moving within /work/&lt;group&gt;
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#if-you-got-it-wrong" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        If you got it wrong
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-qut-eresearch-documents-and-doesnt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What QUT eResearch documents (and doesn't)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#where-next" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where next
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+                
+
+
+
+  
+
+
+  <nav class="md-path" aria-label="Navigation" >
+    <ol class="md-path__list">
+      
+        
+  
+  
+    <li class="md-path__item">
+      <a href="../.." class="md-path__link">
+        
+  <span class="md-ellipsis">
+    ~/welcome
+  </span>
+
+      </a>
+    </li>
+  
+
+      
+      
+        
+  
+  
+    
+    
+      <li class="md-path__item">
+        <a href="../" class="md-path__link">
+          
+  <span class="md-ellipsis">
+    Cmd+Opt+Remote
+  </span>
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ol>
+  </nav>
+
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/ZhipengHe/Walltime-Chronicles/edit/main/docs/remote-dev/Permissions-Dont-Move.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+    
+      
+    
+    <a href="https://github.com/ZhipengHe/Walltime-Chronicles/raw/main/docs/remote-dev/Permissions-Dont-Move.md" title="View source of this page" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"/></svg>
+    </a>
+  
+
+
+<h1 id="permissions-dont-move-a-workgroup-survival-guide">Permissions Don't Move: A <code>/work/&lt;group&gt;</code> Survival Guide</h1>
+<p>Putting files into a shared <code>/work/&lt;group&gt;/</code> folder is a two-part problem: get the <mark>group</mark> right (<code>&lt;group&gt;</code>, not your private <code>default</code>), and get the <mark>mode bits</mark> right (open enough for collaborators to do what you intend). <code>/work/&lt;group&gt;/</code> solves the group half automatically when you <mark>create</mark> new entries inside; you solve the mode half with <code>chmod</code>. <code>mv</code> from <code>~/</code> solves neither.</p>
+<div class="admonition tip">
+<p class="admonition-title">Companion pages</p>
+<ul>
+<li><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3 1 9l11 6 9-4.91V17h2V9M5 13.18v4L12 21l7-3.82v-4L12 17z"/></svg></span> <a href="../../tutorials/lesson-2/">Lesson 2 — Tooling Setup</a> — <code>/home</code> vs <code>/scratch</code> placement</li>
+<li><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 19h1a1 1 0 0 1 1 1h7v2h-7a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1H2v-2h7a1 1 0 0 1 1-1h1v-2H4a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-7zM4 3h16a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1m5 4h1V5H9zm0 8h1v-2H9zM5 5v2h2V5zm0 8v2h2v-2z"/></svg></span> <a href="../../scheduler/Know-Your-Nodes/#storage-internals">Know Your Nodes — Storage internals</a> — the broader Aqua filesystem picture</li>
+<li><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10.59 13.41c.41.39.41 1.03 0 1.42-.39.39-1.03.39-1.42 0a5.003 5.003 0 0 1 0-7.07l3.54-3.54a5.003 5.003 0 0 1 7.07 0 5.003 5.003 0 0 1 0 7.07l-1.49 1.49c.01-.82-.12-1.64-.4-2.42l.47-.48a2.98 2.98 0 0 0 0-4.24 2.98 2.98 0 0 0-4.24 0l-3.53 3.53a2.98 2.98 0 0 0 0 4.24m2.82-4.24c.39-.39 1.03-.39 1.42 0a5.003 5.003 0 0 1 0 7.07l-3.54 3.54a5.003 5.003 0 0 1-7.07 0 5.003 5.003 0 0 1 0-7.07l1.49-1.49c-.01.82.12 1.64.4 2.43l-.47.47a2.98 2.98 0 0 0 0 4.24 2.98 2.98 0 0 0 4.24 0l3.53-3.53a2.98 2.98 0 0 0 0-4.24.973.973 0 0 1 0-1.42"/></svg></span> <a href="https://docs.eres.qut.edu.au/hpc-filesystem">QUT eResearch — Filesystem and data management</a><sup id="fnref5:1"><a class="footnote-ref" href="#fn:1">1</a></sup> — the canonical line on <code>/work/</code></li>
+</ul>
+</div>
+<hr />
+<h2 id="the-mental-model"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 15.5A3.5 3.5 0 0 1 8.5 12 3.5 3.5 0 0 1 12 8.5a3.5 3.5 0 0 1 3.5 3.5 3.5 3.5 0 0 1-3.5 3.5m7.43-2.53c.04-.32.07-.64.07-.97s-.03-.66-.07-1l2.11-1.63c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.31-.61-.22l-2.49 1c-.52-.39-1.06-.73-1.69-.98l-.37-2.65A.506.506 0 0 0 14 2h-4c-.25 0-.46.18-.5.42l-.37 2.65c-.63.25-1.17.59-1.69.98l-2.49-1c-.22-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64L4.57 11c-.04.34-.07.67-.07 1s.03.65.07.97l-2.11 1.66c-.19.15-.25.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1.01c.52.4 1.06.74 1.69.99l.37 2.65c.04.24.25.42.5.42h4c.25 0 .46-.18.5-.42l.37-2.65c.63-.26 1.17-.59 1.69-.99l2.49 1.01c.22.08.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64z"/></svg></span> The mental model</h2>
+<p>A shareable file in <code>/work/&lt;group&gt;/</code> needs <mark>three things working together</mark>:</p>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>What it means</th>
+<th>Who sets it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1. Group</strong></td>
+<td>File group = <code>&lt;group&gt;</code> (so collaborators are in-group)</td>
+<td>Automatic on <code>create</code>, via the dir's setgid bit</td>
+</tr>
+<tr>
+<td><strong>2. Mode bits</strong></td>
+<td>File mode group bits include the access you want (<code>rw</code> for edit, <code>r</code> for read)</td>
+<td><strong>Always you, with <code>chmod</code></strong></td>
+</tr>
+<tr>
+<td><strong>3. ACL</strong></td>
+<td><code>group:&lt;group&gt;:rwx</code> entry + default ACL for future children</td>
+<td>Automatic on <code>create</code>, via the dir's default ACL</td>
+</tr>
+</tbody>
+</table>
+<h3 id="what-workgroup-gives-you-and-doesnt-automatically">What <code>/work/&lt;group&gt;/</code> gives you — and doesn't — automatically</h3>
+<pre class="mermaid"><code>flowchart LR
+    Create([Create a new entry&lt;br/&gt;inside /work/&amp;lt;group&amp;gt;/]) --&gt; L1[Layer 1&lt;br/&gt;group set automatically&lt;br/&gt;via setgid]
+    Create --&gt; L3[Layer 3&lt;br/&gt;ACL entries inherited&lt;br/&gt;via default ACL]
+    Create -.does NOT set.-&gt; L2[Layer 2&lt;br/&gt;mode bits = source mode &amp;cap; umask&lt;br/&gt;You chmod]
+
+    style Create fill:#e1f5fe
+    style L1 fill:#e8f5e8
+    style L3 fill:#e8f5e8
+    style L2 fill:#fff3e0</code></pre>
+<p>The <mark>mode-bit gap is the load-bearing detail nobody documents</mark>. Both <code>cp</code> and <code>rsync -rlt --no-perms</code> inherit layer 1 + layer 3 from the parent dir, but they propagate the <mark>source file's mode bits</mark> for layer 2. Empirically (verified against <code>/work/&lt;group&gt;</code> with system umask <code>0022</code>):</p>
+<table>
+<thead>
+<tr>
+<th>What you bring in from <code>~/</code></th>
+<th>Mode at destination</th>
+<th>Effective group access</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>File created with plain <code>touch</code> / <code>cp</code> (mode <code>0644</code>)</td>
+<td><code>-rw-r-----+</code></td>
+<td><code>r--</code> — group can read, not write</td>
+</tr>
+<tr>
+<td>File you <code>chmod 600</code>'d for privacy</td>
+<td><code>-rw-------+</code></td>
+<td><code>---</code> — group can't even read</td>
+</tr>
+<tr>
+<td>File you explicitly <code>chmod 664</code>'d</td>
+<td><code>-rw-rw----+</code></td>
+<td><code>rw-</code> — group can read + write ✓</td>
+</tr>
+</tbody>
+</table>
+<p>The ACL entry says <code>group:&lt;group&gt;:rwx</code> in all three cases, but the file's mode-bit mask gates the effective access down to whatever the source mode permitted. <mark>You always need <code>chmod</code> to normalize layer 2</mark>, regardless of how you transferred the file.</p>
+<p>Here's what a correctly-wired shared folder looks like:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>$ ls -ld /work/&lt;group&gt;
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>drwxrws---+ &lt;user&gt; &lt;group&gt; /work/&lt;group&gt;
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>$ getfacl -p /work/&lt;group&gt;
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a># file: /work/&lt;group&gt;
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a># owner: &lt;user&gt;
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a># group: &lt;group&gt;
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a># flags: -s-
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>user::rwx
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>group::rwx
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>other::---
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>default:user::rwx
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>default:group::rwx
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>default:group:&lt;group&gt;:rwx
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>default:mask::rwx
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>default:other::---
+</span></code></pre></div>
+<p>Two markers in <code>ls -ld</code>: <code>s</code> in column 6 = setgid (layer 1), <code>+</code> at the end = default ACLs present (layer 3). Both fire on <strong>create</strong>; neither sets layer 2. If either marker is missing, the folder isn't fully wired — open an <a href="https://eresearchqut.atlassian.net/servicedesk/customer/portals">eResearch Help Centre</a> ticket.</p>
+<h3 id="what-mv-from-breaks">What <code>mv</code> from <code>~/</code> breaks</h3>
+<p><code>mv</code> is a rename, not a create. It bypasses both layer 1 and layer 3 inheritance AND propagates your <code>~/</code> mode bits to layer 2. You inherit nothing useful and keep three problems:</p>
+<ul>
+<li><strong>Group</strong>: your <code>default</code>, not <code>&lt;group&gt;</code> (collaborators are out-group)</li>
+<li><strong>Mode bits</strong>: whatever the file had in <code>~/</code> (probably restrictive)</li>
+<li><strong>ACL</strong>: none at all (no entry, no future inheritance)</li>
+</ul>
+<p><mark><code>mv</code> is the worst case</mark> — every other "wrong" method gets at least one layer right.</p>
+<hr />
+<h2 id="decide-your-intent"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m15.07 11.25-.9.92C13.45 12.89 13 13.5 13 15h-2v-.5c0-1.11.45-2.11 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41a2 2 0 0 0-2-2 2 2 0 0 0-2 2H8a4 4 0 0 1 4-4 4 4 0 0 1 4 4 3.2 3.2 0 0 1-.93 2.25M13 19h-2v-2h2M12 2A10 10 0 0 0 2 12a10 10 0 0 0 10 10 10 10 0 0 0 10-10c0-5.53-4.5-10-10-10"/></svg></span> Decide your intent</h2>
+<p>One question decides everything: <strong>will your collaborators write to these files?</strong></p>
+<!-- markdownlint-disable MD051 -->
+
+<table>
+<thead>
+<tr>
+<th>Answer</th>
+<th>Layers you need</th>
+<th>Right workflow</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Yes</strong> — shared-edit (group reads + writes + deletes)</td>
+<td>1 + 2 (<code>rw</code>) + 3</td>
+<td><a href="#shared-edit-transfers">§ Shared-edit transfers</a></td>
+</tr>
+<tr>
+<td><strong>No</strong> — read-only (group reads only)</td>
+<td>1 + 2 (<code>r--</code>); skip 3</td>
+<td><a href="#read-only-sharing">§ Read-only sharing</a></td>
+</tr>
+<tr>
+<td>Already inside <code>/work/&lt;group&gt;</code></td>
+<td>All three already set</td>
+<td><a href="#moving-within-work">§ Moving within <code>/work/&lt;group&gt;</code></a></td>
+</tr>
+</tbody>
+</table>
+<!-- markdownlint-enable MD051 -->
+
+<p><mark>Pick before you transfer.</mark> Most "I just moved stuff and my collaborators can't edit it" trouble comes from solving the wrong subset of layers.</p>
+<hr />
+<h2 id="shared-edit-transfers"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75z"/></svg></span> Shared-edit transfers</h2>
+<p>Pattern: <strong>create + chmod</strong>. Create lands you layers 1 + 3 for free; chmod opens layer 2.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Single file</label><label for="__tabbed_1_2">Directory</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nv">GROUP</span><span class="o">=</span>your-group-name<span class="w">                                        </span><span class="c1"># (1)!</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>cp<span class="w"> </span>~/script.py<span class="w"> </span><span class="s2">&quot;/work/</span><span class="nv">$GROUP</span><span class="s2">/project/&quot;</span><span class="w">                       </span><span class="c1"># (2)!</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>chmod<span class="w"> </span>g+rw,o-rwx<span class="w"> </span><span class="s2">&quot;/work/</span><span class="nv">$GROUP</span><span class="s2">/project/script.py&quot;</span><span class="w">            </span><span class="c1"># (3)!</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1"># Executable script? Use `chmod 770` instead.</span>
+</span></code></pre></div>
+<ol>
+<li>Replace with your actual group name.</li>
+<li><code>cp</code> creates a new file → layers 1 + 3 inherited → group=<code>&lt;group&gt;</code>, ACL entry present.</li>
+<li>Open layer 2 group bits. <code>o-rwx</code> keeps the file group-private.</li>
+</ol>
+</div>
+<div class="tabbed-block">
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nv">GROUP</span><span class="o">=</span>your-group-name
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nv">SRC</span><span class="o">=</span>~/project_folder
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nv">DST</span><span class="o">=</span><span class="s2">&quot;/work/</span><span class="nv">$GROUP</span><span class="s2">/project_folder&quot;</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>mkdir<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">&quot;</span><span class="w">                                                       </span><span class="c1"># (1)!</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>rsync<span class="w"> </span>-rlt<span class="w"> </span>--no-owner<span class="w"> </span>--no-group<span class="w"> </span>--no-perms<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SRC</span><span class="s2">&quot;</span>/<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">&quot;</span>/<span class="w">        </span><span class="c1"># (2)!</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>chmod<span class="w"> </span>-R<span class="w"> </span>g+rwX,o-rwx<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">&quot;</span><span class="w">                                        </span><span class="c1"># (3)!</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="c1"># Verify content matches (empty output = identical)</span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>rsync<span class="w"> </span>-rltni<span class="w"> </span>--no-owner<span class="w"> </span>--no-group<span class="w"> </span>--no-perms<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SRC</span><span class="s2">&quot;</span>/<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">&quot;</span>/<span class="w">      </span><span class="c1"># (4)!</span>
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>
+</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="c1"># Once verified, drop the source</span>
+</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>rm<span class="w"> </span>-rf<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SRC</span><span class="s2">&quot;</span>
+</span></code></pre></div>
+<ol>
+<li>Fresh directory inside <code>/work/&lt;group&gt;</code> → inherits setgid + default ACLs → layers 1 + 3 done.</li>
+<li>Copy contents. <code>-rlt</code> recurses + preserves symlinks + mtime. <code>--no-perms</code> + the <code>--no-*</code> flags propagate source mode bits without source group/owner — layers 1 + 3 stay inherited per file.</li>
+<li><strong>Required.</strong> Opens layer 2 group bits across the tree — <code>--no-perms</code> propagated source mode bits which are usually too restrictive (see the mental model above). Capital <code>X</code> adds exec only to dirs + already-exec files (preserves scripts, leaves data files non-exec).</li>
+<li><code>-n</code> = dry-run; <code>-i</code> = itemize. Verifies content match, not perms.</li>
+</ol>
+</div>
+</div>
+</div>
+<details class="note">
+<summary>Why these rsync flags and not <code>-a</code>?</summary>
+<p><code>-a</code> (archive mode) expands to <code>-rlptgoD</code>. The <code>p</code> (perms), <code>g</code> (group), and <code>o</code> (owner) flags preserve source metadata — which keeps your <code>default</code> group on the destination, breaking layer 1.</p>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>What it does</th>
+<th style="text-align: center;">Safe for <code>~/</code> → <code>/work/&lt;group&gt;/</code>?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-r</code></td>
+<td>Recurse into directories</td>
+<td style="text-align: center;">✓</td>
+</tr>
+<tr>
+<td><code>-l</code></td>
+<td>Preserve symlinks as symlinks</td>
+<td style="text-align: center;">✓</td>
+</tr>
+<tr>
+<td><code>-t</code></td>
+<td>Preserve modification times</td>
+<td style="text-align: center;">✓</td>
+</tr>
+<tr>
+<td><code>--no-perms</code></td>
+<td>Destination uses source-mode + umask, not source's exact mode bits</td>
+<td style="text-align: center;">✓ — needs the follow-up <code>chmod</code> to open layer 2</td>
+</tr>
+<tr>
+<td><code>--no-owner</code></td>
+<td>Don't copy source owner</td>
+<td style="text-align: center;">✓ — <code>chown</code> across users needs root anyway</td>
+</tr>
+<tr>
+<td><code>--no-group</code></td>
+<td>Don't copy source group</td>
+<td style="text-align: center;">✓ — destination inherits layer 1 via setgid</td>
+</tr>
+<tr>
+<td><code>-p</code> (in <code>-a</code>)</td>
+<td>Preserve source mode bits</td>
+<td style="text-align: center;">✗ — locks layer 2 to source's bits</td>
+</tr>
+<tr>
+<td><code>-g</code> (in <code>-a</code>)</td>
+<td>Preserve source group</td>
+<td style="text-align: center;">✗ — breaks layer 1</td>
+</tr>
+<tr>
+<td><code>-o</code> (in <code>-a</code>)</td>
+<td>Preserve source owner</td>
+<td style="text-align: center;">✗ — would fail anyway, but noisy</td>
+</tr>
+</tbody>
+</table>
+</details>
+<div class="admonition failure">
+<p class="admonition-title">Methods that LOOK right but fail at one or more layers</p>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Layer 1 (group)</th>
+<th>Layer 2 (mode)</th>
+<th>Layer 3 (ACL)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mv ~/dir /work/$GROUP/</code></td>
+<td>✗ default</td>
+<td>✗ source's</td>
+<td>✗ none</td>
+</tr>
+<tr>
+<td><code>cp -a ~/dir /work/$GROUP/</code></td>
+<td>✗ default</td>
+<td>✗ source's</td>
+<td>partial (setgid bit only)</td>
+</tr>
+<tr>
+<td><code>cp -p ~/dir /work/$GROUP/</code></td>
+<td>✗ default</td>
+<td>✗ source's</td>
+<td>✗ none</td>
+</tr>
+<tr>
+<td><code>rsync -a ~/dir/ /work/$GROUP/dir/</code></td>
+<td>✗ default</td>
+<td>✗ source's</td>
+<td>✓ inherited (but mask = <code>---</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>Each preserves source metadata at the cost of layer 1 (group). <code>rsync -a</code> paradoxically gets layer 3 right via inheritance but still locks collaborators out via layer 2.</p>
+</div>
+<details class="info">
+<summary>What the modes look like after <code>chmod -R g+rwX,o-rwx</code></summary>
+<p>Verified live against <code>/work/&lt;group&gt;</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>Mode after <code>chmod -R g+rwX,o-rwx</code></th>
+<th>What it gives the group</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Directory (any starting mode)</td>
+<td><code>drwxrws---+</code> mask=<code>rwx</code></td>
+<td><code>rwx</code> — <code>cd</code>, list, create, delete</td>
+</tr>
+<tr>
+<td>Data file <code>-rw-------</code></td>
+<td><code>-rw-rw----+</code> mask=<code>rw-</code></td>
+<td><code>rw-</code> — read + write, no exec</td>
+</tr>
+<tr>
+<td>Script <code>-rwx------</code></td>
+<td><code>-rwxrwx---+</code> mask=<code>rwx</code></td>
+<td><code>rwx</code> — exec preserved</td>
+</tr>
+<tr>
+<td>NEW file/dir created later</td>
+<td><code>-rw-rw----+</code> / <code>drwxrws---+</code></td>
+<td>inheritance keeps firing</td>
+</tr>
+</tbody>
+</table>
+</details>
+<hr />
+<h2 id="read-only-sharing"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0 8a5 5 0 0 1-5-5 5 5 0 0 1 5-5 5 5 0 0 1 5 5 5 5 0 0 1-5 5m0-12.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5"/></svg></span> Read-only sharing</h2>
+<p>Different goal: collaborators read, you write. Layers 1 + 2 are enough — you don't need layer 3 because you're not setting up an ongoing area where new entries appear.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nv">GROUP</span><span class="o">=</span>your-group-name
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>mv<span class="w"> </span>~/project_folder<span class="w"> </span><span class="s2">&quot;/work/</span><span class="nv">$GROUP</span><span class="s2">/&quot;</span><span class="w">                               </span><span class="c1"># (1)!</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>chgrp<span class="w"> </span>-R<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$GROUP</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;/work/</span><span class="nv">$GROUP</span><span class="s2">/project_folder&quot;</span><span class="w">                   </span><span class="c1"># (2)!</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>chmod<span class="w"> </span>-R<span class="w"> </span>g+rX,o-rwx<span class="w"> </span><span class="s2">&quot;/work/</span><span class="nv">$GROUP</span><span class="s2">/project_folder&quot;</span><span class="w">                 </span><span class="c1"># (3)!</span>
+</span></code></pre></div>
+<ol>
+<li><code>mv</code> is fine here — fastest move (rename, no copy), and we're about to fix layers 1 + 2 explicitly anyway.</li>
+<li>Fix layer 1 (group identity).</li>
+<li>Fix layer 2 for read-only. Capital <code>X</code> (not <code>x</code>) gives traverse for dirs + exec for already-exec scripts; lowercase <code>x</code> would falsely mark data files executable.</li>
+</ol>
+<!-- markdownlint-disable MD051 -->
+
+<div class="admonition note">
+<p class="admonition-title">When this stops working</p>
+<p>Any file you ADD LATER won't auto-inherit (no layer 3 / default ACL). You'll need to re-run <code>chgrp + chmod</code> each time, or graduate to the <a href="#shared-edit-transfers">§ Shared-edit</a> workflow. Use this pattern for one-time publish-style sharing — results snapshots, archive drops, things you won't touch again.</p>
+</div>
+<!-- markdownlint-enable MD051 -->
+
+<hr />
+<h2 id="moving-within-work"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg></span> Moving within <code>/work/&lt;group&gt;</code></h2>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nv">GROUP</span><span class="o">=</span>your-group-name
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>mv<span class="w"> </span><span class="s2">&quot;/work/</span><span class="nv">$GROUP</span><span class="s2">/project1/data.csv&quot;</span><span class="w"> </span><span class="s2">&quot;/work/</span><span class="nv">$GROUP</span><span class="s2">/project2/&quot;</span>
+</span></code></pre></div>
+<p>Plain <code>mv</code> is correct here. Source already has all three layers — nothing to break. The trap only fires when you cross from outside <code>/work/&lt;group&gt;</code> into it.</p>
+<hr />
+<h2 id="if-you-got-it-wrong"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.73 12 3.98-3.96c.39-.39.39-1.04 0-1.41l-4.34-4.34c-.37-.39-1.02-.39-1.41 0L12 6.27 8 2.29a1.001 1.001 0 0 0-1.41 0L2.25 6.63c-.39.37-.39 1.02 0 1.41L6.23 12l-3.98 4c-.39.39-.39 1 0 1.41l4.34 4.34c.41.39 1.02.39 1.41 0l4-3.98 3.96 3.98c.2.2.45.29.71.29s.51-.1.71-.29l4.34-4.34c.39-.41.39-1.02 0-1.41zM12 9a1 1 0 0 1 1 1 1 1 0 0 1-1 1 1 1 0 0 1-1-1 1 1 0 0 1 1-1m-4.71 1.96L3.66 7.34l3.63-3.63 3.62 3.62zM10 13a1 1 0 0 1-1-1 1 1 0 0 1 1-1 1 1 0 0 1 1 1 1 1 0 0 1-1 1m2 2a1 1 0 0 1-1-1 1 1 0 0 1 1-1 1 1 0 0 1 1 1 1 1 0 0 1-1 1m2-4a1 1 0 0 1 1 1 1 1 0 0 1-1 1 1 1 0 0 1-1-1 1 1 0 0 1 1-1m2.66 9.34-3.63-3.62 3.63-3.63 3.62 3.62z"/></svg></span> If you got it wrong</h2>
+<p>If <code>mv</code> already happened and you want to fix it in place, pick by intent.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Make it read-only (small fix — layers 1 + 2)</label><label for="__tabbed_2_2">Make it shared-edit (full fix — layers 1 + 2 + 3)</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nv">GROUP</span><span class="o">=</span>your-group-name
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nv">DST</span><span class="o">=</span><span class="s2">&quot;/work/</span><span class="nv">$GROUP</span><span class="s2">/the_moved_thing&quot;</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>chgrp<span class="w"> </span>-R<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$GROUP</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">&quot;</span><span class="w">               </span><span class="c1"># layer 1</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>chmod<span class="w"> </span>-R<span class="w"> </span>g+rX,o-rwx<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">&quot;</span><span class="w">             </span><span class="c1"># layer 2</span>
+</span></code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nv">GROUP</span><span class="o">=</span>your-group-name
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="nv">DST</span><span class="o">=</span><span class="s2">&quot;/work/</span><span class="nv">$GROUP</span><span class="s2">/the_moved_thing&quot;</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>chgrp<span class="w"> </span>-R<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$GROUP</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">&quot;</span><span class="w">                              </span><span class="c1"># (1)!</span>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>find<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">&quot;</span><span class="w"> </span>-type<span class="w"> </span>d<span class="w"> </span>-exec<span class="w"> </span>chmod<span class="w"> </span><span class="m">2770</span><span class="w"> </span><span class="o">{}</span><span class="w"> </span><span class="se">\;</span><span class="w">            </span><span class="c1"># (2)!</span>
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>find<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">&quot;</span><span class="w"> </span>-type<span class="w"> </span>f<span class="w"> </span>-exec<span class="w"> </span>chmod<span class="w"> </span>g+rwX,o-rwx<span class="w"> </span><span class="o">{}</span><span class="w"> </span><span class="se">\;</span><span class="w">     </span><span class="c1"># (3)!</span>
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>setfacl<span class="w"> </span>-R<span class="w">  </span>-m<span class="w"> </span>g:<span class="s2">&quot;</span><span class="nv">$GROUP</span><span class="s2">&quot;</span>:rwx<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">&quot;</span><span class="w">                  </span><span class="c1"># (4)!</span>
+</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>setfacl<span class="w"> </span>-Rd<span class="w"> </span>-m<span class="w"> </span>g:<span class="s2">&quot;</span><span class="nv">$GROUP</span><span class="s2">&quot;</span>:rwx<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">&quot;</span><span class="w">                  </span><span class="c1"># (5)!</span>
+</span></code></pre></div>
+<ol>
+<li>Layer 1 — fix group identity.</li>
+<li>Layer 2 for dirs — <code>2770</code> = setgid bit + group rwx + no other access.</li>
+<li>Layer 2 for files — <code>g+rw</code> opens group write; capital <code>X</code> (not <code>x</code>) conditionally adds group exec <strong>only</strong> to files that already had exec set, so scripts stay executable and data files don't get falsely marked exec; <code>o-rwx</code> strips other access.</li>
+<li>Layer 3 current ACL — applies to entries that exist now.</li>
+<li>Layer 3 default ACL — applies to entries created later, so <code>DST</code> keeps behaving correctly going forward.</li>
+</ol>
+<p>Verified: after the full fix, new entries created inside DST inherit layers 1 + 3 automatically — <code>DST</code> is now configured the same way as <code>/work/&lt;group&gt;/</code> itself.</p>
+</div>
+</div>
+</div>
+<!-- markdownlint-disable MD051 -->
+
+<div class="admonition warning">
+<p class="admonition-title">Ownership transfer needs a re-create</p>
+<p><code>chgrp</code> to a group you're in works fine. <code>chown</code> to a different <strong>user</strong> requires root — even if a colleague gave you the files, you can't take ownership directly. To "transfer" ownership, copy the tree into a fresh destination you create as yourself (<a href="#shared-edit-transfers">§ Shared-edit directory workflow</a>). The copy's new inodes will be owned by you.</p>
+</div>
+<!-- markdownlint-enable MD051 -->
+
+<hr />
+<h2 id="what-qut-eresearch-documents-and-doesnt"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 9h-2V7h2m0 10h-2v-6h2m-1-9A10 10 0 0 0 2 12a10 10 0 0 0 10 10 10 10 0 0 0 10-10A10 10 0 0 0 12 2"/></svg></span> What QUT eResearch documents (and doesn't)</h2>
+<ul>
+<li>The <a href="https://docs.eres.qut.edu.au/hpc-filesystem">Filesystem and data management page</a><sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> says new entries in <code>/work/</code> inherit parent permissions. <mark>True for layers 1 + 3; false for layer 2.</mark> Mode bits come from your creating process (rsync, cp, touch), not from the parent. The page doesn't define create-vs-move, doesn't mention setgid or default ACLs, and doesn't warn about <code>mv</code>.</li>
+<li>The <a href="https://docs.eres.qut.edu.au/hpc-transferring-files-tofrom-hpc">Transferring files page</a><sup id="fnref2:1"><a class="footnote-ref" href="#fn:1">1</a></sup> documents <code>rsync -a</code> as the recommended flag set. Fine for <code>/home</code> ↔ <code>/home</code>; for <code>~/</code> → <code>/work/&lt;group&gt;/</code> shared-edit, <code>-a</code> preserves your <code>default</code> group and breaks layer 1.</li>
+<li>New shared folder requests go through the <a href="https://eresearchqut.atlassian.net/servicedesk/customer/portals">eResearch Help Centre portal</a> (<code>HPC request</code> → <code>New shared folder</code>).</li>
+</ul>
+<hr />
+<h2 id="where-next"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M22 12a10 10 0 0 1-10 10A10 10 0 0 1 2 12 10 10 0 0 1 12 2a10 10 0 0 1 10 10M6 13h8l-3.5 3.5 1.42 1.42L17.84 12l-5.92-5.92L10.5 7.5 14 11H6z"/></svg></span> Where next</h2>
+<ul>
+<li><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3 1 9l11 6 9-4.91V17h2V9M5 13.18v4L12 21l7-3.82v-4L12 17z"/></svg></span> <a href="../../tutorials/lesson-2/">Lesson 2 — Tooling Setup</a> — <code>/home</code> vs <code>/scratch</code> placement</li>
+<li><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 19h1a1 1 0 0 1 1 1h7v2h-7a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1H2v-2h7a1 1 0 0 1 1-1h1v-2H4a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-7zM4 3h16a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1m5 4h1V5H9zm0 8h1v-2H9zM5 5v2h2V5zm0 8v2h2v-2z"/></svg></span> <a href="../../scheduler/Know-Your-Nodes/#storage-internals">Know Your Nodes — Storage internals</a> — Aqua filesystem capacity picture</li>
+<li><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10.59 13.41c.41.39.41 1.03 0 1.42-.39.39-1.03.39-1.42 0a5.003 5.003 0 0 1 0-7.07l3.54-3.54a5.003 5.003 0 0 1 7.07 0 5.003 5.003 0 0 1 0 7.07l-1.49 1.49c.01-.82-.12-1.64-.4-2.42l.47-.48a2.98 2.98 0 0 0 0-4.24 2.98 2.98 0 0 0-4.24 0l-3.53 3.53a2.98 2.98 0 0 0 0 4.24m2.82-4.24c.39-.39 1.03-.39 1.42 0a5.003 5.003 0 0 1 0 7.07l-3.54 3.54a5.003 5.003 0 0 1-7.07 0 5.003 5.003 0 0 1 0-7.07l1.49-1.49c-.01.82.12 1.64.4 2.43l-.47.47a2.98 2.98 0 0 0 0 4.24 2.98 2.98 0 0 0 4.24 0l3.53-3.53a2.98 2.98 0 0 0 0-4.24.973.973 0 0 1 0-1.42"/></svg></span> <a href="https://docs.eres.qut.edu.au/hpc-filesystem">QUT eResearch — Filesystem and data management</a><sup id="fnref3:1"><a class="footnote-ref" href="#fn:1">1</a></sup></li>
+<li><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10.59 13.41c.41.39.41 1.03 0 1.42-.39.39-1.03.39-1.42 0a5.003 5.003 0 0 1 0-7.07l3.54-3.54a5.003 5.003 0 0 1 7.07 0 5.003 5.003 0 0 1 0 7.07l-1.49 1.49c.01-.82-.12-1.64-.4-2.42l.47-.48a2.98 2.98 0 0 0 0-4.24 2.98 2.98 0 0 0-4.24 0l-3.53 3.53a2.98 2.98 0 0 0 0 4.24m2.82-4.24c.39-.39 1.03-.39 1.42 0a5.003 5.003 0 0 1 0 7.07l-3.54 3.54a5.003 5.003 0 0 1-7.07 0 5.003 5.003 0 0 1 0-7.07l1.49-1.49c-.01.82.12 1.64.4 2.43l-.47.47a2.98 2.98 0 0 0 0 4.24 2.98 2.98 0 0 0 4.24 0l3.53-3.53a2.98 2.98 0 0 0 0-4.24.973.973 0 0 1 0-1.42"/></svg></span> <a href="https://docs.eres.qut.edu.au/hpc-transferring-files-tofrom-hpc">QUT eResearch — Transferring files to/from HPC</a><sup id="fnref4:1"><a class="footnote-ref" href="#fn:1">1</a></sup></li>
+<li>Linux refs: <code>acl(5)</code>, <code>getfacl(1)</code>, <code>setfacl(1)</code>, <code>chmod(1)</code></li>
+</ul>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p>Access only in QUT network. Please use VPN to access the documentation when off-campus.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref2:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref3:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref4:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref5:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+
+
+
+
+
+
+
+  
+    
+  
+  
+    
+  
+
+
+  <aside class="md-source-file">
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="Last update">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 1, 2026 02:25:48 AEST">July 1, 2026</span>
+  </span>
+
+    
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="Created">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 1, 2026 02:25:48 AEST">July 1, 2026</span>
+  </span>
+
+    
+    
+    
+      
+  <span class="md-source-file__fact">
+    
+      
+  <span class="md-icon" title="Contributors">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33s1.71.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2"/></svg>
+  </span>
+  <span>GitHub</span>
+
+    
+    <nav>
+      
+        <a href="https://github.com/ZhipengHe" class="md-author" title="@ZhipengHe">
+          
+          <img src="https://avatars.githubusercontent.com/u/29477872?v=4&size=72" alt="ZhipengHe">
+        </a>
+      
+        <a href="https://github.com/web-flow" class="md-author" title="@web-flow">
+          
+          <img src="https://avatars.githubusercontent.com/u/19864447?v=4&size=72" alt="web-flow">
+        </a>
+      
+      
+      
+    </nav>
+  </span>
+
+    
+  </aside>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2025 Zhipeng He
+
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://zhipenghe.me" target="_blank" rel="noopener" title="zhipenghe.me" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M234.2 8.6c12.3-11.4 31.3-11.4 43.5 0L368 92.3V80c0-17.7 14.3-32 32-32h32c17.7 0 32 14.3 32 32v101.5l37.8 35.1c9.6 9 12.8 22.9 8 35.1S493.2 272 480 272h-16v176c0 35.3-28.7 64-64 64H112c-35.3 0-64-28.7-64-64V272H32c-13.2 0-25-8.1-29.8-20.3s-1.6-26.2 8-35.1zM240 320c-26.5 0-48 21.5-48 48v96h128v-96c0-26.5-21.5-48-48-48z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/zhipenghe" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["search.suggest", "search.highlight", "search.share", "navigation.instant", "navigation.instant.progress", "navigation.path", "navigation.top", "navigation.expand", "navigation.indexes", "content.action.view", "content.action.edit", "content.code.copy", "content.code.select", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../javascripts/katex.js"></script>
+      
+        <script src="https://unpkg.com/katex@0/dist/katex.min.js"></script>
+      
+        <script src="https://unpkg.com/katex@0/dist/contrib/auto-render.min.js"></script>
+      
+    
+  </body>
+</html>
