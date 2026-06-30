@@ -232,14 +232,14 @@ If `mv` already happened and you want to fix it in place, pick by intent.
 
     chgrp -R "$GROUP" "$DST"                              # (1)!
     find "$DST" -type d -exec chmod 2770 {} \;            # (2)!
-    find "$DST" -type f -exec chmod 660 {} \;             # (3)!
+    find "$DST" -type f -exec chmod g+rwX,o-rwx {} \;     # (3)!
     setfacl -R  -m g:"$GROUP":rwx "$DST"                  # (4)!
     setfacl -Rd -m g:"$GROUP":rwx "$DST"                  # (5)!
     ```
 
     1. Layer 1 — fix group identity.
     2. Layer 2 for dirs — `2770` = setgid bit + group rwx + no other access.
-    3. Layer 2 for files — group rwx (`770`) for scripts you want collaborators to execute.
+    3. Layer 2 for files — `g+rw` opens group write; capital `X` (not `x`) conditionally adds group exec **only** to files that already had exec set, so scripts stay executable and data files don't get falsely marked exec; `o-rwx` strips other access.
     4. Layer 3 current ACL — applies to entries that exist now.
     5. Layer 3 default ACL — applies to entries created later, so `DST` keeps behaving correctly going forward.
 
