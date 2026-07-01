@@ -260,15 +260,20 @@ cell_verify() {
     # PyTorch wheels bundle their own CUDA runtime; ldd must resolve
     # libcudart/libcublas/libcudnn INSIDE the venv, not to system paths
     # under /apps/CUDA/... — otherwise the "no module load CUDA needed"
-    # claim is wrong and reproducibility is broken.
-    local torch_cuda_so="$VENV/lib/python3.13/site-packages/torch/lib/libtorch_cuda.so"
-    if [ -f "$torch_cuda_so" ]; then
+    # claim is wrong and reproducibility is broken. Glob the python*/ dir so
+    # this stays valid across `requires-python` bumps rather than silently
+    # degrading to a "skipped" warning on a version mismatch.
+    local torch_cuda_so=""
+    for so in "$VENV"/lib/python*/site-packages/torch/lib/libtorch_cuda.so; do
+      [ -f "$so" ] && torch_cuda_so="$so" && break
+    done
+    if [ -n "$torch_cuda_so" ]; then
       echo "-- ldd bundled-CUDA-libs check --"
       ldd "$torch_cuda_so" 2>&1 | grep -E "libcudart|libcublas|libcudnn" \
         | tee "$RESULTS_DIR/ldd-$cell.txt" \
         || echo "WARNING: no libcudart/libcublas/libcudnn rows in ldd output"
     else
-      echo "WARNING: libtorch_cuda.so not found at $torch_cuda_so — skipping ldd check"
+      echo "WARNING: libtorch_cuda.so not found under $VENV/lib/python*/site-packages/torch/lib/ — skipping ldd check"
     fi
 
     "$VENV/bin/python" -c "
