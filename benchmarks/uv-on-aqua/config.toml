@@ -38,6 +38,6 @@ pbs_walltime = "01:30:00"
 pbs_ngpus = 1
 verify_cuda = true
 description = "Same stack as cpu-ml but cu126 PyTorch wheels (~5-7 GB, ~8k files)"
-# Empty until workloads/gpu-ml/uv.lock is created and its sha256 captured.
-# session_prologue halts if this is empty when WORKLOAD=gpu-ml.
-lock_hash_expected = ""
+# Pinned sha256 of `workloads/gpu-ml/uv.lock`. session_prologue refuses to
+# run a workload whose lock_hash_expected is empty — update this if you re-lock.
+lock_hash_expected = "bac22cfa00a89bdbd25779d1656f5ddc5ba4832347a451e24b1dc2d0ccaa4c03"
