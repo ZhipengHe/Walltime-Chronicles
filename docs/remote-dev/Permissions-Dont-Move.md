@@ -96,7 +96,7 @@ Layers 1 and 3 depend on ==where== the file lands (the parent dir's setgid + def
 | Linux `cp` from `~/` (default `umask 0022`) | Source mode bits, masked by umask | `-rw-r-----+`, group `r--` only | Yes (`chmod g+w`) |
 | Linux `cp` from `~/` with `umask 0007` | Source mode bits, masked by permissive umask | `-rw-rw----+`, group `rw-` effective | **No** ✓ |
 | Linux `rsync --no-perms` from `~/` | Same behavior as `cp` — masked by umask | `-rw-r-----+` with default `umask 0022`; `-rw-rw----+` with `umask 0007` | Yes with default umask; **no** with `umask 0007` ✓ |
-| Linux `rsync --chmod=Fg+rw,o-rwx` from `~/` | Explicit override at transfer time | `-rw-rw----+`, group `rw-` effective | **No** ✓ |
+| Linux `rsync --chmod=Dg+rwX,Fg+rw,o-rwx` from `~/` | Explicit override at transfer time — dirs get `rwx`, files get `rw` | Dirs `drwxrws---+`, files `-rw-rw----+`; group `rwx` / `rw-` effective | **No** ✓ |
 | Linux `rsync -a` from `~/` | Source file's exact mode bits (breaks layer 1 too) | Same as source; source group leaks | Yes (`chgrp` + `chmod`) |
 | Windows Explorer via SMB (`\\hpc-fs\work`) | **Samba's server-side `create_mask`** | Folders `drwxrws---+` (2770); files `-rw-rw----+` (660) or `-rw-rwx---+` (670); group `rwx` effective | **No** for shared-edit; `chmod u+x` for scripts (see [Windows tab](#shared-edit-transfers)) |
 | macOS Finder via SMB (`smb://hpc-fs/work/`) | Same Samba as Windows Explorer | Same three-layer shape as Windows | **No** for shared-edit — but Finder emits `._filename` sidecars per file (see [Finder tab](#shared-edit-transfers)) |
@@ -109,15 +109,11 @@ The Linux rows share one root cause — the transfer preserves the source file's
 
 One question decides everything: **will your collaborators write to these files?**
 
-<!-- markdownlint-disable MD051 -->
-
 | Answer | Layers you need | Right workflow |
 |---|---|---|
 | **Yes** — shared-edit (group reads + writes + deletes) | 1 + 2 (`rw`) + 3 | [§ Shared-edit transfers](#shared-edit-transfers) |
 | **No** — read-only (group reads only) | 1 + 2 (`r--`); skip 3 | [§ Read-only sharing](#read-only-sharing) |
 | Already inside `/work/<group>` | All three already set | [§ Moving within `/work/<group>`](#moving-within-work) |
-
-<!-- markdownlint-enable MD051 -->
 
 ==Pick before you transfer.== Most "I just moved stuff and my collaborators can't edit it" trouble comes from solving the wrong subset of layers.
 
@@ -161,7 +157,7 @@ Pattern: **create + chmod** (Linux) or **drag + drop** (Windows / macOS SMB). Cr
     | `cp` with `umask 0022` (system default) | `-rw-r-----+` | `r--` | `r--` — chmod needed |
     | `cp` with `umask 0002` | `-rw-rw----+` | `rw-` | `rw-` ✓ |
     | `cp` with `umask 0007` | `-rw-rw----+` | `rw-` | `rw-` ✓ + no `other` access |
-    | `rsync --chmod=Fg+rw,o-rwx` | `-rw-rw----+` | `rw-` | `rw-` ✓ |
+    | `rsync --chmod=Dg+rwX,Fg+rw,o-rwx` | `-rw-rw----+` (files); `drwxrws---+` (dirs) | `rw-` (files); `rwx` (dirs) | `rw-` / `rwx` ✓ |
 
     **Caveats:**
 
@@ -231,10 +227,8 @@ Pattern: **create + chmod** (Linux) or **drag + drop** (Windows / macOS SMB). Cr
 
     ==Layer results are identical to Windows Explorer== — three layers land correctly, no `chmod` needed for shared-edit.
 
-    !!! danger "Finder emits `._filename` sidecars for every file it touches"
-        Finder writes an AppleDouble sidecar (`._<original-filename>`, ~4 KB) for every file it interacts with — including files it merely browses past, not just files it writes. At any real dataset scale (thousands of files), that's one sidecar per file: doubled inode count, and cluttered `ls` / `find` / `du` / `rsync` output for every collaborator downstream.
-
-        The sidecars carry macOS-side metadata (Gatekeeper `com.apple.quarantine` markers, resource-fork xattrs) that the HPC side has no use for.
+    !!! danger "Finder emits `._filename` sidecars for xattr storage"
+        Finder writes an AppleDouble sidecar (`._<original-filename>`, ~4 KB) whenever macOS needs to preserve extended attributes on a file — the shared filesystem doesn't natively store macOS xattrs, so AppleDouble is the fallback. This fires on Finder copy/move (files typically arrive carrying Gatekeeper `com.apple.quarantine` markers, resource-fork xattrs, or Finder tags), and can fire during passive Finder operations that touch metadata (tagging, icon-info viewing, Spotlight indexing). At any real dataset scale that's one sidecar per file — doubled inode count and cluttered `ls` / `find` / `du` / `rsync` output for every collaborator downstream.
 
     **Recommended alternatives** (both avoid `._` sidecars entirely):
 
@@ -320,8 +314,6 @@ chmod -R g+rX,o-rwx "/work/$GROUP/project_folder"                 # (3)!
 2. Fix layer 1 (group identity).
 3. Fix layer 2 for read-only. Capital `X` (not `x`) gives traverse for dirs + exec for already-exec scripts; lowercase `x` would falsely mark data files executable.
 
-<!-- markdownlint-disable MD051 -->
-
 !!! tip "Already copied via Explorer or Finder as shared-edit?"
     Dial back to read-only from an Aqua shell without re-transferring:
 
@@ -334,8 +326,6 @@ chmod -R g+rX,o-rwx "/work/$GROUP/project_folder"                 # (3)!
 
 !!! note "When this stops working"
     Any file you ADD LATER won't auto-inherit (no layer 3 / default ACL). You'll need to re-run `chgrp + chmod` each time, or graduate to the [§ Shared-edit](#shared-edit-transfers) workflow. Use this pattern for one-time publish-style sharing — results snapshots, archive drops, things you won't touch again.
-
-<!-- markdownlint-enable MD051 -->
 
 ---
 
@@ -396,25 +386,17 @@ No matter how the wrong perms got there — Linux `mv` from `~/`, `rsync -a`, or
 
     See the [Windows Explorer tab under Shared-edit](#shared-edit-transfers) for why Samba drops this specific bit.
 
-<!-- markdownlint-disable MD051 -->
-
 !!! warning "Ownership transfer needs a re-create"
     `chgrp` to a group you're in works fine. `chown` to a different **user** requires root — even if a colleague gave you the files, you can't take ownership directly. To "transfer" ownership, copy the tree into a fresh destination you create as yourself ([§ Shared-edit directory workflow](#shared-edit-transfers)). The copy's new inodes will be owned by you.
-
-<!-- markdownlint-enable MD051 -->
 
 ---
 
 ## :material-information: What QUT eResearch documents (and doesn't)
 
-<!-- markdownlint-disable MD051 -->
-
 - The [Filesystem and data management page](https://docs.eres.qut.edu.au/hpc-filesystem)[^1] says new entries in `/work/` inherit parent permissions. ==True for layers 1 + 3; false for layer 2.== Mode bits come from whatever the transfer method supplies (source mode bits for Linux `cp` / `rsync`; Samba's `create_mask` for Windows Explorer or macOS Finder). The page doesn't define create-vs-move, doesn't mention setgid or default ACLs, and doesn't warn about `mv`.
 - The [Transferring files page](https://docs.eres.qut.edu.au/hpc-transferring-files-tofrom-hpc)[^1] documents `rsync -a` as the recommended flag set. Fine for `/home` ↔ `/home`; for `~/` → `/work/<group>/` shared-edit, `-a` preserves your `default` group and breaks layer 1. Use the [Linux Directory workflow](#shared-edit-transfers) instead.
 - The same page shows `\\hpc-fs\<username>` for Windows home and `smb://hpc-fs/work/` for macOS `/work`, but doesn't spell out `\\hpc-fs\work` for Windows or describe Samba's `create_mask` behavior on the server side. This page fills that gap: the [Windows Explorer and Finder tabs](#shared-edit-transfers) are the tested + documented SMB paths.
 - New shared folder requests go through the [eResearch Help Centre portal](https://eresearchqut.atlassian.net/servicedesk/customer/portals) (`HPC request` → `New shared folder`).
-
-<!-- markdownlint-enable MD051 -->
 
 ---
 
