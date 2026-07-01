@@ -811,6 +811,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#transfer-method" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How your transfer method sets layer 2
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#decide-your-intent" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1318,6 +1329,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#transfer-method" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How your transfer method sets layer 2
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#decide-your-intent" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1476,7 +1498,9 @@
 
 
 <h1 id="permissions-dont-move-a-workgroup-survival-guide">Permissions Don't Move: A <code>/work/&lt;group&gt;</code> Survival Guide</h1>
-<p>Putting files into a shared <code>/work/&lt;group&gt;/</code> folder is a two-part problem: get the <mark>group</mark> right (<code>&lt;group&gt;</code>, not your private <code>default</code>), and get the <mark>mode bits</mark> right (open enough for collaborators to do what you intend). <code>/work/&lt;group&gt;/</code> solves the group half automatically when you <mark>create</mark> new entries inside; you solve the mode half with <code>chmod</code>. <code>mv</code> from <code>~/</code> solves neither.</p>
+<!-- markdownlint-configure-file { "MD051": false } -->
+
+<p>Putting files into a shared <code>/work/&lt;group&gt;/</code> folder is a <mark>three-layer problem</mark>: get the <mark>group</mark> right, get the <mark>mode bits</mark> right, and get the <mark>ACL</mark> inherited. <code>/work/&lt;group&gt;/</code> automatically wires layers 1 and 3 when you <mark>create</mark> new entries inside; layer 2 depends on <mark>how you transferred the file</mark> (Linux <code>cp</code> / <code>rsync</code> needs <code>chmod</code> — or set <code>umask 0007</code> up front; Windows Explorer and macOS Finder via SMB let Samba fill it). <code>mv</code> from <code>~/</code> breaks all three.</p>
 <div class="admonition tip">
 <p class="admonition-title">Companion pages</p>
 <ul>
@@ -1505,7 +1529,7 @@
 <tr>
 <td><strong>2. Mode bits</strong></td>
 <td>File mode group bits include the access you want (<code>rw</code> for edit, <code>r</code> for read)</td>
-<td><strong>Always you, with <code>chmod</code></strong></td>
+<td><strong>Depends on the transfer method</strong> — see <a href="#transfer-method">§ How your transfer method sets layer 2</a></td>
 </tr>
 <tr>
 <td><strong>3. ACL</strong></td>
@@ -1516,19 +1540,24 @@
 </table>
 <h3 id="what-workgroup-gives-you-and-doesnt-automatically">What <code>/work/&lt;group&gt;/</code> gives you — and doesn't — automatically</h3>
 <pre class="mermaid"><code>flowchart LR
-    Create([Create a new entry&lt;br/&gt;inside /work/&amp;lt;group&amp;gt;/]) --&gt; L1[Layer 1&lt;br/&gt;group set automatically&lt;br/&gt;via setgid]
+    Create([Create a new entry&lt;br/&gt;inside /work/&amp;lt;group&amp;gt;/]) --&gt; L1[Layer 1&lt;br/&gt;group=&amp;lt;group&amp;gt;&lt;br/&gt;via setgid]
     Create --&gt; L3[Layer 3&lt;br/&gt;ACL entries inherited&lt;br/&gt;via default ACL]
-    Create -.does NOT set.-&gt; L2[Layer 2&lt;br/&gt;mode bits = source mode &amp;cap; umask&lt;br/&gt;You chmod]
+    Create --&gt; L2{Layer 2&lt;br/&gt;who sets mode bits?}
+    L2 --&gt;|Linux cp / rsync from ~/| L2a[source mode &amp;cap; umask&lt;br/&gt;chmod after, OR&lt;br/&gt;set umask 0007]
+    L2 --&gt;|Windows / macOS SMB| L2b[Samba create_mask&lt;br/&gt;hpc-fs configured well&lt;br/&gt;usually done]
 
     style Create fill:#e1f5fe
     style L1 fill:#e8f5e8
     style L3 fill:#e8f5e8
-    style L2 fill:#fff3e0</code></pre>
-<p>The <mark>mode-bit gap is the load-bearing detail nobody documents</mark>. Both <code>cp</code> and <code>rsync -rlt --no-perms</code> inherit layer 1 + layer 3 from the parent dir, but they propagate the <mark>source file's mode bits</mark> for layer 2. Empirically (verified against <code>/work/&lt;group&gt;</code> with system umask <code>0022</code>):</p>
+    style L2 fill:#fff3e0
+    style L2a fill:#fff3e0
+    style L2b fill:#e8f5e8</code></pre>
+<p>The <mark>mode-bit gap only fires when the transfer propagates source mode bits</mark>. Linux <code>cp</code> and <code>rsync -rlt --no-perms</code> do — they inherit layers 1 + 3 from the parent dir but push the source file's mode bits into layer 2 (usually too restrictive because your umask defaults to <code>0022</code>). Windows Explorer and macOS Finder via SMB don't — there's no POSIX mode on the client side to propagate, so Samba's server-side <code>create_mask</code> fills layer 2 instead. See <a href="#transfer-method">§ How your transfer method sets layer 2</a> for the client-by-client breakdown.</p>
+<p>Empirically for Linux transfers on <code>/work/&lt;group&gt;</code> with default <code>umask 0022</code>:</p>
 <table>
 <thead>
 <tr>
-<th>What you bring in from <code>~/</code></th>
+<th>What you bring in from <code>~/</code> via <code>cp</code> or <code>rsync --no-perms</code></th>
 <th>Mode at destination</th>
 <th>Effective group access</th>
 </tr>
@@ -1540,18 +1569,18 @@
 <td><code>r--</code> — group can read, not write</td>
 </tr>
 <tr>
-<td>File you <code>chmod 600</code>'d for privacy</td>
+<td>File you <code>chmod 600</code> for privacy</td>
 <td><code>-rw-------+</code></td>
 <td><code>---</code> — group can't even read</td>
 </tr>
 <tr>
-<td>File you explicitly <code>chmod 664</code>'d</td>
+<td>File you explicitly <code>chmod 664</code></td>
 <td><code>-rw-rw----+</code></td>
 <td><code>rw-</code> — group can read + write ✓</td>
 </tr>
 </tbody>
 </table>
-<p>The ACL entry says <code>group:&lt;group&gt;:rwx</code> in all three cases, but the file's mode-bit mask gates the effective access down to whatever the source mode permitted. <mark>You always need <code>chmod</code> to normalize layer 2</mark>, regardless of how you transferred the file.</p>
+<p>The ACL entry says <code>group:&lt;group&gt;:rwx</code> in all three cases, but the file's mode-bit mask gates effective access down to whatever the source mode permitted. <strong>For Linux transfers with default umask, you either <code>chmod</code> after each transfer or set <code>umask 0007</code> up front</strong> — see the tip at the top of <a href="#shared-edit-transfers">§ Shared-edit transfers</a>.</p>
 <p>Here's what a correctly-wired shared folder looks like:</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>$ ls -ld /work/&lt;group&gt;
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>drwxrws---+ &lt;user&gt; &lt;group&gt; /work/&lt;group&gt;
@@ -1580,10 +1609,72 @@
 </ul>
 <p><mark><code>mv</code> is the worst case</mark> — every other "wrong" method gets at least one layer right.</p>
 <hr />
+<h2 id="transfer-method"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m21 9-4-4v3h-7v2h7v3M7 11l-4 4 4 4v-3h7v-2H7z"/></svg></span> How your transfer method sets layer 2</h2>
+<p>Layers 1 and 3 depend on <mark>where</mark> the file lands (the parent dir's setgid + default ACL — see <a href="#the-mental-model">§ The mental model</a>). Layer 2 depends on <mark>how</mark> it lands, and that varies by transfer method:</p>
+<table>
+<thead>
+<tr>
+<th>Transfer method</th>
+<th>Source of layer-2 mode bits</th>
+<th>Typical result on <code>/work/&lt;group&gt;</code></th>
+<th>Post-transfer <code>chmod</code>?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Linux <code>mv</code> from <code>~/</code></td>
+<td>Source file, preserved wholesale (rename, no create)</td>
+<td><code>-rw-------</code> typical</td>
+<td>Yes (<code>chgrp</code> + <code>chmod</code>)</td>
+</tr>
+<tr>
+<td>Linux <code>cp</code> from <code>~/</code> (default <code>umask 0022</code>)</td>
+<td>Source mode bits, masked by umask</td>
+<td><code>-rw-r-----+</code>, group <code>r--</code> only</td>
+<td>Yes (<code>chmod g+w</code>)</td>
+</tr>
+<tr>
+<td>Linux <code>cp</code> from <code>~/</code> with <code>umask 0007</code></td>
+<td>Source mode bits, masked by permissive umask</td>
+<td><code>-rw-rw----+</code>, group <code>rw-</code> effective</td>
+<td><strong>No</strong> ✓</td>
+</tr>
+<tr>
+<td>Linux <code>rsync --no-perms</code> from <code>~/</code></td>
+<td>Same behavior as <code>cp</code> — masked by umask</td>
+<td><code>-rw-r-----+</code> with default <code>umask 0022</code>; <code>-rw-rw----+</code> with <code>umask 0007</code></td>
+<td>Yes with default umask; <strong>no</strong> with <code>umask 0007</code> ✓</td>
+</tr>
+<tr>
+<td>Linux <code>rsync --chmod=Dg+rwX,Fg+rw,o-rwx</code> from <code>~/</code></td>
+<td>Explicit override at transfer time — dirs get <code>rwx</code>, files get <code>rw</code></td>
+<td>Dirs <code>drwxrws---+</code>, files <code>-rw-rw----+</code>; group <code>rwx</code> / <code>rw-</code> effective</td>
+<td><strong>No</strong> ✓</td>
+</tr>
+<tr>
+<td>Linux <code>rsync -a</code> from <code>~/</code></td>
+<td>Source file's exact mode bits (breaks layer 1 too)</td>
+<td>Same as source; source group leaks</td>
+<td>Yes (<code>chgrp</code> + <code>chmod</code>)</td>
+</tr>
+<tr>
+<td>Windows Explorer via SMB (<code>\\hpc-fs\work</code>)</td>
+<td><strong>Samba's server-side <code>create_mask</code></strong></td>
+<td>Folders <code>drwxrws---+</code> (2770); files <code>-rw-rw----+</code> (660) or <code>-rw-rwx---+</code> (670); group <code>rwx</code> effective</td>
+<td><strong>No</strong> for shared-edit; <code>chmod u+x</code> for scripts (see <a href="#shared-edit-transfers">Windows tab</a>)</td>
+</tr>
+<tr>
+<td>macOS Finder via SMB (<code>smb://hpc-fs/work/</code>)</td>
+<td>Same Samba as Windows Explorer</td>
+<td>Same three-layer shape as Windows</td>
+<td><strong>No</strong> for shared-edit — but Finder emits <code>._filename</code> sidecars per file (see <a href="#shared-edit-transfers">Finder tab</a>)</td>
+</tr>
+</tbody>
+</table>
+<p>The Linux rows share one root cause — the transfer preserves the source file's mode bits, and those bits are usually too restrictive because they were shaped by your umask on a single-user <code>~/</code>. Change the umask (or use <code>rsync --chmod</code>) and the gap closes without any post-transfer <code>chmod</code>. The SMB rows break the pattern entirely: there's no POSIX mode on the client side to propagate, so Samba writes fresh mode bits from its server-side <code>create_mask</code> (QUT's <code>hpc-fs</code> has this configured to open group <code>rw</code>).</p>
+<hr />
 <h2 id="decide-your-intent"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m15.07 11.25-.9.92C13.45 12.89 13 13.5 13 15h-2v-.5c0-1.11.45-2.11 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41a2 2 0 0 0-2-2 2 2 0 0 0-2 2H8a4 4 0 0 1 4-4 4 4 0 0 1 4 4 3.2 3.2 0 0 1-.93 2.25M13 19h-2v-2h2M12 2A10 10 0 0 0 2 12a10 10 0 0 0 10 10 10 10 0 0 0 10-10c0-5.53-4.5-10-10-10"/></svg></span> Decide your intent</h2>
 <p>One question decides everything: <strong>will your collaborators write to these files?</strong></p>
-<!-- markdownlint-disable MD051 -->
-
 <table>
 <thead>
 <tr>
@@ -1610,19 +1701,77 @@
 </tr>
 </tbody>
 </table>
-<!-- markdownlint-enable MD051 -->
-
 <p><mark>Pick before you transfer.</mark> Most "I just moved stuff and my collaborators can't edit it" trouble comes from solving the wrong subset of layers.</p>
 <hr />
 <h2 id="shared-edit-transfers"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75z"/></svg></span> Shared-edit transfers</h2>
-<p>Pattern: <strong>create + chmod</strong>. Create lands you layers 1 + 3 for free; chmod opens layer 2.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Single file</label><label for="__tabbed_1_2">Directory</label></div>
+<p>Pattern: <strong>create + chmod</strong> (Linux) or <strong>drag + drop</strong> (Windows / macOS SMB). Create lands you layers 1 + 3 for free; the transfer method decides whether layer 2 needs your attention.</p>
+<details class="tip">
+<summary>Linux: skip the chmod step — set your umask, or use <code>rsync --chmod</code></summary>
+<p>Layer 2 needs <code>chmod</code> after Linux transfers only because your umask defaults to <code>0022</code>, which produces mode <code>0644</code> files (group <code>r--</code>). Change the umask up front and layer 2 lands correctly on <code>/work/&lt;group&gt;/</code> without any post-transfer step.</p>
+<p><strong>Recommended — <code>umask 0007</code> in <code>~/.bashrc</code></strong> (or <code>~/.zshrc</code>):</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Add to ~/.bashrc or ~/.zshrc</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nb">umask</span><span class="w"> </span><span class="m">0007</span>
+</span></code></pre></div>
+<p>New files land at mode <code>0660</code> (<code>rw-rw----</code>); new dirs at <code>0770</code> (<code>rwxrwx---</code>). On <code>/work/&lt;group&gt;/</code>, effective group access is <code>rw-</code> (or <code>rwx</code> on dirs) — shared-edit-ready with no <code>chmod</code>.</p>
+<p><mark>Why 0007 over the alternatives</mark>: strictly tighter than the system default. Default <code>umask 0022</code> leaves your <code>~/</code> files world-readable at mode <code>0644</code>; <code>umask 0007</code> closes off world access on ALL new files (including <code>~/</code>) while opening group <code>rw</code>. On Aqua's default per-user private groups (your <code>default</code> group contains only you), opening group <code>rw</code> on <code>~/</code> is harmless. Net: your <code>~/</code> gets stricter than default, AND <code>/work/&lt;group&gt;/</code> shared-edit just works.</p>
+<p><strong>Alternative — <code>umask 0002</code></strong>: same effect on <code>/work/&lt;group&gt;/</code> shared-edit, but keeps <code>~/</code> files at mode <code>0664</code> — world-readable (same posture as system default, just adds group write). Pick this if you want minimal behavioral change from the default and don't care about the <code>~/</code> world-readable exposure.</p>
+<p><strong>Per-command alternative — <code>rsync --chmod</code></strong>: no shell rc change; override source mode bits at transfer time.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>rsync<span class="w"> </span>-rlt<span class="w"> </span>--no-owner<span class="w"> </span>--no-group<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">      </span>--chmod<span class="o">=</span>Dg+rwX,Fg+rw,o-rwx<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">      </span><span class="s2">&quot;</span><span class="nv">$SRC</span><span class="s2">&quot;</span>/<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">&quot;</span>/
+</span></code></pre></div>
+<p>Alias it in <code>~/.bashrc</code> if you use it often.</p>
+<p><strong>Empirical outcomes</strong> on <code>/work/&lt;group&gt;</code> (same <code>cp</code> command, different umask or override):</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Resulting mode</th>
+<th>Mask</th>
+<th>Effective group</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cp</code> with <code>umask 0022</code> (system default)</td>
+<td><code>-rw-r-----+</code></td>
+<td><code>r--</code></td>
+<td><code>r--</code> — chmod needed</td>
+</tr>
+<tr>
+<td><code>cp</code> with <code>umask 0002</code></td>
+<td><code>-rw-rw----+</code></td>
+<td><code>rw-</code></td>
+<td><code>rw-</code> ✓</td>
+</tr>
+<tr>
+<td><code>cp</code> with <code>umask 0007</code></td>
+<td><code>-rw-rw----+</code></td>
+<td><code>rw-</code></td>
+<td><code>rw-</code> ✓ + no <code>other</code> access</td>
+</tr>
+<tr>
+<td><code>rsync --chmod=Dg+rwX,Fg+rw,o-rwx</code></td>
+<td><code>-rw-rw----+</code> (files); <code>drwxrws---+</code> (dirs)</td>
+<td><code>rw-</code> (files); <code>rwx</code> (dirs)</td>
+<td><code>rw-</code> / <code>rwx</code> ✓</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Caveats:</strong></p>
+<ul>
+<li>Only affects <strong>newly-created</strong> files. Files already in <code>~/</code> at restrictive mode still land at that mode if you <code>mv</code> them in — umask does not touch renames.</li>
+<li>Both umasks affect ALL new files everywhere, not just <code>/work/&lt;group&gt;/</code>. On Aqua's default per-user private groups, this is harmless.</li>
+<li>Check your current umask with <code>umask</code> (from a login shell) before deciding whether to change it.</li>
+</ul>
+</details>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:4"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Single file</label><label for="__tabbed_1_2">Directory</label><label for="__tabbed_1_3">Windows Explorer via SMB</label><label for="__tabbed_1_4">macOS Finder via SMB</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nv">GROUP</span><span class="o">=</span>your-group-name<span class="w">                                        </span><span class="c1"># (1)!</span>
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>cp<span class="w"> </span>~/script.py<span class="w"> </span><span class="s2">&quot;/work/</span><span class="nv">$GROUP</span><span class="s2">/project/&quot;</span><span class="w">                       </span><span class="c1"># (2)!</span>
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>chmod<span class="w"> </span>g+rw,o-rwx<span class="w"> </span><span class="s2">&quot;/work/</span><span class="nv">$GROUP</span><span class="s2">/project/script.py&quot;</span><span class="w">            </span><span class="c1"># (3)!</span>
-</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1"># Executable script? Use `chmod 770` instead.</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nv">GROUP</span><span class="o">=</span>your-group-name<span class="w">                                        </span><span class="c1"># (1)!</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>cp<span class="w"> </span>~/script.py<span class="w"> </span><span class="s2">&quot;/work/</span><span class="nv">$GROUP</span><span class="s2">/project/&quot;</span><span class="w">                       </span><span class="c1"># (2)!</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>chmod<span class="w"> </span>g+rw,o-rwx<span class="w"> </span><span class="s2">&quot;/work/</span><span class="nv">$GROUP</span><span class="s2">/project/script.py&quot;</span><span class="w">            </span><span class="c1"># (3)!</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="c1"># Executable script? Use `chmod 770` instead.</span>
 </span></code></pre></div>
 <ol>
 <li>Replace with your actual group name.</li>
@@ -1631,26 +1780,74 @@
 </ol>
 </div>
 <div class="tabbed-block">
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nv">GROUP</span><span class="o">=</span>your-group-name
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nv">SRC</span><span class="o">=</span>~/project_folder
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nv">DST</span><span class="o">=</span><span class="s2">&quot;/work/</span><span class="nv">$GROUP</span><span class="s2">/project_folder&quot;</span>
-</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
-</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>mkdir<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">&quot;</span><span class="w">                                                       </span><span class="c1"># (1)!</span>
-</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>rsync<span class="w"> </span>-rlt<span class="w"> </span>--no-owner<span class="w"> </span>--no-group<span class="w"> </span>--no-perms<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SRC</span><span class="s2">&quot;</span>/<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">&quot;</span>/<span class="w">        </span><span class="c1"># (2)!</span>
-</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>chmod<span class="w"> </span>-R<span class="w"> </span>g+rwX,o-rwx<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">&quot;</span><span class="w">                                        </span><span class="c1"># (3)!</span>
-</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>
-</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="c1"># Verify content matches (empty output = identical)</span>
-</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>rsync<span class="w"> </span>-rltni<span class="w"> </span>--no-owner<span class="w"> </span>--no-group<span class="w"> </span>--no-perms<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SRC</span><span class="s2">&quot;</span>/<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">&quot;</span>/<span class="w">      </span><span class="c1"># (4)!</span>
-</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>
-</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="c1"># Once verified, drop the source</span>
-</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>rm<span class="w"> </span>-rf<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SRC</span><span class="s2">&quot;</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nv">GROUP</span><span class="o">=</span>your-group-name
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nv">SRC</span><span class="o">=</span>~/project_folder
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="nv">DST</span><span class="o">=</span><span class="s2">&quot;/work/</span><span class="nv">$GROUP</span><span class="s2">/project_folder&quot;</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>mkdir<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">&quot;</span><span class="w">                                                       </span><span class="c1"># (1)!</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>rsync<span class="w"> </span>-rlt<span class="w"> </span>--no-owner<span class="w"> </span>--no-group<span class="w"> </span>--no-perms<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SRC</span><span class="s2">&quot;</span>/<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">&quot;</span>/<span class="w">        </span><span class="c1"># (2)!</span>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>chmod<span class="w"> </span>-R<span class="w"> </span>g+rwX,o-rwx<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">&quot;</span><span class="w">                                        </span><span class="c1"># (3)!</span>
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="c1"># Verify content matches (empty output = identical)</span>
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>rsync<span class="w"> </span>-rltni<span class="w"> </span>--no-owner<span class="w"> </span>--no-group<span class="w"> </span>--no-perms<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SRC</span><span class="s2">&quot;</span>/<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">&quot;</span>/<span class="w">      </span><span class="c1"># (4)!</span>
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>
+</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="c1"># Once verified, drop the source</span>
+</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>rm<span class="w"> </span>-rf<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SRC</span><span class="s2">&quot;</span>
 </span></code></pre></div>
 <ol>
 <li>Fresh directory inside <code>/work/&lt;group&gt;</code> → inherits setgid + default ACLs → layers 1 + 3 done.</li>
 <li>Copy contents. <code>-rlt</code> recurses + preserves symlinks + mtime. <code>--no-perms</code> + the <code>--no-*</code> flags propagate source mode bits without source group/owner — layers 1 + 3 stay inherited per file.</li>
-<li><strong>Required.</strong> Opens layer 2 group bits across the tree — <code>--no-perms</code> propagated source mode bits which are usually too restrictive (see the mental model above). Capital <code>X</code> adds exec only to dirs + already-exec files (preserves scripts, leaves data files non-exec).</li>
+<li><strong>Required with default umask.</strong> Opens layer 2 group bits across the tree — <code>--no-perms</code> propagated source mode bits which are usually too restrictive. Capital <code>X</code> adds exec only to dirs + already-exec files (preserves scripts, leaves data files non-exec). Skip this step if you already set <code>umask 0007</code> (see the tip at the top of this section).</li>
 <li><code>-n</code> = dry-run; <code>-i</code> = itemize. Verifies content match, not perms.</li>
 </ol>
+</div>
+<div class="tabbed-block">
+<p>Mount <code>\\hpc-fs\work</code> as a network drive in Windows Explorer (VPN if off-campus, <code>qutad\&lt;username&gt;</code> credentials — see the <a href="https://docs.eres.qut.edu.au/hpc-transferring-files-tofrom-hpc">QUT eResearch — Transferring files page</a><sup id="fnref6:1"><a class="footnote-ref" href="#fn:1">1</a></sup>). Drag files or folders into <code>\\hpc-fs\work\&lt;group&gt;\</code>.</p>
+<p>That's it. <mark>No <code>chmod</code> needed</mark> for the shared-edit case — Samba's server-side <code>create_mask</code> on <code>hpc-fs</code> fills layer 2 correctly (see the <a href="#transfer-method">transfer-method matrix</a>).</p>
+<p>Optional verify from an Aqua shell:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>getfacl<span class="w"> </span><span class="s2">&quot;/work/&lt;group&gt;/&lt;the-thing-you-copied&gt;&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-10
+</span></code></pre></div>
+<p>Expect: <code># group: &lt;group&gt;</code>, <code>mask::rwx</code>, <code>default:group:&lt;group&gt;:rwx</code> (present if it's a folder). Effective group access should be <code>rw-</code> or <code>rwx</code>, never <code>r--</code> or <code>---</code>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Scripts drop owner-exec</p>
+<p>Windows Explorer via SMB leaves scripts (<code>.sh</code>, <code>.py</code>) at mode <code>670</code> (<code>-rw-rwx---</code>): <strong>group can execute</strong>, but <strong>owner cannot</strong>. If you want to run your own script from an Aqua shell, run <code>chmod u+x /work/&lt;group&gt;/&lt;your-script&gt;</code> afterward. Samba-specific — scripts moved via the Linux tabs stay owner-executable.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">CRLF line endings</p>
+<p>Text files edited with Notepad or other Windows editors may carry CRLF line endings that break shell scripts on Aqua. Fix with <code>dos2unix &lt;filename&gt;</code> on the Aqua side, or configure your editor to save with LF.</p>
+</div>
+</div>
+<div class="tabbed-block">
+<p>In Finder: <strong>Go → Connect to Server</strong>, enter <code>smb://hpc-fs/work/</code> (VPN if off-campus). Authenticate with your QUT username + password. Navigate to <code>/work/&lt;group&gt;/</code> and drag files or folders.</p>
+<p><mark>Layer results are identical to Windows Explorer</mark> — three layers land correctly, no <code>chmod</code> needed for shared-edit.</p>
+<div class="admonition danger">
+<p class="admonition-title">Finder emits <code>._filename</code> sidecars for xattr storage</p>
+<p>Finder writes an AppleDouble sidecar (<code>._&lt;original-filename&gt;</code>, ~4 KB) whenever macOS needs to preserve extended attributes on a file — the shared filesystem doesn't natively store macOS xattrs, so AppleDouble is the fallback. This fires on Finder copy/move (files typically arrive carrying Gatekeeper <code>com.apple.quarantine</code> markers, resource-fork xattrs, or Finder tags), and can fire during passive Finder operations that touch metadata (tagging, icon-info viewing, Spotlight indexing). At any real dataset scale that's one sidecar per file — doubled inode count and cluttered <code>ls</code> / <code>find</code> / <code>du</code> / <code>rsync</code> output for every collaborator downstream.</p>
+</div>
+<p><strong>Recommended alternatives</strong> (both avoid <code>._</code> sidecars entirely):</p>
+<ul>
+<li><strong><a href="https://cyberduck.io/">Cyberduck</a></strong> / <strong><a href="https://panic.com/transmit/">Transmit</a></strong> — SFTP-based GUI clients, drop-in Finder-workflow replacements.</li>
+<li>Terminal <code>rsync -e ssh &lt;src&gt;/ &lt;your-username&gt;@aqua.qut.edu.au:/work/&lt;group&gt;/</code> — cleanest for repeatable transfers.</li>
+</ul>
+<div class="admonition tip">
+<p class="admonition-title">If you already copied via Finder, sweep the sidecars</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># Preview what would be deleted (dry run):</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>find<span class="w"> </span>/work/&lt;group&gt;/&lt;path&gt;<span class="w"> </span>-name<span class="w"> </span><span class="s1">&#39;._*&#39;</span><span class="w"> </span>-print
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="c1"># Delete once you&#39;re happy with the preview:</span>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>find<span class="w"> </span>/work/&lt;group&gt;/&lt;path&gt;<span class="w"> </span>-name<span class="w"> </span><span class="s1">&#39;._*&#39;</span><span class="w"> </span>-delete
+</span></code></pre></div>
+<p>On macOS: <code>dot_clean -m /Volumes/work/&lt;group&gt;/&lt;path&gt;</code> also works if the share is still mounted.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title"><code>.DS_Store</code> behavior is inconsistent</p>
+<p><code>.DS_Store</code> files are NOT blocked by Samba on <code>hpc-fs</code>, so Finder can drop them at any point. Prevent future ones by running this on your Mac (once):</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>defaults<span class="w"> </span>write<span class="w"> </span>com.apple.desktopservices<span class="w"> </span>DSDontWriteNetworkStores<span class="w"> </span>-bool<span class="w"> </span>TRUE
+</span></code></pre></div>
+<p>Sweep any that already landed:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>find<span class="w"> </span>/work/&lt;group&gt;/&lt;path&gt;<span class="w"> </span>-name<span class="w"> </span>.DS_Store<span class="w"> </span>-delete
+</span></code></pre></div>
+</div>
 </div>
 </div>
 </div>
@@ -1715,7 +1912,7 @@
 </table>
 </details>
 <div class="admonition failure">
-<p class="admonition-title">Methods that LOOK right but fail at one or more layers</p>
+<p class="admonition-title">Linux methods that LOOK right but fail at one or more layers</p>
 <table>
 <thead>
 <tr>
@@ -1752,7 +1949,7 @@
 </tr>
 </tbody>
 </table>
-<p>Each preserves source metadata at the cost of layer 1 (group). <code>rsync -a</code> paradoxically gets layer 3 right via inheritance but still locks collaborators out via layer 2.</p>
+<p>Each preserves source metadata at the cost of layer 1 (group). <code>rsync -a</code> paradoxically gets layer 3 right via inheritance but still locks collaborators out via layer 2. Windows Explorer and macOS Finder via SMB don't appear here — different mechanism (Samba <code>create_mask</code>), different failure modes (see the <a href="#transfer-method">transfer-method matrix</a> and the <a href="#shared-edit-transfers">Windows/Finder tabs above</a>).</p>
 </div>
 <details class="info">
 <summary>What the modes look like after <code>chmod -R g+rwX,o-rwx</code></summary>
@@ -1792,52 +1989,56 @@
 <hr />
 <h2 id="read-only-sharing"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0 8a5 5 0 0 1-5-5 5 5 0 0 1 5-5 5 5 0 0 1 5 5 5 5 0 0 1-5 5m0-12.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5"/></svg></span> Read-only sharing</h2>
 <p>Different goal: collaborators read, you write. Layers 1 + 2 are enough — you don't need layer 3 because you're not setting up an ongoing area where new entries appear.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nv">GROUP</span><span class="o">=</span>your-group-name
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>mv<span class="w"> </span>~/project_folder<span class="w"> </span><span class="s2">&quot;/work/</span><span class="nv">$GROUP</span><span class="s2">/&quot;</span><span class="w">                               </span><span class="c1"># (1)!</span>
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>chgrp<span class="w"> </span>-R<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$GROUP</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;/work/</span><span class="nv">$GROUP</span><span class="s2">/project_folder&quot;</span><span class="w">                   </span><span class="c1"># (2)!</span>
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>chmod<span class="w"> </span>-R<span class="w"> </span>g+rX,o-rwx<span class="w"> </span><span class="s2">&quot;/work/</span><span class="nv">$GROUP</span><span class="s2">/project_folder&quot;</span><span class="w">                 </span><span class="c1"># (3)!</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="nv">GROUP</span><span class="o">=</span>your-group-name
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>mv<span class="w"> </span>~/project_folder<span class="w"> </span><span class="s2">&quot;/work/</span><span class="nv">$GROUP</span><span class="s2">/&quot;</span><span class="w">                               </span><span class="c1"># (1)!</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>chgrp<span class="w"> </span>-R<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$GROUP</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;/work/</span><span class="nv">$GROUP</span><span class="s2">/project_folder&quot;</span><span class="w">                   </span><span class="c1"># (2)!</span>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>chmod<span class="w"> </span>-R<span class="w"> </span>g+rX,o-rwx<span class="w"> </span><span class="s2">&quot;/work/</span><span class="nv">$GROUP</span><span class="s2">/project_folder&quot;</span><span class="w">                 </span><span class="c1"># (3)!</span>
 </span></code></pre></div>
 <ol>
 <li><code>mv</code> is fine here — fastest move (rename, no copy), and we're about to fix layers 1 + 2 explicitly anyway.</li>
 <li>Fix layer 1 (group identity).</li>
 <li>Fix layer 2 for read-only. Capital <code>X</code> (not <code>x</code>) gives traverse for dirs + exec for already-exec scripts; lowercase <code>x</code> would falsely mark data files executable.</li>
 </ol>
-<!-- markdownlint-disable MD051 -->
-
+<div class="admonition tip">
+<p class="admonition-title">Already copied via Explorer or Finder as shared-edit?</p>
+<p>Dial back to read-only from an Aqua shell without re-transferring:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nv">GROUP</span><span class="o">=</span>your-group-name
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>chmod<span class="w"> </span>-R<span class="w"> </span>g-w,o-rwx<span class="w"> </span><span class="s2">&quot;/work/</span><span class="nv">$GROUP</span><span class="s2">/&lt;the-thing-you-copied&gt;&quot;</span>
+</span></code></pre></div>
+<p>Removes group write while keeping group read + traverse. Default ACL entries stay in place (shadowed by the mode-bit mask).</p>
+</div>
 <div class="admonition note">
 <p class="admonition-title">When this stops working</p>
 <p>Any file you ADD LATER won't auto-inherit (no layer 3 / default ACL). You'll need to re-run <code>chgrp + chmod</code> each time, or graduate to the <a href="#shared-edit-transfers">§ Shared-edit</a> workflow. Use this pattern for one-time publish-style sharing — results snapshots, archive drops, things you won't touch again.</p>
 </div>
-<!-- markdownlint-enable MD051 -->
-
 <hr />
 <h2 id="moving-within-work"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg></span> Moving within <code>/work/&lt;group&gt;</code></h2>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nv">GROUP</span><span class="o">=</span>your-group-name
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>mv<span class="w"> </span><span class="s2">&quot;/work/</span><span class="nv">$GROUP</span><span class="s2">/project1/data.csv&quot;</span><span class="w"> </span><span class="s2">&quot;/work/</span><span class="nv">$GROUP</span><span class="s2">/project2/&quot;</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="nv">GROUP</span><span class="o">=</span>your-group-name
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>mv<span class="w"> </span><span class="s2">&quot;/work/</span><span class="nv">$GROUP</span><span class="s2">/project1/data.csv&quot;</span><span class="w"> </span><span class="s2">&quot;/work/</span><span class="nv">$GROUP</span><span class="s2">/project2/&quot;</span>
 </span></code></pre></div>
 <p>Plain <code>mv</code> is correct here. Source already has all three layers — nothing to break. The trap only fires when you cross from outside <code>/work/&lt;group&gt;</code> into it.</p>
 <hr />
 <h2 id="if-you-got-it-wrong"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.73 12 3.98-3.96c.39-.39.39-1.04 0-1.41l-4.34-4.34c-.37-.39-1.02-.39-1.41 0L12 6.27 8 2.29a1.001 1.001 0 0 0-1.41 0L2.25 6.63c-.39.37-.39 1.02 0 1.41L6.23 12l-3.98 4c-.39.39-.39 1 0 1.41l4.34 4.34c.41.39 1.02.39 1.41 0l4-3.98 3.96 3.98c.2.2.45.29.71.29s.51-.1.71-.29l4.34-4.34c.39-.41.39-1.02 0-1.41zM12 9a1 1 0 0 1 1 1 1 1 0 0 1-1 1 1 1 0 0 1-1-1 1 1 0 0 1 1-1m-4.71 1.96L3.66 7.34l3.63-3.63 3.62 3.62zM10 13a1 1 0 0 1-1-1 1 1 0 0 1 1-1 1 1 0 0 1 1 1 1 1 0 0 1-1 1m2 2a1 1 0 0 1-1-1 1 1 0 0 1 1-1 1 1 0 0 1 1 1 1 1 0 0 1-1 1m2-4a1 1 0 0 1 1 1 1 1 0 0 1-1 1 1 1 0 0 1-1-1 1 1 0 0 1 1-1m2.66 9.34-3.63-3.62 3.63-3.63 3.62 3.62z"/></svg></span> If you got it wrong</h2>
-<p>If <code>mv</code> already happened and you want to fix it in place, pick by intent.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Make it read-only (small fix — layers 1 + 2)</label><label for="__tabbed_2_2">Make it shared-edit (full fix — layers 1 + 2 + 3)</label></div>
+<p>No matter how the wrong perms got there — Linux <code>mv</code> from <code>~/</code>, <code>rsync -a</code>, or a Windows-dropped script missing owner-exec — the fix runs Linux-side. Pick by intent.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:3"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><input id="__tabbed_2_3" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Make it read-only (small fix — layers 1 + 2)</label><label for="__tabbed_2_2">Make it shared-edit (full fix — layers 1 + 2 + 3)</label><label for="__tabbed_2_3">Fix a Windows-dropped script's owner-exec bit</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nv">GROUP</span><span class="o">=</span>your-group-name
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nv">DST</span><span class="o">=</span><span class="s2">&quot;/work/</span><span class="nv">$GROUP</span><span class="s2">/the_moved_thing&quot;</span>
-</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
-</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>chgrp<span class="w"> </span>-R<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$GROUP</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">&quot;</span><span class="w">               </span><span class="c1"># layer 1</span>
-</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>chmod<span class="w"> </span>-R<span class="w"> </span>g+rX,o-rwx<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">&quot;</span><span class="w">             </span><span class="c1"># layer 2</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="nv">GROUP</span><span class="o">=</span>your-group-name
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="nv">DST</span><span class="o">=</span><span class="s2">&quot;/work/</span><span class="nv">$GROUP</span><span class="s2">/the_moved_thing&quot;</span>
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>
+</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>chgrp<span class="w"> </span>-R<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$GROUP</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">&quot;</span><span class="w">               </span><span class="c1"># layer 1</span>
+</span><span id="__span-12-5"><a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>chmod<span class="w"> </span>-R<span class="w"> </span>g+rX,o-rwx<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">&quot;</span><span class="w">             </span><span class="c1"># layer 2</span>
 </span></code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nv">GROUP</span><span class="o">=</span>your-group-name
-</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="nv">DST</span><span class="o">=</span><span class="s2">&quot;/work/</span><span class="nv">$GROUP</span><span class="s2">/the_moved_thing&quot;</span>
-</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
-</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>chgrp<span class="w"> </span>-R<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$GROUP</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">&quot;</span><span class="w">                              </span><span class="c1"># (1)!</span>
-</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>find<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">&quot;</span><span class="w"> </span>-type<span class="w"> </span>d<span class="w"> </span>-exec<span class="w"> </span>chmod<span class="w"> </span><span class="m">2770</span><span class="w"> </span><span class="o">{}</span><span class="w"> </span><span class="se">\;</span><span class="w">            </span><span class="c1"># (2)!</span>
-</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>find<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">&quot;</span><span class="w"> </span>-type<span class="w"> </span>f<span class="w"> </span>-exec<span class="w"> </span>chmod<span class="w"> </span>g+rwX,o-rwx<span class="w"> </span><span class="o">{}</span><span class="w"> </span><span class="se">\;</span><span class="w">     </span><span class="c1"># (3)!</span>
-</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>setfacl<span class="w"> </span>-R<span class="w">  </span>-m<span class="w"> </span>g:<span class="s2">&quot;</span><span class="nv">$GROUP</span><span class="s2">&quot;</span>:rwx<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">&quot;</span><span class="w">                  </span><span class="c1"># (4)!</span>
-</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>setfacl<span class="w"> </span>-Rd<span class="w"> </span>-m<span class="w"> </span>g:<span class="s2">&quot;</span><span class="nv">$GROUP</span><span class="s2">&quot;</span>:rwx<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">&quot;</span><span class="w">                  </span><span class="c1"># (5)!</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="nv">GROUP</span><span class="o">=</span>your-group-name
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="nv">DST</span><span class="o">=</span><span class="s2">&quot;/work/</span><span class="nv">$GROUP</span><span class="s2">/the_moved_thing&quot;</span>
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>chgrp<span class="w"> </span>-R<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$GROUP</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">&quot;</span><span class="w">                              </span><span class="c1"># (1)!</span>
+</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>find<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">&quot;</span><span class="w"> </span>-type<span class="w"> </span>d<span class="w"> </span>-exec<span class="w"> </span>chmod<span class="w"> </span><span class="m">2770</span><span class="w"> </span><span class="o">{}</span><span class="w"> </span><span class="se">\;</span><span class="w">            </span><span class="c1"># (2)!</span>
+</span><span id="__span-13-6"><a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>find<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">&quot;</span><span class="w"> </span>-type<span class="w"> </span>f<span class="w"> </span>-exec<span class="w"> </span>chmod<span class="w"> </span>g+rwX,o-rwx<span class="w"> </span><span class="o">{}</span><span class="w"> </span><span class="se">\;</span><span class="w">     </span><span class="c1"># (3)!</span>
+</span><span id="__span-13-7"><a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a>setfacl<span class="w"> </span>-R<span class="w">  </span>-m<span class="w"> </span>g:<span class="s2">&quot;</span><span class="nv">$GROUP</span><span class="s2">&quot;</span>:rwx<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">&quot;</span><span class="w">                  </span><span class="c1"># (4)!</span>
+</span><span id="__span-13-8"><a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a>setfacl<span class="w"> </span>-Rd<span class="w"> </span>-m<span class="w"> </span>g:<span class="s2">&quot;</span><span class="nv">$GROUP</span><span class="s2">&quot;</span>:rwx<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">&quot;</span><span class="w">                  </span><span class="c1"># (5)!</span>
 </span></code></pre></div>
 <ol>
 <li>Layer 1 — fix group identity.</li>
@@ -1848,21 +2049,25 @@
 </ol>
 <p>Verified: after the full fix, new entries created inside DST inherit layers 1 + 3 automatically — <code>DST</code> is now configured the same way as <code>/work/&lt;group&gt;/</code> itself.</p>
 </div>
+<div class="tabbed-block">
+<p>Single-line fix — the file already has correct layers 1 + 3 and group-exec; only owner-exec needs opening.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="nv">GROUP</span><span class="o">=</span>your-group-name
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>chmod<span class="w"> </span>u+x<span class="w"> </span><span class="s2">&quot;/work/</span><span class="nv">$GROUP</span><span class="s2">/&lt;your-script&gt;&quot;</span>
+</span></code></pre></div>
+<p>See the <a href="#shared-edit-transfers">Windows Explorer tab under Shared-edit</a> for why Samba drops this specific bit.</p>
 </div>
 </div>
-<!-- markdownlint-disable MD051 -->
-
+</div>
 <div class="admonition warning">
 <p class="admonition-title">Ownership transfer needs a re-create</p>
 <p><code>chgrp</code> to a group you're in works fine. <code>chown</code> to a different <strong>user</strong> requires root — even if a colleague gave you the files, you can't take ownership directly. To "transfer" ownership, copy the tree into a fresh destination you create as yourself (<a href="#shared-edit-transfers">§ Shared-edit directory workflow</a>). The copy's new inodes will be owned by you.</p>
 </div>
-<!-- markdownlint-enable MD051 -->
-
 <hr />
 <h2 id="what-qut-eresearch-documents-and-doesnt"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 9h-2V7h2m0 10h-2v-6h2m-1-9A10 10 0 0 0 2 12a10 10 0 0 0 10 10 10 10 0 0 0 10-10A10 10 0 0 0 12 2"/></svg></span> What QUT eResearch documents (and doesn't)</h2>
 <ul>
-<li>The <a href="https://docs.eres.qut.edu.au/hpc-filesystem">Filesystem and data management page</a><sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> says new entries in <code>/work/</code> inherit parent permissions. <mark>True for layers 1 + 3; false for layer 2.</mark> Mode bits come from your creating process (rsync, cp, touch), not from the parent. The page doesn't define create-vs-move, doesn't mention setgid or default ACLs, and doesn't warn about <code>mv</code>.</li>
-<li>The <a href="https://docs.eres.qut.edu.au/hpc-transferring-files-tofrom-hpc">Transferring files page</a><sup id="fnref2:1"><a class="footnote-ref" href="#fn:1">1</a></sup> documents <code>rsync -a</code> as the recommended flag set. Fine for <code>/home</code> ↔ <code>/home</code>; for <code>~/</code> → <code>/work/&lt;group&gt;/</code> shared-edit, <code>-a</code> preserves your <code>default</code> group and breaks layer 1.</li>
+<li>The <a href="https://docs.eres.qut.edu.au/hpc-filesystem">Filesystem and data management page</a><sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> says new entries in <code>/work/</code> inherit parent permissions. <mark>True for layers 1 + 3; false for layer 2.</mark> Mode bits come from whatever the transfer method supplies (source mode bits for Linux <code>cp</code> / <code>rsync</code>; Samba's <code>create_mask</code> for Windows Explorer or macOS Finder). The page doesn't define create-vs-move, doesn't mention setgid or default ACLs, and doesn't warn about <code>mv</code>.</li>
+<li>The <a href="https://docs.eres.qut.edu.au/hpc-transferring-files-tofrom-hpc">Transferring files page</a><sup id="fnref2:1"><a class="footnote-ref" href="#fn:1">1</a></sup> documents <code>rsync -a</code> as the recommended flag set. Fine for <code>/home</code> ↔ <code>/home</code>; for <code>~/</code> → <code>/work/&lt;group&gt;/</code> shared-edit, <code>-a</code> preserves your <code>default</code> group and breaks layer 1. Use the <a href="#shared-edit-transfers">Linux Directory workflow</a> instead.</li>
+<li>The same page shows <code>\\hpc-fs\&lt;username&gt;</code> for Windows home and <code>smb://hpc-fs/work/</code> for macOS <code>/work</code>, but doesn't spell out <code>\\hpc-fs\work</code> for Windows or describe Samba's <code>create_mask</code> behavior on the server side. This page fills that gap: the <a href="#shared-edit-transfers">Windows Explorer and Finder tabs</a> are the tested + documented SMB paths.</li>
 <li>New shared folder requests go through the <a href="https://eresearchqut.atlassian.net/servicedesk/customer/portals">eResearch Help Centre portal</a> (<code>HPC request</code> → <code>New shared folder</code>).</li>
 </ul>
 <hr />
@@ -1878,7 +2083,7 @@
 <hr />
 <ol>
 <li id="fn:1">
-<p>Access only in QUT network. Please use VPN to access the documentation when off-campus.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref2:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref3:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref4:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref5:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+<p>Access only in QUT network. Please use VPN to access the documentation when off-campus.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref2:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref3:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref4:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref5:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref6:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
 </li>
 </ol>
 </div>
@@ -1904,7 +2109,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 1, 2026 02:25:48 AEST">July 1, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 1, 2026 17:34:45 AEST">July 1, 2026</span>
   </span>
 
     
