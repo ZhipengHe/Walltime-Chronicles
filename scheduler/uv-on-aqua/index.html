@@ -1074,6 +1074,34 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#envsh-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Enable + activate in one line — the env.sh pattern
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Enable + activate in one line — the env.sh pattern">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-this-shines-for-team-projects-on-work" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this shines for team projects on /work
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#what-to-leave-on-home" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1456,6 +1484,34 @@
     <span class="md-ellipsis">
       
         (c) Batch jobs — cache + venv on $TMPDIR
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#envsh-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Enable + activate in one line — the env.sh pattern
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Enable + activate in one line — the env.sh pattern">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-this-shines-for-team-projects-on-work" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this shines for team projects on /work
       
     </span>
   </a>
@@ -1871,7 +1927,7 @@
 </span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>ln<span class="w"> </span>-s<span class="w"> </span>/scratch/<span class="si">${</span><span class="nv">USER</span><span class="si">}</span>/uv/envs/my-project<span class="w"> </span>.venv
 </span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>uv<span class="w"> </span>venv<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>uv<span class="w"> </span>sync
 </span></code></pre></div>
-<p>Both options put the venv on Weka, satisfying the same-FS rule because the cache is also on Weka.</p>
+<p>Both options put the venv on Weka, satisfying the same-FS rule because the cache is also on Weka. Option 1's export only lasts for the current shell, though — see <a href="#envsh-pattern">the <code>env.sh</code> pattern</a> below for making it stick (and for the team-project-on-<code>/work</code> variant).</p>
 <div class="admonition warning">
 <p class="admonition-title">Set a 30-day reminder</p>
 <p><code>/scratch</code> is purged after <strong>30 days of inactivity</strong> (Aqua's policy, not uv's). Touch <code>/scratch/${USER}/uv/</code> monthly, or just rebuild the env from <code>uv.lock</code> when you come back. Don't keep anything irreplaceable on scratch.</p>
@@ -1891,6 +1947,103 @@
 <p><code>uv sync --frozen</code> installs <strong>exactly</strong> what's in <code>uv.lock</code> without re-running the resolver. Deterministic, fast, reproducible across nodes. Commit <code>uv.lock</code> to git so this works at all.</p>
 </div>
 <p>This pattern trades cold-install time (~16 s on a fresh node) for cleanliness — the venv vanishes when the job exits, no risk of leaving stale envs behind. Pairs naturally with <a href="../Walltime-by-Recipe/#recipe-8-long-pipeline-with-chained-jobs">Recipe 8's checkpoint chain</a> when your training run spans multiple PBS stages.</p>
+<hr />
+<h2 id="envsh-pattern"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m16.56 5.44-1.45 1.45A5.97 5.97 0 0 1 18 12a6 6 0 0 1-6 6 6 6 0 0 1-6-6c0-2.17 1.16-4.06 2.88-5.12L7.44 5.44A7.96 7.96 0 0 0 4 12a8 8 0 0 0 8 8 8 8 0 0 0 8-8c0-2.72-1.36-5.12-3.44-6.56M13 3h-2v10h2"/></svg></span> Enable + activate in one line — the <code>env.sh</code> pattern</h2>
+<p>Pattern (b)'s <code>UV_PROJECT_ENVIRONMENT</code> export works, but it's an env var you have to re-export <strong>every session</strong> — and there's no way around that: uv has no config-file knob for the venv path. Not in <code>uv.toml</code>, not in <code>pyproject.toml</code>, and <code>UV_*</code> variables in <code>.env</code> files don't affect uv itself. The env var is the only interface, and Aqua has no <code>direnv</code> to auto-set it per-directory.</p>
+<p>The fix: commit a small <code>env.sh</code> next to your project and make <code>source</code> do everything — set the uv variables <em>and</em> activate the venv, so <code>python</code> and <code>jupyter</code> work directly with no <code>uv run</code> prefix.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># env.sh — commit this next to your pyproject.toml</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">UV_CACHE_DIR</span><span class="o">=</span><span class="s2">&quot;/scratch/</span><span class="si">${</span><span class="nv">USER</span><span class="si">}</span><span class="s2">/uv/cache&quot;</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="nb">export</span><span class="w"> </span><span class="nv">UV_PROJECT_ENVIRONMENT</span><span class="o">=</span><span class="s2">&quot;/scratch/</span><span class="si">${</span><span class="nv">USER</span><span class="si">}</span><span class="s2">/uv/envs/my-project&quot;</span>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="c1"># uv itself (per-user install) — make sure it&#39;s on PATH in batch jobs too</span>
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="k">case</span><span class="w"> </span><span class="s2">&quot;:</span><span class="si">${</span><span class="nv">PATH</span><span class="si">}</span><span class="s2">:&quot;</span><span class="w"> </span><span class="k">in</span>
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">    </span>*<span class="s2">&quot;:</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span><span class="s2">/.local/bin:&quot;</span>*<span class="o">)</span><span class="w"> </span><span class="p">;;</span>
+</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">    </span>*<span class="o">)</span><span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span><span class="s2">/.local/bin:</span><span class="si">${</span><span class="nv">PATH</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="p">;;</span>
+</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="k">esac</span>
+</span><span id="__span-6-10"><a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>
+</span><span id="__span-6-11"><a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="c1"># Activate the venv if this user has installed it already</span>
+</span><span id="__span-6-12"><a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">UV_PROJECT_ENVIRONMENT</span><span class="si">}</span><span class="s2">/bin/activate&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+</span><span id="__span-6-13"><a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="w">    </span><span class="nb">source</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">UV_PROJECT_ENVIRONMENT</span><span class="si">}</span><span class="s2">/bin/activate&quot;</span>
+</span><span id="__span-6-14"><a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="k">else</span>
+</span><span id="__span-6-15"><a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a><span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;env.sh: no venv at </span><span class="si">${</span><span class="nv">UV_PROJECT_ENVIRONMENT</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span>&gt;<span class="p">&amp;</span><span class="m">2</span>
+</span><span id="__span-6-16"><a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a><span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;env.sh: first-time install:  cd &lt;project&gt; &amp;&amp; uv sync --frozen&quot;</span><span class="w"> </span>&gt;<span class="p">&amp;</span><span class="m">2</span>
+</span><span id="__span-6-17"><a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a><span class="k">fi</span>
+</span></code></pre></div>
+<p>One line, everywhere — interactive shells, PBS job scripts, the terminal you launch Jupyter from:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="nb">source</span><span class="w"> </span>/work/my-team/my-project/env.sh
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>python<span class="w"> </span>train.py<span class="w">                    </span><span class="c1"># venv python, no `uv run` needed</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>uv<span class="w"> </span>add<span class="w"> </span>scipy<span class="w">                       </span><span class="c1"># still routes to the scratch venv</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>deactivate<span class="w">                         </span><span class="c1"># works as usual</span>
+</span></code></pre></div>
+<p>Because the script exports the uv variables <em>before</em> activating, <code>uv sync</code> / <code>uv add</code> keep targeting the scratch venv even while it's active — you get both interfaces at once.</p>
+<h3 id="why-this-shines-for-team-projects-on-work">Why this shines for team projects on <code>/work</code></h3>
+<p><code>/work</code> is Lustre, team-writable, and not purged — the right place for shared source. But a shared <code>.venv</code> in the project directory would be a mess: one user's <code>uv sync</code> clobbers another's, and the venv sits on Lustre while everyone's cache is on Weka (hello, cross-FS trap). The <code>env.sh</code> pattern splits it cleanly:</p>
+<table>
+<thead>
+<tr>
+<th>What</th>
+<th>Where</th>
+<th>Scope</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pyproject.toml</code> + <code>uv.lock</code></td>
+<td><code>/work/&lt;team&gt;/&lt;project&gt;/</code> (Lustre)</td>
+<td>Team-shared, in git</td>
+</tr>
+<tr>
+<td><code>env.sh</code></td>
+<td><code>/work/&lt;team&gt;/&lt;project&gt;/</code> (Lustre)</td>
+<td>Team-shared, in git</td>
+</tr>
+<tr>
+<td>uv cache</td>
+<td><code>/scratch/$USER/uv/cache/</code> (Weka)</td>
+<td>Per-user</td>
+</tr>
+<tr>
+<td>venv</td>
+<td><code>/scratch/$USER/uv/envs/&lt;project&gt;/</code> (Weka)</td>
+<td>Per-user</td>
+</tr>
+</tbody>
+</table>
+<p><code>$USER</code> expands at <code>source</code> time, so the <strong>same committed file</strong> gives every team member their own Weka venv — same-FS rule satisfied per-user, reproducibility guaranteed by the committed <code>uv.lock</code>. A new teammate's onboarding is two lines:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nb">source</span><span class="w"> </span>/work/&lt;team&gt;/&lt;project&gt;/env.sh<span class="w">   </span><span class="c1"># prints the install hint</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="nb">cd</span><span class="w"> </span>/work/&lt;team&gt;/&lt;project&gt;<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>uv<span class="w"> </span>sync<span class="w"> </span>--frozen
+</span></code></pre></div>
+<p>The same file works unchanged for a personal project on <code>/home</code> — only the venv location in the export changes, the mechanics don't.</p>
+<div class="admonition tip">
+<p class="admonition-title">Auto-activate when you <code>cd</code> in (optional)</p>
+<p>Don't just export <code>UV_PROJECT_ENVIRONMENT</code> globally in <code>~/.bashrc</code> — it silently hijacks <strong>every other uv project</strong> you touch into the same venv. If you want hands-free activation, scope it to the project directory with a <code>PROMPT_COMMAND</code> hook:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># ~/.bashrc — poor-man&#39;s direnv, scoped to one project tree</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>_myproject_uv_env<span class="o">()</span><span class="w"> </span><span class="o">{</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PWD</span><span class="s2">&quot;</span><span class="w"> </span><span class="k">in</span>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">        </span>/work/my-team/my-project<span class="p">|</span>/work/my-team/my-project/*<span class="o">)</span>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">            </span><span class="nb">export</span><span class="w"> </span><span class="nv">UV_PROJECT_ENVIRONMENT</span><span class="o">=</span><span class="s2">&quot;/scratch/</span><span class="nv">$USER</span><span class="s2">/uv/envs/my-project&quot;</span>
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$UV_PROJECT_ENVIRONMENT</span><span class="s2">/bin/activate&quot;</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="o">&amp;&amp;</span>
+</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="w">               </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">VIRTUAL_ENV</span><span class="k">:-</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span>!<span class="o">=</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$UV_PROJECT_ENVIRONMENT</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+</span><span id="__span-9-8"><a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="w">                </span><span class="nb">source</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$UV_PROJECT_ENVIRONMENT</span><span class="s2">/bin/activate&quot;</span>
+</span><span id="__span-9-9"><a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="w">            </span><span class="k">fi</span><span class="w"> </span><span class="p">;;</span>
+</span><span id="__span-9-10"><a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="w">        </span>*<span class="o">)</span>
+</span><span id="__span-9-11"><a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a><span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">VIRTUAL_ENV</span><span class="k">:-</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;/scratch/</span><span class="nv">$USER</span><span class="s2">/uv/envs/my-project&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+</span><span id="__span-9-12"><a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a><span class="w">                </span>deactivate
+</span><span id="__span-9-13"><a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a><span class="w">            </span><span class="k">fi</span>
+</span><span id="__span-9-14"><a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a><span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">UV_PROJECT_ENVIRONMENT</span><span class="k">:-</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;/scratch/</span><span class="nv">$USER</span><span class="s2">/uv/envs/my-project&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+</span><span id="__span-9-15"><a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a><span class="w">                </span><span class="nb">unset</span><span class="w"> </span>UV_PROJECT_ENVIRONMENT
+</span><span id="__span-9-16"><a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a><span class="w">            </span><span class="k">fi</span><span class="w"> </span><span class="p">;;</span>
+</span><span id="__span-9-17"><a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a><span class="w">    </span><span class="k">esac</span>
+</span><span id="__span-9-18"><a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a><span class="o">}</span>
+</span><span id="__span-9-19"><a id="__codelineno-9-19" name="__codelineno-9-19" href="#__codelineno-9-19"></a><span class="nv">PROMPT_COMMAND</span><span class="o">=</span><span class="s2">&quot;_myproject_uv_env</span><span class="si">${</span><span class="nv">PROMPT_COMMAND</span><span class="p">:+;</span><span class="nv">$PROMPT_COMMAND</span><span class="si">}</span><span class="s2">&quot;</span>
+</span></code></pre></div>
+<p>Two details that matter: the <code>pattern|pattern/*</code> pair keeps sibling
+directories like <code>my-project-other</code> from matching, and the guarded
+<code>source</code>/<code>deactivate</code> pair means <code>python</code> itself switches with you —
+not just uv's routing — while staying idempotent when <code>PROMPT_COMMAND</code>
+fires on every prompt.</p>
+<p>PBS batch jobs never run <code>PROMPT_COMMAND</code> — job scripts still need the explicit <code>source env.sh</code> line. That's a feature: the job script documents its own environment.</p>
+</div>
 <hr />
 <h2 id="what-to-leave-on-home"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M16 12V4h1V2H7v2h1v8l-2 2v2h5.2v6h1.6v-6H18v-2z"/></svg></span> What to leave on <code>/home</code></h2>
 <p>Some uv state is <strong>write-once user data</strong>, not cache. Don't redirect it to scratch — the cost of re-downloading after a scratch purge dwarfs the Lustre slowness.</p>
@@ -1992,7 +2145,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="June 30, 2026 01:02:26 AEST">June 30, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 14, 2026 14:09:44 AEST">July 14, 2026</span>
   </span>
 
     
