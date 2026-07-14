@@ -142,7 +142,7 @@ ln -s /scratch/${USER}/uv/envs/my-project .venv
 uv venv && uv sync
 ```
 
-Both options put the venv on Weka, satisfying the same-FS rule because the cache is also on Weka.
+Both options put the venv on Weka, satisfying the same-FS rule because the cache is also on Weka. Option 1's export only lasts for the current shell, though — see [the `env.sh` pattern](#envsh-pattern) below for making it stick (and for the team-project-on-`/work` variant).
 
 !!! warning "Set a 30-day reminder"
     `/scratch` is purged after **30 days of inactivity** (Aqua's policy, not uv's). Touch `/scratch/${USER}/uv/` monthly, or just rebuild the env from `uv.lock` when you come back. Don't keep anything irreplaceable on scratch.
@@ -165,6 +165,98 @@ python script.py
     `uv sync --frozen` installs **exactly** what's in `uv.lock` without re-running the resolver. Deterministic, fast, reproducible across nodes. Commit `uv.lock` to git so this works at all.
 
 This pattern trades cold-install time (~16 s on a fresh node) for cleanliness — the venv vanishes when the job exits, no risk of leaving stale envs behind. Pairs naturally with [Recipe 8's checkpoint chain](Walltime-by-Recipe.md#recipe-8-long-pipeline-with-chained-jobs) when your training run spans multiple PBS stages.
+
+---
+
+## :material-power: Enable + activate in one line — the `env.sh` pattern {#envsh-pattern}
+
+Pattern (b)'s `UV_PROJECT_ENVIRONMENT` export works, but it's an env var you have to re-export **every session** — and there's no way around that: uv has no config-file knob for the venv path. Not in `uv.toml`, not in `pyproject.toml`, and `UV_*` variables in `.env` files don't affect uv itself. The env var is the only interface, and Aqua has no `direnv` to auto-set it per-directory.
+
+The fix: commit a small `env.sh` next to your project and make `source` do everything — set the uv variables *and* activate the venv, so `python` and `jupyter` work directly with no `uv run` prefix.
+
+```bash
+# env.sh — commit this next to your pyproject.toml
+export UV_CACHE_DIR="/scratch/${USER}/uv/cache"
+export UV_PROJECT_ENVIRONMENT="/scratch/${USER}/uv/envs/my-project"
+
+# uv itself (per-user install) — make sure it's on PATH in batch jobs too
+case ":${PATH}:" in
+    *":${HOME}/.local/bin:"*) ;;
+    *) export PATH="${HOME}/.local/bin:${PATH}" ;;
+esac
+
+# Activate the venv if this user has installed it already
+if [ -f "${UV_PROJECT_ENVIRONMENT}/bin/activate" ]; then
+    source "${UV_PROJECT_ENVIRONMENT}/bin/activate"
+else
+    echo "env.sh: no venv at ${UV_PROJECT_ENVIRONMENT}" >&2
+    echo "env.sh: first-time install:  cd <project> && uv sync --frozen" >&2
+fi
+```
+
+One line, everywhere — interactive shells, PBS job scripts, the terminal you launch Jupyter from:
+
+```bash
+source /work/my-team/my-project/env.sh
+python train.py                    # venv python, no `uv run` needed
+uv add scipy                       # still routes to the scratch venv
+deactivate                         # works as usual
+```
+
+Because the script exports the uv variables *before* activating, `uv sync` / `uv add` keep targeting the scratch venv even while it's active — you get both interfaces at once.
+
+### Why this shines for team projects on `/work`
+
+`/work` is Lustre, team-writable, and not purged — the right place for shared source. But a shared `.venv` in the project directory would be a mess: one user's `uv sync` clobbers another's, and the venv sits on Lustre while everyone's cache is on Weka (hello, cross-FS trap). The `env.sh` pattern splits it cleanly:
+
+| What | Where | Scope |
+|---|---|---|
+| `pyproject.toml` + `uv.lock` | `/work/<team>/<project>/` (Lustre) | Team-shared, in git |
+| `env.sh` | `/work/<team>/<project>/` (Lustre) | Team-shared, in git |
+| uv cache | `/scratch/$USER/uv/cache/` (Weka) | Per-user |
+| venv | `/scratch/$USER/uv/envs/<project>/` (Weka) | Per-user |
+
+`$USER` expands at `source` time, so the **same committed file** gives every team member their own Weka venv — same-FS rule satisfied per-user, reproducibility guaranteed by the committed `uv.lock`. A new teammate's onboarding is two lines:
+
+```bash
+source /work/<team>/<project>/env.sh   # prints the install hint
+cd /work/<team>/<project> && uv sync --frozen
+```
+
+The same file works unchanged for a personal project on `/home` — only the venv location in the export changes, the mechanics don't.
+
+!!! tip "Auto-activate when you `cd` in (optional)"
+    Don't just export `UV_PROJECT_ENVIRONMENT` globally in `~/.bashrc` — it silently hijacks **every other uv project** you touch into the same venv. If you want hands-free activation, scope it to the project directory with a `PROMPT_COMMAND` hook:
+
+    ```bash
+    # ~/.bashrc — poor-man's direnv, scoped to one project tree
+    _myproject_uv_env() {
+        case "$PWD" in
+            /work/my-team/my-project|/work/my-team/my-project/*)
+                export UV_PROJECT_ENVIRONMENT="/scratch/$USER/uv/envs/my-project"
+                if [ -f "$UV_PROJECT_ENVIRONMENT/bin/activate" ] &&
+                   [ "${VIRTUAL_ENV:-}" != "$UV_PROJECT_ENVIRONMENT" ]; then
+                    source "$UV_PROJECT_ENVIRONMENT/bin/activate"
+                fi ;;
+            *)
+                if [ "${VIRTUAL_ENV:-}" = "/scratch/$USER/uv/envs/my-project" ]; then
+                    deactivate
+                fi
+                if [ "${UV_PROJECT_ENVIRONMENT:-}" = "/scratch/$USER/uv/envs/my-project" ]; then
+                    unset UV_PROJECT_ENVIRONMENT
+                fi ;;
+        esac
+    }
+    PROMPT_COMMAND="_myproject_uv_env${PROMPT_COMMAND:+;$PROMPT_COMMAND}"
+    ```
+
+    Two details that matter: the `pattern|pattern/*` pair keeps sibling
+    directories like `my-project-other` from matching, and the guarded
+    `source`/`deactivate` pair means `python` itself switches with you —
+    not just uv's routing — while staying idempotent when `PROMPT_COMMAND`
+    fires on every prompt.
+
+    PBS batch jobs never run `PROMPT_COMMAND` — job scripts still need the explicit `source env.sh` line. That's a feature: the job script documents its own environment.
 
 ---
 
