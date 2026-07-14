@@ -232,9 +232,16 @@ The same file works unchanged for a personal project on `/home` — only the ven
     # ~/.bashrc — poor-man's direnv, scoped to one project tree
     _myproject_uv_env() {
         case "$PWD" in
-            /work/my-team/my-project*)
-                export UV_PROJECT_ENVIRONMENT="/scratch/$USER/uv/envs/my-project" ;;
+            /work/my-team/my-project|/work/my-team/my-project/*)
+                export UV_PROJECT_ENVIRONMENT="/scratch/$USER/uv/envs/my-project"
+                if [ -f "$UV_PROJECT_ENVIRONMENT/bin/activate" ] &&
+                   [ "${VIRTUAL_ENV:-}" != "$UV_PROJECT_ENVIRONMENT" ]; then
+                    source "$UV_PROJECT_ENVIRONMENT/bin/activate"
+                fi ;;
             *)
+                if [ "${VIRTUAL_ENV:-}" = "/scratch/$USER/uv/envs/my-project" ]; then
+                    deactivate
+                fi
                 if [ "${UV_PROJECT_ENVIRONMENT:-}" = "/scratch/$USER/uv/envs/my-project" ]; then
                     unset UV_PROJECT_ENVIRONMENT
                 fi ;;
@@ -242,6 +249,12 @@ The same file works unchanged for a personal project on `/home` — only the ven
     }
     PROMPT_COMMAND="_myproject_uv_env${PROMPT_COMMAND:+;$PROMPT_COMMAND}"
     ```
+
+    Two details that matter: the `pattern|pattern/*` pair keeps sibling
+    directories like `my-project-other` from matching, and the guarded
+    `source`/`deactivate` pair means `python` itself switches with you —
+    not just uv's routing — while staying idempotent when `PROMPT_COMMAND`
+    fires on every prompt.
 
     PBS batch jobs never run `PROMPT_COMMAND` — job scripts still need the explicit `source env.sh` line. That's a feature: the job script documents its own environment.
 
