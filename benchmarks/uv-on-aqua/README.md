@@ -4,7 +4,7 @@ Measures `uv sync` install timing on QUT Aqua across three filesystem configurat
 
 ## What this measures
 
-Three cells, one workload (`cpu-ml` — realistic ML stack with CPU PyTorch). For each cell, cold + warm install timing via [hyperfine](https://github.com/sharkdp/hyperfine), plus auxiliary metrics (hardlink ratio, system CPU time, phase decomposition, file count, `Failed to hardlink` warning count).
+Three cells, run against one workload per session — `cpu-ml` (realistic ML stack with CPU PyTorch, the default) or `gpu-ml` (same stack on CUDA wheels). For each cell, cold + warm install timing via [hyperfine](https://github.com/sharkdp/hyperfine), plus auxiliary metrics (hardlink ratio, system CPU time, phase decomposition, file count, `Failed to hardlink` warning count).
 
 | Cell | Cache | Venv | Same-FS? | What it tests |
 |---|---|---|---|---|
@@ -14,7 +14,7 @@ Three cells, one workload (`cpu-ml` — realistic ML stack with CPU PyTorch). Fo
 
 ### Reference numbers from initial measurements
 
-A bench run on the same hardware should reproduce these within noise. If your warm Weka comes in at, say, 12 s, something else is going on — start with the queue snapshot and the FS-provenance lines in `session-meta.txt`.
+`cpu-ml` on the archived hardware. A run on the same hardware should reproduce these within noise. If your warm Weka comes in at, say, 12 s, something else is going on — start with the queue snapshot and the FS-provenance lines in `session-meta.txt`. These were measured against the torch 2.12.1+cpu lock; the workload has since moved to torch 2.13.0+cpu, so treat them as a sanity band rather than an exact target until a run refreshes them.
 
 | Cell | Warm install (mean ± stddev) | Cold install (median) |
 |---|---|---|
@@ -81,30 +81,37 @@ Edit `config.toml`. The knobs you're most likely to touch:
 - `include_cells` — drop `"crossfs"` if you only want same-FS comparison.
 - `cold_reps`, `warm_reps` — rep counts per cell (defaults: 5 each).
 - `hyperfine_cold_warmup`, `hyperfine_warm_warmup` — `0` for cold (capture first-rep + report median), `1` for warm (discard OS-page-cache first-rep + report mean).
-- `[workload.cpu-ml]` — PBS shape (queue, ncpus, mem, walltime). `[workload.gpu-ml]` is defined now but not run by default; switch with `WORKLOAD=gpu-ml` once a GPU bench is scheduled.
+- `[workload.cpu-ml]` — PBS shape (queue, ncpus, mem, walltime). `cpu-ml` is the default; switch with `WORKLOAD=gpu-ml` for the GPU workload.
 
 Bash reads `config.toml` via the `scripts/_toml_to_env.py` shim (Python's `tomllib` → `export KEY=VALUE` lines). Python helpers read it directly via `tomllib`.
 
-## Re-locking the workload
+## Re-locking a workload
 
-`workloads/cpu-ml/uv.lock` was generated from the probe campaign and pins exact versions of all 53 packages. Re-lock periodically — once a year is a reasonable cadence — to refresh against current PyPI:
+`workloads/cpu-ml/uv.lock` pins exact versions of all 53 packages; `workloads/gpu-ml/uv.lock` pins 71. Re-lock periodically — once a year is a reasonable cadence — to refresh against current PyPI:
 
 ```bash
-cd workloads/cpu-ml
+cd workloads/cpu-ml   # or workloads/gpu-ml
 uv lock
 ```
 
-The floors in `pyproject.toml` (e.g., `torch>=2.0`, `numpy>=2.0`) guard against accidentally pulling a pre-modern-era version. After re-locking, commit the new `uv.lock` and record its sha256 in the next run's `summary.md`. The PBS-job prologue verifies `sha256sum workloads/cpu-ml/uv.lock` at session start — a mismatch halts the run rather than silently measuring against a different version set.
+The floors in `pyproject.toml` (e.g., `torch>=2.13.0`, `numpy>=2.0`) guard against accidentally pulling a pre-modern-era version. After re-locking, commit the new `uv.lock` and record its sha256 in the next run's `summary.md`.
+
+**Re-pin after every re-lock.** The PBS-job prologue verifies `sha256sum workloads/$WORKLOAD/uv.lock` against `config.toml`'s `[workload.<name>].lock_hash_expected` at session start; a mismatch halts the run before any cell executes, rather than silently measuring against a different version set. Dependency bots re-lock too — a merged bump leaves the pin stale and the next run fail-closed until it is updated.
 
 ## Bench-locked lockfile sha256
 
-`b64e55eee8c28496d2cafd82ec1e5c6d998bcb3d38072c3853efca5c1a99b98f` — the current `workloads/cpu-ml/uv.lock` sha256. Update this README when you re-lock.
+| Workload | `uv.lock` sha256 |
+|---|---|
+| `cpu-ml` | `b07d97b29497b0b9a3bfc13b0c3410a1e9c02119596bcd6cac573b22150cd580` |
+| `gpu-ml` | `4dd3179f13645d78ba2ea033f3c372b08cb0c15dd128f99e5565307c65759efd` |
+
+These must agree with `lock_hash_expected` in `config.toml`. Update both when you re-lock.
 
 ## Caveats
 
 - **Aqua-specific.** Lustre + Weka are the filesystems measured; results don't transfer to other clusters.
 - **Single-node.** No multi-node bench.
-- **v1 ships `cpu-ml` only.** GPU bench (cu126 wheels, ~5–7 GB extracted, ~8k files) is a separate future run.
+- **The archived `gpu-ml` run predates the cu130 switch.** `results-archive/2026-07-01-gpu1n012/` measured cu126 wheels (torch 2.12.1+cu126, ~6.2 GB, ~26k files). The workload now resolves torch 2.13.0+cu130 against the cu13 NVIDIA stack, so its install footprint and the `ldd` evidence for the bundled-CUDA claim are unverified until a cu130 run lands.
 - **`/dev/shm` is unusable for ML venvs on Aqua.** It's mounted `noexec`, which blocks `mmap(PROT_EXEC)` on the `.so` files uv extracts into the venv. `import torch` fails with `failed to map segment from shared object`. Documented here as a negative finding; not a bench cell.
 - **File counts > byte counts for cross-FS comparisons.** Lustre `du` reports differently than Weka for identical content (up to ~22% lower on some reps). The bench reports file count, hardlink count, and hardlink ratio alongside footprint bytes.
 - **Cross-FS direction shown is Lustre cache → Weka venv** (the more common user mistake: default `~/.cache/uv` while the project lives on `/scratch/`). The inverse direction (Weka cache → Lustre venv) is ~10% slower per probe but doesn't change the lesson.
@@ -115,7 +122,7 @@ Every PBS-job prologue writes `session-meta.txt` with:
 
 - uv binary path + sha256 (halts if changed mid-session)
 - hyperfine binary path + sha256
-- `workloads/cpu-ml/uv.lock` sha256 (must match the bench-locked value above)
+- `workloads/$WORKLOAD/uv.lock` sha256 (must match the bench-locked value above)
 - Filesystem provenance: `df` on `$HOME`, `/scratch`, `$TMPDIR`, `/tmp`; Lustre + Weka client versions
 - Node + PBS context: hostname, jobid, queue snapshot (`qstat -Q`)
 
