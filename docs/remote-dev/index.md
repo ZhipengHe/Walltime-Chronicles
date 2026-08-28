@@ -4,3 +4,4 @@ QUT Aqua doesn't support VS Code Remote SSH. This section documents the workarou
 
 - :material-keyboard: [Surviving without VS Code Remote SSH](Surviving-without-VS-Code-Remote-SSH.md) — tunnels, Jupyter, sshfs, and the editor-side options that don't need Remote SSH.
 - :material-folder-eye-outline: [The .DS_Store Strikes Back: Finder Edition](The-DS_Store-Strikes-Back.md) — stop macOS from littering `._*` and `.DS_Store` files across your Aqua home dir.
+- :material-account-group-outline: [Permissions Don't Move: A /work/group Survival Guide](Permissions-Dont-Move.md) — get the group, the mode bits, and the ACL right when files land in a shared `/work/<group>/` folder, and why `mv` from `~/` breaks all three.

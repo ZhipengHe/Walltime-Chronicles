@@ -41,10 +41,12 @@ pre-commit install
 
 - `docs/` - Main documentation content in Markdown
     - `index.md` - Homepage with project overview and disclaimers
+    - `tutorials/` - Crash Course Café: course index, prerequisites checklist, `lesson-1.md` … `lesson-9.md` (Lessons 1–2 written; 3–9 are stubs with scope contracts)
     - `pbs-scripts/` - PBS job scripts and tools documentation
-    - `scheduler/` - Walltime estimation and node selection guides
-    - `remote-dev/` - Remote development setup and troubleshooting
+    - `scheduler/` - Walltime estimation, node selection, and uv cache/env placement guides
+    - `remote-dev/` - Remote development setup, macOS metadata cleanup, `/work/<group>` permissions
     - `javascripts/` - KaTeX math rendering support
+- `benchmarks/uv-on-aqua/` - PBS-driven `uv sync` benchmark behind `docs/scheduler/uv-on-aqua.md`: `config.toml`, `scripts/` (run harness, sanitizer, analysis stubs), `workloads/` (locked `cpu-ml` / `gpu-ml` projects), `results-archive/` (redacted per-run bundles + summaries)
 - `mkdocs.yml` - MkDocs configuration with Material theme
 - `pyproject.toml` - Python project metadata and dependencies for MkDocs build
 - `uv.lock` - Pinned dependency versions (managed by `uv sync` / `uv lock`)
@@ -81,7 +83,10 @@ The documentation has a specific tone and style:
 
 The project includes practical HPC tools in `docs/pbs-scripts/scripts/`:
 
+- `pbs_batch_cook.sh` - Generates and submits one timestamped PBS script that runs several experiment scripts sequentially
 - `pbs_brew_inspector.sh` - PBS job history analysis tool for resource usage insights
+
+Both are embedded into their doc pages with `--8<--` snippets, so the page and the downloadable file are the same source.
 
 ## Important Notes
 

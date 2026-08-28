@@ -14,7 +14,7 @@ If you have ever:
 Then this is the right place.
 
 !!! tip "Crash Course Café — opinionated onboarding for newcomers"
-    Lessons 1 and 2 of the [Crash Course Café](tutorials/index.md) are now shipped — prerequisites checklist, a tour of Aqua with your first interactive job, and Python tooling setup. The course follows an 8-lesson workflow-driven outline (see the [outline](tutorials/index.md)); Lessons 3–8 are stubs with scope contracts and land as I write them.
+    Lessons 1 and 2 of the [Crash Course Café](tutorials/index.md) are now shipped — prerequisites checklist, a tour of Aqua with your first interactive job, and Python tooling setup. The course follows a 9-lesson workflow-driven outline (see the [outline](tutorials/index.md)); Lessons 3–9 are stubs with scope contracts and land as I write them.
 
 ---
 
