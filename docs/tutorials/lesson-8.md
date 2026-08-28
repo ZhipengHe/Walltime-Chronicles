@@ -23,4 +23,4 @@ By the end of this 15–20 minute lesson, you'll have:
 
 ---
 
-← **[Lesson 7: Job Arrays](lesson-7.md)** · You've reached the end of the Crash Course! Back to the **[course outline](index.md)** for next steps.
+← **[Lesson 7: Job Arrays](lesson-7.md)** · **[Lesson 9: Working with an AI Agent on Aqua](lesson-9.md)** →

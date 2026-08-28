@@ -3,12 +3,10 @@
 Welcome to the Crash Course Café! ☕ Pull up a chair and let's get you productive on QUT Aqua without the usual learning curve headaches.
 
 !!! info "Course status (2026-08-28)"
-    The Crash Course follows a **workflow-driven 8-lesson outline**, where each lesson ends with a tangible deliverable and one script is carried from Lesson 2 through to Lesson 8. Lesson 3 (Working Interactively) was added on 2026-08-28: the develop-and-measure step that sits between having a Python environment and submitting your first batch job.
+    The Crash Course follows a **workflow-driven 9-lesson outline**, where each lesson ends with a tangible deliverable and one script is carried from Lesson 2 through to Lesson 8. Added on 2026-08-28: Lesson 3 (Working Interactively), the develop-and-measure step between having a Python environment and submitting your first batch job; and Lesson 9 (Working with an AI Agent on Aqua), which closes the course.
 
     - **Lessons 1 and 2** are written.
-    - **Lessons 3–8** are **stubs** with scope contracts and pointers to existing deeper guides. Lessons land as they're written.
-
-    **Under consideration:** a lesson on working with AI coding agents (Claude Code, Codex) on Aqua — where to run the agent, how it reaches the cluster, and how to write its rules. Its place in the course is not decided yet.
+    - **Lessons 3–9** are **stubs** with scope contracts and pointers to existing deeper guides. Lessons land as they're written.
 
 ---
 
@@ -48,6 +46,7 @@ By the end of this crash course, you'll be able to:
 - **Diagnose common failures** before panicking
 - **Right-size resource requests** — cores, memory, walltime, GPU
 - **Scale beyond a single job** — arrays for bulk work, dependencies for long pipelines
+- **Work with an AI coding agent on Aqua** — without handing it the `qsub` button
 - **Know when to dig deeper** into the specialized guides
 
 ### What You Need
@@ -66,7 +65,7 @@ By the end of this crash course, you'll be able to:
 
 #### Time Commitment
 
-- **Total time**: ~2 hours 15 minutes across **8 focused lessons**
+- **Total time**: ~2 hours 30 minutes across **9 focused lessons**
 - **Lesson format**: 15–20 minutes each
 - **Hands-on from Lesson 1**: First SSH connection and an interactive job within the opening lesson
 - **Follow-up learning**: Each lesson connects to detailed guides for when you need more
@@ -181,6 +180,16 @@ This crash course is your launching pad. When you hit specific challenges, you'l
 - Checkpointing intuition
 
 [→ Lesson 8](lesson-8.md) — *stub with scope contract and pointers*
+
+### Lesson 9: Working with an AI Agent on Aqua (15–20 min)
+
+> *"Delegate the typing, never the `qsub`."*
+
+- Where the agent runs, and how it reaches Aqua
+- Rules for the agent: `AGENTS.md` / `CLAUDE.md` for an HPC repo
+- What to delegate, and what stays yours
+
+[→ Lesson 9](lesson-9.md) — *stub with scope contract and pointers*
 
 ---
 

@@ -110,6 +110,7 @@ nav:
     - "Lesson 6: Right-sizing Requests": tutorials/lesson-6.md
     - "Lesson 7: Job Arrays": tutorials/lesson-7.md
     - "Lesson 8: Long Jobs — Dependencies & Checkpointing": tutorials/lesson-8.md
+    - "Lesson 9: Working with an AI Agent on Aqua": tutorials/lesson-9.md
 
   - "Cmd+Opt+Remote":
     - remote-dev/index.md
