@@ -104,7 +104,7 @@ Six steps to fit the recipe to your kitchen. Each tab covers one piece of the sc
     - **Queue.** `gpu_batch_exec`, `cpu_batch_exec`, `cpu_batch_exlm`, `gpu_inter_exec`, `cpu_inter_exec`, `cpu_inter_pers` — see the queue limits in [Art of Walltime](../scheduler/The-Art-of-Walltime.md).
 
     !!! info "Pick a `gpu_id` deliberately"
-        `gpu_id=H100` targets the H100 hosts (busiest queue, fastest cards). Other valid values from a live `pbsnodes` probe: **`A100`**, **`P100`**, **`MI100`**. For inference or smaller models, an A100 (or even a [MIG slice](../scheduler/Know-Your-Nodes.md) on a `gpu_inter_exec` node) often dispatches sooner than an H100.
+        `gpu_id=H100` targets the H100 hosts (busiest queue, fastest cards). The other valid value is **`A100`**. For inference or smaller models, an A100 (or even a [MIG slice](../scheduler/Know-Your-Nodes.md) on a `gpu_inter_exec` node) often dispatches sooner than an H100.
 
 === ":material-package-variant-closed: 4. Environment"
 

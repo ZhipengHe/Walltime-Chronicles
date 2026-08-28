@@ -370,7 +370,7 @@ Job runs only after `5551111.aqua` finishes with exit code 0. Other useful types
 
 ### :material-eye: Checking the Kitchen (discovery)
 
-Aqua wraps the raw PBS admin tools in user-friendly scripts. They live in `/usr/local/bin/` (symlinks to `/pkg/hpc/scripts/`).
+Aqua wraps the raw PBS tools in user-friendly scripts. They live in `/usr/local/bin/` (symlinks to `/pkg/hpc/scripts/`). Start here; drop to the raw commands only for a number the wrappers don't print.
 
 | Script                  | Best for                                                                 |
 | ----------------------- | ------------------------------------------------------------------------ |
@@ -382,8 +382,12 @@ Aqua wraps the raw PBS admin tools in user-friendly scripts. They live in `/usr/
 | `pbs_mem_bytes`         | Helper for memory-size unit conversion.                                  |
 | `cat /etc/motd`         | Login banner — shows the time until next maintenance as you log in.     |
 
-!!! failure "Raw PBS tools are admin-restricted"
-    `pbsnodes`, `qmgr`, `qstat -Q`, `qstat -B`, and similar return `command not found` for ordinary users. The QUT wrappers above cover everything you actually need. Don't waste time fighting the bare PBS commands.
+!!! tip "When the wrappers aren't enough"
+    The raw PBS commands are on your `PATH` in a login shell (`/opt/pbs/bin`). Three earn their keep:
+
+    - `qstat -Qf <queue>` — the live per-job and per-user caps behind [House Rules](#house-rules) below
+    - `pbsnodes -a` — per-node `resources_available.*`, including the exact `cpu_id` / `gpu_id` strings for your `select` line
+    - `qstat -B` — server-wide queued / running totals in one line
 
 ### :material-gavel: House Rules { #house-rules }
 
