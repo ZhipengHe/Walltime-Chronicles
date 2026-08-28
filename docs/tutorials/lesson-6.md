@@ -10,12 +10,12 @@
 
 By the end of this 15–20 minute lesson, you'll have:
 
-- [ ] **The request-then-tune loop** — run small, observe, scale (instead of guessing big)
+- [ ] **The measure-then-request loop** — start from your Lesson 3 numbers, request ~2×, tighten
 - [ ] **Cores** — `ncpus=N`, plus the `OMP_NUM_THREADS=$NCPUS` one-liner that bites everyone
 - [ ] **Memory** — `mem=NGB`, and what "OOM kill" actually means about your request
 - [ ] **Walltime** — the 2× rule of thumb, and when to consult the deeper estimation theory
 - [ ] **GPU** — `ngpus=1`, `CUDA_VISIBLE_DEVICES` set automatically; short and practical
-- [ ] **One worked translation** — "12 GB Python script, ~3 hr on my laptop" → a real PBS request
+- [ ] **One worked translation** — your Lesson 3 measurement → a real PBS request
 - [ ] **When to go deeper** — explicit pointers, not duplication, into the scheduler section
 
 ## 🔗 Until this lesson lands

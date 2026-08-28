@@ -156,9 +156,9 @@ This crash course is your launching pad. When you hit specific challenges, you'l
 
 > *"How much computer do I actually need?"*
 
-- The request-then-tune loop
+- The measure-then-request loop
 - Cores, memory, walltime, GPU — what to ask for and why
-- One worked translation: laptop script → PBS request
+- One worked translation: your measured script → PBS request
 
 [→ Lesson 6](lesson-6.md) — *stub with scope contract and pointers*
 

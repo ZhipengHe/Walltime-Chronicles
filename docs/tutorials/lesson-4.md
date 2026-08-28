@@ -11,7 +11,7 @@
 By the end of this 15–20 minute lesson, you'll have:
 
 - [ ] **PBS script anatomy** — shebang, `#PBS` directives, body, and the `cd $PBS_O_WORKDIR` discipline
-- [ ] **A working Hello World script** — about 10 lines: echo, hostname, sleep 30, echo done
+- [ ] **Two working scripts** — a 10-line bash Hello World, then Lesson 3's `hello.py` submitted unattended
 - [ ] **Submitted your first job with `qsub`** — captured the job ID and know what to do with it
 - [ ] **Monitored a job with `qstat -u $USER`** — watched it move Q → R → C
 - [ ] **Read your `.o` (stdout) and `.e` (stderr) files** — figured out where your job's prints actually go

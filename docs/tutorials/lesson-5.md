@@ -16,10 +16,10 @@ By the end of this 15-minute lesson, you'll have:
 - [ ] **The 5 failures you'll actually hit:**
     1. Walltime exceeded (exit code 271 / "job killed: walltime exceeded")
     2. OOM kill (exit code 137 / signal 9)
-    3. Module not loaded (`command: not found`)
+    3. Environment not activated in the job's shell (`command not found`)
     4. Wrong working directory (missing `cd $PBS_O_WORKDIR`)
     5. Job stuck in Q forever (resource shape rejected, or queue just busy)
-- [ ] **The "what now?" decision tree** — when to retry, when to resize, when to ask
+- [ ] **The "what now?" decision tree** — reproduce in `qsub -I` first, then retry, resize, or ask
 
 ## 🔗 Until this lesson lands
 

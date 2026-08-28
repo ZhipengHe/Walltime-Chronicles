@@ -13,7 +13,7 @@ By the end of this 15–20 minute lesson, you'll have:
 - [ ] **The 48-hour-barrier problem** — walltime ceilings and queue limits on Aqua
 - [ ] **Job dependencies with `afterok`** — `qsub -W depend=afterok:$JOB1 stage2.pbs`
 - [ ] **The wrapper-script idiom** — chaining stages at submit time
-- [ ] **Checkpointing intuition** — signal handlers for SIGTERM at walltime-end
+- [ ] **Checkpointing intuition** — `#PBS -c w=N` plus `USR1`/`USR2` traps (see Recipe 8)
 - [ ] **When to checkpoint vs when to chain** — the rule of thumb
 
 ## 🔗 Until this lesson lands
