@@ -1,30 +1,32 @@
-# Lesson 5: Right-sizing Requests
+# Lesson 5: When Jobs Fail
 
 !!! warning "Lesson under construction"
     This lesson hasn't been written yet. The scope below is the planned contract; the linked guides in **Until this lesson lands** cover the underlying material today.
 
 !!! quote "Mission Statement"
-    *"How much computer do I actually need?"* ⚖️
+    *"Reading PBS tea leaves and error messages"* 🔍
 
 ## 📋 What You'll Accomplish (planned)
 
-By the end of this 15–20 minute lesson, you'll have:
+By the end of this 15-minute lesson, you'll have:
 
-- [ ] **The request-then-tune loop** — run small, observe, scale (instead of guessing big)
-- [ ] **Cores** — `ncpus=N`, plus the `OMP_NUM_THREADS=$NCPUS` one-liner that bites everyone
-- [ ] **Memory** — `mem=NGB`, and what "OOM kill" actually means about your request
-- [ ] **Walltime** — the 2× rule of thumb, and when to consult the deeper estimation theory
-- [ ] **GPU** — `ngpus=1`, `CUDA_VISIBLE_DEVICES` set automatically; short and practical
-- [ ] **One worked translation** — "12 GB Python script, ~3 hr on my laptop" → a real PBS request
-- [ ] **When to go deeper** — explicit pointers, not duplication, into the scheduler section
+- [ ] **The `.o` / `.e` file split** — where errors actually appear vs where stdout lands
+- [ ] **PBS queue states** — Q (queued), R (running), H (held), E (exiting), F (finished)
+- [ ] **`tracejob` for post-mortem** — the event log when a job has gone sideways
+- [ ] **The 5 failures you'll actually hit:**
+    1. Walltime exceeded (exit code 271 / "job killed: walltime exceeded")
+    2. OOM kill (exit code 137 / signal 9)
+    3. Module not loaded (`command: not found`)
+    4. Wrong working directory (missing `cd $PBS_O_WORKDIR`)
+    5. Job stuck in Q forever (resource shape rejected, or queue just busy)
+- [ ] **The "what now?" decision tree** — when to retry, when to resize, when to ask
 
 ## 🔗 Until this lesson lands
 
-- **Walltime estimation theory** — the 2× rule, scaling laws, complexity classes: [Guess, Request, Regret: The Art of Walltime](../scheduler/The-Art-of-Walltime.md)
-- **Hardware/queue field guide** — which queue backs which silicon, per-queue ceilings: [Know Your Nodes](../scheduler/Know-Your-Nodes.md)
-- **8 worked PBS resource shapes** — copy-paste recipes for real Aqua scenarios: [Walltime by Recipe](../scheduler/Walltime-by-Recipe.md)
-- **Post-hoc tuning** — see what your job actually used: [PBS Brew Inspector](../pbs-scripts/PBS-Brew-Inspector.md)
+- **Why your queue choice was rejected** — per-queue ceilings and node-type field guide: [Know Your Nodes](../scheduler/Know-Your-Nodes.md)
+- **Right-sizing the next attempt after a walltime kill**: [Guess, Request, Regret: The Art of Walltime](../scheduler/The-Art-of-Walltime.md)
+- **Post-hoc resource introspection** — what your job actually used: [PBS Brew Inspector](../pbs-scripts/PBS-Brew-Inspector.md)
 
 ---
 
-← **[Lesson 4: When Jobs Fail](lesson-4.md)** · **[Lesson 6: Job Arrays](lesson-6.md)** →
+← **[Lesson 4: Your First Batch Job](lesson-4.md)** · **[Lesson 6: Right-sizing Requests](lesson-6.md)** →

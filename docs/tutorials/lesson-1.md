@@ -99,7 +99,7 @@ The hostname in your shell prompt tells you which one you're on. We'll see this 
 
 ## 🛠️ Part 2: Your First Interactive Session (~10 min)
 
-Time to SSH in and try a tiny interactive job. The goal isn't to *do* anything useful — it's to feel the **login → request → compute → exit** loop end-to-end before Lesson 3 starts introducing real PBS scripts. If you can do this round-trip, you're 80% of the way to being productive on Aqua.
+Time to SSH in and try a tiny interactive job. The goal isn't to *do* anything useful — it's to feel the **login → request → compute → exit** loop end-to-end before Lesson 4 starts introducing real PBS scripts. If you can do this round-trip, you're 80% of the way to being productive on Aqua.
 
 ### Step 1: SSH in
 
@@ -136,7 +136,7 @@ qsub -I -l walltime=00:05:00 -l select=1:ncpus=1:mem=1GB
     - `-l walltime=00:05:00` → kill the job after 5 minutes if you haven't exited
     - `-l select=1:ncpus=1:mem=1GB` → give me 1 chunk: 1 CPU core, 1 GB RAM
 
-That's the smallest reasonable shape — just enough to see "yes, I'm somewhere different now." Real interactive sessions will ask for more (covered in Lesson 5).
+That's the smallest reasonable shape — just enough to see "yes, I'm somewhere different now." Real interactive sessions will ask for more (covered in Lesson 3).
 
 After submitting, you'll see something like:
 
@@ -178,7 +178,7 @@ exit
 You're back at the login node prompt (`aquarius02`), and PBS has released your compute node back into the pool. The job is now `F` (finished) in queue state. If you forget to exit, the job dies on its own when walltime expires — but exiting cleanly is polite.
 
 !!! success "You've now done the basic round-trip"
-    Log in → request resources → work on a compute node → exit. This is the loop you'll repeat for every interactive session, forever. Batch jobs (Lesson 3) are the same pattern with a script in the middle and no human waiting around for it.
+    Log in → request resources → work on a compute node → exit. This is the loop you'll repeat for every interactive session, forever. Batch jobs (Lesson 4) are the same pattern with a script in the middle and no human waiting around for it.
 
 ---
 

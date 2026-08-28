@@ -1,28 +1,29 @@
-# Lesson 3: Your First Batch Job
+# Lesson 3: Working Interactively
 
 !!! warning "Lesson under construction"
     This lesson hasn't been written yet. The scope below is the planned contract; the linked guides in **Until this lesson lands** cover the underlying material today.
 
 !!! quote "Mission Statement"
-    *"Hello World, meet High Performance Computing"* 👋
+    *"Interactive is where you develop. Batch is where you run."* 🧪
 
 ## 📋 What You'll Accomplish (planned)
 
 By the end of this 15–20 minute lesson, you'll have:
 
-- [ ] **PBS script anatomy** — shebang, `#PBS` directives, body, and the `cd $PBS_O_WORKDIR` discipline
-- [ ] **A working Hello World script** — about 10 lines: echo, hostname, sleep 30, echo done
-- [ ] **Submitted your first job with `qsub`** — captured the job ID and know what to do with it
-- [ ] **Monitored a job with `qstat -u $USER`** — watched it move Q → R → C
-- [ ] **Read your `.o` (stdout) and `.e` (stderr) files** — figured out where your job's prints actually go
-- [ ] **Killed a stuck job with `qdel <job_id>`** — when something goes wrong
+- [ ] **Sized an interactive request on purpose** — cores, memory and walltime for a development session, and the caps that bound it (CPU: 8 cores / 34 GB / 12 h per job and per user; GPU: 12 cores / 64 GB / one MIG slice / 12 h)
+- [ ] **Known which queue you land on** — `cpu_inter_exec` vs `gpu_inter_exec`, and why an interactive `ngpus=1` is a MIG slice, not a whole card
+- [ ] **Run your Lesson 2 script on a compute node by hand** — `source .venv/bin/activate && python hello.py` from inside `qsub -I`
+- [ ] **Measured it** — `time` for the runtime, `/usr/bin/time -v` for peak memory: the two numbers Lesson 6 will size your batch request from
+- [ ] **Kept the session alive across disconnects** — `tmux` on the login node, so a dropped Wi-Fi doesn't take your job with it
+- [ ] **Known when to stop being interactive** — resources are held for the full walltime whether you use them or not; anything that runs unattended is a batch job (Lesson 4)
 
 ## 🔗 Until this lesson lands
 
-- **Working PBS script templates** that run N experiments sequentially inside one job: [Batch-Cooking PBS Scripts with a Bash Pan](../pbs-scripts/Batch-Cooking-PBS-Scripts-with-a-Bash-Pan.md)
-- **Production-grade PBS shapes** for 8 real Aqua scenarios: [Walltime by Recipe](../scheduler/Walltime-by-Recipe.md)
-- **After your job finishes** — introspect what it actually used: [PBS Brew Inspector](../pbs-scripts/PBS-Brew-Inspector.md)
+- **A ready-made interactive CPU request** — Recipe 1 in [Walltime by Recipe](../scheduler/Walltime-by-Recipe.md#recipe-1-quick-cpu-test-cpu_inter_exec)
+- **Interactive queue caps, the single interactive CPU node, and MIG slices** — [Know Your Nodes](../scheduler/Know-Your-Nodes.md)
+- **Probing with a small interactive job before sizing a big one** — [Guess, Request, Regret: The Art of Walltime](../scheduler/The-Art-of-Walltime.md)
+- **VS Code Tunnel and Jupyter Lab inside an interactive job** — [Surviving without VS Code Remote SSH](../remote-dev/Surviving-without-VS-Code-Remote-SSH.md)
 
 ---
 
-← **[Lesson 2: Environment Setup](lesson-2.md)** · **[Lesson 4: When Jobs Fail](lesson-4.md)** →
+← **[Lesson 2: Tooling Setup](lesson-2.md)** · **[Lesson 4: Your First Batch Job](lesson-4.md)** →

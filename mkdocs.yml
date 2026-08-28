@@ -104,11 +104,12 @@ nav:
     - "Prerequisites Checklist": tutorials/prerequisites.md
     - "Lesson 1: Welcome to Aqua": tutorials/lesson-1.md
     - "Lesson 2: Tooling Setup": tutorials/lesson-2.md
-    - "Lesson 3: Your First Batch Job": tutorials/lesson-3.md
-    - "Lesson 4: When Jobs Fail": tutorials/lesson-4.md
-    - "Lesson 5: Right-sizing Requests": tutorials/lesson-5.md
-    - "Lesson 6: Job Arrays": tutorials/lesson-6.md
-    - "Lesson 7: Long Jobs — Dependencies & Checkpointing": tutorials/lesson-7.md
+    - "Lesson 3: Working Interactively": tutorials/lesson-3.md
+    - "Lesson 4: Your First Batch Job": tutorials/lesson-4.md
+    - "Lesson 5: When Jobs Fail": tutorials/lesson-5.md
+    - "Lesson 6: Right-sizing Requests": tutorials/lesson-6.md
+    - "Lesson 7: Job Arrays": tutorials/lesson-7.md
+    - "Lesson 8: Long Jobs — Dependencies & Checkpointing": tutorials/lesson-8.md
 
   - "Cmd+Opt+Remote":
     - remote-dev/index.md

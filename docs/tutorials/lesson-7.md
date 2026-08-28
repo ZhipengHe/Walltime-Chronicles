@@ -1,26 +1,26 @@
-# Lesson 7: Long Jobs — Dependencies & Checkpointing
+# Lesson 7: Job Arrays
 
 !!! warning "Lesson under construction"
     This lesson hasn't been written yet. The scope below is the planned contract; the linked guides in **Until this lesson lands** cover the underlying material today.
 
 !!! quote "Mission Statement"
-    *"When one walltime ceiling isn't enough"* ⏰
+    *"When the same script runs 100 times"* 🔁
 
 ## 📋 What You'll Accomplish (planned)
 
-By the end of this 15–20 minute lesson, you'll have:
+By the end of this 15-minute lesson, you'll have:
 
-- [ ] **The 48-hour-barrier problem** — walltime ceilings and queue limits on Aqua
-- [ ] **Job dependencies with `afterok`** — `qsub -W depend=afterok:$JOB1 stage2.pbs`
-- [ ] **The wrapper-script idiom** — chaining stages at submit time
-- [ ] **Checkpointing intuition** — signal handlers for SIGTERM at walltime-end
-- [ ] **When to checkpoint vs when to chain** — the rule of thumb
+- [ ] **When to use arrays** — parameter sweeps, file batch processing, Monte Carlo runs
+- [ ] **Array submission** — `qsub -J 1-N script.pbs`
+- [ ] **`PBS_ARRAY_INDEX`** — how to map it to inputs (table-lookup pattern, list-index pattern)
+- [ ] **Sub-job monitoring** — `qstat -t <array_job_id>` without flooding the survey view
+- [ ] **Output file naming** — the bracketed-index `.o` files
+- [ ] **Recovering from partial failure** — re-run only the indices that failed
 
 ## 🔗 Until this lesson lands
 
-- **Recipe 8 (long pipeline with chained jobs)** — production-grade `afterok` wrapper pattern with a full PBS script: [Walltime by Recipe](../scheduler/Walltime-by-Recipe.md)
-- **Walltime estimation for long jobs**: [Guess, Request, Regret: The Art of Walltime](../scheduler/The-Art-of-Walltime.md)
+- **Alternative pattern: sequential single-job runner** when arrays are overkill: [Batch-Cooking PBS Scripts with a Bash Pan](../pbs-scripts/Batch-Cooking-PBS-Scripts-with-a-Bash-Pan.md)
 
 ---
 
-← **[Lesson 6: Job Arrays](lesson-6.md)** · You've reached the end of the Crash Course! Back to the **[course outline](index.md)** for next steps.
+← **[Lesson 6: Right-sizing Requests](lesson-6.md)** · **[Lesson 8: Long Jobs](lesson-8.md)** →

@@ -2,13 +2,13 @@
 
 Welcome to the Crash Course Café! ☕ Pull up a chair and let's get you productive on QUT Aqua without the usual learning curve headaches.
 
-!!! info "Course is mid-restructure (2026-06-23)"
-    The Crash Course is migrating from a topic-driven 0–7 outline to a **workflow-driven 1–7 outline**, where each lesson ends with a tangible deliverable. The new outline is below.
+!!! info "Course status (2026-08-28)"
+    The Crash Course follows a **workflow-driven 8-lesson outline**, where each lesson ends with a tangible deliverable and one script is carried from Lesson 2 through to Lesson 8. Lesson 3 (Working Interactively) was added on 2026-08-28: the develop-and-measure step that sits between having a Python environment and submitting your first batch job.
 
-    - **Lessons 1 and 2** show **pre-rewrite content** — accurate, but the upcoming rewrites will reshape the structure (Lesson 1 absorbs a hands-on SSH/interactive-job at the end; Lesson 2 focuses purely on tooling install).
-    - **Lessons 3–7** are **stubs** with scope contracts and pointers to existing deeper guides.
+    - **Lessons 1 and 2** are written.
+    - **Lessons 3–8** are **stubs** with scope contracts and pointers to existing deeper guides. Lessons land as they're written.
 
-    Per-lesson rewrites land as they're written.
+    **Under consideration:** a lesson on working with AI coding agents (Claude Code, Codex) on Aqua — where to run the agent, how it reaches the cluster, and how to write its rules. Its place in the course is not decided yet.
 
 ---
 
@@ -43,6 +43,7 @@ Generic PBS tutorials are everywhere. This course is tailored specifically to QU
 By the end of this crash course, you'll be able to:
 
 - **Connect to Aqua and run an interactive job** without breaking anything
+- **Develop and measure on a compute node interactively** — before you submit anything unattended
 - **Submit your first PBS batch job** — and find its output
 - **Diagnose common failures** before panicking
 - **Right-size resource requests** — cores, memory, walltime, GPU
@@ -65,7 +66,7 @@ By the end of this crash course, you'll be able to:
 
 #### Time Commitment
 
-- **Total time**: ~2 hours across **7 focused lessons**
+- **Total time**: ~2 hours 15 minutes across **8 focused lessons**
 - **Lesson format**: 15–20 minutes each
 - **Hands-on from Lesson 1**: First SSH connection and an interactive job within the opening lesson
 - **Follow-up learning**: Each lesson connects to detailed guides for when you need more
@@ -109,7 +110,7 @@ This crash course is your launching pad. When you hit specific challenges, you'l
 - First SSH connection and a 5-minute interactive job
 - Where to put your files (home / scratch / work / TMPDIR)
 
-[→ Lesson 1](lesson-1.md) — *pre-rewrite content (was Lesson 0: HPC Fundamentals)*
+[→ Lesson 1](lesson-1.md)
 
 ### Lesson 2: Tooling Setup (15 min)
 
@@ -119,9 +120,19 @@ This crash course is your launching pad. When you hit specific challenges, you'l
 - Install via upstream installers — no QUT module needed (~5 to ~30 seconds per tool)
 - Create a test environment, verify it works
 
-[→ Lesson 2](lesson-2.md) — *pre-rewrite content (was Lesson 1: Environment Setup & First Interactive Session)*
+[→ Lesson 2](lesson-2.md)
 
-### Lesson 3: Your First Batch Job (15–20 min)
+### Lesson 3: Working Interactively (15–20 min)
+
+> *"Interactive is where you develop. Batch is where you run."*
+
+- Size an interactive request — CPU vs GPU interactive queues and their caps
+- Run your Lesson 2 script on a compute node by hand, and measure it
+- `tmux` for surviving disconnects; when a session should become a batch job
+
+[→ Lesson 3](lesson-3.md) — *stub with scope contract and pointers*
+
+### Lesson 4: Your First Batch Job (15–20 min)
 
 > *"Hello World, meet High Performance Computing"*
 
@@ -129,9 +140,9 @@ This crash course is your launching pad. When you hit specific challenges, you'l
 - Submit with `qsub`, monitor with `qstat -u $USER`
 - Read `.o` / `.e` output, kill with `qdel`
 
-[→ Lesson 3](lesson-3.md) — *stub with scope contract and pointers*
+[→ Lesson 4](lesson-4.md) — *stub with scope contract and pointers*
 
-### Lesson 4: When Jobs Fail (15 min)
+### Lesson 5: When Jobs Fail (15 min)
 
 > *"Reading PBS tea leaves and error messages"*
 
@@ -139,9 +150,9 @@ This crash course is your launching pad. When you hit specific challenges, you'l
 - The 5 failures you'll actually hit
 - The "what now?" decision tree
 
-[→ Lesson 4](lesson-4.md) — *stub with scope contract and pointers*
+[→ Lesson 5](lesson-5.md) — *stub with scope contract and pointers*
 
-### Lesson 5: Right-sizing Requests (15–20 min)
+### Lesson 6: Right-sizing Requests (15–20 min)
 
 > *"How much computer do I actually need?"*
 
@@ -149,9 +160,9 @@ This crash course is your launching pad. When you hit specific challenges, you'l
 - Cores, memory, walltime, GPU — what to ask for and why
 - One worked translation: laptop script → PBS request
 
-[→ Lesson 5](lesson-5.md) — *stub with scope contract and pointers*
+[→ Lesson 6](lesson-6.md) — *stub with scope contract and pointers*
 
-### Lesson 6: Job Arrays (15 min)
+### Lesson 7: Job Arrays (15 min)
 
 > *"When the same script runs 100 times"*
 
@@ -159,9 +170,9 @@ This crash course is your launching pad. When you hit specific challenges, you'l
 - Sub-job monitoring with `qstat -t`
 - Recovering from partial failure
 
-[→ Lesson 6](lesson-6.md) — *stub with scope contract and pointers*
+[→ Lesson 7](lesson-7.md) — *stub with scope contract and pointers*
 
-### Lesson 7: Long Jobs — Dependencies & Checkpointing (15–20 min)
+### Lesson 8: Long Jobs — Dependencies & Checkpointing (15–20 min)
 
 > *"When one walltime ceiling isn't enough"*
 
@@ -169,7 +180,7 @@ This crash course is your launching pad. When you hit specific challenges, you'l
 - Job dependencies with `afterok` (wrapper-script idiom)
 - Checkpointing intuition
 
-[→ Lesson 7](lesson-7.md) — *stub with scope contract and pointers*
+[→ Lesson 8](lesson-8.md) — *stub with scope contract and pointers*
 
 ---
 
