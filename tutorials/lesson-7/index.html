@@ -12,13 +12,13 @@
         <meta name="author" content="Zhipeng He">
       
       
-        <link rel="canonical" href="https://zhipenghe.me/walltime-chronicles/tutorials/lesson-7/">
+        <link rel="canonical" href="https://zhipenghe.me/Walltime-Chronicles/tutorials/lesson-7/">
       
       
         <link rel="prev" href="../lesson-6/">
       
       
-        <link rel="next" href="../../remote-dev/">
+        <link rel="next" href="../lesson-8/">
       
       
         
@@ -29,7 +29,7 @@
     
     
       
-        <title>Lesson 7: Long Jobs — Dependencies & Checkpointing - Walltime Chronicles</title>
+        <title>Lesson 7: Job Arrays - Walltime Chronicles</title>
       
     
     
@@ -62,17 +62,17 @@
     
   
 <meta property="og:type" content="website" />
-<meta property="og:title" content="Lesson 7: Long Jobs — Dependencies & Checkpointing - Walltime Chronicles" />
+<meta property="og:title" content="Lesson 7: Job Arrays - Walltime Chronicles" />
 <meta property="og:description" content="My personal survival log of mysterious errors, queueing oddities, and PBS quirks encountered on QUT Aqua" />
-<meta property="og:image" content="https://zhipenghe.me/walltime-chronicles/assets/images/social/tutorials/lesson-7.png" />
+<meta property="og:image" content="https://zhipenghe.me/Walltime-Chronicles/assets/images/social/tutorials/lesson-7.png" />
 <meta property="og:image:type" content="image/png" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
-<meta property="og:url" content="https://zhipenghe.me/walltime-chronicles/tutorials/lesson-7/" />
+<meta property="og:url" content="https://zhipenghe.me/Walltime-Chronicles/tutorials/lesson-7/" />
 <meta property="twitter:card" content="summary_large_image" />
-<meta property="twitter:title" content="Lesson 7: Long Jobs — Dependencies & Checkpointing - Walltime Chronicles" />
+<meta property="twitter:title" content="Lesson 7: Job Arrays - Walltime Chronicles" />
 <meta property="twitter:description" content="My personal survival log of mysterious errors, queueing oddities, and PBS quirks encountered on QUT Aqua" />
-<meta property="twitter:image" content="https://zhipenghe.me/walltime-chronicles/assets/images/social/tutorials/lesson-7.png" />
+<meta property="twitter:image" content="https://zhipenghe.me/Walltime-Chronicles/assets/images/social/tutorials/lesson-7.png" />
 </head>
   
   
@@ -85,7 +85,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#lesson-7-long-jobs-dependencies-checkpointing" class="md-skip">
+        <a href="#lesson-7-job-arrays" class="md-skip">
           Skip to content
         </a>
       
@@ -121,7 +121,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Lesson 7: Long Jobs — Dependencies & Checkpointing
+              Lesson 7: Job Arrays
             
           </span>
         </div>
@@ -299,6 +299,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -446,7 +450,7 @@
   <span class="md-ellipsis">
     
   
-    Lesson 3: Your First Batch Job
+    Lesson 3: Working Interactively
   
 
     
@@ -474,7 +478,7 @@
   <span class="md-ellipsis">
     
   
-    Lesson 4: When Jobs Fail
+    Lesson 4: Your First Batch Job
   
 
     
@@ -502,7 +506,7 @@
   <span class="md-ellipsis">
     
   
-    Lesson 5: Right-sizing Requests
+    Lesson 5: When Jobs Fail
   
 
     
@@ -530,7 +534,7 @@
   <span class="md-ellipsis">
     
   
-    Lesson 6: Job Arrays
+    Lesson 6: Right-sizing Requests
   
 
     
@@ -567,7 +571,7 @@
   <span class="md-ellipsis">
     
   
-    Lesson 7: Long Jobs — Dependencies & Checkpointing
+    Lesson 7: Job Arrays
   
 
     
@@ -585,7 +589,7 @@
   <span class="md-ellipsis">
     
   
-    Lesson 7: Long Jobs — Dependencies & Checkpointing
+    Lesson 7: Job Arrays
   
 
     
@@ -636,6 +640,62 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lesson-8/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 8: Long Jobs — Dependencies & Checkpointing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lesson-9/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 9: Working with an AI Agent on Aqua
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -1287,31 +1347,31 @@
   
 
 
-<h1 id="lesson-7-long-jobs-dependencies-checkpointing">Lesson 7: Long Jobs — Dependencies &amp; Checkpointing</h1>
+<h1 id="lesson-7-job-arrays">Lesson 7: Job Arrays</h1>
 <div class="admonition warning">
 <p class="admonition-title">Lesson under construction</p>
 <p>This lesson hasn't been written yet. The scope below is the planned contract; the linked guides in <strong>Until this lesson lands</strong> cover the underlying material today.</p>
 </div>
 <div class="admonition quote">
 <p class="admonition-title">Mission Statement</p>
-<p><em>"When one walltime ceiling isn't enough"</em> ⏰</p>
+<p><em>"When the same script runs 100 times"</em> 🔁</p>
 </div>
 <h2 id="what-youll-accomplish-planned">📋 What You'll Accomplish (planned)</h2>
-<p>By the end of this 15–20 minute lesson, you'll have:</p>
+<p>By the end of this 15-minute lesson, you'll have:</p>
 <ul class="task-list">
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>The 48-hour-barrier problem</strong> — walltime ceilings and queue limits on Aqua</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>Job dependencies with <code>afterok</code></strong> — <code>qsub -W depend=afterok:$JOB1 stage2.pbs</code></li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>The wrapper-script idiom</strong> — chaining stages at submit time</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>Checkpointing intuition</strong> — signal handlers for SIGTERM at walltime-end</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>When to checkpoint vs when to chain</strong> — the rule of thumb</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>When to use arrays</strong> — parameter sweeps, file batch processing, Monte Carlo runs</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>Array submission</strong> — <code>qsub -J 1-N script.pbs</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong><code>PBS_ARRAY_INDEX</code></strong> — how to map it to inputs (table-lookup pattern, list-index pattern)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>Sub-job monitoring</strong> — <code>qstat -t &lt;array_job_id&gt;</code> without flooding the survey view</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>Output file naming</strong> — the bracketed-index <code>.o</code> files</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>Recovering from partial failure</strong> — re-run only the indices that failed</li>
 </ul>
 <h2 id="until-this-lesson-lands">🔗 Until this lesson lands</h2>
 <ul>
-<li><strong>Recipe 8 (long pipeline with chained jobs)</strong> — production-grade <code>afterok</code> wrapper pattern with a full PBS script: <a href="../../scheduler/Walltime-by-Recipe/">Walltime by Recipe</a></li>
-<li><strong>Walltime estimation for long jobs</strong>: <a href="../../scheduler/The-Art-of-Walltime/">Guess, Request, Regret: The Art of Walltime</a></li>
+<li><strong>Alternative pattern: sequential single-job runner</strong> when arrays are overkill: <a href="../../pbs-scripts/Batch-Cooking-PBS-Scripts-with-a-Bash-Pan/">Batch-Cooking PBS Scripts with a Bash Pan</a></li>
 </ul>
 <hr />
-<p>← <strong><a href="../lesson-6/">Lesson 6: Job Arrays</a></strong> · You've reached the end of the Crash Course! Back to the <strong><a href="../">course outline</a></strong> for next steps.</p>
+<p>← <strong><a href="../lesson-6/">Lesson 6: Right-sizing Requests</a></strong> · <strong><a href="../lesson-8/">Lesson 8: Long Jobs</a></strong> →</p>
 
 
 
@@ -1334,7 +1394,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="June 23, 2026 20:16:37 AEST">June 23, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="August 28, 2026 13:38:43 AEST">August 28, 2026</span>
   </span>
 
     

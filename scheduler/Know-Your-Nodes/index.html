@@ -12,7 +12,7 @@
         <meta name="author" content="Zhipeng He">
       
       
-        <link rel="canonical" href="https://zhipenghe.me/walltime-chronicles/scheduler/Know-Your-Nodes/">
+        <link rel="canonical" href="https://zhipenghe.me/Walltime-Chronicles/scheduler/Know-Your-Nodes/">
       
       
         <link rel="prev" href="../">
@@ -64,15 +64,15 @@
 <meta property="og:type" content="website" />
 <meta property="og:title" content="Know Your Nodes - Walltime Chronicles" />
 <meta property="og:description" content="My personal survival log of mysterious errors, queueing oddities, and PBS quirks encountered on QUT Aqua" />
-<meta property="og:image" content="https://zhipenghe.me/walltime-chronicles/assets/images/social/scheduler/Know-Your-Nodes.png" />
+<meta property="og:image" content="https://zhipenghe.me/Walltime-Chronicles/assets/images/social/scheduler/Know-Your-Nodes.png" />
 <meta property="og:image:type" content="image/png" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
-<meta property="og:url" content="https://zhipenghe.me/walltime-chronicles/scheduler/Know-Your-Nodes/" />
+<meta property="og:url" content="https://zhipenghe.me/Walltime-Chronicles/scheduler/Know-Your-Nodes/" />
 <meta property="twitter:card" content="summary_large_image" />
 <meta property="twitter:title" content="Know Your Nodes - Walltime Chronicles" />
 <meta property="twitter:description" content="My personal survival log of mysterious errors, queueing oddities, and PBS quirks encountered on QUT Aqua" />
-<meta property="twitter:image" content="https://zhipenghe.me/walltime-chronicles/assets/images/social/scheduler/Know-Your-Nodes.png" />
+<meta property="twitter:image" content="https://zhipenghe.me/Walltime-Chronicles/assets/images/social/scheduler/Know-Your-Nodes.png" />
 </head>
   
   
@@ -297,6 +297,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -446,7 +450,7 @@
   <span class="md-ellipsis">
     
   
-    Lesson 3: Your First Batch Job
+    Lesson 3: Working Interactively
   
 
     
@@ -474,7 +478,7 @@
   <span class="md-ellipsis">
     
   
-    Lesson 4: When Jobs Fail
+    Lesson 4: Your First Batch Job
   
 
     
@@ -502,7 +506,7 @@
   <span class="md-ellipsis">
     
   
-    Lesson 5: Right-sizing Requests
+    Lesson 5: When Jobs Fail
   
 
     
@@ -530,7 +534,7 @@
   <span class="md-ellipsis">
     
   
-    Lesson 6: Job Arrays
+    Lesson 6: Right-sizing Requests
   
 
     
@@ -558,7 +562,63 @@
   <span class="md-ellipsis">
     
   
-    Lesson 7: Long Jobs — Dependencies & Checkpointing
+    Lesson 7: Job Arrays
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/lesson-8/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 8: Long Jobs — Dependencies & Checkpointing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/lesson-9/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 9: Working with an AI Agent on Aqua
   
 
     
@@ -2474,7 +2534,7 @@ All chunks land on the same CPU family. Use when you didn't pin <code>cpu_id</co
 </span></code></pre></div>
 <p>Job runs only after <code>5551111.aqua</code> finishes with exit code 0. Other useful types: <code>afterany</code> (success or failure), <code>afternotok</code> (failure only), <code>before</code> (the inverse — block another job from starting).</p>
 <h3 id="checking-the-kitchen-discovery"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0 8a5 5 0 0 1-5-5 5 5 0 0 1 5-5 5 5 0 0 1 5 5 5 5 0 0 1-5 5m0-12.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5"/></svg></span> Checking the Kitchen (discovery)</h3>
-<p>Aqua wraps the raw PBS admin tools in user-friendly scripts. They live in <code>/usr/local/bin/</code> (symlinks to <code>/pkg/hpc/scripts/</code>).</p>
+<p>Aqua wraps the raw PBS tools in user-friendly scripts. They live in <code>/usr/local/bin/</code> (symlinks to <code>/pkg/hpc/scripts/</code>). Start here; drop to the raw commands only for a number the wrappers don't print.</p>
 <table>
 <thead>
 <tr>
@@ -2513,9 +2573,14 @@ All chunks land on the same CPU family. Use when you didn't pin <code>cpu_id</co
 </tr>
 </tbody>
 </table>
-<div class="admonition failure">
-<p class="admonition-title">Raw PBS tools are admin-restricted</p>
-<p><code>pbsnodes</code>, <code>qmgr</code>, <code>qstat -Q</code>, <code>qstat -B</code>, and similar return <code>command not found</code> for ordinary users. The QUT wrappers above cover everything you actually need. Don't waste time fighting the bare PBS commands.</p>
+<div class="admonition tip">
+<p class="admonition-title">When the wrappers aren't enough</p>
+<p>The raw PBS commands are on your <code>PATH</code> in a login shell (<code>/opt/pbs/bin</code>). Three earn their keep:</p>
+<ul>
+<li><code>qstat -Qf &lt;queue&gt;</code> — the live per-job and per-user caps behind <a href="#house-rules">House Rules</a> below</li>
+<li><code>pbsnodes -a</code> — per-node <code>resources_available.*</code>, including the exact <code>cpu_id</code> / <code>gpu_id</code> strings for your <code>select</code> line</li>
+<li><code>qstat -B</code> — server-wide queued / running totals in one line</li>
+</ul>
 </div>
 <h3 id="house-rules"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m2.3 20.28 9.6-9.6-1.4-1.42-.72.71a.996.996 0 0 1-1.41 0l-.71-.71a.996.996 0 0 1 0-1.41l5.66-5.66a.996.996 0 0 1 1.41 0l.71.71c.39.39.39 1.02 0 1.41l-.71.69 1.42 1.43a.996.996 0 0 1 1.41 0c.39.39.39 1.03 0 1.42l1.41 1.41.71-.71c.39-.39 1.03-.39 1.42 0l.7.71c.39.39.39 1.03 0 1.42l-5.65 5.65c-.39.39-1.03.39-1.42 0l-.7-.7a.99.99 0 0 1 0-1.42l.7-.71-1.41-1.41-9.61 9.61a.996.996 0 0 1-1.41 0c-.39-.39-.39-1.03 0-1.42M20 19a2 2 0 0 1 2 2v1H12v-1a2 2 0 0 1 2-2z"/></svg></span> House Rules</h3>
 <div class="tabbed-set tabbed-alternate" data-tabs="3:3"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><input id="__tabbed_3_3" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Per-job ceilings</label><label for="__tabbed_3_2">Per-queue ceilings</label><label for="__tabbed_3_3">Per-user (cluster-wide)</label></div>
@@ -2782,7 +2847,7 @@ All chunks land on the same CPU family. Use when you didn't pin <code>cpu_id</co
 <li>In-job temporary files → <code>$TMPDIR</code> (already Weka, already cleaned on exit).</li>
 </ul>
 </details>
-<p>For the higher-level filesystem orientation, see L1's <a href="../../tutorials/lesson-1/">QUT Aqua's File Systems section</a>. This page focuses on the <em>node-level</em> picture.</p>
+<p>For the higher-level filesystem orientation, see Lesson 1's <a href="../../tutorials/lesson-1/#where-your-files-live">Where your files live</a> section. This page focuses on the <em>node-level</em> picture.</p>
 <h3 id="per-node-quirks-worth-knowing"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 12h-4v-2h4m0 6h-4v-2h4m6-6h-2.81a6 6 0 0 0-1.82-1.96L17 4.41 15.59 3l-2.17 2.17a6 6 0 0 0-2.83 0L8.41 3 7 4.41l1.62 1.63C7.88 6.55 7.26 7.22 6.81 8H4v2h2.09c-.05.33-.09.66-.09 1v1H4v2h2v1c0 .34.04.67.09 1H4v2h2.81c1.04 1.79 2.97 3 5.19 3s4.15-1.21 5.19-3H20v-2h-2.09c.05-.33.09-.66.09-1v-1h2v-2h-2v-1c0-.34-.04-.67-.09-1H20z"/></svg></span> Per-node quirks worth knowing</h3>
 <ul>
 <li><mark><strong><code>cpu1n024</code> and <code>cpu1n031</code> show 0% usage</strong></mark> — both flagged <code>old image</code> by the operators via <code>pbsnodestatus</code>. Online but excluded from job dispatch until re-imaged.</li>
@@ -2802,7 +2867,7 @@ All chunks land on the same CPU family. Use when you didn't pin <code>cpu_id</co
 </ul>
 <p>For the broader picture:</p>
 <ul>
-<li><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m19 2-5 4.5v11l5-4.5zM6.5 5C4.55 5 2.45 5.4 1 6.5v14.66c0 .25.25.5.5.5.1 0 .15-.07.25-.07 1.35-.65 3.3-1.09 4.75-1.09 1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.31 4.75 1.06.1.05.15.03.25.03.25 0 .5-.25.5-.5V6.5c-.6-.45-1.25-.75-2-1V19c-1.1-.35-2.3-.5-3.5-.5-1.7 0-4.15.65-5.5 1.5V6.5C10.55 5.4 8.45 5 6.5 5"/></svg></span> <a href="../../tutorials/lesson-1/">Lesson 1: HPC Fundamentals</a> — clusters, nodes, cores, file systems at a beginner level.</li>
+<li><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m19 2-5 4.5v11l5-4.5zM6.5 5C4.55 5 2.45 5.4 1 6.5v14.66c0 .25.25.5.5.5.1 0 .15-.07.25-.07 1.35-.65 3.3-1.09 4.75-1.09 1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.31 4.75 1.06.1.05.15.03.25.03.25 0 .5-.25.5-.5V6.5c-.6-.45-1.25-.75-2-1V19c-1.1-.35-2.3-.5-3.5-.5-1.7 0-4.15.65-5.5 1.5V6.5C10.55 5.4 8.45 5 6.5 5"/></svg></span> <a href="../../tutorials/lesson-1/">Lesson 1: Welcome to Aqua</a> — the cluster mental model, where files live, login vs compute nodes, and your first interactive job.</li>
 <li><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 20a8 8 0 0 0 8-8 8 8 0 0 0-8-8 8 8 0 0 0-8 8 8 8 0 0 0 8 8m0-18a10 10 0 0 1 10 10 10 10 0 0 1-10 10C6.47 22 2 17.5 2 12A10 10 0 0 1 12 2m.5 5v5.25l4.5 2.67-.75 1.23L11 13V7z"/></svg></span> <a href="../The-Art-of-Walltime/">Guess, Request, Regret: The Art of Walltime</a> — how to size walltime so you don't overshoot or undershoot.</li>
 <li><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12.5 1.5c-1.77 0-3.33 1.17-3.83 2.87C8.14 4.13 7.58 4 7 4a4 4 0 0 0-4 4 4.01 4.01 0 0 0 3 3.87V19h13v-7.13c1.76-.46 3-2.05 3-3.87a4 4 0 0 0-4-4c-.58 0-1.14.13-1.67.37-.5-1.7-2.06-2.87-3.83-2.87m-.5 9h1v7h-1zm-3 2h1v5H9zm6 0h1v5h-1zM6 20v1a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-1z"/></svg></span> <a href="../Walltime-by-Recipe/">Walltime by Recipe</a> — eight copy-paste PBS recipes (queue caps and hardware shapes from this page in action).</li>
 <li><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10.59 13.41c.41.39.41 1.03 0 1.42-.39.39-1.03.39-1.42 0a5.003 5.003 0 0 1 0-7.07l3.54-3.54a5.003 5.003 0 0 1 7.07 0 5.003 5.003 0 0 1 0 7.07l-1.49 1.49c.01-.82-.12-1.64-.4-2.42l.47-.48a2.98 2.98 0 0 0 0-4.24 2.98 2.98 0 0 0-4.24 0l-3.53 3.53a2.98 2.98 0 0 0 0 4.24m2.82-4.24c.39-.39 1.03-.39 1.42 0a5.003 5.003 0 0 1 0 7.07l-3.54 3.54a5.003 5.003 0 0 1-7.07 0 5.003 5.003 0 0 1 0-7.07l1.49-1.49c-.01.82.12 1.64.4 2.43l-.47.47a2.98 2.98 0 0 0 0 4.24 2.98 2.98 0 0 0 4.24 0l3.53-3.53a2.98 2.98 0 0 0 0-4.24.973.973 0 0 1 0-1.42"/></svg></span> <a href="https://docs.eres.qut.edu.au/about-aqua">About Aqua</a><sup id="fnref3:1"><a class="footnote-ref" href="#fn:1">1</a></sup> — QUT eResearch's authoritative cluster description (vendor specs, pricing, maintenance schedule).</li>
@@ -2838,7 +2903,7 @@ All chunks land on the same CPU family. Use when you didn't pin <code>cpu_id</co
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="June 23, 2026 20:16:37 AEST">June 23, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="August 28, 2026 14:32:15 AEST">August 28, 2026</span>
   </span>
 
     

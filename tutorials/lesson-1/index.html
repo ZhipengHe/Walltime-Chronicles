@@ -12,7 +12,7 @@
         <meta name="author" content="Zhipeng He">
       
       
-        <link rel="canonical" href="https://zhipenghe.me/walltime-chronicles/tutorials/lesson-1/">
+        <link rel="canonical" href="https://zhipenghe.me/Walltime-Chronicles/tutorials/lesson-1/">
       
       
         <link rel="prev" href="../prerequisites/">
@@ -64,15 +64,15 @@
 <meta property="og:type" content="website" />
 <meta property="og:title" content="Lesson 1: Welcome to Aqua - Walltime Chronicles" />
 <meta property="og:description" content="My personal survival log of mysterious errors, queueing oddities, and PBS quirks encountered on QUT Aqua" />
-<meta property="og:image" content="https://zhipenghe.me/walltime-chronicles/assets/images/social/tutorials/lesson-1.png" />
+<meta property="og:image" content="https://zhipenghe.me/Walltime-Chronicles/assets/images/social/tutorials/lesson-1.png" />
 <meta property="og:image:type" content="image/png" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
-<meta property="og:url" content="https://zhipenghe.me/walltime-chronicles/tutorials/lesson-1/" />
+<meta property="og:url" content="https://zhipenghe.me/Walltime-Chronicles/tutorials/lesson-1/" />
 <meta property="twitter:card" content="summary_large_image" />
 <meta property="twitter:title" content="Lesson 1: Welcome to Aqua - Walltime Chronicles" />
 <meta property="twitter:description" content="My personal survival log of mysterious errors, queueing oddities, and PBS quirks encountered on QUT Aqua" />
-<meta property="twitter:image" content="https://zhipenghe.me/walltime-chronicles/assets/images/social/tutorials/lesson-1.png" />
+<meta property="twitter:image" content="https://zhipenghe.me/Walltime-Chronicles/assets/images/social/tutorials/lesson-1.png" />
 </head>
   
   
@@ -281,6 +281,10 @@
       
         
           
+        
+      
+        
+      
         
       
         
@@ -626,7 +630,7 @@
   <span class="md-ellipsis">
     
   
-    Lesson 3: Your First Batch Job
+    Lesson 3: Working Interactively
   
 
     
@@ -654,7 +658,7 @@
   <span class="md-ellipsis">
     
   
-    Lesson 4: When Jobs Fail
+    Lesson 4: Your First Batch Job
   
 
     
@@ -682,7 +686,7 @@
   <span class="md-ellipsis">
     
   
-    Lesson 5: Right-sizing Requests
+    Lesson 5: When Jobs Fail
   
 
     
@@ -710,7 +714,7 @@
   <span class="md-ellipsis">
     
   
-    Lesson 6: Job Arrays
+    Lesson 6: Right-sizing Requests
   
 
     
@@ -738,7 +742,63 @@
   <span class="md-ellipsis">
     
   
-    Lesson 7: Long Jobs — Dependencies & Checkpointing
+    Lesson 7: Job Arrays
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lesson-8/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 8: Long Jobs — Dependencies & Checkpointing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lesson-9/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 9: Working with an AI Agent on Aqua
   
 
     
@@ -1641,7 +1701,7 @@
 <p>The hostname in your shell prompt tells you which one you're on. We'll see this in action below.</p>
 <hr />
 <h2 id="part-2-your-first-interactive-session-10-min">🛠️ Part 2: Your First Interactive Session (~10 min)</h2>
-<p>Time to SSH in and try a tiny interactive job. The goal isn't to <em>do</em> anything useful — it's to feel the <strong>login → request → compute → exit</strong> loop end-to-end before Lesson 3 starts introducing real PBS scripts. If you can do this round-trip, you're 80% of the way to being productive on Aqua.</p>
+<p>Time to SSH in and try a tiny interactive job. The goal isn't to <em>do</em> anything useful — it's to feel the <strong>login → request → compute → exit</strong> loop end-to-end before Lesson 4 starts introducing real PBS scripts. If you can do this round-trip, you're 80% of the way to being productive on Aqua.</p>
 <h3 id="step-1-ssh-in">Step 1: SSH in</h3>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>ssh<span class="w"> </span>&lt;your-username&gt;@aqua.qut.edu.au
 </span></code></pre></div>
@@ -1671,7 +1731,7 @@
 <li><code>-l select=1:ncpus=1:mem=1GB</code> → give me 1 chunk: 1 CPU core, 1 GB RAM</li>
 </ul>
 </div>
-<p>That's the smallest reasonable shape — just enough to see "yes, I'm somewhere different now." Real interactive sessions will ask for more (covered in Lesson 5).</p>
+<p>That's the smallest reasonable shape — just enough to see "yes, I'm somewhere different now." Real interactive sessions will ask for more (covered in Lesson 3).</p>
 <p>After submitting, you'll see something like:</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>qsub: waiting for job 12345678.aqua-pbs to start
 </span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>qsub: job 12345678.aqua-pbs ready
@@ -1701,7 +1761,7 @@
 <p>You're back at the login node prompt (<code>aquarius02</code>), and PBS has released your compute node back into the pool. The job is now <code>F</code> (finished) in queue state. If you forget to exit, the job dies on its own when walltime expires — but exiting cleanly is polite.</p>
 <div class="admonition success">
 <p class="admonition-title">You've now done the basic round-trip</p>
-<p>Log in → request resources → work on a compute node → exit. This is the loop you'll repeat for every interactive session, forever. Batch jobs (Lesson 3) are the same pattern with a script in the middle and no human waiting around for it.</p>
+<p>Log in → request resources → work on a compute node → exit. This is the loop you'll repeat for every interactive session, forever. Batch jobs (Lesson 4) are the same pattern with a script in the middle and no human waiting around for it.</p>
 </div>
 <hr />
 <h2 id="key-takeaways">🎯 Key Takeaways</h2>
@@ -1753,7 +1813,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="June 24, 2026 01:18:07 AEST">June 24, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="August 28, 2026 13:38:43 AEST">August 28, 2026</span>
   </span>
 
     

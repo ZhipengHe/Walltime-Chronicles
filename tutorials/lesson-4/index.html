@@ -12,7 +12,7 @@
         <meta name="author" content="Zhipeng He">
       
       
-        <link rel="canonical" href="https://zhipenghe.me/walltime-chronicles/tutorials/lesson-4/">
+        <link rel="canonical" href="https://zhipenghe.me/Walltime-Chronicles/tutorials/lesson-4/">
       
       
         <link rel="prev" href="../lesson-3/">
@@ -29,7 +29,7 @@
     
     
       
-        <title>Lesson 4: When Jobs Fail - Walltime Chronicles</title>
+        <title>Lesson 4: Your First Batch Job - Walltime Chronicles</title>
       
     
     
@@ -62,17 +62,17 @@
     
   
 <meta property="og:type" content="website" />
-<meta property="og:title" content="Lesson 4: When Jobs Fail - Walltime Chronicles" />
+<meta property="og:title" content="Lesson 4: Your First Batch Job - Walltime Chronicles" />
 <meta property="og:description" content="My personal survival log of mysterious errors, queueing oddities, and PBS quirks encountered on QUT Aqua" />
-<meta property="og:image" content="https://zhipenghe.me/walltime-chronicles/assets/images/social/tutorials/lesson-4.png" />
+<meta property="og:image" content="https://zhipenghe.me/Walltime-Chronicles/assets/images/social/tutorials/lesson-4.png" />
 <meta property="og:image:type" content="image/png" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
-<meta property="og:url" content="https://zhipenghe.me/walltime-chronicles/tutorials/lesson-4/" />
+<meta property="og:url" content="https://zhipenghe.me/Walltime-Chronicles/tutorials/lesson-4/" />
 <meta property="twitter:card" content="summary_large_image" />
-<meta property="twitter:title" content="Lesson 4: When Jobs Fail - Walltime Chronicles" />
+<meta property="twitter:title" content="Lesson 4: Your First Batch Job - Walltime Chronicles" />
 <meta property="twitter:description" content="My personal survival log of mysterious errors, queueing oddities, and PBS quirks encountered on QUT Aqua" />
-<meta property="twitter:image" content="https://zhipenghe.me/walltime-chronicles/assets/images/social/tutorials/lesson-4.png" />
+<meta property="twitter:image" content="https://zhipenghe.me/Walltime-Chronicles/assets/images/social/tutorials/lesson-4.png" />
 </head>
   
   
@@ -85,7 +85,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#lesson-4-when-jobs-fail" class="md-skip">
+        <a href="#lesson-4-your-first-batch-job" class="md-skip">
           Skip to content
         </a>
       
@@ -121,7 +121,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Lesson 4: When Jobs Fail
+              Lesson 4: Your First Batch Job
             
           </span>
         </div>
@@ -299,6 +299,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -446,7 +450,7 @@
   <span class="md-ellipsis">
     
   
-    Lesson 3: Your First Batch Job
+    Lesson 3: Working Interactively
   
 
     
@@ -483,7 +487,7 @@
   <span class="md-ellipsis">
     
   
-    Lesson 4: When Jobs Fail
+    Lesson 4: Your First Batch Job
   
 
     
@@ -501,7 +505,7 @@
   <span class="md-ellipsis">
     
   
-    Lesson 4: When Jobs Fail
+    Lesson 4: Your First Batch Job
   
 
     
@@ -571,7 +575,7 @@
   <span class="md-ellipsis">
     
   
-    Lesson 5: Right-sizing Requests
+    Lesson 5: When Jobs Fail
   
 
     
@@ -599,7 +603,7 @@
   <span class="md-ellipsis">
     
   
-    Lesson 6: Job Arrays
+    Lesson 6: Right-sizing Requests
   
 
     
@@ -627,7 +631,63 @@
   <span class="md-ellipsis">
     
   
-    Lesson 7: Long Jobs — Dependencies & Checkpointing
+    Lesson 7: Job Arrays
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lesson-8/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 8: Long Jobs — Dependencies & Checkpointing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lesson-9/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 9: Working with an AI Agent on Aqua
   
 
     
@@ -1287,39 +1347,33 @@
   
 
 
-<h1 id="lesson-4-when-jobs-fail">Lesson 4: When Jobs Fail</h1>
+<h1 id="lesson-4-your-first-batch-job">Lesson 4: Your First Batch Job</h1>
 <div class="admonition warning">
 <p class="admonition-title">Lesson under construction</p>
 <p>This lesson hasn't been written yet. The scope below is the planned contract; the linked guides in <strong>Until this lesson lands</strong> cover the underlying material today.</p>
 </div>
 <div class="admonition quote">
 <p class="admonition-title">Mission Statement</p>
-<p><em>"Reading PBS tea leaves and error messages"</em> 🔍</p>
+<p><em>"Hello World, meet High Performance Computing"</em> 👋</p>
 </div>
 <h2 id="what-youll-accomplish-planned">📋 What You'll Accomplish (planned)</h2>
-<p>By the end of this 15-minute lesson, you'll have:</p>
+<p>By the end of this 15–20 minute lesson, you'll have:</p>
 <ul class="task-list">
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>The <code>.o</code> / <code>.e</code> file split</strong> — where errors actually appear vs where stdout lands</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>PBS queue states</strong> — Q (queued), R (running), H (held), E (exiting), F (finished)</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong><code>tracejob</code> for post-mortem</strong> — the event log when a job has gone sideways</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>The 5 failures you'll actually hit:</strong><ol>
-<li>Walltime exceeded (exit code 271 / "job killed: walltime exceeded")</li>
-<li>OOM kill (exit code 137 / signal 9)</li>
-<li>Module not loaded (<code>command: not found</code>)</li>
-<li>Wrong working directory (missing <code>cd $PBS_O_WORKDIR</code>)</li>
-<li>Job stuck in Q forever (resource shape rejected, or queue just busy)</li>
-</ol>
-</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>The "what now?" decision tree</strong> — when to retry, when to resize, when to ask</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>PBS script anatomy</strong> — shebang, <code>#PBS</code> directives, body, and the <code>cd $PBS_O_WORKDIR</code> discipline</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>Two working scripts</strong> — a 10-line bash Hello World, then Lesson 3's <code>hello.py</code> submitted unattended</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>Submitted your first job with <code>qsub</code></strong> — captured the job ID and know what to do with it</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>Monitored a job with <code>qstat -u $USER</code></strong> — watched it move Q → R → F</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>Read your <code>.o</code> (stdout) and <code>.e</code> (stderr) files</strong> — figured out where your job's prints actually go</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>Killed a stuck job with <code>qdel &lt;job_id&gt;</code></strong> — when something goes wrong</li>
 </ul>
 <h2 id="until-this-lesson-lands">🔗 Until this lesson lands</h2>
 <ul>
-<li><strong>Why your queue choice was rejected</strong> — per-queue ceilings and node-type field guide: <a href="../../scheduler/Know-Your-Nodes/">Know Your Nodes</a></li>
-<li><strong>Right-sizing the next attempt after a walltime kill</strong>: <a href="../../scheduler/The-Art-of-Walltime/">Guess, Request, Regret: The Art of Walltime</a></li>
-<li><strong>Post-hoc resource introspection</strong> — what your job actually used: <a href="../../pbs-scripts/PBS-Brew-Inspector/">PBS Brew Inspector</a></li>
+<li><strong>Working PBS script templates</strong> that run N experiments sequentially inside one job: <a href="../../pbs-scripts/Batch-Cooking-PBS-Scripts-with-a-Bash-Pan/">Batch-Cooking PBS Scripts with a Bash Pan</a></li>
+<li><strong>Production-grade PBS shapes</strong> for 8 real Aqua scenarios: <a href="../../scheduler/Walltime-by-Recipe/">Walltime by Recipe</a></li>
+<li><strong>After your job finishes</strong> — introspect what it actually used: <a href="../../pbs-scripts/PBS-Brew-Inspector/">PBS Brew Inspector</a></li>
 </ul>
 <hr />
-<p>← <strong><a href="../lesson-3/">Lesson 3: Your First Batch Job</a></strong> · <strong><a href="../lesson-5/">Lesson 5: Right-sizing Requests</a></strong> →</p>
+<p>← <strong><a href="../lesson-3/">Lesson 3: Working Interactively</a></strong> · <strong><a href="../lesson-5/">Lesson 5: When Jobs Fail</a></strong> →</p>
 
 
 
@@ -1342,7 +1396,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="June 23, 2026 20:16:37 AEST">June 23, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="August 28, 2026 14:32:15 AEST">August 28, 2026</span>
   </span>
 
     
