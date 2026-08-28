@@ -43,7 +43,7 @@ for tool_entry in "uv:$UV" "hyperfine:$HF"; do
   fi
 done
 
-# Pick a workload. v1 ships cpu-ml only; gpu-ml is defined in config.toml for later.
+# Pick a workload: cpu-ml (default) or gpu-ml, both defined in config.toml.
 WORKLOAD="${WORKLOAD:-cpu-ml}"
 
 # Need Python 3.11+ for tomllib. Prefer uv's managed Python; fall back to system python3.
