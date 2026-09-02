@@ -337,7 +337,7 @@ Now prove your install works. Pick the tab matching the tool you installed, run 
 
 ## 🔗 What's Next?
 
-→ **[Lesson 3: Working Interactively](lesson-3.md)** — now that you have Python ready, take it to a compute node by hand, measure it, and learn when a session should become a batch job instead.
+→ **[Lesson 3: Working Interactively](lesson-3.md)** — now that you have Python ready, take it to a compute node by hand and learn when a session should become a batch job instead.
 
 !!! question "Stuck?"
     - **`uv` / `conda` / `micromamba` not found after install?** Re-source `~/.bashrc`, or open a new terminal so the shell init runs.

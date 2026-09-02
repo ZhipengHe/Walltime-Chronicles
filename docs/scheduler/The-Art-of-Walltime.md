@@ -69,7 +69,7 @@ Even if your job fits the per-job table above, the *queue* limits how many of yo
 | `cpu_batch_exlm` | 100 | 180 | 6015 GB | – |
 | `cpu_inter_pers` | 1 | 1 | 4 GB | – |
 
-PBS also rate-limits job launches at **60/min/queue** — if you fire 200 jobs at once, the first batch starts immediately and the rest trickle in over the next few minutes.
+PBS also rate-limits job launches at **60/min/queue** — if you fire 200 jobs at once, the first batch starts immediately and the rest trickle in over the next few minutes. The 32-GPU total for `gpu_batch_exec` is eResearch's documented figure; the queue configuration itself enforces the running-job, CPU and memory totals.
 
 ---
 
@@ -359,7 +359,7 @@ Multiply both for the net effect.
 | Very large, memory-bound | $S \approx (p_{\text{new}} / p_{\text{baseline}})^d, \ d > 1$ | Cache and access-pattern penalties |
 | **Doesn't fit in GPU memory** | 10–100× | Gradient checkpointing or model parallelism kicks in |
 
-If you're near the memory limit, see [Know Your Nodes](Know-Your-Nodes.md) for MIG slicing on A100 (sometimes a 1/7 slice is enough and arrives faster than a full card).
+If you're near the memory limit, see [Know Your Nodes](Know-Your-Nodes.md) for the MIG slices on the interactive nodes (a 10 GB H100 slice or a 20 GB A100 slice is sometimes enough, and arrives faster than a full card).
 
 ### Architecture-specific FLOPs (forward + backward)
 

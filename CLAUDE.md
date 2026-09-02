@@ -41,7 +41,7 @@ pre-commit install
 
 - `docs/` - Main documentation content in Markdown
     - `index.md` - Homepage with project overview and disclaimers
-    - `tutorials/` - Crash Course Café: course index, prerequisites checklist, `lesson-1.md` … `lesson-9.md` (Lessons 1–2 written; 3–9 are stubs with scope contracts)
+    - `tutorials/` - Crash Course Café: course index, prerequisites checklist, `lesson-1.md` … `lesson-9.md`; `scripts/train_mnist.py` is the one worked example carried from Lesson 3 onward (MNIST digits, PyTorch only; embedded by `--8<--` snippet, downloadable; data downloaded by the script, never committed)
     - `pbs-scripts/` - PBS job scripts and tools documentation
     - `scheduler/` - Walltime estimation, node selection, and uv cache/env placement guides
     - `remote-dev/` - Remote development setup, macOS metadata cleanup, `/work/<group>` permissions
