@@ -47,7 +47,7 @@ qsub -I -l select=1:ncpus=4:mem=8GB -l walltime=01:00:00
 ```
 
 !!! info "When you'd pick the GPU queue instead"
-    Add `:ngpus=1` and PBS sends you to `gpu_inter_exec`. The slice you get is for checking that a model loads and a CUDA build works, not for training; `ngpus=2` is refused because two slices cannot talk to each other. Recipe 7 in [Walltime by Recipe](../scheduler/Walltime-by-Recipe.md#recipe-7-mig-slice-sanity-check) is the ready-made line, and [Know Your Nodes](../scheduler/Know-Your-Nodes.md) explains MIG. This lesson stays on CPU: `train_mnist.py` runs happily there and the CPU queue starts faster.
+    Add `:ngpus=1` and PBS sends you to `gpu_inter_exec`. The slice you get is for checking that a model loads and a CUDA build works, not for training. The queue lets you ask for two slices, but two slices cannot work together without specialised code, so the second one buys you nothing; ask for one. Recipe 7 in [Walltime by Recipe](../scheduler/Walltime-by-Recipe.md#recipe-7-mig-slice-sanity-check) is the ready-made line, and [Know Your Nodes](../scheduler/Know-Your-Nodes.md) explains MIG. This lesson stays on CPU: `train_mnist.py` runs happily there and the CPU queue starts faster.
 
 ---
 
