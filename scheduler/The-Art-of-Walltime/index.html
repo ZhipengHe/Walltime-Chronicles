@@ -2245,7 +2245,7 @@
 </tr>
 </tbody>
 </table>
-<p>PBS also rate-limits job launches at <strong>60/min/queue</strong> — if you fire 200 jobs at once, the first batch starts immediately and the rest trickle in over the next few minutes.</p>
+<p>PBS also rate-limits job launches at <strong>60/min/queue</strong> — if you fire 200 jobs at once, the first batch starts immediately and the rest trickle in over the next few minutes. The 32-GPU total for <code>gpu_batch_exec</code> is eResearch's documented figure; the queue configuration itself enforces the running-job, CPU and memory totals.</p>
 <hr />
 <h2 id="the-walltime-calculation-ritual"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3c-1.27 0-2.4.8-2.82 2H3v2h1.95L2 14c-.47 2 1 3 3.5 3s4.06-1 3.5-3L6.05 7h3.12c.33.85.98 1.5 1.83 1.83V20H2v2h20v-2h-9V8.82c.85-.32 1.5-.97 1.82-1.82h3.13L15 14c-.47 2 1 3 3.5 3s4.06-1 3.5-3l-2.95-7H21V5h-6.17C14.4 3.8 13.27 3 12 3m0 2a1 1 0 0 1 1 1 1 1 0 0 1-1 1 1 1 0 0 1-1-1 1 1 0 0 1 1-1m-6.5 5.25L7 14H4zm13 0L20 14h-3z"/></svg></span> The Walltime Calculation Ritual</h2>
 <h3 id="step-1-check-your-history-know-yourself">Step 1 — Check your history (know yourself)</h3>
@@ -2550,7 +2550,7 @@
 </tr>
 </tbody>
 </table>
-<p>If you're near the memory limit, see <a href="../Know-Your-Nodes/">Know Your Nodes</a> for MIG slicing on A100 (sometimes a 1/7 slice is enough and arrives faster than a full card).</p>
+<p>If you're near the memory limit, see <a href="../Know-Your-Nodes/">Know Your Nodes</a> for the MIG slices on the interactive nodes (a 10 GB H100 slice or a 20 GB A100 slice is sometimes enough, and arrives faster than a full card).</p>
 <h3 id="architecture-specific-flops-forward-backward">Architecture-specific FLOPs (forward + backward)</h3>
 <details class="math">
 <summary>Click for the per-architecture scaling factors</summary>
@@ -2800,7 +2800,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="June 22, 2026 01:30:01 AEST">June 22, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="September 2, 2026 15:19:48 AEST">September 2, 2026</span>
   </span>
 
     

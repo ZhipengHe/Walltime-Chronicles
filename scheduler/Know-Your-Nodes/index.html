@@ -1071,7 +1071,7 @@
   <a href="#a100-batch" class="md-nav__link">
     <span class="md-ellipsis">
       
-        GPU A100 Batch — the legacy classic (7 normals + 2 oddballs)
+        GPU A100 Batch — the legacy classic (5 nodes)
       
     </span>
   </a>
@@ -1688,7 +1688,7 @@
   <a href="#a100-batch" class="md-nav__link">
     <span class="md-ellipsis">
       
-        GPU A100 Batch — the legacy classic (7 normals + 2 oddballs)
+        GPU A100 Batch — the legacy classic (5 nodes)
       
     </span>
   </a>
@@ -1972,7 +1972,7 @@
 <h1 id="know-your-nodes-a-field-guide-to-hpc-resources">Know Your Nodes: A Field Guide to HPC Resources</h1>
 <div class="admonition info">
 <p class="admonition-title">Last updated</p>
-<p>2026-06-21. Hardware specs change. <strong>Always</strong> run <code>pbsnodeinfo</code> on the cluster before sizing a serious job — the tables below are a snapshot, not a contract.</p>
+<p>2026-09-02. Hardware specs change. <strong>Always</strong> run <code>pbsnodeinfo</code> on the cluster before sizing a serious job — the tables below are a snapshot, not a contract.</p>
 </div>
 <h2 id="whats-on-the-menu"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 1h16a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1m0 8h16a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1m0 8h16a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1M9 5h1V3H9zm0 8h1v-2H9zm0 8h1v-2H9zM5 3v2h2V3zm0 8v2h2v-2zm0 8v2h2v-2z"/></svg></span> What's on the Menu?</h2>
 <p>So you want to run your code, but what hardware should you order? Welcome to the <strong>HPC buffet</strong> — where some dishes are fast but small, others are huge but slow, and the good stuff always seems to be reserved for someone else.</p>
@@ -1991,8 +1991,8 @@
     Q2 --&gt; CPUI[CPU Interactive&lt;br/&gt;1 node · AMD Genoa]
     Q3 --&gt; LM[LargeMem&lt;br/&gt;1 node · 6 TB RAM]
     Q4 --&gt; GPUH[GPU H100 Batch&lt;br/&gt;13 nodes · 4× H100]
-    Q4 --&gt; GPUA[GPU A100 Batch&lt;br/&gt;7+2 nodes · 8× A100]
-    Q5 --&gt; GPUI[GPU Interactive&lt;br/&gt;2 nodes · MIG slices]
+    Q4 --&gt; GPUA[GPU A100 Batch&lt;br/&gt;5 nodes · 8× A100]
+    Q5 --&gt; GPUI[GPU Interactive&lt;br/&gt;2 nodes · 44 MIG slices]
 
     CPUB --&gt; FS[Lustre 5 PB · Weka 1 PB&lt;br/&gt;via InfiniBand HDR/NDR]
     CPUI --&gt; FS
@@ -2067,8 +2067,8 @@
 </tr>
 <tr>
 <td>GPU A100 Batch</td>
-<td>7 + 2*</td>
-<td>124</td>
+<td>5</td>
+<td>120–124</td>
 <td>974 GB</td>
 <td>8× A100 40 GB</td>
 <td>Cheaper GPU time than H100, smaller VRAM OK</td>
@@ -2076,14 +2076,14 @@
 <tr>
 <td>GPU Interactive</td>
 <td>2</td>
-<td>168 / 120</td>
+<td>168 / 124</td>
 <td>974 GB</td>
-<td>MIG slices</td>
+<td>28 + 16 MIG slices</td>
 <td>Quick GPU experiments, debugging, dry runs</td>
 </tr>
 </tbody>
 </table>
-<p><code>*</code> Two A100 batch nodes are oddballs — see <strong>GPU A100 Batch — the legacy classic</strong> in Tier 2.</p>
+<p>Two further A100 hosts exist but are not general batch nodes — see <strong>GPU A100 Batch — the legacy classic</strong> in Tier 2.</p>
 <h3 id="five-lines-that-cover-80-of-jobs">Five lines that cover 80% of jobs</h3>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:5"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><input id="__tabbed_1_5" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">1. Interactive CPU</label><label for="__tabbed_1_2">2. Interactive GPU</label><label for="__tabbed_1_3">3. Batch CPU</label><label for="__tabbed_1_4">4. Batch GPU (H100)</label><label for="__tabbed_1_5">5. LargeMem (auto-routes)</label></div>
 <div class="tabbed-content">
@@ -2097,7 +2097,7 @@ Lands you in a shell on <code>cpu1n001</code>. Exit with <span class="keys"><kbd
 <p><div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># 1 MIG slice on H100, 6 cores, 32 GB host RAM, 12 hours</span>
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>qsub<span class="w"> </span>-I<span class="w"> </span>-l<span class="w"> </span><span class="k">select</span><span class="o">=</span><span class="m">1</span>:ncpus<span class="o">=</span><span class="m">6</span>:ngpus<span class="o">=</span><span class="m">1</span>:mem<span class="o">=</span>32GB<span class="w"> </span>-l<span class="w"> </span><span class="nv">walltime</span><span class="o">=</span><span class="m">12</span>:00:00
 </span></code></pre></div>
-<code>ngpus=1</code> here means <strong>one MIG slice</strong> (≈ 1/7 of a card, ~10 GB VRAM). Good for sanity-checking a model loads. Bad for real training.</p>
+<code>ngpus=1</code> here means <strong>one MIG slice</strong>: a 1g.10gb slice of an H100 (~10 GB VRAM) on <code>gpu1n001</code>, or a 3g.20gb slice of an A100 (~20 GB) on <code>gpu0n004</code>, whichever PBS picks; add <code>gpu_id=H100</code> or <code>gpu_id=A100</code> to choose. Good for sanity-checking a model loads. Bad for real training.</p>
 </div>
 <div class="tabbed-block">
 <p><div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># AMD Genoa-pinned MPI: 4 chunks × 8 cores, 32 GB / chunk, 24 hours</span>
@@ -2136,7 +2136,7 @@ No <code>-q</code> needed. The scheduler routes by your <code>mem</code> value a
 <hr />
 <h2 id="tier-2-what-you-should-know">Tier 2 — What You Should Know</h2>
 <h3 id="the-dishes"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4"/></svg></span> The Dishes</h3>
-<p>Aqua has <strong>73 compute nodes</strong> across five categories. Each subsection below is a card — specs, copy-paste line, and one quirk to file away.</p>
+<p>Aqua has <strong>72 compute nodes</strong>: the 71 in the table above, in six categories, plus one research-group A100 host. Each subsection below is a card — specs, copy-paste line, and one quirk to file away.</p>
 <h4 id="cpu-batch-the-workhorse-49-nodes">CPU Batch — the workhorse (49 nodes)</h4>
 <table>
 <thead>
@@ -2181,8 +2181,8 @@ No <code>-q</code> needed. The scheduler routes by your <code>mem</code> value a
 </span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">     </span>-l<span class="w"> </span><span class="nv">place</span><span class="o">=</span>scatter<span class="w"> </span>-l<span class="w"> </span><span class="nv">walltime</span><span class="o">=</span><span class="m">24</span>:00:00<span class="w"> </span>script.pbs
 </span></code></pre></div>
 <div class="admonition info">
-<p class="admonition-title">Quirk: the two 'old image' nodes</p>
-<p><code>cpu1n024</code> and <code>cpu1n031</code> may show <code>0/188</code> in <code>pbsnodeinfo</code> even when the cluster is otherwise jammed — they're online but flagged <mark>old image</mark> by the operators (re-image pending). Confirm with <code>pbsnodestatus</code>. PBS won't dispatch jobs to them until they're refreshed.</p>
+<p class="admonition-title">Quirk: a node at 0 % while everything else is jammed</p>
+<p>A node can be online yet excluded from dispatch by an operator comment (<code>old image</code>, <code>maintenance</code>). <code>pbsnodestatus</code> lists offline nodes and any such comments; if it shows none, the idle node is simply idle.</p>
 </div>
 <h4 id="cpu-interactive-the-appetiser-1-node">CPU Interactive — the appetiser (1 node)</h4>
 <table>
@@ -2335,7 +2335,7 @@ No <code>-q</code> needed. The scheduler routes by your <code>mem</code> value a
 <p class="admonition-title">Why these hosts run Intel</p>
 <p>Unlike everywhere else on Aqua, H100 nodes use Sapphire Rapids — for <strong>AMX</strong> (Advanced Matrix Extensions, BF16/INT8 tile multiplies) and PCIe 5.0 host↔GPU bandwidth. If your training pipeline does heavy CPU-side preprocessing (tokenisation, data augmentation), AMX is worth knowing about. Otherwise it doesn't change how you submit jobs.</p>
 </div>
-<h4 id="a100-batch">GPU A100 Batch — the legacy classic (7 normals + 2 oddballs)</h4>
+<h4 id="a100-batch">GPU A100 Batch — the legacy classic (5 nodes)</h4>
 <table>
 <thead>
 <tr>
@@ -2346,7 +2346,7 @@ No <code>-q</code> needed. The scheduler routes by your <code>mem</code> value a
 <tbody>
 <tr>
 <td>Hostnames</td>
-<td><code>gpu0n002</code>, <code>gpu0n004</code> through <code>gpu0n009</code> (no <code>gpu0n003</code>)</td>
+<td><code>gpu0n005</code> through <code>gpu0n009</code></td>
 </tr>
 <tr>
 <td>Cores / node</td>
@@ -2354,11 +2354,11 @@ No <code>-q</code> needed. The scheduler routes by your <code>mem</code> value a
 </tr>
 <tr>
 <td>RAM / node</td>
-<td>974 GB (most) or <mark>470 GB (<code>gpu0n002</code>)</mark></td>
+<td>974 GB</td>
 </tr>
 <tr>
 <td>GPUs / node</td>
-<td>8× A100 (most), <mark>4× (<code>gpu0n002</code>)</mark>, <mark>16× (<code>gpu0n004</code>)</mark></td>
+<td>8× A100</td>
 </tr>
 <tr>
 <td>GPU memory</td>
@@ -2387,13 +2387,13 @@ No <code>-q</code> needed. The scheduler routes by your <code>mem</code> value a
 </span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">     </span>-l<span class="w"> </span><span class="nv">walltime</span><span class="o">=</span><span class="m">24</span>:00:00<span class="w"> </span>script.pbs
 </span></code></pre></div>
 <div class="admonition warning">
-<p class="admonition-title">Three batch A100 nodes are not like the others</p>
-<p>Six A100 batch nodes follow the standard recipe (8× A100, 974 GB RAM). Two are oddballs:</p>
+<p class="admonition-title">Two more A100 hosts exist, and neither takes your batch job</p>
+<p><code>pbsnodeinfo</code> lists two other <code>gpu0n*</code> hosts, and both are traps if you read them as batch capacity:</p>
 <ul>
-<li><strong><code>gpu0n002</code></strong> — 4× A100 and <mark>470 GB RAM</mark> (half-populated board, half the memory). If you <code>select=1:ngpus=8</code> the scheduler can't land you here, so it effectively becomes the home for ≤ 4-GPU jobs.</li>
-<li><strong><code>gpu0n004</code></strong> — <mark>16× A100</mark>, 974 GB RAM (double-density). The <em>only</em> Aqua node where <code>ngpus=16</code> is satisfiable in a single chunk.</li>
+<li><strong><code>gpu0n004</code></strong> shows <mark>16 GPUs</mark>, but they are 16 3g.20gb MIG slices of 8 A100s, and the host serves the <strong>interactive</strong> queue only (next card). <code>ngpus=16</code> in a batch job is not satisfiable anywhere on Aqua.</li>
+<li><strong><code>gpu0n002</code></strong> carries 4× A100 with <mark>80 GB</mark> each and 470 GB RAM, and serves research-group queues only (<code>qcr-users</code>, <code>qvpr</code>, <code>saivt_igpu</code>). A plain <code>gpu_batch_exec</code> job never lands there.</li>
 </ul>
-<p><code>gpu0n003</code> is currently absent from <code>pbsnodeinfo</code> — decommissioned or off-line; not user-visible.</p>
+<p><code>gpu0n003</code> is absent from PBS altogether.</p>
 </div>
 <div class="admonition tip">
 <p class="admonition-title">When to pick A100 over H100</p>
@@ -2410,19 +2410,23 @@ No <code>-q</code> needed. The scheduler routes by your <code>mem</code> value a
 <tbody>
 <tr>
 <td>Hostnames</td>
-<td><code>gpu1n001</code> (28 H100 MIG slices) and <code>gpu0n001</code> (3 A100 MIG slices)</td>
+<td><code>gpu1n001</code>: 4× H100 carved into <mark>28 slices of 1g.10gb</mark> (~10 GB each); <code>gpu0n004</code>: 8× A100 carved into <mark>16 slices of 3g.20gb</mark> (~20 GB each)</td>
+</tr>
+<tr>
+<td>Which you get</td>
+<td>Either, unless you add <code>gpu_id=H100</code> or <code>gpu_id=A100</code></td>
 </tr>
 <tr>
 <td>Per-job cap</td>
-<td>12 cores, 64 GB, <mark>1 MIG slice</mark>, 12 h</td>
+<td>12 cores, 68 GB, up to 2 MIG slices (but see below), 12 h</td>
 </tr>
 <tr>
 <td>Per-user cap</td>
-<td>12 cores, 64 GB, <mark>2 MIG slices</mark> total</td>
+<td>12 cores, 68 GB, <mark>2 MIG slices</mark> total, 2 queued</td>
 </tr>
 <tr>
 <td>What <code>ngpus=1</code> means</td>
-<td>One MIG <strong>1g.10gb</strong> profile — roughly 1/7 of an H100, ~10 GB VRAM</td>
+<td>One MIG slice: 1g.10gb on the H100 (1/7 of the card, ~10 GB) or 3g.20gb on the A100 (3/7 of the compute, half the memory, ~20 GB)</td>
 </tr>
 <tr>
 <td>Queue</td>
@@ -2435,7 +2439,7 @@ No <code>-q</code> needed. The scheduler routes by your <code>mem</code> value a
 </span></code></pre></div>
 <div class="admonition info">
 <p class="admonition-title">MIG, not a whole GPU</p>
-<p>Interactive GPU jobs run on <strong>MIG (Multi-Instance GPU) slices</strong> — small hardware partitions of a single physical card. Each MIG instance has its own memory, compute, and L2 cache, isolated from neighbours. <code>ngpus=1</code> interactively means one slice; <code>ngpus=2</code> is <strong>not allowed</strong> because the slices don't talk to each other without specialised code.</p>
+<p>Interactive GPU jobs run on <strong>MIG (Multi-Instance GPU) slices</strong> — small hardware partitions of a single physical card. Each MIG instance has its own memory, compute, and L2 cache, isolated from neighbours. <code>ngpus=1</code> interactively means one slice. The queue lets a job hold two, but a single program cannot span two MIG instances without specialised code, so ask for two only if you have two independent things to run.</p>
 </div>
 <div class="admonition tip">
 <p class="admonition-title">What this is good for</p>
@@ -2687,6 +2691,7 @@ All chunks land on the same CPU family. Use when you didn't pin <code>cpu_id</co
 </tbody>
 </table>
 <p>All queues share a <mark>rate cap of 60 job launches per minute</mark> — relevant if you submit 1000-subjob arrays and want to know how fast they actually start.</p>
+<p>The 32-GPU total for <code>gpu_batch_exec</code> is eResearch's documented figure; the queue configuration itself enforces the running-job, CPU and memory totals, so in practice 32 running jobs of up to 8 GPUs each is the shape of the ceiling.</p>
 </div>
 <div class="tabbed-block">
 <ul>
@@ -2799,8 +2804,8 @@ All chunks land on the same CPU family. Use when you didn't pin <code>cpu_id</co
     H100 --&gt; S7[Slice 1g.10gb&lt;br/&gt;10 GB · 18 SMs]
 
     style H100 fill:#e8f5e8</code></pre>
-<p>Aqua's interactive GPU queue uses the <strong>1g.10gb</strong> profile: 1 compute slice + 10 GB VRAM = roughly 1/7 of a card. The <code>gpu1n001</code> interactive H100 node carves its 4 cards into 28 such slices; <code>gpu0n001</code> carves its A100s into 3.</p>
-<p>You can't <code>ngpus=2</code> interactively because two MIG instances don't share memory — they're isolated by design. For multi-GPU work, you need a batch GPU job on a whole-card allocation.</p>
+<p>Aqua's interactive GPU queue uses two profiles. On the H100 node <code>gpu1n001</code>, <strong>1g.10gb</strong>: 1 compute slice + 10 GB VRAM, roughly 1/7 of a card, 4 cards into 28 slices. On the A100 node <code>gpu0n004</code>, <strong>3g.20gb</strong>: 3 of the card's 7 compute slices and half its memory (20 GB), 8 cards into 16 slices.</p>
+<p>Two MIG instances don't share memory — they're isolated by design — so one program can't use two of them. For multi-GPU work, you need a batch GPU job on a whole-card allocation.</p>
 </details>
 <h3 id="storage-internals"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3C7.58 3 4 4.79 4 7s3.58 4 8 4 8-1.79 8-4-3.58-4-8-4M4 9v3c0 2.21 3.58 4 8 4s8-1.79 8-4V9c0 2.21-3.58 4-8 4s-8-1.79-8-4m0 5v3c0 2.21 3.58 4 8 4s8-1.79 8-4v-3c0 2.21-3.58 4-8 4s-8-1.79-8-4"/></svg></span> Storage internals</h3>
 <p>Two parallel filesystems, both mounted on every compute node via InfiniBand.</p>
@@ -2850,10 +2855,9 @@ All chunks land on the same CPU family. Use when you didn't pin <code>cpu_id</co
 <p>For the higher-level filesystem orientation, see Lesson 1's <a href="../../tutorials/lesson-1/#where-your-files-live">Where your files live</a> section. This page focuses on the <em>node-level</em> picture.</p>
 <h3 id="per-node-quirks-worth-knowing"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 12h-4v-2h4m0 6h-4v-2h4m6-6h-2.81a6 6 0 0 0-1.82-1.96L17 4.41 15.59 3l-2.17 2.17a6 6 0 0 0-2.83 0L8.41 3 7 4.41l1.62 1.63C7.88 6.55 7.26 7.22 6.81 8H4v2h2.09c-.05.33-.09.66-.09 1v1H4v2h2v1c0 .34.04.67.09 1H4v2h2.81c1.04 1.79 2.97 3 5.19 3s4.15-1.21 5.19-3H20v-2h-2.09c.05-.33.09-.66.09-1v-1h2v-2h-2v-1c0-.34-.04-.67-.09-1H20z"/></svg></span> Per-node quirks worth knowing</h3>
 <ul>
-<li><mark><strong><code>cpu1n024</code> and <code>cpu1n031</code> show 0% usage</strong></mark> — both flagged <code>old image</code> by the operators via <code>pbsnodestatus</code>. Online but excluded from job dispatch until re-imaged.</li>
-<li><strong><code>gpu0n003</code> is missing</strong> — the A100 batch nodes go <code>gpu0n002, gpu0n004, gpu0n005, …</code>. Either decommissioned or off-line; not user-visible.</li>
-<li><strong><code>gpu0n002</code> has half the RAM</strong> of every other A100 node (470 GB vs 974 GB) and only 4 GPUs. Quietly the home for small-batch A100 jobs.</li>
-<li><strong><code>gpu0n004</code> has 16 GPUs</strong> — twice the A100 density of every other node. The only place <code>ngpus=16</code> lands in one chunk.</li>
+<li><strong><code>gpu0n003</code> is missing</strong> — the <code>gpu0n*</code> hosts go <code>gpu0n002, gpu0n004, gpu0n005, …</code>. Either decommissioned or off-line; not in PBS.</li>
+<li><strong><code>gpu0n002</code> is the odd A100 host</strong> — 4× A100 <strong>80 GB</strong> (every other A100 is 40 GB), 470 GB RAM, and reserved for research-group queues, so ordinary batch jobs never see it.</li>
+<li><strong><code>gpu0n004</code> shows 16 GPUs</strong> — they are 16 3g.20gb MIG slices of 8 A100s, and the host serves only the interactive queue. Nothing on Aqua satisfies <code>ngpus=16</code> in one chunk.</li>
 <li><mark><strong>Login node ≠ compute node.</strong></mark> When you SSH in, you land on <code>aquarius02</code>, an EPYC 9274F (Zen 4, single socket, 24 cores, 187 GB RAM). It is <strong>not</strong> a compute node. Don't benchmark there, don't run long scripts there — submit through PBS.</li>
 <li><strong>Mixed CPU families on GPU nodes.</strong> A100 hosts run AMD Zen 3, H100 hosts run Intel Sapphire Rapids. If you compile vendor-conditional code (AMX vs AVX-512 vs nothing), this matters. For most users it doesn't.</li>
 </ul>
@@ -2903,7 +2907,7 @@ All chunks land on the same CPU family. Use when you didn't pin <code>cpu_id</co
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="August 28, 2026 14:32:15 AEST">August 28, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="September 2, 2026 15:19:48 AEST">September 2, 2026</span>
   </span>
 
     
@@ -2918,6 +2922,34 @@ All chunks land on the same CPU family. Use when you didn't pin <code>cpu_id</co
 
     
     
+    
+      
+  <span class="md-source-file__fact">
+    
+      
+  <span class="md-icon" title="Contributors">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33s1.71.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2"/></svg>
+  </span>
+  <span>GitHub</span>
+
+    
+    <nav>
+      
+        <a href="https://github.com/ZhipengHe" class="md-author" title="@ZhipengHe">
+          
+          <img src="https://avatars.githubusercontent.com/u/29477872?v=4&size=72" alt="ZhipengHe">
+        </a>
+      
+        <a href="https://github.com/web-flow" class="md-author" title="@web-flow">
+          
+          <img src="https://avatars.githubusercontent.com/u/19864447?v=4&size=72" alt="web-flow">
+        </a>
+      
+      
+      
+    </nav>
+  </span>
+
     
   </aside>
 

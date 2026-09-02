@@ -1755,7 +1755,7 @@
 <li>
 <p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.46 6.28 11.05 9c-2.58.26-4.55 2.41-4.55 5a5 5 0 0 0 5 5c2.05 0 3.81-1.23 4.58-3H13.5v-2h8v2h-2.25a8.05 8.05 0 0 1-2.46 4h2.71v2h-16v-2h2.71a8 8 0 0 1-2.71-6c0-3.63 2.46-6.8 5.96-7.72m3.28-4.21.76 1.3.86-.5 3.5 6.06-3.47 2-3.5-6.06.87-.5-.76-1.3z"/></svg></span> <strong>Recipe 7 — MIG sanity check</strong></p>
 <hr />
-<p>One 1g.10gb MIG slice (≈ 1/7 of an H100, ~10 GB VRAM). "Does my model load?"</p>
+<p>One MIG slice (a 10 GB H100 slice or a 20 GB A100 slice). "Does my model load?"</p>
 <p><a href="#recipe-7-mig-slice-sanity-check"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"/></svg></span> Jump to recipe</a></p>
 </li>
 <li>
@@ -1981,7 +1981,7 @@ T_{\text{est}} \times 1.5 &amp;= 27\,\text{h} \to \text{request } 30\,\text{h}
 <div class="admonition danger">
 <p class="admonition-title">8 GPUs is the hard ceiling for one job</p>
 <p><code>gpu_batch_exec</code> per-job: <strong>max 8 GPUs</strong>. PBS rejects <code>select=4:ngpus=4</code> (16 GPUs) at submit time. For more than 8 GPUs, you split across multiple jobs — see <a href="#recipe-8-long-pipeline-with-chained-jobs">Recipe 8</a>.</p>
-<p>Per-user concurrent-running cap on the queue is 32 GPUs across all your jobs. So 4 simultaneous 8-GPU jobs is the cluster-wide ceiling.</p>
+<p>eResearch documents a per-user cap of 32 GPUs across your running jobs (the queue configuration itself caps you at 32 running jobs, 1024 cores and 7680 GB), so 4 simultaneous 8-GPU jobs is the practical ceiling.</p>
 </div>
 </div>
 <div class="tabbed-block">
@@ -2026,12 +2026,12 @@ T_{\text{est}} \times 1.5 &amp;\approx 2.4\,\text{h} \to \text{request } 4\,\tex
 <li><strong><code>ngpus=8</code></strong> — A100 nodes (<code>gpu0n005</code>–<code>gpu0n009</code>) have 8 cards each; one node holds the whole job. No <code>place=scatter</code> needed.</li>
 </ul>
 <div class="admonition warning">
-<p class="admonition-title">Some A100 nodes are oddballs</p>
+<p class="admonition-title">Two A100 hosts you will not land on</p>
 <ul>
-<li><strong><code>gpu0n002</code></strong> has only <strong>4 A100s</strong> and <strong>470 GB RAM</strong> (half-populated). Ask for <code>ngpus=8</code> and the scheduler can't land you here.</li>
-<li><strong><code>gpu0n004</code></strong> has <strong>16 A100s</strong>, 974 GB RAM (double-density). The only place <code>ngpus=16</code> lands in one chunk.</li>
+<li><strong><code>gpu0n004</code></strong> shows 16 GPUs, but they are 3g.20gb MIG slices and the host serves the interactive queue only.</li>
+<li><strong><code>gpu0n002</code></strong> (4× A100 80 GB, 470 GB RAM) is reserved for research-group queues.</li>
 </ul>
-<p>See <a href="../Know-Your-Nodes/#a100-batch">Know Your Nodes § GPU A100 Batch</a>.</p>
+<p>Batch A100 jobs run on <code>gpu0n005</code> to <code>gpu0n009</code>, 8 cards each. See <a href="../Know-Your-Nodes/#a100-batch">Know Your Nodes § GPU A100 Batch</a>.</p>
 </div>
 </div>
 <div class="tabbed-block">
@@ -2047,7 +2047,7 @@ T_{\text{est}} \times 1.5 &amp;\approx 2.4\,\text{h} \to \text{request } 4\,\tex
 </div>
 </div>
 <h3 id="recipe-7-mig-slice-sanity-check"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.46 6.28 11.05 9c-2.58.26-4.55 2.41-4.55 5a5 5 0 0 0 5 5c2.05 0 3.81-1.23 4.58-3H13.5v-2h8v2h-2.25a8.05 8.05 0 0 1-2.46 4h2.71v2h-16v-2h2.71a8 8 0 0 1-2.71-6c0-3.63 2.46-6.8 5.96-7.72m3.28-4.21.76 1.3.86-.5 3.5 6.06-3.47 2-3.5-6.06.87-.5-.76-1.3z"/></svg></span> Recipe 7 — MIG slice sanity check</h3>
-<p>The fastest way to confirm your model actually loads on a real Aqua GPU before you queue a real training job. One MIG slice = ~10 GB VRAM, lands almost immediately.</p>
+<p>The fastest way to confirm your model actually loads on a real Aqua GPU before you queue a real training job. One MIG slice, ~10 GB VRAM on an H100 or ~20 GB on an A100, lands almost immediately.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="7:4"><input checked="checked" id="__tabbed_7_1" name="__tabbed_7" type="radio" /><input id="__tabbed_7_2" name="__tabbed_7" type="radio" /><input id="__tabbed_7_3" name="__tabbed_7" type="radio" /><input id="__tabbed_7_4" name="__tabbed_7" type="radio" /><div class="tabbed-labels"><label for="__tabbed_7_1">Scenario</label><label for="__tabbed_7_2">Scaling</label><label for="__tabbed_7_3">PBS script</label><label for="__tabbed_7_4">Bottom line</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
@@ -2060,7 +2060,7 @@ T_{\text{est}} \times 1.5 &amp;\approx 2.4\,\text{h} \to \text{request } 4\,\tex
 <p>Submit from the command line:</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>qsub<span class="w"> </span>-I<span class="w"> </span>-l<span class="w"> </span><span class="k">select</span><span class="o">=</span><span class="m">1</span>:ncpus<span class="o">=</span><span class="m">6</span>:ngpus<span class="o">=</span><span class="m">1</span>:mem<span class="o">=</span>32gb<span class="w"> </span>-l<span class="w"> </span><span class="nv">walltime</span><span class="o">=</span><span class="m">02</span>:00:00
 </span></code></pre></div>
-<p>What <code>ngpus=1</code> means in the interactive queue: <strong>one 1g.10gb MIG slice</strong> — roughly 1/7 of an H100, ~10 GB VRAM. The full card is sliced into 28 such instances on <code>gpu1n001</code>.</p>
+<p>What <code>ngpus=1</code> means in the interactive queue: <strong>one MIG slice</strong>, either a 1g.10gb slice of an H100 (~10 GB VRAM, 28 of them on <code>gpu1n001</code>) or a 3g.20gb slice of an A100 (3/7 of the compute, half the memory, ~20 GB; 16 of them on <code>gpu0n004</code>), whichever PBS places you on. Add <code>:gpu_id=H100</code> to the select line if the card type matters to your check.</p>
 <div class="admonition danger">
 <p class="admonition-title">Don't ask for <code>ngpus=2</code> interactively</p>
 <p>Two MIG slices in one job aren't supported — the slices don't share memory or talk to each other without specialised code. PBS may accept the submit (per-job cap is 1–2), but the workload won't actually distribute across the slices. See <a href="../Know-Your-Nodes/#gpu-interactive-the-tasting-flight-2-nodes-mig-sliced">Know Your Nodes § MIG, not a whole GPU</a>.</p>
@@ -2071,7 +2071,7 @@ T_{\text{est}} \times 1.5 &amp;\approx 2.4\,\text{h} \to \text{request } 4\,\tex
 <div class="admonition success">
 <p class="admonition-title">Walltime: 02:00:00 — queue: <code>gpu_inter_exec</code> (auto-routed)</p>
 <ul>
-<li>1 MIG slice (~10 GB VRAM), 6 cores host, 32 GB host RAM, 2 h interactive</li>
+<li>1 MIG slice (~10 GB VRAM on an H100, ~20 GB on an A100), 6 cores host, 32 GB host RAM, 2 h interactive</li>
 <li>Caps: 1–2 slices/job (but use 1), 1–12 cores, 1–68 GB, ≤ 12 h</li>
 <li>Don't book the full 12 h then walk away — the queue holds resources the whole time</li>
 </ul>
@@ -2229,7 +2229,7 @@ T_{\text{est}} \times 1.5 &amp;\approx 2.4\,\text{h} \to \text{request } 4\,\tex
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="June 22, 2026 01:23:16 AEST">June 22, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="September 2, 2026 15:26:24 AEST">September 2, 2026</span>
   </span>
 
     
