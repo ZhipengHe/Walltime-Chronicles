@@ -119,7 +119,7 @@ flowchart TD
 
     ---
 
-    One 1g.10gb MIG slice (≈ 1/7 of an H100, ~10 GB VRAM). "Does my model load?"
+    One MIG slice (≈ 1/7 of an H100, ~10 GB, or half an A100, ~20 GB). "Does my model load?"
 
     [:octicons-arrow-right-24: Jump to recipe](#recipe-7-mig-slice-sanity-check)
 
@@ -364,7 +364,7 @@ The hard wall is **8 GPUs per job** (`gpu_batch_exec` per-job cap). H100 nodes h
     !!! danger "8 GPUs is the hard ceiling for one job"
         `gpu_batch_exec` per-job: **max 8 GPUs**. PBS rejects `select=4:ngpus=4` (16 GPUs) at submit time. For more than 8 GPUs, you split across multiple jobs — see [Recipe 8](#recipe-8-long-pipeline-with-chained-jobs).
 
-        Per-user concurrent-running cap on the queue is 32 GPUs across all your jobs. So 4 simultaneous 8-GPU jobs is the cluster-wide ceiling.
+        eResearch documents a per-user cap of 32 GPUs across your running jobs (the queue configuration itself caps you at 32 running jobs, 1024 cores and 7680 GB), so 4 simultaneous 8-GPU jobs is the practical ceiling.
 
 === "Bottom line"
 
@@ -410,11 +410,11 @@ A100 nodes are usually less contested. If your model fits in 40 GB VRAM and you 
     - **`gpu_id=A100`** — explicit A100 selection. Without this, PBS picks any GPU model. With H100s in demand, this is the whole point of the recipe.
     - **`ngpus=8`** — A100 nodes (`gpu0n005`–`gpu0n009`) have 8 cards each; one node holds the whole job. No `place=scatter` needed.
 
-    !!! warning "Some A100 nodes are oddballs"
-        - **`gpu0n002`** has only **4 A100s** and **470 GB RAM** (half-populated). Ask for `ngpus=8` and the scheduler can't land you here.
-        - **`gpu0n004`** has **16 A100s**, 974 GB RAM (double-density). The only place `ngpus=16` lands in one chunk.
+    !!! warning "Two A100 hosts you will not land on"
+        - **`gpu0n004`** shows 16 GPUs, but they are half-card MIG slices and the host serves the interactive queue only.
+        - **`gpu0n002`** (4× A100 80 GB, 470 GB RAM) is reserved for research-group queues.
 
-        See [Know Your Nodes § GPU A100 Batch](Know-Your-Nodes.md#a100-batch).
+        Batch A100 jobs run on `gpu0n005` to `gpu0n009`, 8 cards each. See [Know Your Nodes § GPU A100 Batch](Know-Your-Nodes.md#a100-batch).
 
 === "Bottom line"
 
@@ -443,7 +443,7 @@ The fastest way to confirm your model actually loads on a real Aqua GPU before y
     qsub -I -l select=1:ncpus=6:ngpus=1:mem=32gb -l walltime=02:00:00
     ```
 
-    What `ngpus=1` means in the interactive queue: **one 1g.10gb MIG slice** — roughly 1/7 of an H100, ~10 GB VRAM. The full card is sliced into 28 such instances on `gpu1n001`.
+    What `ngpus=1` means in the interactive queue: **one MIG slice**, either a 1g.10gb slice of an H100 (~10 GB VRAM, 28 of them on `gpu1n001`) or a 3g.20gb half-card slice of an A100 (~20 GB, 16 of them on `gpu0n004`), whichever PBS places you on. Add `:gpu_id=H100` to the select line if the card type matters to your check.
 
     !!! danger "Don't ask for `ngpus=2` interactively"
         Two MIG slices in one job aren't supported — the slices don't share memory or talk to each other without specialised code. PBS may accept the submit (per-job cap is 1–2), but the workload won't actually distribute across the slices. See [Know Your Nodes § MIG, not a whole GPU](Know-Your-Nodes.md#gpu-interactive-the-tasting-flight-2-nodes-mig-sliced).

@@ -31,7 +31,7 @@ Lesson 1 asked for one core and one gigabyte because the point was to arrive som
 | Queue | You get | Per job | Per user, all your interactive jobs | Walltime |
 |---|---|---|---|---|
 | `cpu_inter_exec` | a shell on `cpu1n001`, the single interactive CPU node | 1–8 cores, 1–34 GB | 8 cores, 34 GB | ≤ 12 h |
-| `gpu_inter_exec` | a shell plus **one MIG slice** (about 1/7 of an H100, ~10 GB VRAM) | 1–12 cores, 1–68 GB, `ngpus=1` | 12 cores, 68 GB, 2 slices | ≤ 12 h |
+| `gpu_inter_exec` | a shell plus **one MIG slice**: 1/7 of an H100 (~10 GB VRAM) or half an A100 (~20 GB), whichever host PBS picks | 1–12 cores, 1–68 GB, `ngpus=1` | 12 cores, 68 GB, 2 slices | ≤ 12 h |
 
 The caps come from the queues themselves (`qstat -Qf cpu_inter_exec`); the [eResearch queue page](https://docs.eres.qut.edu.au/hpc-queue-limits)[^1] rounds them to 32 and 64 GB. Ask for more than the cap and the job is rejected at submit time, not queued.
 
@@ -47,7 +47,7 @@ qsub -I -l select=1:ncpus=4:mem=8GB -l walltime=01:00:00
 ```
 
 !!! info "When you'd pick the GPU queue instead"
-    Add `:ngpus=1` and PBS sends you to `gpu_inter_exec`. The slice you get is for checking that a model loads and a CUDA build works, not for training. The queue lets one job hold two slices, but a single program cannot span two MIG instances without specialised code, so a second slice only helps if you have two independent things to run. For this lesson, one. Recipe 7 in [Walltime by Recipe](../scheduler/Walltime-by-Recipe.md#recipe-7-mig-slice-sanity-check) is the ready-made line, and [Know Your Nodes](../scheduler/Know-Your-Nodes.md) explains MIG. This lesson stays on CPU: `train_mnist.py` runs happily there and the CPU queue starts faster.
+    Add `:ngpus=1` and PBS sends you to `gpu_inter_exec` (add `:gpu_id=H100` or `:gpu_id=A100` if the card type matters). The slice you get is for checking that a model loads and a CUDA build works, not for training. The queue lets one job hold two slices, but a single program cannot span two MIG instances without specialised code, so a second slice only helps if you have two independent things to run. For this lesson, one. Recipe 7 in [Walltime by Recipe](../scheduler/Walltime-by-Recipe.md#recipe-7-mig-slice-sanity-check) is the ready-made line, and [Know Your Nodes](../scheduler/Know-Your-Nodes.md) explains MIG. This lesson stays on CPU: `train_mnist.py` runs happily there and the CPU queue starts faster.
 
 ---
 

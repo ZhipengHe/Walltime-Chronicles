@@ -51,7 +51,7 @@ graph TD
 !!! info "Aqua at a glance"
     - **~70 compute nodes** — 50 CPU (AMD Genoa), 14 H100 GPU hosts, 7 A100 GPU hosts, 1 large-memory node
     - **~10,000 CPU cores** across the cluster
-    - **116 GPUs** total (56 H100 + 60 A100)
+    - **108 GPUs** total (56 H100 + 52 A100), some of them sliced or reserved
     - **High-speed InfiniBand** interconnect (200–400 Gbit/s) between nodes and storage
     - **~1 PB Weka scratch storage** on NVMe flash
 
@@ -186,7 +186,7 @@ You're back at the login node prompt (`aquarius02`), and PBS has released your c
 
 !!! success "You now know"
 
-    🌊 **What Aqua is** — QUT's centrally-funded HPC, free to researchers, ~70 nodes / 10k CPU cores / 116 GPUs
+    🌊 **What Aqua is** — QUT's centrally-funded HPC, free to researchers, ~70 nodes / 10k CPU cores / 108 GPUs
 
     📂 **Where files live** — `/home` for code (backed up), `/scratch` for active data (fast, not backed up), `/work` for shared (backed up), `$TMPDIR` for per-job intermediates
 

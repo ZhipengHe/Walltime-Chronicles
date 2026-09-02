@@ -24,8 +24,8 @@ graph TB
     Q2 --> CPUI[CPU Interactive<br/>1 node · AMD Genoa]
     Q3 --> LM[LargeMem<br/>1 node · 6 TB RAM]
     Q4 --> GPUH[GPU H100 Batch<br/>13 nodes · 4× H100]
-    Q4 --> GPUA[GPU A100 Batch<br/>5+2 nodes · 8× A100]
-    Q5 --> GPUI[GPU Interactive<br/>1 node · 28 MIG slices]
+    Q4 --> GPUA[GPU A100 Batch<br/>5 nodes · 8× A100]
+    Q5 --> GPUI[GPU Interactive<br/>2 nodes · 44 MIG slices]
 
     CPUB --> FS[Lustre 5 PB · Weka 1 PB<br/>via InfiniBand HDR/NDR]
     CPUI --> FS
@@ -62,10 +62,10 @@ graph TB
 | CPU Interactive   | 1      | 376 (HT)     | 1478 GB    | —               | A shell on a real compute node, ≤ 12 h      |
 | Large Memory      | 1      | 180          | 6014 GB    | —               | Single-process workloads above ==1.5 TB== RAM |
 | GPU H100 Batch    | 13     | 168          | 974 GB     | 4× H100 80 GB   | AI training, FP8/BF16, biggest VRAM         |
-| GPU A100 Batch    | 5 + 2* | 120–124      | 974 GB     | 8× A100 40 GB   | Cheaper GPU time than H100, smaller VRAM OK |
-| GPU Interactive   | 1      | 168          | 974 GB     | 28 MIG slices   | Quick GPU experiments, debugging, dry runs  |
+| GPU A100 Batch    | 5      | 120–124      | 974 GB     | 8× A100 40 GB   | Cheaper GPU time than H100, smaller VRAM OK |
+| GPU Interactive   | 2      | 168 / 124    | 974 GB     | 28 + 16 MIG slices | Quick GPU experiments, debugging, dry runs  |
 
-`*` Two A100 batch nodes are oddballs — see **GPU A100 Batch — the legacy classic** in Tier 2.
+Two further A100 hosts exist but are not general batch nodes — see **GPU A100 Batch — the legacy classic** in Tier 2.
 
 ### Five lines that cover 80% of jobs
 
@@ -81,7 +81,7 @@ graph TB
     # 1 MIG slice on H100, 6 cores, 32 GB host RAM, 12 hours
     qsub -I -l select=1:ncpus=6:ngpus=1:mem=32GB -l walltime=12:00:00
     ```
-    `ngpus=1` here means **one MIG slice** (≈ 1/7 of a card, ~10 GB VRAM). Good for sanity-checking a model loads. Bad for real training.
+    `ngpus=1` here means **one MIG slice**: a seventh of an H100 (~10 GB VRAM) on `gpu1n001`, or half an A100 (~20 GB) on `gpu0n004`, whichever PBS picks; add `gpu_id=H100` or `gpu_id=A100` to choose. Good for sanity-checking a model loads. Bad for real training.
 
 === "3. Batch CPU"
     ```bash
@@ -142,8 +142,8 @@ qsub -l select=4:ncpus=8:mem=32GB:cpu_id=AMD-25-17:mpiprocs=8 \
      -l place=scatter -l walltime=24:00:00 script.pbs
 ```
 
-!!! info "Quirk: the two 'old image' nodes"
-    `cpu1n024` and `cpu1n031` may show `0/188` in `pbsnodeinfo` even when the cluster is otherwise jammed — they're online but flagged ==old image== by the operators (re-image pending). Confirm with `pbsnodestatus`. PBS won't dispatch jobs to them until they're refreshed.
+!!! info "Quirk: a node at 0 % while everything else is jammed"
+    A node can be online yet excluded from dispatch by an operator comment (`old image`, `maintenance`). `pbsnodestatus` lists offline nodes and any such comments; if it shows none, the idle node is simply idle.
 
 #### CPU Interactive — the appetiser (1 node)
 
@@ -211,14 +211,14 @@ qsub -l select=1:ncpus=8:ngpus=2:mem=128GB:gpu_id=H100 \
 !!! info "Why these hosts run Intel"
     Unlike everywhere else on Aqua, H100 nodes use Sapphire Rapids — for **AMX** (Advanced Matrix Extensions, BF16/INT8 tile multiplies) and PCIe 5.0 host↔GPU bandwidth. If your training pipeline does heavy CPU-side preprocessing (tokenisation, data augmentation), AMX is worth knowing about. Otherwise it doesn't change how you submit jobs.
 
-#### GPU A100 Batch — the legacy classic (5 normals + 2 oddballs) { #a100-batch }
+#### GPU A100 Batch — the legacy classic (5 nodes) { #a100-batch }
 
 | Field         | Value                                                  |
 | ------------- | ------------------------------------------------------ |
-| Hostnames     | `gpu0n002`, `gpu0n004` through `gpu0n009` (no `gpu0n003`) |
+| Hostnames     | `gpu0n005` through `gpu0n009`                          |
 | Cores / node  | 120 – 124 user-addressable                             |
-| RAM / node    | 974 GB (most) or ==470 GB (`gpu0n002`)==               |
-| GPUs / node   | 8× A100 (most), ==4× (`gpu0n002`)==, ==16× (`gpu0n004`)== |
+| RAM / node    | 974 GB                                                 |
+| GPUs / node   | 8× A100                                                |
 | GPU memory    | 40 GB HBM2 per card                                    |
 | Host silicon  | 2× AMD EPYC (Zen 3 Milan, retained from previous Lyra cluster) |
 | `cpu_id`      | `AMD-25-1`                                             |
@@ -231,25 +231,26 @@ qsub -l select=1:ncpus=16:ngpus=4:mem=256GB:gpu_id=A100 \
      -l walltime=24:00:00 script.pbs
 ```
 
-!!! warning "Two batch A100 nodes are not like the others"
-    Five A100 batch nodes (`gpu0n005` to `gpu0n009`) follow the standard recipe (8× A100, 974 GB RAM). Two are oddballs:
+!!! warning "Two more A100 hosts exist, and neither takes your batch job"
+    `pbsnodeinfo` lists two other `gpu0n*` hosts, and both are traps if you read them as batch capacity:
 
-    - **`gpu0n002`** — 4× A100 and ==470 GB RAM== (half-populated board, half the memory). If you `select=1:ngpus=8` the scheduler can't land you here, so it effectively becomes the home for ≤ 4-GPU jobs.
-    - **`gpu0n004`** — ==16× A100==, 974 GB RAM (double-density). The *only* Aqua node where `ngpus=16` is satisfiable in a single chunk.
+    - **`gpu0n004`** shows ==16 GPUs==, but they are 16 half-card MIG slices of 8 A100s, and the host serves the **interactive** queue only (next card). `ngpus=16` in a batch job is not satisfiable anywhere on Aqua.
+    - **`gpu0n002`** carries 4× A100 with ==80 GB== each and 470 GB RAM, and serves research-group queues only (`qcr-users`, `qvpr`, `saivt_igpu`). A plain `gpu_batch_exec` job never lands there.
 
-    `gpu0n003` is currently absent from `pbsnodeinfo` — decommissioned or off-line; not user-visible.
+    `gpu0n003` is absent from PBS altogether.
 
 !!! tip "When to pick A100 over H100"
     The H100 queue is usually busier. If your model fits in 40 GB VRAM and you don't need FP8 acceleration, A100 gets you to "actually running" faster than waiting in the H100 queue.
 
-#### GPU Interactive — the tasting flight (1 node, MIG-sliced)
+#### GPU Interactive — the tasting flight (2 nodes, MIG-sliced)
 
 | Field         | Value                                                          |
 | ------------- | -------------------------------------------------------------- |
-| Hostname      | `gpu1n001`: 4× H100, each carved into 7 slices, so ==28 MIG slices== |
+| Hostnames     | `gpu1n001`: 4× H100 carved into ==28 slices of 1g.10gb== (~10 GB each); `gpu0n004`: 8× A100 carved into ==16 slices of 3g.20gb== (~20 GB each) |
+| Which you get | Either, unless you add `gpu_id=H100` or `gpu_id=A100`          |
 | Per-job cap   | 12 cores, 68 GB, up to 2 MIG slices (but see below), 12 h      |
-| Per-user cap  | 12 cores, 68 GB, ==2 MIG slices== total                        |
-| What `ngpus=1` means | One MIG **1g.10gb** profile — roughly 1/7 of an H100, ~10 GB VRAM |
+| Per-user cap  | 12 cores, 68 GB, ==2 MIG slices== total, 2 queued              |
+| What `ngpus=1` means | One MIG slice: 1/7 of an H100 (~10 GB VRAM) or half an A100 (~20 GB) |
 | Queue         | `gpu_inter_exec` (auto-routed when you combine `-I` with `ngpus`) |
 
 ```bash
@@ -415,6 +416,8 @@ Aqua wraps the raw PBS tools in user-friendly scripts. They live in `/usr/local/
 
     All queues share a ==rate cap of 60 job launches per minute== — relevant if you submit 1000-subjob arrays and want to know how fast they actually start.
 
+    The 32-GPU total for `gpu_batch_exec` is eResearch's documented figure; the queue configuration itself enforces the running-job, CPU and memory totals, so in practice 32 running jobs of up to 8 GPUs each is the shape of the ceiling.
+
 === "Per-user (cluster-wide)"
     - **10 000** jobs queued maximum
     - **3 382** jobs running maximum
@@ -495,7 +498,7 @@ This section is the part of the menu you'd skip on a busy day. Each block is col
         style H100 fill:#e8f5e8
     ```
 
-    Aqua's interactive GPU queue uses the **1g.10gb** profile: 1 compute slice + 10 GB VRAM = roughly 1/7 of a card. The `gpu1n001` interactive H100 node carves its 4 cards into 28 such slices.
+    Aqua's interactive GPU queue uses two profiles. On the H100 node `gpu1n001`, **1g.10gb**: 1 compute slice + 10 GB VRAM, roughly 1/7 of a card, 4 cards into 28 slices. On the A100 node `gpu0n004`, **3g.20gb**: half a card's compute and 20 GB VRAM, 8 cards into 16 slices.
 
     Two MIG instances don't share memory — they're isolated by design — so one program can't use two of them. For multi-GPU work, you need a batch GPU job on a whole-card allocation.
 
@@ -520,10 +523,9 @@ For the higher-level filesystem orientation, see Lesson 1's [Where your files li
 
 ### :material-bug: Per-node quirks worth knowing
 
-- ==**`cpu1n024` and `cpu1n031` show 0% usage**== — both flagged `old image` by the operators via `pbsnodestatus`. Online but excluded from job dispatch until re-imaged.
-- **`gpu0n003` is missing** — the A100 batch nodes go `gpu0n002, gpu0n004, gpu0n005, …`. Either decommissioned or off-line; not user-visible.
-- **`gpu0n002` has half the RAM** of every other A100 node (470 GB vs 974 GB) and only 4 GPUs. Quietly the home for small-batch A100 jobs.
-- **`gpu0n004` has 16 GPUs** — twice the A100 density of every other node. The only place `ngpus=16` lands in one chunk.
+- **`gpu0n003` is missing** — the `gpu0n*` hosts go `gpu0n002, gpu0n004, gpu0n005, …`. Either decommissioned or off-line; not in PBS.
+- **`gpu0n002` is the odd A100 host** — 4× A100 **80 GB** (every other A100 is 40 GB), 470 GB RAM, and reserved for research-group queues, so ordinary batch jobs never see it.
+- **`gpu0n004` shows 16 GPUs** — they are 16 half-card MIG slices of 8 A100s, and the host serves only the interactive queue. Nothing on Aqua satisfies `ngpus=16` in one chunk.
 - ==**Login node ≠ compute node.**== When you SSH in, you land on `aquarius02`, an EPYC 9274F (Zen 4, single socket, 24 cores, 187 GB RAM). It is **not** a compute node. Don't benchmark there, don't run long scripts there — submit through PBS.
 - **Mixed CPU families on GPU nodes.** A100 hosts run AMD Zen 3, H100 hosts run Intel Sapphire Rapids. If you compile vendor-conditional code (AMX vs AVX-512 vs nothing), this matters. For most users it doesn't.
 
