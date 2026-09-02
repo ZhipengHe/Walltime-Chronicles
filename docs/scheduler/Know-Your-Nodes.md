@@ -81,7 +81,7 @@ Two further A100 hosts exist but are not general batch nodes — see **GPU A100 
     # 1 MIG slice on H100, 6 cores, 32 GB host RAM, 12 hours
     qsub -I -l select=1:ncpus=6:ngpus=1:mem=32GB -l walltime=12:00:00
     ```
-    `ngpus=1` here means **one MIG slice**: a seventh of an H100 (~10 GB VRAM) on `gpu1n001`, or half an A100 (~20 GB) on `gpu0n004`, whichever PBS picks; add `gpu_id=H100` or `gpu_id=A100` to choose. Good for sanity-checking a model loads. Bad for real training.
+    `ngpus=1` here means **one MIG slice**: a 1g.10gb slice of an H100 (~10 GB VRAM) on `gpu1n001`, or a 3g.20gb slice of an A100 (~20 GB) on `gpu0n004`, whichever PBS picks; add `gpu_id=H100` or `gpu_id=A100` to choose. Good for sanity-checking a model loads. Bad for real training.
 
 === "3. Batch CPU"
     ```bash
@@ -122,7 +122,7 @@ Two further A100 hosts exist but are not general batch nodes — see **GPU A100 
 
 ### :material-silverware-fork-knife: The Dishes
 
-Aqua has **72 compute nodes** across five categories. Each subsection below is a card — specs, copy-paste line, and one quirk to file away.
+Aqua has **72 compute nodes**: the 71 in the table above, in six categories, plus one research-group A100 host. Each subsection below is a card — specs, copy-paste line, and one quirk to file away.
 
 #### CPU Batch — the workhorse (49 nodes)
 
@@ -234,7 +234,7 @@ qsub -l select=1:ncpus=16:ngpus=4:mem=256GB:gpu_id=A100 \
 !!! warning "Two more A100 hosts exist, and neither takes your batch job"
     `pbsnodeinfo` lists two other `gpu0n*` hosts, and both are traps if you read them as batch capacity:
 
-    - **`gpu0n004`** shows ==16 GPUs==, but they are 16 half-card MIG slices of 8 A100s, and the host serves the **interactive** queue only (next card). `ngpus=16` in a batch job is not satisfiable anywhere on Aqua.
+    - **`gpu0n004`** shows ==16 GPUs==, but they are 16 3g.20gb MIG slices of 8 A100s, and the host serves the **interactive** queue only (next card). `ngpus=16` in a batch job is not satisfiable anywhere on Aqua.
     - **`gpu0n002`** carries 4× A100 with ==80 GB== each and 470 GB RAM, and serves research-group queues only (`qcr-users`, `qvpr`, `saivt_igpu`). A plain `gpu_batch_exec` job never lands there.
 
     `gpu0n003` is absent from PBS altogether.
@@ -250,7 +250,7 @@ qsub -l select=1:ncpus=16:ngpus=4:mem=256GB:gpu_id=A100 \
 | Which you get | Either, unless you add `gpu_id=H100` or `gpu_id=A100`          |
 | Per-job cap   | 12 cores, 68 GB, up to 2 MIG slices (but see below), 12 h      |
 | Per-user cap  | 12 cores, 68 GB, ==2 MIG slices== total, 2 queued              |
-| What `ngpus=1` means | One MIG slice: 1/7 of an H100 (~10 GB VRAM) or half an A100 (~20 GB) |
+| What `ngpus=1` means | One MIG slice: 1g.10gb on the H100 (1/7 of the card, ~10 GB) or 3g.20gb on the A100 (3/7 of the compute, half the memory, ~20 GB) |
 | Queue         | `gpu_inter_exec` (auto-routed when you combine `-I` with `ngpus`) |
 
 ```bash
@@ -498,7 +498,7 @@ This section is the part of the menu you'd skip on a busy day. Each block is col
         style H100 fill:#e8f5e8
     ```
 
-    Aqua's interactive GPU queue uses two profiles. On the H100 node `gpu1n001`, **1g.10gb**: 1 compute slice + 10 GB VRAM, roughly 1/7 of a card, 4 cards into 28 slices. On the A100 node `gpu0n004`, **3g.20gb**: half a card's compute and 20 GB VRAM, 8 cards into 16 slices.
+    Aqua's interactive GPU queue uses two profiles. On the H100 node `gpu1n001`, **1g.10gb**: 1 compute slice + 10 GB VRAM, roughly 1/7 of a card, 4 cards into 28 slices. On the A100 node `gpu0n004`, **3g.20gb**: 3 of the card's 7 compute slices and half its memory (20 GB), 8 cards into 16 slices.
 
     Two MIG instances don't share memory — they're isolated by design — so one program can't use two of them. For multi-GPU work, you need a batch GPU job on a whole-card allocation.
 
@@ -525,7 +525,7 @@ For the higher-level filesystem orientation, see Lesson 1's [Where your files li
 
 - **`gpu0n003` is missing** — the `gpu0n*` hosts go `gpu0n002, gpu0n004, gpu0n005, …`. Either decommissioned or off-line; not in PBS.
 - **`gpu0n002` is the odd A100 host** — 4× A100 **80 GB** (every other A100 is 40 GB), 470 GB RAM, and reserved for research-group queues, so ordinary batch jobs never see it.
-- **`gpu0n004` shows 16 GPUs** — they are 16 half-card MIG slices of 8 A100s, and the host serves only the interactive queue. Nothing on Aqua satisfies `ngpus=16` in one chunk.
+- **`gpu0n004` shows 16 GPUs** — they are 16 3g.20gb MIG slices of 8 A100s, and the host serves only the interactive queue. Nothing on Aqua satisfies `ngpus=16` in one chunk.
 - ==**Login node ≠ compute node.**== When you SSH in, you land on `aquarius02`, an EPYC 9274F (Zen 4, single socket, 24 cores, 187 GB RAM). It is **not** a compute node. Don't benchmark there, don't run long scripts there — submit through PBS.
 - **Mixed CPU families on GPU nodes.** A100 hosts run AMD Zen 3, H100 hosts run Intel Sapphire Rapids. If you compile vendor-conditional code (AMX vs AVX-512 vs nothing), this matters. For most users it doesn't.
 

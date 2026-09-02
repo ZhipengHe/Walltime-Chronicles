@@ -359,7 +359,7 @@ Multiply both for the net effect.
 | Very large, memory-bound | $S \approx (p_{\text{new}} / p_{\text{baseline}})^d, \ d > 1$ | Cache and access-pattern penalties |
 | **Doesn't fit in GPU memory** | 10–100× | Gradient checkpointing or model parallelism kicks in |
 
-If you're near the memory limit, see [Know Your Nodes](Know-Your-Nodes.md) for the MIG slices on the interactive nodes (a seventh of an H100 or half an A100 is sometimes enough, and arrives faster than a full card).
+If you're near the memory limit, see [Know Your Nodes](Know-Your-Nodes.md) for the MIG slices on the interactive nodes (a 10 GB H100 slice or a 20 GB A100 slice is sometimes enough, and arrives faster than a full card).
 
 ### Architecture-specific FLOPs (forward + backward)
 

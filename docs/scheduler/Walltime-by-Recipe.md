@@ -119,7 +119,7 @@ flowchart TD
 
     ---
 
-    One MIG slice (≈ 1/7 of an H100, ~10 GB, or half an A100, ~20 GB). "Does my model load?"
+    One MIG slice (a 10 GB H100 slice or a 20 GB A100 slice). "Does my model load?"
 
     [:octicons-arrow-right-24: Jump to recipe](#recipe-7-mig-slice-sanity-check)
 
@@ -411,7 +411,7 @@ A100 nodes are usually less contested. If your model fits in 40 GB VRAM and you 
     - **`ngpus=8`** — A100 nodes (`gpu0n005`–`gpu0n009`) have 8 cards each; one node holds the whole job. No `place=scatter` needed.
 
     !!! warning "Two A100 hosts you will not land on"
-        - **`gpu0n004`** shows 16 GPUs, but they are half-card MIG slices and the host serves the interactive queue only.
+        - **`gpu0n004`** shows 16 GPUs, but they are 3g.20gb MIG slices and the host serves the interactive queue only.
         - **`gpu0n002`** (4× A100 80 GB, 470 GB RAM) is reserved for research-group queues.
 
         Batch A100 jobs run on `gpu0n005` to `gpu0n009`, 8 cards each. See [Know Your Nodes § GPU A100 Batch](Know-Your-Nodes.md#a100-batch).
@@ -443,7 +443,7 @@ The fastest way to confirm your model actually loads on a real Aqua GPU before y
     qsub -I -l select=1:ncpus=6:ngpus=1:mem=32gb -l walltime=02:00:00
     ```
 
-    What `ngpus=1` means in the interactive queue: **one MIG slice**, either a 1g.10gb slice of an H100 (~10 GB VRAM, 28 of them on `gpu1n001`) or a 3g.20gb half-card slice of an A100 (~20 GB, 16 of them on `gpu0n004`), whichever PBS places you on. Add `:gpu_id=H100` to the select line if the card type matters to your check.
+    What `ngpus=1` means in the interactive queue: **one MIG slice**, either a 1g.10gb slice of an H100 (~10 GB VRAM, 28 of them on `gpu1n001`) or a 3g.20gb slice of an A100 (3/7 of the compute, half the memory, ~20 GB; 16 of them on `gpu0n004`), whichever PBS places you on. Add `:gpu_id=H100` to the select line if the card type matters to your check.
 
     !!! danger "Don't ask for `ngpus=2` interactively"
         Two MIG slices in one job aren't supported — the slices don't share memory or talk to each other without specialised code. PBS may accept the submit (per-job cap is 1–2), but the workload won't actually distribute across the slices. See [Know Your Nodes § MIG, not a whole GPU](Know-Your-Nodes.md#gpu-interactive-the-tasting-flight-2-nodes-mig-sliced).

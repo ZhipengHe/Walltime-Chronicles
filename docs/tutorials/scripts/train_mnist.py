@@ -38,6 +38,7 @@ FILES = {
 
 
 def parse_args():
+    """Parse the command line and reject sizes the training loop cannot run with."""
     p = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     p.add_argument("--data-dir", default="data/mnist", help="where the four MNIST files live (downloaded if missing)")
     p.add_argument("--samples", type=int, default=60_000, help="training images to use, up to 60,000 (memory)")
@@ -49,7 +50,14 @@ def parse_args():
     p.add_argument("--seed", type=int, default=0, help="controls shuffling and initialisation")
     p.add_argument("--checkpoint", default=None, help="path to save after each epoch and resume from")
     p.add_argument("--out", default="results.json", help="where the summary is written")
-    return p.parse_args()
+    args = p.parse_args()
+    if not 1 <= args.samples <= 60_000:
+        p.error("--samples must be between 1 and 60000")
+    if args.width < 1 or args.batch < 1:
+        p.error("--width and --batch must be at least 1")
+    if args.epochs < 0 or args.threads < 0:
+        p.error("--epochs and --threads cannot be negative")
+    return args
 
 
 def fetch(data_dir):
@@ -73,6 +81,7 @@ def read_idx(path):
 
 
 def load(data_dir, samples, device):
+    """Return train and test tensors on `device`, using the first `samples` training images."""
     fetch(data_dir)
     x_train = read_idx(os.path.join(data_dir, FILES["train_images"]))[:samples]
     y_train = read_idx(os.path.join(data_dir, FILES["train_labels"]))[:samples]
@@ -85,6 +94,7 @@ def load(data_dir, samples, device):
 
 
 def pick_device(name):
+    """Resolve --device: `auto` takes a GPU if one is visible, `cuda` insists on one."""
     if name == "cuda" or (name == "auto" and torch.cuda.is_available()):
         if not torch.cuda.is_available():
             sys.exit("ERROR: --device cuda requested but no GPU is visible (did you ask PBS for ngpus=1?)")
@@ -104,6 +114,7 @@ def peak_memory_mb():
 
 @torch.no_grad()
 def accuracy(model, x, y, batch=1000):
+    """Fraction of `x` classified correctly, evaluated in batches to bound memory."""
     correct = 0
     for start in range(0, x.shape[0], batch):
         correct += (model(x[start : start + batch]).argmax(1) == y[start : start + batch]).sum().item()
@@ -111,10 +122,12 @@ def accuracy(model, x, y, batch=1000):
 
 
 def main():
+    """Train, report per-epoch accuracy, and write the JSON summary."""
     args = parse_args()
     started = time.time()
 
-    # PBS exports NCPUS inside a job; matching it is the whole point of Lesson 6.
+    # PBS exports NCPUS inside a job; using exactly that many threads is what
+    # makes the job's cpupercent match its request.
     threads = args.threads or int(os.environ.get("NCPUS", "1"))
     torch.set_num_threads(threads)
     torch.manual_seed(args.seed)
