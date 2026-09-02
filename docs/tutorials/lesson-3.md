@@ -29,7 +29,7 @@ PBS routes `qsub -I` to one of two interactive queues by whether you asked for a
 | Queue | You get | Per job | Per user, all your interactive jobs | Walltime |
 |---|---|---|---|---|
 | `cpu_inter_exec` | a shell on `cpu1n001`, the single interactive CPU node | 1–8 cores, 1–34 GB | 8 cores, 34 GB | ≤ 12 h |
-| `gpu_inter_exec` (`:ngpus=1`) | a shell plus **one MIG slice**, ~10 GB of an H100 or ~20 GB of an A100, not a whole card | 1–12 cores, 1–68 GB | 12 cores, 68 GB, 2 slices | ≤ 12 h |
+| `gpu_inter_exec` (`:ngpus=1`) | a shell plus **MIG slices**, ~10 GB of an H100 or ~20 GB of an A100 each, not whole cards | 1–12 cores, 1–68 GB, 1–2 slices | 12 cores, 68 GB, 2 slices | ≤ 12 h |
 
 This lesson stays on CPU. For the GPU queue, [Know Your Nodes](../scheduler/Know-Your-Nodes.md) explains the slices and Recipe 7 in [Walltime by Recipe](../scheduler/Walltime-by-Recipe.md#recipe-7-mig-slice-sanity-check) has the ready-made line.
 
@@ -44,7 +44,7 @@ The caps come from the queues themselves (`qstat -Qf cpu_inter_exec`); the [eRes
     ```
 
     - `ncpus=4` → the script reads `$NCPUS` and uses every core PBS gives it
-    - `mem=8GB` → the run peaks near 500 MB; 8 GB leaves room to turn the knobs up
+    - `mem=8GB` → memory for the whole job, all processes together; enough for the script with room to turn the knobs up
     - `walltime=01:00:00` → an hour at the keyboard, not the 12 h cap
 
     You submit this in Part 3. Part 2 comes first, because installing and downloading belongs on the login node.
@@ -62,7 +62,7 @@ It needs only PyTorch. Install that into your Lesson 2 environment, download the
     cd ~/hello-aqua
     source .venv/bin/activate
 
-    # CPU build of PyTorch (about 800 MB installed; the CUDA build is gigabytes and needs a GPU node).
+    # CPU build of PyTorch (about 800 MB installed; the CUDA build is gigabytes and only useful on a GPU node).
     # numpy is not required, but without it torch prints a warning on every import.
     uv pip install --index https://download.pytorch.org/whl/cpu torch numpy
 
@@ -110,9 +110,9 @@ It needs only PyTorch. Install that into your Lesson 2 environment, download the
 
     Four files land in `~/hello-aqua/data/mnist/`. Accuracy is `None` because nothing was trained.
 
-The script in full (also [downloadable](scripts/train_mnist.py)):
+[Download the script](scripts/train_mnist.py), or read it here:
 
-??? note "The script, in full (`train_mnist.py`)"
+??? note "`train_mnist.py`"
 
     ```python title="train_mnist.py"
     --8<-- "docs/tutorials/scripts/train_mnist.py"
@@ -160,7 +160,7 @@ python train_mnist.py
     done      test accuracy 0.982  in 25.2s  -> results.json
     ```
 
-    Eight passes over 60,000 digits and it reads 98 % of the 10,000 it has never seen. The accuracies will match to a few decimals (the seed is fixed). The times will vary with whoever else is on `cpu1n001`, and the first epoch is slower while PyTorch warms up.
+    Eight passes over 60,000 digits and it reads 98% of the 10,000 it has never seen. The accuracies will match to a few decimals (the seed is fixed). The times will vary with whoever else is on `cpu1n001`, and the first epoch is slower while PyTorch warms up.
 
 ### Step 3: Read the summary
 
@@ -213,24 +213,11 @@ Those two keys and two commands are all this lesson needs; the [tmux cheat sheet
 
 `tmux` costs the login node nothing. What runs inside it still follows Lesson 1's rule: editing, `git` and `qsub` yes, the training run no.
 
----
+!!! tip "Interactive or batch?"
+    Before you start running things in an interactive job, ask: **am I waiting on the machine, or is it waiting on me?**
 
-## 🛑 Part 5: Know when to stop (~1 min)
-
-Before you start running things here, ask: **am I waiting on the machine, or is it waiting on me?**
-
-- If you are typing, reading output, changing a parameter and running again, this is interactive work. Stay.
-- If you have set something going and are watching it, or would like to walk away, or intend to run it more than once with different inputs, it is a batch job. That is Lesson 4.
-
-When you are done, leave:
-
-```bash
-exit                 # ends the interactive job; you are back in tmux on the login node
-exit                 # closes the tmux session too
-qstat -u $USER       # nothing left running? good
-```
-
-Your node goes back into the pool.
+    - If you are typing, reading output, changing a parameter and running again, this is interactive work. Stay.
+    - If you have set something going and are watching it, or would like to walk away, or intend to run it more than once with different inputs, it is a batch job. That is Lesson 4.
 
 ---
 
@@ -238,9 +225,9 @@ Your node goes back into the pool.
 
 !!! success "You now know"
 
-    ⚖️ **Interactive requests are sized for the session, not the maximum** — the caps are 8 cores / 34 GB (CPU) and 12 cores / 68 GB / one MIG slice (GPU), 12 h, and everything you ask for is held until you leave
+    ⚖️ **Interactive requests are sized for the session, not the maximum** — the caps are 8 cores / 34 GB (CPU) and 12 cores / 68 GB / 2 MIG slices (GPU), 12 h, and everything you ask for is held until you leave
 
-    🛠️ **PBS tells your job what it got** — `$NCPUS`, `$PBS_JOBID`; programs that read them behave
+    🛠️ **PBS tells your job what it got** — `$NCPUS` for the thread count, `$PBS_JOBID` for the record
 
     🔌 **`tmux` on the login node** keeps an interactive job alive across a dropped connection
 
@@ -255,7 +242,7 @@ Your node goes back into the pool.
 !!! question "Stuck?"
     - **`qsub -I` sits at "waiting for job to start"?** There is one interactive CPU node and it may be full. Try fewer cores (`ncpus=2:mem=4GB`), or check `pbsnodeinfo | grep cpu1n001` to see how busy it is.
     - **`command not found: python` after the prompt changes?** You haven't activated the environment on the compute node. `source ~/hello-aqua/.venv/bin/activate` (or the conda equivalent) is per shell.
-    - **The script tries to download on the compute node?** You skipped the `--epochs 0` fetch in Part 2, or ran from a different directory. It will still work (compute nodes can reach the internet), but fetch once on the login node and keep `data/mnist/` next to the script.
+    - **The script tries to download on the compute node?** You skipped the `--epochs 0` fetch in Part 2, or ran from a different directory. Fetch once on the login node and keep `data/mnist/` next to the script.
     - **PyTorch install is slow or warns about hardlinks?** Cache and venv are on different filesystems. [uv on Aqua](../scheduler/uv-on-aqua.md) has the three placements that avoid it.
     - **Want VS Code or Jupyter inside the interactive job instead of a bare shell?** [Surviving without VS Code Remote SSH](../remote-dev/Surviving-without-VS-Code-Remote-SSH.md) covers the tunnel and the port-forwarded Jupyter Lab, both of which run inside exactly the `qsub -I` you just used.
     - **Curious what the interactive node actually is?** [Know Your Nodes](../scheduler/Know-Your-Nodes.md), "CPU Interactive — the appetiser".
