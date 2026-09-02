@@ -425,7 +425,7 @@ A100 nodes are usually less contested. If your model fits in 40 GB VRAM and you 
 
 ### :material-microscope: Recipe 7 — MIG slice sanity check { #recipe-7-mig-slice-sanity-check }
 
-The fastest way to confirm your model actually loads on a real Aqua GPU before you queue a real training job. One MIG slice = ~10 GB VRAM, lands almost immediately.
+The fastest way to confirm your model actually loads on a real Aqua GPU before you queue a real training job. One MIG slice, ~10 GB VRAM on an H100 or ~20 GB on an A100, lands almost immediately.
 
 === "Scenario"
 
@@ -453,7 +453,7 @@ The fastest way to confirm your model actually loads on a real Aqua GPU before y
 === "Bottom line"
 
     !!! success "Walltime: 02:00:00 — queue: `gpu_inter_exec` (auto-routed)"
-        - 1 MIG slice (~10 GB VRAM), 6 cores host, 32 GB host RAM, 2 h interactive
+        - 1 MIG slice (~10 GB VRAM on an H100, ~20 GB on an A100), 6 cores host, 32 GB host RAM, 2 h interactive
         - Caps: 1–2 slices/job (but use 1), 1–12 cores, 1–68 GB, ≤ 12 h
         - Don't book the full 12 h then walk away — the queue holds resources the whole time
 
