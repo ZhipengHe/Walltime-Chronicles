@@ -3,7 +3,7 @@
 Welcome to the Crash Course Café! ☕ Pull up a chair and let's get you productive on QUT Aqua without the usual learning curve headaches.
 
 !!! info "Course status (2026-08-28)"
-    The Crash Course follows a **workflow-driven 9-lesson outline**, where each lesson ends with a tangible deliverable and one small training script is carried from Lesson 3 through to Lesson 9. Added on 2026-08-28: Lesson 3 (Working Interactively), the develop-and-measure step between having a Python environment and submitting your first batch job; and Lesson 9 (Working with an AI Agent on Aqua), which closes the course.
+    The Crash Course follows a **workflow-driven 9-lesson outline**, where each lesson ends with a tangible deliverable and one small training script is carried from Lesson 3 through to Lesson 9. Added on 2026-08-28: Lesson 3 (Working Interactively), the hands-on step between having a Python environment and submitting your first batch job; and Lesson 9 (Working with an AI Agent on Aqua), which closes the course.
 
     - **Lessons 1 and 2** are written.
     - **Lessons 3–9** are **stubs** with scope contracts and pointers to existing deeper guides. Lessons land as they're written.
@@ -126,7 +126,7 @@ This crash course is your launching pad. When you hit specific challenges, you'l
 > *"Interactive is where you develop. Batch is where you run."*
 
 - Size an interactive request — CPU vs GPU interactive queues and their caps
-- Run the course's training script on a compute node by hand, and measure it
+- Run the course's training script on a compute node by hand
 - `tmux` for surviving disconnects; when a session should become a batch job
 
 [→ Lesson 3](lesson-3.md) — *stub with scope contract and pointers*
