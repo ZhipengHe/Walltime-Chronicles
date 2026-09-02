@@ -129,7 +129,7 @@ This crash course is your launching pad. When you hit specific challenges, you'l
 - Run the course's training script on a compute node by hand
 - `tmux` for surviving disconnects; when a session should become a batch job
 
-[→ Lesson 3](lesson-3.md) — *stub with scope contract and pointers*
+[→ Lesson 3](lesson-3.md)
 
 ### Lesson 4: Your First Batch Job (15–20 min)
 
