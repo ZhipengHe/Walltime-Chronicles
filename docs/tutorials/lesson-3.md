@@ -87,7 +87,7 @@ It needs only PyTorch. Install that into your Lesson 2 environment, download the
         If you followed Lesson 2's tip and moved `UV_CACHE_DIR` to `/scratch`, this venv on `/home` is now on a different filesystem from the cache, and uv will warn `Failed to hardlink files; falling back to full copy`. It still works, just slower. The fix is to keep cache and venv together: [uv on Aqua](../scheduler/uv-on-aqua.md).
 
 === "Miniforge"
-    Add one line to Lesson 2's `environment.yml`:
+    Add `- pytorch-cpu` to the `dependencies` list in Lesson 2's `environment.yml`, so the file reads:
 
     ```yaml
     # ~/hello-aqua/environment.yml
