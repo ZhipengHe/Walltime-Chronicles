@@ -1,9 +1,8 @@
 """Train a small network to recognise handwritten digits (MNIST).
 
-The Crash Course's one worked example. Lesson 3 runs it by hand and measures
-it; every later lesson turns one of its knobs: more epochs (walltime), more
-samples or a wider layer (memory), more threads or a GPU (right-sizing), a
-seed per job (arrays), and a checkpoint file (long jobs).
+Its knobs map to what a job asks PBS for: epochs to walltime, samples and
+width to memory, threads or a GPU to the hardware request. A seed makes
+separate runs differ; a checkpoint lets a long run resume.
 
     python train_mnist.py                        # ~half a minute on one core
     python train_mnist.py --epochs 20            # longer

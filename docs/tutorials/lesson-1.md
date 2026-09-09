@@ -10,7 +10,7 @@ Welcome to Aqua, QUT's central HPC. The first half of this lesson is the mental 
 By the end of this 15-minute lesson, you'll have:
 
 - [ ] **A mental model of Aqua** — what's a node, where files live, who decides when your job runs
-- [ ] **SSHed into Aqua** — and confirmed you landed on the login node (`aquarius02`)
+- [ ] **SSHed into Aqua** — and confirmed you landed on a login node (`aquarius01` or `aquarius02`)
 - [ ] **Run your first interactive job** — `qsub -I` for 5 minutes on a real compute node
 - [ ] **Felt the difference** between login and compute nodes (different hostnames, same files)
 - [ ] **Exited cleanly** — resources released back to PBS
@@ -24,11 +24,11 @@ By the end of this 15-minute lesson, you'll have:
 
 **Aqua** (formally *Aquarius*) is QUT's centrally-funded supercomputer — free to use for QUT researchers. It's built for the workloads your laptop can't handle: training ML models on real datasets, running multi-day simulations, slicing genomes, modelling climate, fitting cosmologically large parameter sweeps. Anything where "let it run overnight on the M2" is no longer a serious plan.
 
-Architecturally, it's a few hundred powerful computers (**nodes**) talking to a shared storage pool over high-speed networking, all coordinated by a job scheduler called **PBS** that hands out resources fairly across the ~hundreds of users competing for them at any given moment.
+Architecturally, it's some seventy powerful computers (**nodes**) talking to a shared storage pool over high-speed networking, all coordinated by a job scheduler called **PBS** that hands out resources fairly across the ~hundreds of users competing for them at any given moment.
 
 ```mermaid
 graph TD
-    You[Your laptop] -->|SSH<br/>via VPN if off-campus| Login[Login node<br/>aquarius02]
+    You[Your laptop] -->|SSH<br/>via VPN if off-campus| Login[Login node<br/>aquarius01 / 02]
     Login -->|qsub| PBS[PBS scheduler]
     PBS -->|allocates| CPU[CPU nodes<br/>cpu1n*<br/>AMD Genoa, 192 cores]
     PBS -->|allocates| GPU[GPU nodes<br/>gpu1n*<br/>H100, A100]
@@ -49,13 +49,13 @@ graph TD
 ```
 
 !!! info "Aqua at a glance"
-    - **~70 compute nodes** — 50 CPU (AMD Genoa), 14 H100 GPU hosts, 7 A100 GPU hosts, 1 large-memory node
-    - **~10,000 CPU cores** across the cluster
-    - **108 GPUs** total (56 H100 + 52 A100), some of them sliced or reserved
+    - **About 70 compute nodes** — mostly CPU boxes (AMD Genoa), plus H100 and A100 GPU hosts and one large-memory node
+    - **Over 10,000 CPU cores** across the cluster
+    - **Over 100 GPUs**, some of them sliced into smaller pieces or reserved
     - **High-speed InfiniBand** interconnect (200–400 Gbit/s) between nodes and storage
     - **~1 PB Weka scratch storage** on NVMe flash
 
-    Full hardware specs: [About Aqua](https://docs.eres.qut.edu.au/about-aqua#hardware)[^1].
+    Exact per-node counts are in [Know Your Nodes](../scheduler/Know-Your-Nodes.md); the official list is [About Aqua](https://docs.eres.qut.edu.au/about-aqua#hardware)[^1].
 
 ### Where your files live
 
@@ -78,10 +78,10 @@ For the deeper take — including per-queue node assignments and which filesyste
 
 Two distinct kinds of machine on Aqua, and the difference matters:
 
-=== "Login node (`aquarius02`)"
-    - **Where you land** when you SSH in
+=== "Login nodes (`aquarius01`, `aquarius02`)"
+    - **Where you land** when you SSH in; `aqua.qut.edu.au` sends you to one of the two
     - **Shared** with every other user logged in right now
-    - A single 24-core EPYC box with 187 GB RAM — easily overwhelmed
+    - Small: `aquarius02` is one 24-core EPYC box with 187 GB RAM — easily overwhelmed
     - Use it for: editing files, submitting jobs, checking job status, light file transfer
     - **Don't** run heavy work here — compiling, training, multi-hour scripts, terabyte copies
     - Think of it as: the reception desk
@@ -89,7 +89,7 @@ Two distinct kinds of machine on Aqua, and the difference matters:
 === "Compute nodes (`cpu1n*`, `gpu1n*`, `mem1n001`)"
     - **Where PBS sends your job** when resources are free
     - **Dedicated to your job** for its entire walltime
-    - Hundreds available, each with 24–192 cores, lots of RAM, sometimes GPUs
+    - About seventy of them, each with well over 100 cores, lots of RAM, sometimes GPUs
     - Hostname format tells you the type: `cpu1nNNN` (CPU), `gpu1nNNN` (GPU), `mem1n001` (the 6 TB monster)
     - This is where the real work happens
 
@@ -113,11 +113,11 @@ Replace `<your-username>` with your QUT username. You'll see a login banner, the
 [your-username@aquarius02 ~]$
 ```
 
-The `aquarius02` part is the **login node hostname** — that's how you know you're at the front door, not inside a compute node yet.
+The `aquarius02` part is the **login node hostname** (you may land on `aquarius01` instead; there are two) — that's how you know you're at the front door, not inside a compute node yet.
 
 !!! example "Sanity checks before you go further"
     ```bash
-    hostname    # → aquarius02
+    hostname    # → aquarius01 or aquarius02
     pwd         # → /home/<your-username>
     whoami      # → <your-username>
     ```
@@ -150,7 +150,7 @@ qsub: job 12345678.aqua-pbs ready
 Two things happened:
 
 1. **Job ID was assigned** (`12345678.aqua-pbs`). You'll see job IDs everywhere — they're how PBS and you refer to the same thing.
-2. **Your prompt's hostname changed** from `aquarius02` to a compute node (here, `cpu1n023` — PBS picked whichever was free).
+2. **Your prompt's hostname changed** from the login node to a compute node (here, `cpu1n023` — PBS picked whichever was free).
 
 You're on a compute node now. The shell you're typing into is running on a different physical machine from the one you SSHed into.
 
@@ -160,7 +160,7 @@ You're on a compute node now. The shell you're typing into is running on a diffe
 ### Step 3: Confirm you've moved
 
 ```bash
-hostname    # → cpu1nNNN (different from aquarius02)
+hostname    # → cpu1nNNN (no longer an aquarius)
 pwd         # → /home/<your-username> (same — your home travels with you)
 nproc       # → 1 (you asked for 1 core, PBS gave you 1 core)
 ```
@@ -175,7 +175,7 @@ Try `ls ~/` — same files you'd see from the login node.
 exit
 ```
 
-You're back at the login node prompt (`aquarius02`), and PBS has released your compute node back into the pool. The job is now `F` (finished) in queue state. If you forget to exit, the job dies on its own when walltime expires — but exiting cleanly is polite.
+You're back at the login node prompt (`aquarius01` or `aquarius02`), and PBS has released your compute node back into the pool. The job is now `F` (finished) in queue state. If you forget to exit, the job dies on its own when walltime expires — but exiting cleanly is polite.
 
 !!! success "You've now done the basic round-trip"
     Log in → request resources → work on a compute node → exit. This is the loop you'll repeat for every interactive session, forever. Batch jobs (Lesson 4) are the same pattern with a script in the middle and no human waiting around for it.
@@ -186,11 +186,11 @@ You're back at the login node prompt (`aquarius02`), and PBS has released your c
 
 !!! success "You now know"
 
-    🌊 **What Aqua is** — QUT's centrally-funded HPC, free to researchers, ~70 nodes / 10k CPU cores / 108 GPUs
+    🌊 **What Aqua is** — QUT's centrally-funded HPC, free to researchers, about 70 nodes, over 10k CPU cores, over 100 GPUs
 
     📂 **Where files live** — `/home` for code (backed up), `/scratch` for active data (fast, not backed up), `/work` for shared (backed up), `$TMPDIR` for per-job intermediates
 
-    🚪 **Login vs compute** — login is `aquarius02` (shared reception desk, no heavy work); compute is `cpu1n*` / `gpu1n*` / `mem1n*` (dedicated to your job)
+    🚪 **Login vs compute** — login is `aquarius01` / `aquarius02` (shared reception desk, no heavy work); compute is `cpu1n*` / `gpu1n*` / `mem1n*` (dedicated to your job)
 
     🛠️ **The round-trip** — `ssh` → `qsub -I` → work → `exit`. PBS handles the rest.
 
