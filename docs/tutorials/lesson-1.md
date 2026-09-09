@@ -131,7 +131,7 @@ The `aquarius02` part is the **login node hostname** (you may land on `aquarius0
 qsub -I -l walltime=00:05:00 -l select=1:ncpus=1:mem=1GB
 ```
 
-!!! example "Command breakdown"
+!!! note "Command breakdown"
     - `qsub -I` → request an **interactive** job (PBS will give you a shell on a compute node)
     - `-l walltime=00:05:00` → kill the job after 5 minutes if you haven't exited
     - `-l select=1:ncpus=1:mem=1GB` → give me 1 chunk: 1 CPU core, 1 GB RAM

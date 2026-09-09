@@ -129,9 +129,9 @@ This crash course is your launching pad. When you hit specific challenges, you'l
 
 > *"Getting your Python tools ready"*
 
-- Pick one: uv (default) or Miniforge / micromamba (for conda-forge packages)
-- Install via upstream installers — no QUT module needed (~5 to ~30 seconds per tool)
-- Create a test environment, verify it works
+- Install uv with one command, no QUT module needed
+- Create a project: `pyproject.toml` for what you asked for, `uv.lock` for what you got, then rebuild the environment from them
+- The one filesystem rule for environments on Aqua; conda as a branch for non-PyPI packages
 
 [→ Lesson 2](lesson-2.md)
 
