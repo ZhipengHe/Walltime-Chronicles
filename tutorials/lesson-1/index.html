@@ -1579,7 +1579,7 @@
 <p>By the end of this 15-minute lesson, you'll have:</p>
 <ul class="task-list">
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>A mental model of Aqua</strong> — what's a node, where files live, who decides when your job runs</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>SSHed into Aqua</strong> — and confirmed you landed on the login node (<code>aquarius02</code>)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>SSHed into Aqua</strong> — and confirmed you landed on a login node (<code>aquarius01</code> or <code>aquarius02</code>)</li>
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>Run your first interactive job</strong> — <code>qsub -I</code> for 5 minutes on a real compute node</li>
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>Felt the difference</strong> between login and compute nodes (different hostnames, same files)</li>
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>Exited cleanly</strong> — resources released back to PBS</li>
@@ -1591,9 +1591,9 @@
 <hr />
 <h2 id="part-1-what-is-aqua-5-min">🌊 Part 1: What is Aqua? (~5 min)</h2>
 <p><strong>Aqua</strong> (formally <em>Aquarius</em>) is QUT's centrally-funded supercomputer — free to use for QUT researchers. It's built for the workloads your laptop can't handle: training ML models on real datasets, running multi-day simulations, slicing genomes, modelling climate, fitting cosmologically large parameter sweeps. Anything where "let it run overnight on the M2" is no longer a serious plan.</p>
-<p>Architecturally, it's a few hundred powerful computers (<strong>nodes</strong>) talking to a shared storage pool over high-speed networking, all coordinated by a job scheduler called <strong>PBS</strong> that hands out resources fairly across the ~hundreds of users competing for them at any given moment.</p>
+<p>Architecturally, it's some seventy powerful computers (<strong>nodes</strong>) talking to a shared storage pool over high-speed networking, all coordinated by a job scheduler called <strong>PBS</strong> that hands out resources fairly across the ~hundreds of users competing for them at any given moment.</p>
 <pre class="mermaid"><code>graph TD
-    You[Your laptop] --&gt;|SSH&lt;br/&gt;via VPN if off-campus| Login[Login node&lt;br/&gt;aquarius02]
+    You[Your laptop] --&gt;|SSH&lt;br/&gt;via VPN if off-campus| Login[Login node&lt;br/&gt;aquarius01 / 02]
     Login --&gt;|qsub| PBS[PBS scheduler]
     PBS --&gt;|allocates| CPU[CPU nodes&lt;br/&gt;cpu1n*&lt;br/&gt;AMD Genoa, 192 cores]
     PBS --&gt;|allocates| GPU[GPU nodes&lt;br/&gt;gpu1n*&lt;br/&gt;H100, A100]
@@ -1614,13 +1614,13 @@
 <div class="admonition info">
 <p class="admonition-title">Aqua at a glance</p>
 <ul>
-<li><strong>~70 compute nodes</strong> — 50 CPU (AMD Genoa), 14 H100 GPU hosts, 7 A100 GPU hosts, 1 large-memory node</li>
-<li><strong>~10,000 CPU cores</strong> across the cluster</li>
-<li><strong>108 GPUs</strong> total (56 H100 + 52 A100), some of them sliced or reserved</li>
+<li><strong>About 70 compute nodes</strong> — mostly CPU boxes (AMD Genoa), plus H100 and A100 GPU hosts and one large-memory node</li>
+<li><strong>Over 10,000 CPU cores</strong> across the cluster</li>
+<li><strong>Over 100 GPUs</strong>, some of them sliced into smaller pieces or reserved</li>
 <li><strong>High-speed InfiniBand</strong> interconnect (200–400 Gbit/s) between nodes and storage</li>
 <li><strong>~1 PB Weka scratch storage</strong> on NVMe flash</li>
 </ul>
-<p>Full hardware specs: <a href="https://docs.eres.qut.edu.au/about-aqua#hardware">About Aqua</a><sup id="fnref2:1"><a class="footnote-ref" href="#fn:1">1</a></sup>.</p>
+<p>Exact per-node counts are in <a href="../../scheduler/Know-Your-Nodes/">Know Your Nodes</a>; the official list is <a href="https://docs.eres.qut.edu.au/about-aqua#hardware">About Aqua</a><sup id="fnref2:1"><a class="footnote-ref" href="#fn:1">1</a></sup>.</p>
 </div>
 <h3 id="where-your-files-live">Where your files live</h3>
 <p>Aqua mounts four filesystems on every node. Picking the right one for the right job is the difference between "my code is fast" and "my I/O is so slow the cluster operator emails me asking what I'm doing":</p>
@@ -1675,13 +1675,13 @@
 <p>For the deeper take — including per-queue node assignments and which filesystem is fastest for which I/O shape — see <a href="../../scheduler/Know-Your-Nodes/">Know Your Nodes</a>. For the official QUT reference: <a href="https://docs.eres.qut.edu.au/hpc-filesystem">QUT eResearch — Filesystem and data management</a><sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup>.</p>
 <h3 id="login-nodes-vs-compute-nodes">Login nodes vs compute nodes</h3>
 <p>Two distinct kinds of machine on Aqua, and the difference matters:</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Login node (<code>aquarius02</code>)</label><label for="__tabbed_1_2">Compute nodes (<code>cpu1n*</code>, <code>gpu1n*</code>, <code>mem1n001</code>)</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Login nodes (<code>aquarius01</code>, <code>aquarius02</code>)</label><label for="__tabbed_1_2">Compute nodes (<code>cpu1n*</code>, <code>gpu1n*</code>, <code>mem1n001</code>)</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <ul>
-<li><strong>Where you land</strong> when you SSH in</li>
+<li><strong>Where you land</strong> when you SSH in; <code>aqua.qut.edu.au</code> sends you to one of the two</li>
 <li><strong>Shared</strong> with every other user logged in right now</li>
-<li>A single 24-core EPYC box with 187 GB RAM — easily overwhelmed</li>
+<li>Small: <code>aquarius02</code> is one 24-core EPYC box with 187 GB RAM — easily overwhelmed</li>
 <li>Use it for: editing files, submitting jobs, checking job status, light file transfer</li>
 <li><strong>Don't</strong> run heavy work here — compiling, training, multi-hour scripts, terabyte copies</li>
 <li>Think of it as: the reception desk</li>
@@ -1691,7 +1691,7 @@
 <ul>
 <li><strong>Where PBS sends your job</strong> when resources are free</li>
 <li><strong>Dedicated to your job</strong> for its entire walltime</li>
-<li>Hundreds available, each with 24–192 cores, lots of RAM, sometimes GPUs</li>
+<li>About seventy of them, each with well over 100 cores, lots of RAM, sometimes GPUs</li>
 <li>Hostname format tells you the type: <code>cpu1nNNN</code> (CPU), <code>gpu1nNNN</code> (GPU), <code>mem1n001</code> (the 6 TB monster)</li>
 <li>This is where the real work happens</li>
 </ul>
@@ -1708,10 +1708,10 @@
 <p>Replace <code>&lt;your-username&gt;</code> with your QUT username. You'll see a login banner, then end up at a prompt that looks something like:</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>[your-username@aquarius02 ~]$
 </span></code></pre></div>
-<p>The <code>aquarius02</code> part is the <strong>login node hostname</strong> — that's how you know you're at the front door, not inside a compute node yet.</p>
+<p>The <code>aquarius02</code> part is the <strong>login node hostname</strong> (you may land on <code>aquarius01</code> instead; there are two) — that's how you know you're at the front door, not inside a compute node yet.</p>
 <div class="admonition example">
 <p class="admonition-title">Sanity checks before you go further</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>hostname<span class="w">    </span><span class="c1"># → aquarius02</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>hostname<span class="w">    </span><span class="c1"># → aquarius01 or aquarius02</span>
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nb">pwd</span><span class="w">         </span><span class="c1"># → /home/&lt;your-username&gt;</span>
 </span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>whoami<span class="w">      </span><span class="c1"># → &lt;your-username&gt;</span>
 </span></code></pre></div>
@@ -1723,7 +1723,7 @@
 <h3 id="step-2-ask-pbs-for-a-5-minute-interactive-job">Step 2: Ask PBS for a 5-minute interactive job</h3>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>qsub<span class="w"> </span>-I<span class="w"> </span>-l<span class="w"> </span><span class="nv">walltime</span><span class="o">=</span><span class="m">00</span>:05:00<span class="w"> </span>-l<span class="w"> </span><span class="k">select</span><span class="o">=</span><span class="m">1</span>:ncpus<span class="o">=</span><span class="m">1</span>:mem<span class="o">=</span>1GB
 </span></code></pre></div>
-<div class="admonition example">
+<div class="admonition note">
 <p class="admonition-title">Command breakdown</p>
 <ul>
 <li><code>qsub -I</code> → request an <strong>interactive</strong> job (PBS will give you a shell on a compute node)</li>
@@ -1741,7 +1741,7 @@
 <p>Two things happened:</p>
 <ol>
 <li><strong>Job ID was assigned</strong> (<code>12345678.aqua-pbs</code>). You'll see job IDs everywhere — they're how PBS and you refer to the same thing.</li>
-<li><strong>Your prompt's hostname changed</strong> from <code>aquarius02</code> to a compute node (here, <code>cpu1n023</code> — PBS picked whichever was free).</li>
+<li><strong>Your prompt's hostname changed</strong> from the login node to a compute node (here, <code>cpu1n023</code> — PBS picked whichever was free).</li>
 </ol>
 <p>You're on a compute node now. The shell you're typing into is running on a different physical machine from the one you SSHed into.</p>
 <div class="admonition note">
@@ -1749,7 +1749,7 @@
 <p><code>qsub -I</code> blocks until PBS finds a free compute node. For a 1-core / 1 GB request it's usually seconds; for bigger asks it can take minutes or hours (peak times). If you're waiting more than 30 seconds for this tiny request, <code>Ctrl+C</code> and try again — there might be a maintenance window or an unusually busy stretch.</p>
 </div>
 <h3 id="step-3-confirm-youve-moved">Step 3: Confirm you've moved</h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>hostname<span class="w">    </span><span class="c1"># → cpu1nNNN (different from aquarius02)</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>hostname<span class="w">    </span><span class="c1"># → cpu1nNNN (no longer an aquarius)</span>
 </span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nb">pwd</span><span class="w">         </span><span class="c1"># → /home/&lt;your-username&gt; (same — your home travels with you)</span>
 </span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>nproc<span class="w">       </span><span class="c1"># → 1 (you asked for 1 core, PBS gave you 1 core)</span>
 </span></code></pre></div>
@@ -1758,7 +1758,7 @@
 <h3 id="step-4-exit-cleanly">Step 4: Exit cleanly</h3>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nb">exit</span>
 </span></code></pre></div>
-<p>You're back at the login node prompt (<code>aquarius02</code>), and PBS has released your compute node back into the pool. The job is now <code>F</code> (finished) in queue state. If you forget to exit, the job dies on its own when walltime expires — but exiting cleanly is polite.</p>
+<p>You're back at the login node prompt (<code>aquarius01</code> or <code>aquarius02</code>), and PBS has released your compute node back into the pool. The job is now <code>F</code> (finished) in queue state. If you forget to exit, the job dies on its own when walltime expires — but exiting cleanly is polite.</p>
 <div class="admonition success">
 <p class="admonition-title">You've now done the basic round-trip</p>
 <p>Log in → request resources → work on a compute node → exit. This is the loop you'll repeat for every interactive session, forever. Batch jobs (Lesson 4) are the same pattern with a script in the middle and no human waiting around for it.</p>
@@ -1767,9 +1767,9 @@
 <h2 id="key-takeaways">🎯 Key Takeaways</h2>
 <div class="admonition success">
 <p class="admonition-title">You now know</p>
-<p>🌊 <strong>What Aqua is</strong> — QUT's centrally-funded HPC, free to researchers, ~70 nodes / 10k CPU cores / 108 GPUs</p>
+<p>🌊 <strong>What Aqua is</strong> — QUT's centrally-funded HPC, free to researchers, about 70 nodes, over 10k CPU cores, over 100 GPUs</p>
 <p>📂 <strong>Where files live</strong> — <code>/home</code> for code (backed up), <code>/scratch</code> for active data (fast, not backed up), <code>/work</code> for shared (backed up), <code>$TMPDIR</code> for per-job intermediates</p>
-<p>🚪 <strong>Login vs compute</strong> — login is <code>aquarius02</code> (shared reception desk, no heavy work); compute is <code>cpu1n*</code> / <code>gpu1n*</code> / <code>mem1n*</code> (dedicated to your job)</p>
+<p>🚪 <strong>Login vs compute</strong> — login is <code>aquarius01</code> / <code>aquarius02</code> (shared reception desk, no heavy work); compute is <code>cpu1n*</code> / <code>gpu1n*</code> / <code>mem1n*</code> (dedicated to your job)</p>
 <p>🛠️ <strong>The round-trip</strong> — <code>ssh</code> → <code>qsub -I</code> → work → <code>exit</code>. PBS handles the rest.</p>
 </div>
 <hr />
@@ -1813,7 +1813,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="September 2, 2026 12:56:33 AEST">September 2, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="September 9, 2026 21:08:07 AEST">September 9, 2026</span>
   </span>
 
     

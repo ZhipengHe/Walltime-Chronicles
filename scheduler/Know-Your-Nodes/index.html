@@ -1978,7 +1978,7 @@
 <p>So you want to run your code, but what hardware should you order? Welcome to the <strong>HPC buffet</strong> — where some dishes are fast but small, others are huge but slow, and the good stuff always seems to be reserved for someone else.</p>
 <p>This field guide identifies which computational beasts are available on Aqua and how to lure them into running your jobs with minimum fuss.</p>
 <pre class="mermaid"><code>graph TB
-    User[Your laptop&lt;br/&gt;SSH] --&gt; Login[Login Node&lt;br/&gt;aquarius02]
+    User[Your laptop&lt;br/&gt;SSH] --&gt; Login[Login Node&lt;br/&gt;aquarius01 / 02]
     Login --&gt; PBS[PBS Scheduler&lt;br/&gt;auto-routes by resource shape]
 
     PBS --&gt; Q1[cpu_batch_exec]
@@ -2094,8 +2094,8 @@
 Lands you in a shell on <code>cpu1n001</code>. Exit with <span class="keys"><kbd class="key-control">Ctrl</kbd><span>+</span><kbd class="key-d">D</kbd></span> when you're done — there's only one of these nodes.</p>
 </div>
 <div class="tabbed-block">
-<p><div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># 1 MIG slice on H100, 6 cores, 32 GB host RAM, 12 hours</span>
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>qsub<span class="w"> </span>-I<span class="w"> </span>-l<span class="w"> </span><span class="k">select</span><span class="o">=</span><span class="m">1</span>:ncpus<span class="o">=</span><span class="m">6</span>:ngpus<span class="o">=</span><span class="m">1</span>:mem<span class="o">=</span>32GB<span class="w"> </span>-l<span class="w"> </span><span class="nv">walltime</span><span class="o">=</span><span class="m">12</span>:00:00
+<p><div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># 1 MIG slice, 6 cores, 32 GB host RAM, 2 hours</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>qsub<span class="w"> </span>-I<span class="w"> </span>-l<span class="w"> </span><span class="k">select</span><span class="o">=</span><span class="m">1</span>:ncpus<span class="o">=</span><span class="m">6</span>:ngpus<span class="o">=</span><span class="m">1</span>:mem<span class="o">=</span>32GB<span class="w"> </span>-l<span class="w"> </span><span class="nv">walltime</span><span class="o">=</span><span class="m">02</span>:00:00
 </span></code></pre></div>
 <code>ngpus=1</code> here means <strong>one MIG slice</strong>: a 1g.10gb slice of an H100 (~10 GB VRAM) on <code>gpu1n001</code>, or a 3g.20gb slice of an A100 (~20 GB) on <code>gpu0n004</code>, whichever PBS picks; add <code>gpu_id=H100</code> or <code>gpu_id=A100</code> to choose. Good for sanity-checking a model loads. Bad for real training.</p>
 </div>
@@ -2434,9 +2434,13 @@ No <code>-q</code> needed. The scheduler routes by your <code>mem</code> value a
 </tr>
 </tbody>
 </table>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># 1 MIG slice (10 GB VRAM), 6 cores, 32 GB host RAM, 12 hours</span>
-</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>qsub<span class="w"> </span>-I<span class="w"> </span>-l<span class="w"> </span><span class="k">select</span><span class="o">=</span><span class="m">1</span>:ncpus<span class="o">=</span><span class="m">6</span>:ngpus<span class="o">=</span><span class="m">1</span>:mem<span class="o">=</span>32GB<span class="w"> </span>-l<span class="w"> </span><span class="nv">walltime</span><span class="o">=</span><span class="m">12</span>:00:00
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># 1 MIG slice, 6 cores, 32 GB host RAM, 2 hours</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>qsub<span class="w"> </span>-I<span class="w"> </span>-l<span class="w"> </span><span class="k">select</span><span class="o">=</span><span class="m">1</span>:ncpus<span class="o">=</span><span class="m">6</span>:ngpus<span class="o">=</span><span class="m">1</span>:mem<span class="o">=</span>32GB<span class="w"> </span>-l<span class="w"> </span><span class="nv">walltime</span><span class="o">=</span><span class="m">02</span>:00:00
 </span></code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">Book what you will sit at</p>
+<p>44 slices serve the whole university, and a slice stays booked until you exit or the walltime runs out. Ask for the hours you will actually be at the keyboard, not the 12-hour maximum, and hit <span class="keys"><kbd class="key-control">Ctrl</kbd><span>+</span><kbd class="key-d">D</kbd></span> when you are done.</p>
+</div>
 <div class="admonition info">
 <p class="admonition-title">MIG, not a whole GPU</p>
 <p>Interactive GPU jobs run on <strong>MIG (Multi-Instance GPU) slices</strong> — small hardware partitions of a single physical card. Each MIG instance has its own memory, compute, and L2 cache, isolated from neighbours. <code>ngpus=1</code> interactively means one slice. The queue lets a job hold two, but a single program cannot span two MIG instances without specialised code, so ask for two only if you have two independent things to run.</p>
@@ -2858,7 +2862,7 @@ All chunks land on the same CPU family. Use when you didn't pin <code>cpu_id</co
 <li><strong><code>gpu0n003</code> is missing</strong> — the <code>gpu0n*</code> hosts go <code>gpu0n002, gpu0n004, gpu0n005, …</code>. Either decommissioned or off-line; not in PBS.</li>
 <li><strong><code>gpu0n002</code> is the odd A100 host</strong> — 4× A100 <strong>80 GB</strong> (every other A100 is 40 GB), 470 GB RAM, and reserved for research-group queues, so ordinary batch jobs never see it.</li>
 <li><strong><code>gpu0n004</code> shows 16 GPUs</strong> — they are 16 3g.20gb MIG slices of 8 A100s, and the host serves only the interactive queue. Nothing on Aqua satisfies <code>ngpus=16</code> in one chunk.</li>
-<li><mark><strong>Login node ≠ compute node.</strong></mark> When you SSH in, you land on <code>aquarius02</code>, an EPYC 9274F (Zen 4, single socket, 24 cores, 187 GB RAM). It is <strong>not</strong> a compute node. Don't benchmark there, don't run long scripts there — submit through PBS.</li>
+<li><mark><strong>Login node ≠ compute node.</strong></mark> When you SSH in, you land on one of the login nodes, <code>aquarius01</code> or <code>aquarius02</code> (the latter an EPYC 9274F: Zen 4, single socket, 24 cores, 187 GB RAM). Neither is a compute node. Don't benchmark there, don't run long scripts there — submit through PBS.</li>
 <li><strong>Mixed CPU families on GPU nodes.</strong> A100 hosts run AMD Zen 3, H100 hosts run Intel Sapphire Rapids. If you compile vendor-conditional code (AMX vs AVX-512 vs nothing), this matters. For most users it doesn't.</li>
 </ul>
 <hr />
@@ -2907,7 +2911,7 @@ All chunks land on the same CPU family. Use when you didn't pin <code>cpu_id</co
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="September 2, 2026 15:19:48 AEST">September 2, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="September 9, 2026 21:08:07 AEST">September 9, 2026</span>
   </span>
 
     
