@@ -11,7 +11,7 @@ This field guide identifies which computational beasts are available on Aqua and
 
 ```mermaid
 graph TB
-    User[Your laptop<br/>SSH] --> Login[Login Node<br/>aquarius02]
+    User[Your laptop<br/>SSH] --> Login[Login Node<br/>aquarius01 / 02]
     Login --> PBS[PBS Scheduler<br/>auto-routes by resource shape]
 
     PBS --> Q1[cpu_batch_exec]
@@ -78,8 +78,8 @@ Two further A100 hosts exist but are not general batch nodes — see **GPU A100 
 
 === "2. Interactive GPU"
     ```bash
-    # 1 MIG slice on H100, 6 cores, 32 GB host RAM, 12 hours
-    qsub -I -l select=1:ncpus=6:ngpus=1:mem=32GB -l walltime=12:00:00
+    # 1 MIG slice, 6 cores, 32 GB host RAM, 2 hours
+    qsub -I -l select=1:ncpus=6:ngpus=1:mem=32GB -l walltime=02:00:00
     ```
     `ngpus=1` here means **one MIG slice**: a 1g.10gb slice of an H100 (~10 GB VRAM) on `gpu1n001`, or a 3g.20gb slice of an A100 (~20 GB) on `gpu0n004`, whichever PBS picks; add `gpu_id=H100` or `gpu_id=A100` to choose. Good for sanity-checking a model loads. Bad for real training.
 
@@ -254,9 +254,12 @@ qsub -l select=1:ncpus=16:ngpus=4:mem=256GB:gpu_id=A100 \
 | Queue         | `gpu_inter_exec` (auto-routed when you combine `-I` with `ngpus`) |
 
 ```bash
-# 1 MIG slice (10 GB VRAM), 6 cores, 32 GB host RAM, 12 hours
-qsub -I -l select=1:ncpus=6:ngpus=1:mem=32GB -l walltime=12:00:00
+# 1 MIG slice, 6 cores, 32 GB host RAM, 2 hours
+qsub -I -l select=1:ncpus=6:ngpus=1:mem=32GB -l walltime=02:00:00
 ```
+
+!!! warning "Book what you will sit at"
+    44 slices serve the whole university, and a slice stays booked until you exit or the walltime runs out. Ask for the hours you will actually be at the keyboard, not the 12-hour maximum, and hit ++ctrl+d++ when you are done.
 
 !!! info "MIG, not a whole GPU"
     Interactive GPU jobs run on **MIG (Multi-Instance GPU) slices** — small hardware partitions of a single physical card. Each MIG instance has its own memory, compute, and L2 cache, isolated from neighbours. `ngpus=1` interactively means one slice. The queue lets a job hold two, but a single program cannot span two MIG instances without specialised code, so ask for two only if you have two independent things to run.
@@ -526,7 +529,7 @@ For the higher-level filesystem orientation, see Lesson 1's [Where your files li
 - **`gpu0n003` is missing** — the `gpu0n*` hosts go `gpu0n002, gpu0n004, gpu0n005, …`. Either decommissioned or off-line; not in PBS.
 - **`gpu0n002` is the odd A100 host** — 4× A100 **80 GB** (every other A100 is 40 GB), 470 GB RAM, and reserved for research-group queues, so ordinary batch jobs never see it.
 - **`gpu0n004` shows 16 GPUs** — they are 16 3g.20gb MIG slices of 8 A100s, and the host serves only the interactive queue. Nothing on Aqua satisfies `ngpus=16` in one chunk.
-- ==**Login node ≠ compute node.**== When you SSH in, you land on `aquarius02`, an EPYC 9274F (Zen 4, single socket, 24 cores, 187 GB RAM). It is **not** a compute node. Don't benchmark there, don't run long scripts there — submit through PBS.
+- ==**Login node ≠ compute node.**== When you SSH in, you land on one of the login nodes, `aquarius01` or `aquarius02` (the latter an EPYC 9274F: Zen 4, single socket, 24 cores, 187 GB RAM). Neither is a compute node. Don't benchmark there, don't run long scripts there — submit through PBS.
 - **Mixed CPU families on GPU nodes.** A100 hosts run AMD Zen 3, H100 hosts run Intel Sapphire Rapids. If you compile vendor-conditional code (AMX vs AVX-512 vs nothing), this matters. For most users it doesn't.
 
 ---

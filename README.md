@@ -18,6 +18,9 @@ My personal survival log of mysterious errors, queueing oddities, and PBS quirks
 - :test_tube: **Experiments & Mistakes**
   Because learning is messy.
 
+- :school: **Crash Course Café**
+  Nine lessons from your first SSH to running your own work on Aqua.
+
 ## Documentation
 
 The full documentation is available at [Walltime Chronicles Documentation](https://zhipenghe.me/Walltime-Chronicles/).

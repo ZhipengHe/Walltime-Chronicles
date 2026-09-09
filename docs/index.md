@@ -13,8 +13,8 @@ If you have ever:
 
 Then this is the right place.
 
-!!! tip "Crash Course Café — opinionated onboarding for newcomers"
-    Lessons 1 and 2 of the [Crash Course Café](tutorials/index.md) are now shipped — prerequisites checklist, a tour of Aqua with your first interactive job, and Python tooling setup. The course follows a 9-lesson workflow-driven outline (see the [outline](tutorials/index.md)); Lessons 3–9 are stubs with scope contracts and land as I write them.
+!!! tip "Crash Course Café — onboarding for newcomers"
+    New to Aqua? The [Crash Course Café](tutorials/index.md) takes you from your first SSH to running your own work on the cluster, in nine lessons.
 
 ---
 
@@ -29,7 +29,7 @@ Pick your entry point. Each card is one shipped page.
 
     ---
 
-    Start with the prerequisites checklist, then walk through Welcome to Aqua (L1) and Tooling Setup (L2).
+    Start with the prerequisites checklist, then take the lessons in order.
 
     [:octicons-arrow-right-24: Crash Course Café](tutorials/index.md)
 
@@ -53,7 +53,7 @@ Pick your entry point. Each card is one shipped page.
 
     ---
 
-    Copy-paste recipe that sequentially runs N experiments inside one PBS job — timestamped names, modules + venv, log banners, and `qsub`.
+    Copy-paste recipe that sequentially runs N experiments inside one PBS job — timestamped names, log banners, and `qsub`.
 
     [:octicons-arrow-right-24: Batch-Cooking PBS Scripts](pbs-scripts/Batch-Cooking-PBS-Scripts-with-a-Bash-Pan.md)
 
@@ -80,6 +80,7 @@ Pick your entry point. Each card is one shipped page.
 
 ## :material-clipboard-list-outline: What You'll Find Here
 
+- :material-school: **A crash course for newcomers** — nine lessons that take you from your first SSH to running your own work on Aqua.
 - :material-bug-outline: **Mystery errors & how I solved them** — real issues with real fixes (and real frustration).
 - :material-lightbulb-on: **Tips, workarounds, and gotchas** — things that *should* have been in the official docs.
 - :material-script-text-outline: **PBS scripts & snippets** — copy-paste-friendly templates with helpful comments.
@@ -87,9 +88,9 @@ Pick your entry point. Each card is one shipped page.
 
 ## :material-cancel: What You'll Not Find Here
 
-- :material-book-open-variant: **Basic Linux tutorials** — this isn't "Linux for Dummies". I assume you know your `ls` from your `rm -rf`.
-- :material-school-outline: **PBS 101** — no "What is PBS?" here. If you don't know what `qsub` means, start with the [official docs](https://docs.eres.qut.edu.au/about-aqua)[^1].
-- :material-format-list-checks: **Comprehensive tutorials** — this is a collection of "oh, *that's* why it failed!" moments, not a step-by-step path to HPC mastery.
+- :material-book-open-variant: **A Linux course** — the [prerequisites checklist](tutorials/prerequisites.md) lists the shell commands the lessons assume and links QUT's own shell tutorial. Everything else here assumes you can use a terminal.
+- :material-school-outline: **A PBS reference** — the course teaches the directives you will actually use. For the full list, start with the [official docs](https://docs.eres.qut.edu.au/about-aqua)[^1].
+- :material-format-list-checks: **HPC mastery** — the course gets you to a working loop; the rest is a collection of "oh, *that's* why it failed!" moments. Neither claims to cover the whole field.
 - :material-cog-outline: **System administration** — I'm not your sysadmin. If you need to configure the cluster, that's above my pay grade.
 - :material-bug: **Debugging your code** — your Python script is throwing errors? That's between you and your debugger. I'm here for PBS-related mysteries only.
 - :material-rocket-launch: **Performance optimisation** — want to make your code run faster? I'll share some tricks that *might* work, but no promises. This isn't a magic wand for your algorithms, just PBS-specific tweaks that occasionally make things less slow.
