@@ -58,29 +58,52 @@ The caps come from the queues themselves (`qstat -Qf cpu_inter_exec`); the [eRes
 It needs only PyTorch. Install that into your Lesson 2 environment, download the script, and let the script fetch its data (12 MB, once). All of this is network and disk work, not compute, so the login node is the right place for it:
 
 === "uv"
+    PyTorch's CPU build lives on its own package index (the PyPI one is the CUDA build, gigabytes of it, only useful on a GPU node). Following [uv's PyTorch guide](https://docs.astral.sh/uv/guides/integration/pytorch/), tell the project about that index and use it for torch only. Append to `~/hello-aqua/pyproject.toml`:
+
+    ```toml
+    [[tool.uv.index]]
+    name = "pytorch-cpu"
+    url = "https://download.pytorch.org/whl/cpu"
+    explicit = true
+
+    [tool.uv.sources]
+    torch = { index = "pytorch-cpu" }
+    ```
+
     ```bash
     cd ~/hello-aqua
-    source .venv/bin/activate
-
-    # CPU build of PyTorch (about 800 MB installed; the CUDA build is gigabytes and only useful on a GPU node).
-    # numpy is not required, but without it torch prints a warning on every import.
-    uv pip install --index https://download.pytorch.org/whl/cpu torch numpy
+    uv add torch      # about 800 MB installed
 
     # The script, straight from this site's repository
     wget https://raw.githubusercontent.com/ZhipengHe/Walltime-Chronicles/main/docs/tutorials/scripts/train_mnist.py
 
     # Fetch the data now, so the compute node never has to. --epochs 0 downloads and exits.
-    python train_mnist.py --epochs 0
+    uv run python train_mnist.py --epochs 0
     ```
+
+    `uv add` puts `torch>=2.14.0` under `dependencies`, and `uv.lock` records the exact CPU build from that index while everything else, pandas included, keeps coming from PyPI. `uv sync --frozen` rebuilds all of it.
 
     !!! note "Same-filesystem rule"
         If you followed Lesson 2's tip and moved `UV_CACHE_DIR` to `/scratch`, this venv on `/home` is now on a different filesystem from the cache, and uv will warn `Failed to hardlink files; falling back to full copy`. It still works, just slower. The fix is to keep cache and venv together: [uv on Aqua](../scheduler/uv-on-aqua.md).
 
 === "Miniforge"
+    Add one line to Lesson 2's `environment.yml`:
+
+    ```yaml
+    # ~/hello-aqua/environment.yml
+    name: hello-aqua
+    channels:
+      - conda-forge
+    dependencies:
+      - python=3.13
+      - pandas
+      - pytorch-cpu
+    ```
+
     ```bash
-    mkdir -p ~/hello-aqua && cd ~/hello-aqua
+    cd ~/hello-aqua
+    conda env update -f environment.yml     # about a minute
     conda activate hello-aqua
-    conda install -c conda-forge pytorch-cpu numpy -y
 
     wget https://raw.githubusercontent.com/ZhipengHe/Walltime-Chronicles/main/docs/tutorials/scripts/train_mnist.py
     python train_mnist.py --epochs 0
@@ -88,9 +111,9 @@ It needs only PyTorch. Install that into your Lesson 2 environment, download the
 
 === "micromamba"
     ```bash
-    mkdir -p ~/hello-aqua && cd ~/hello-aqua
+    cd ~/hello-aqua
     micromamba activate hello-aqua
-    micromamba install -c conda-forge pytorch-cpu numpy -y
+    micromamba install -c conda-forge pytorch-cpu -y
 
     wget https://raw.githubusercontent.com/ZhipengHe/Walltime-Chronicles/main/docs/tutorials/scripts/train_mnist.py
     python train_mnist.py --epochs 0

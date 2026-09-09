@@ -73,7 +73,7 @@ ls -A
 ### Step 2: Add a package
 
 ```bash
-uv add requests
+uv add pandas
 ```
 
 !!! example "Expected output (first time on a fresh account)"
@@ -82,22 +82,25 @@ uv add requests
      Downloaded cpython-3.13.15-linux-x86_64-gnu (download)
     Using CPython 3.13.15
     Creating virtual environment at: .venv
-    Resolved 6 packages in 52ms
-    Prepared 5 packages in 55ms
-    Installed 5 packages in 108ms
-     + certifi==2026.7.22
-     + charset-normalizer==3.5.1
-     + idna==3.19
-     + requests==2.34.2
-     + urllib3==2.7.0
+    Resolved 6 packages in 79ms
+    Downloading numpy (15.9MiB)
+    Downloading pandas (10.4MiB)
+     Downloaded numpy
+     Downloaded pandas
+    Prepared 4 packages in 1.26s
+    Installed 4 packages in 1.35s
+     + numpy==2.5.3
+     + pandas==3.0.5
+     + python-dateutil==2.9.0.post0
+     + six==1.17.0
     ```
 
-Four things happened in about four seconds:
+Four things happened in about six seconds:
 
 1. **Python 3.13 was downloaded** (33 MiB, into `~/.local/share/uv/python/`). Aqua's system Python is 3.9, so uv fetched the version you pinned. This happens once per version, never again.
 2. **`.venv` was created** next to your files.
-3. **`requests` and its four dependencies were installed** into it.
-4. **Two files changed.** `pyproject.toml` now lists `requests>=2.34.2` under `dependencies`, and a new `uv.lock` appeared.
+3. **`pandas` and the three packages it depends on were installed** into it.
+4. **Two files changed.** `pyproject.toml` now lists `pandas>=3.0.5` under `dependencies`, and a new `uv.lock` appeared.
 
 ```bash
 ls -A
@@ -109,7 +112,7 @@ ls -A
     ```
 
 !!! info "Two files, two jobs"
-    - **`pyproject.toml`** is what you asked for: `requests`, any version from 2.34.2 up. You edit this file, usually through `uv add` and `uv remove`.
+    - **`pyproject.toml`** is what you asked for: `pandas`, any version from 3.0.5 up. Nothing about numpy or the other two; they follow. You edit this file, usually through `uv add` and `uv remove`.
     - **`uv.lock`** is what you got: every package, direct or not, at an exact version, with a checksum. uv writes it; you never edit it. It is the part that makes "the same environment on another node next month" a fact rather than a hope.
 
     Keep both. If the project is in git, commit both.
@@ -117,12 +120,16 @@ ls -A
 ### Step 3: Run something in it
 
 ```bash
-uv run python -c "import requests, sys; print('Python', sys.version.split()[0], '/ requests', requests.__version__)"
+uv run python -c "import pandas as pd, sys; print('Python', sys.version.split()[0], '/ pandas', pd.__version__); print(pd.DataFrame({'cores': [1, 4, 8], 'seconds': [96, 25, 13]}))"
 ```
 
 !!! example "Expected output"
     ```text
-    Python 3.13.x / requests 2.34.x or newer
+    Python 3.13.x / pandas 3.0.x or newer
+       cores  seconds
+    0      1       96
+    1      4       25
+    2      8       13
     ```
 
 `uv run` runs a command inside the project's environment without activating anything. For a longer session at the keyboard, activate the way every Python tutorial does:
@@ -148,15 +155,14 @@ uv sync --frozen
     ```text
     Using CPython 3.13.15
     Creating virtual environment at: .venv
-    Installed 5 packages in 95ms
-     + certifi==2026.7.22
-     + charset-normalizer==3.5.1
-     + idna==3.19
-     + requests==2.34.2
-     + urllib3==2.7.0
+    Installed 4 packages in 1.93s
+     + numpy==2.5.3
+     + pandas==3.0.5
+     + python-dateutil==2.9.0.post0
+     + six==1.17.0
     ```
 
-Under a second, and the same five packages at the same five versions. `--frozen` means "install exactly what `uv.lock` says, do not resolve anything". Run it on a different node, or in six months, and you get this environment again. Run it when nothing has changed and it says so:
+Two seconds, and the same four packages at the same four versions. `--frozen` means "install exactly what `uv.lock` says, do not resolve anything". Run it on a different node, or in six months, and you get this environment again. Run it when nothing has changed and it says so:
 
 ```bash
 uv sync --frozen
@@ -164,7 +170,7 @@ uv sync --frozen
 
 !!! example "Expected output"
     ```text
-    Checked 5 packages in 0.51ms
+    Checked 4 packages in 1ms
     ```
 
 That command, `uv sync --frozen`, is what a batch job runs before your program. The `.venv` directory is disposable; the two files are the thing you keep.
@@ -173,9 +179,9 @@ That command, `uv sync --frozen`, is what a batch job runs before your program. 
 
 ## 🗂️ Part 3: Where it lives (~3 min)
 
-One rule: **keep uv's cache and your `.venv` on the same filesystem.** uv installs packages by hardlinking them from its cache (`~/.cache/uv`) into the environment. Across filesystems, hardlinks are impossible, so uv silently falls back to copying every file, which on Aqua is about eight to nine times slower.
+One rule: **keep uv's cache and your `.venv` on the same filesystem.** uv installs packages by linking them from its cache (`~/.cache/uv`) into the environment: a copy-on-write clone where the filesystem allows it, a hardlink otherwise. Across filesystems neither is possible, so uv warns (`Failed to hardlink files; falling back to full copy`) and copies every file, which on Aqua is about eight to nine times slower.
 
-For this lesson, both are on `/home` and that is fine: the environment you just built is 3 MB. It stops being fine when a project grows. PyTorch with CUDA is gigabytes, and `/home` is Lustre, which is slow at exactly the many-small-files pattern a Python environment is. Then move **both** halves to `/scratch`:
+For this lesson, both are on `/home` and that is fine: the environment you just built is 98 MB. It stops being fine when a project grows. PyTorch with CUDA is gigabytes, and `/home` is Lustre, which is slow at exactly the many-small-files pattern a Python environment is. Then move **both** halves to `/scratch`:
 
 ```bash
 # Once, in ~/.bashrc:
@@ -260,25 +266,29 @@ The comparison behind the chart (the chart skips Miniconda; the box further down
       - conda-forge
     dependencies:
       - python=3.13
-      - requests
+      - pandas
     ```
 
     ```bash
     conda env create -f environment.yml
     conda activate hello-aqua
-    python -c "import requests, sys; print('Python', sys.version.split()[0], '/ requests', requests.__version__)"
+    python -c "import pandas as pd, sys; print('Python', sys.version.split()[0], '/ pandas', pd.__version__); print(pd.DataFrame({'cores': [1, 4, 8], 'seconds': [96, 25, 13]}))"
     conda deactivate
     ```
 
-    !!! example "Expected output (after about 20 seconds of solving and downloading)"
+    !!! example "Expected output (after about 25 seconds of solving and downloading)"
         ```text
-        Python 3.13.x / requests 2.34.x or newer
+        Python 3.13.x / pandas 3.0.x or newer
+           cores  seconds
+        0      1       96
+        1      4       25
+        2      8       13
         ```
 
     !!! warning "`environment.yml` pins less than `uv.lock`"
         The file above records what you asked for, not what you got; a rebuild next month may resolve newer versions of everything you did not pin. For an exact record, run `conda env export > environment.lock.yml` inside the environment: it lists every package at its exact build, and `conda env create -f environment.lock.yml` recreates that. Keep the short file as the one you edit and the exported one as the one you rebuild from.
 
-    **Where it lives.** A conda environment is far larger than a uv one (this two-package environment is 266 MB, and the package cache another 160 MB), so put both on `/scratch` once your environments are more than toys. Create `~/.condarc`:
+    **Where it lives.** A conda environment is far larger than a uv one (this one is 425 MB before its package cache), so put both on `/scratch` once your environments are more than toys. Create `~/.condarc`:
 
     ```yaml
     pkgs_dirs:
@@ -350,7 +360,7 @@ The comparison behind the chart (the chart skips Miniconda; the box further down
 !!! question "Stuck?"
     - **`uv` not found after install?** Re-source `~/.bashrc`, or open a new terminal so the shell init runs.
     - **`uv add` or `uv sync` printed `Failed to hardlink files; falling back to full copy`?** Cache and `.venv` are on different filesystems. Move both to the same side (Part 3), or accept the slower copy.
-    - **`uv sync --frozen` complains the lock file is missing or out of date?** Run `uv lock` once (it writes `uv.lock` from `pyproject.toml`), then `uv sync --frozen` again.
+    - **`uv sync --frozen` says there is no lock file, or `uv sync --locked` says it is out of date?** Run `uv lock` once (it writes `uv.lock` from `pyproject.toml`), then `uv sync --frozen` again. `--frozen` never checks whether the lock is stale; `--locked` does.
     - **Hit the `conda-anaconda-tos` prompt on first `conda create`?** You're on Miniconda, or an Anaconda-shipped conda, touching `pkgs/main` / `pkgs/r`. Switch to Miniforge; the box in Part 4 has the steps.
     - **Want the official QUT reference?** [QUT eResearch — Conda package and environment manager](https://docs.eres.qut.edu.au/hpc-conda-package-and-environment-manager)[^1]. It recommends Miniconda; Part 4 says why this course doesn't.
     - **Tempted by `module load Python`?** That is the shared system Python. Stick with an isolated environment.

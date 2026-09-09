@@ -1,8 +1,9 @@
 """Train a small network to recognise handwritten digits (MNIST).
 
 Its knobs map to what a job asks PBS for: epochs to walltime, samples and
-width to memory, threads or a GPU to the hardware request. A seed makes
-separate runs differ; a checkpoint lets a long run resume.
+width to memory, threads or a GPU to the hardware request. The seed fixes
+shuffling and initialisation: one value repeats a run, different values give
+different runs. A checkpoint lets a long run resume.
 
     python train_mnist.py                        # ~half a minute on one core
     python train_mnist.py --epochs 20            # longer
