@@ -254,7 +254,7 @@ That means no node that serves this queue has room for the request right now. A 
 
 ### Reading an ending
 
-Every ending in this lesson, in one place. The end email, `qstat -xf` and the summary at the end of `.o` all show the same `Exit_status`; the logs say the same thing in words.
+Every ending in this lesson, in one place. For a job that ran, the end email, `qstat -xf` and the summary at the end of `.o` all show the same `Exit_status`, and the logs say the same thing in words.
 
 | What you see | `Exit_status` | Who stopped it | Next move |
 |---|---|---|---|
@@ -371,7 +371,7 @@ For work that cannot fit in one walltime at all, [Lesson 8](lesson-8.md) splits 
     ```bash
     qsub -I -l select=1:ncpus=6:ngpus=1:mem=32GB -l walltime=01:00:00
     cd ~/hello-aqua
-    uv run python my_program.py <small setting>    # watch it run, fix, repeat
+    uv run python my_program.py              # at its smallest setting; watch it run, fix, repeat
     exit
     qsub my_job.pbs
     ```
