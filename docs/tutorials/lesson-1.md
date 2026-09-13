@@ -154,7 +154,7 @@ Two things happened:
 
 You're on a compute node now. The shell you're typing into is running on a different physical machine from the one you SSHed into.
 
-!!! note "If the wait is long"
+!!! info "If the wait is long"
     `qsub -I` blocks until PBS finds a free compute node. For a 1-core / 1 GB request it's usually seconds; for bigger asks it can take minutes or hours (peak times). If you're waiting more than 30 seconds for this tiny request, `Ctrl+C` and try again — there might be a maintenance window or an unusually busy stretch.
 
 ### Step 3: Confirm you've moved

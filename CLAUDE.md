@@ -63,6 +63,7 @@ Each lesson picks its own task; a script is not carried from one lesson to the n
 | Script | Used in | Task | Needs |
 |---|---|---|---|
 | `docs/tutorials/scripts/train_mnist.py` | Lesson 3 | MNIST digit classifier | PyTorch only |
+| `docs/tutorials/scripts/movielens_recommender.py` | Lesson 4 | MovieLens film recommender (matrix factorisation, GPU) | PyTorch (CUDA build), pandas |
 
 ## Writing Style and Content Guidelines
 
