@@ -1,6 +1,6 @@
 # uv on Aqua: Cache + Envs Placement
 
-[uv](https://docs.astral.sh/uv/) is fast on Aqua — when you keep its cache and your virtual environments on the **same filesystem**. Cross-filesystem, uv falls back to slow byte-by-byte copy and prints a warning. This page is the deep-dive companion to [Lesson 2's short version](../tutorials/lesson-2.md#for-uv-users-same-fs-rule): the capability matrix, the empirical evidence, the three placement patterns, the traps, and the wider HPC-community context.
+[uv](https://docs.astral.sh/uv/) is fast on Aqua — when you keep its cache and your virtual environments on the **same filesystem**. Cross-filesystem, uv falls back to slow byte-by-byte copy and prints a warning. This page is the deep-dive companion to [Lesson 2's short version](../tutorials/lesson-2.md#part-3-where-it-lives-3-min): the capability matrix, the empirical evidence, the three placement patterns, the traps, and the wider HPC-community context.
 
 !!! tip "Companion pages"
     - :material-school: [Lesson 2: Tooling Setup](../tutorials/lesson-2.md) — the 14-line operational version of this rule, plus the install + verify flow.
@@ -305,7 +305,7 @@ Stick to keeping cache + venv on the same filesystem. The symlink mode is a foot
 
 ## :material-earth: The wider community
 
-There is **no `module load uv` on Aqua** (`module spider uv` only returns R-package false hits like `ruv`). The uv binary is installed per-user via the [Astral curl installer](https://docs.astral.sh/uv/getting-started/installation/) — that's what Lesson 2's [install step](../tutorials/lesson-2.md#uv-the-default) documents.
+There is **no `module load uv` on Aqua** (`module spider uv` only returns R-package false hits like `ruv`). The uv binary is installed per-user via the [Astral curl installer](https://docs.astral.sh/uv/getting-started/installation/) — that's what Lesson 2's [install step](../tutorials/lesson-2.md#part-1-install-uv-2-min) documents.
 
 This isn't an Aqua oversight. uv's HPC patterns are unsettled across the board:
 

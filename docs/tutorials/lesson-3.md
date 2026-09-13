@@ -15,7 +15,7 @@ By the end of this 15–20 minute lesson, you'll have:
 - [ ] **Kept a session alive across a dropped connection** with `tmux`
 - [ ] **Known when to stop being interactive** and let Lesson 4 take over
 
-!!! tip "You need Lesson 2's environment"
+!!! info "You need Lesson 2's environment"
     Everything below assumes `~/hello-aqua/.venv` (uv) or the `hello-aqua` env (Miniforge / micromamba) from [Lesson 2](lesson-2.md) exists and works. If not, do the Test Drive there first; it takes two minutes.
 
 ---
@@ -83,7 +83,7 @@ It needs only PyTorch. Install that into your Lesson 2 environment, download the
 
     `uv add` puts `torch>=2.14.0` under `dependencies`, and `uv.lock` records the exact CPU build from that index while everything else, pandas included, keeps coming from PyPI. `uv sync --frozen` rebuilds all of it.
 
-    !!! note "Same-filesystem rule"
+    !!! warning "Same-filesystem rule"
         If you followed Lesson 2's tip and moved `UV_CACHE_DIR` to `/scratch`, this venv on `/home` is now on a different filesystem from the cache, and uv will warn `Failed to hardlink files; falling back to full copy`. It still works, just slower. The fix is to keep cache and venv together: [uv on Aqua](../scheduler/uv-on-aqua.md).
 
 === "Miniforge"
@@ -135,7 +135,7 @@ It needs only PyTorch. Install that into your Lesson 2 environment, download the
 
 [Download the script](scripts/train_mnist.py), or read it here:
 
-??? note "`train_mnist.py`"
+??? example "`train_mnist.py`"
 
     ```python title="train_mnist.py"
     --8<-- "docs/tutorials/scripts/train_mnist.py"
@@ -206,7 +206,7 @@ cat results.json
 }
 ```
 
-`job_id` is `$PBS_JOBID`, also set by PBS. `elapsed_s` and `peak_rss_mb` are what you carry to Lesson 4: about 25 s and 500 MB, against a request of 1 h and 8 GB.
+`job_id` is `$PBS_JOBID`, also set by PBS. `elapsed_s` and `peak_rss_mb` are what the run actually used: about 25 s and 500 MB, against a request of 1 h and 8 GB.
 
 ---
 
@@ -230,7 +230,7 @@ tmux attach -t dev
 
 Those two keys and two commands are all this lesson needs; the [tmux cheat sheet](https://tmuxcheatsheet.com/) has the rest (windows, panes, scrolling).
 
-!!! note "If your session seems to have vanished"
+!!! failure "If your session seems to have vanished"
     - **Aqua has more than one login node** (`aquarius01`, `aquarius02`, …), and `ssh aqua.qut.edu.au` lands you on one of them. A tmux session lives on the node where you started it, so `tmux ls` on the other node shows nothing. Run `hostname` when you start the session, and check it again before assuming the session is gone.
     - **Sessions do not survive a login-node reboot.** Maintenance is the third Wednesday of each month; `time_until_outage.sh` tells you how far away it is.
 
@@ -260,7 +260,7 @@ Those two keys and two commands are all this lesson needs; the [tmux cheat sheet
 
 ## 🔗 What's Next?
 
-→ **[Lesson 4: Your First Batch Job](lesson-4.md)** — the same script, submitted unattended.
+→ **[Lesson 4: Your First Batch Job](lesson-4.md)** — write the request and the commands in a file, and let PBS run them with nobody watching.
 
 !!! question "Stuck?"
     - **`qsub -I` sits at "waiting for job to start"?** There is one interactive CPU node and it may be full. Try fewer cores (`ncpus=2:mem=4GB`), or check `pbsnodeinfo | grep cpu1n001` to see how busy it is.
