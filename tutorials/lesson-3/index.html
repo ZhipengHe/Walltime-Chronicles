@@ -1572,7 +1572,7 @@
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>Kept a session alive across a dropped connection</strong> with <code>tmux</code></li>
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>Known when to stop being interactive</strong> and let Lesson 4 take over</li>
 </ul>
-<div class="admonition tip">
+<div class="admonition info">
 <p class="admonition-title">You need Lesson 2's environment</p>
 <p>Everything below assumes <code>~/hello-aqua/.venv</code> (uv) or the <code>hello-aqua</code> env (Miniforge / micromamba) from <a href="../lesson-2/">Lesson 2</a> exists and works. If not, do the Test Drive there first; it takes two minutes.</p>
 </div>
@@ -1650,7 +1650,7 @@
 </span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>train_mnist.py<span class="w"> </span>--epochs<span class="w"> </span><span class="m">0</span>
 </span></code></pre></div>
 <p><code>uv add</code> puts <code>torch&gt;=2.14.0</code> under <code>dependencies</code>, and <code>uv.lock</code> records the exact CPU build from that index while everything else, pandas included, keeps coming from PyPI. <code>uv sync --frozen</code> rebuilds all of it.</p>
-<div class="admonition note">
+<div class="admonition warning">
 <p class="admonition-title">Same-filesystem rule</p>
 <p>If you followed Lesson 2's tip and moved <code>UV_CACHE_DIR</code> to <code>/scratch</code>, this venv on <code>/home</code> is now on a different filesystem from the cache, and uv will warn <code>Failed to hardlink files; falling back to full copy</code>. It still works, just slower. The fix is to keep cache and venv together: <a href="../../scheduler/uv-on-aqua/">uv on Aqua</a>.</p>
 </div>
@@ -1699,7 +1699,7 @@
 <p>Four files land in <code>~/hello-aqua/data/mnist/</code>. Accuracy is <code>None</code> because nothing was trained.</p>
 </div>
 <p><a href="../scripts/train_mnist.py">Download the script</a>, or read it here:</p>
-<details class="note">
+<details class="example">
 <summary><code>train_mnist.py</code></summary>
 <div class="language-python highlight"><span class="filename">train_mnist.py</span><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="sd">&quot;&quot;&quot;Train a small network to recognise handwritten digits (MNIST).</span>
 </span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
@@ -1949,7 +1949,7 @@
 </span><span id="__span-12-11"><a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a><span class="w">  </span><span class="nt">&quot;job_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;12345678.aqua&quot;</span>
 </span><span id="__span-12-12"><a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a><span class="p">}</span>
 </span></code></pre></div>
-<p><code>job_id</code> is <code>$PBS_JOBID</code>, also set by PBS. <code>elapsed_s</code> and <code>peak_rss_mb</code> are what you carry to Lesson 4: about 25 s and 500 MB, against a request of 1 h and 8 GB.</p>
+<p><code>job_id</code> is <code>$PBS_JOBID</code>, also set by PBS. <code>elapsed_s</code> and <code>peak_rss_mb</code> are what the run actually used: about 25 s and 500 MB, against a request of 1 h and 8 GB.</p>
 <hr />
 <h2 id="part-4-survive-a-dropped-connection-3-min">🔌 Part 4: Survive a dropped connection (~3 min)</h2>
 <p>An interactive job's shell is your SSH session. Lose the connection and PBS ends the job, along with anything running in it. The cure is <code>tmux</code> on the <strong>login node</strong>, so the thing holding your job is not your Wi-Fi. You are still inside the job from Part 3, so leave it first:</p>
@@ -1963,7 +1963,7 @@
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>tmux<span class="w"> </span>attach<span class="w"> </span>-t<span class="w"> </span>dev
 </span></code></pre></div>
 <p>Those two keys and two commands are all this lesson needs; the <a href="https://tmuxcheatsheet.com/">tmux cheat sheet</a> has the rest (windows, panes, scrolling).</p>
-<div class="admonition note">
+<div class="admonition failure">
 <p class="admonition-title">If your session seems to have vanished</p>
 <ul>
 <li><strong>Aqua has more than one login node</strong> (<code>aquarius01</code>, <code>aquarius02</code>, …), and <code>ssh aqua.qut.edu.au</code> lands you on one of them. A tmux session lives on the node where you started it, so <code>tmux ls</code> on the other node shows nothing. Run <code>hostname</code> when you start the session, and check it again before assuming the session is gone.</li>
@@ -1990,7 +1990,7 @@
 </div>
 <hr />
 <h2 id="whats-next">🔗 What's Next?</h2>
-<p>→ <strong><a href="../lesson-4/">Lesson 4: Your First Batch Job</a></strong> — the same script, submitted unattended.</p>
+<p>→ <strong><a href="../lesson-4/">Lesson 4: Your First Batch Job</a></strong> — write the request and the commands in a file, and let PBS run them with nobody watching.</p>
 <div class="admonition question">
 <p class="admonition-title">Stuck?</p>
 <ul>
@@ -2063,7 +2063,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="September 9, 2026 21:08:07 AEST">September 9, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="September 13, 2026 21:22:53 AEST">September 13, 2026</span>
   </span>
 
     
