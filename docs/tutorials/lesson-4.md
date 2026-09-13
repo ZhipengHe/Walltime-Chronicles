@@ -335,7 +335,7 @@ That is the whole ceremony. The job no longer needs your connection: log out, lo
     resources_used.walltime=...
     ```
 
-    `Exit_status=0` means the script finished without an error. Anything else is [Lesson 5](lesson-5.md)'s business.
+    `Exit_status=0` means the script's last command finished without an error. What any other number means, and when a `0` can hide an earlier failure, is [Lesson 5](lesson-5.md)'s business.
 
 ### Step 5: Read the results
 

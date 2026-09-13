@@ -11,7 +11,7 @@ Welcome to the Crash Course Café! ☕ Pull up a chair and let's get you product
     | [2. Tooling Setup](lesson-2.md) | Written |
     | [3. Working Interactively](lesson-3.md) | Written |
     | [4. Your First Batch Job](lesson-4.md) | Written |
-    | [5. When Jobs Fail](lesson-5.md) | Stub |
+    | [5. When Jobs Fail](lesson-5.md) | Written |
     | [6. Right-sizing Requests](lesson-6.md) | Stub |
     | [7. Job Arrays](lesson-7.md) | Stub |
     | [8. Long Jobs: Dependencies & Checkpointing](lesson-8.md) | Stub |
@@ -157,13 +157,13 @@ This crash course is your launching pad. When you hit specific challenges, you'l
 
 **Phase 2, reliable operation (Lessons 5 and 6).** Read a failure before panicking, then size requests from measurements instead of guesses.
 
-### Lesson 5: When Jobs Fail (15 min)
+### Lesson 5: When Jobs Fail (15–20 min)
 
 > *"Reading PBS tea leaves and error messages"*
 
-- Queue states, the `.o` / `.e` split, `tracejob`
-- The 5 failures you'll actually hit
-- The "what now?" decision tree
+- Where a failure leaves its evidence: the end of `.e`, the summary in `.o`, `qstat -xf`
+- Who stopped the job: your program, PBS at a limit, or PBS refusing it, and the next move for each
+- Test small in an interactive session before you queue long
 
 [→ Lesson 5](lesson-5.md)
 
