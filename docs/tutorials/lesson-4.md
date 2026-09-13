@@ -520,12 +520,23 @@ What a job actually used, and how to ask for the right amount next time, is [Les
 
 ## 📝 Quick Reference
 
-=== "Job script"
+=== "CPU job script"
     ```bash
     #!/bin/bash
     #PBS -N my_job
-    #PBS -l select=1:ncpus=4:mem=8GB             # CPU job
-    ##PBS -l select=1:ncpus=4:ngpus=1:mem=32GB   # GPU job instead
+    #PBS -l select=1:ncpus=4:mem=8GB
+    #PBS -l walltime=01:00:00
+    #PBS -m abe
+
+    cd "$PBS_O_WORKDIR"
+    uv run python my_program.py
+    ```
+
+=== "GPU job script"
+    ```bash
+    #!/bin/bash
+    #PBS -N my_job
+    #PBS -l select=1:ncpus=4:ngpus=1:mem=32GB
     #PBS -l walltime=01:00:00
     #PBS -m abe
 
