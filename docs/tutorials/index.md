@@ -147,11 +147,11 @@ This crash course is your launching pad. When you hit specific challenges, you'l
 
 ### Lesson 4: Your First Batch Job (15–20 min)
 
-> *"Hello World, meet High Performance Computing"*
+> *"Write down what you want, hand it to PBS, and go do something else."*
 
-- PBS script anatomy
-- Submit with `qsub`, monitor with `qstat -u $USER`
-- Read `.o` / `.e` output, kill with `qdel`
+- A job script: `#PBS` lines for the request, shell for the work, and what a job's shell starts with
+- Fine-tune a language model to judge film reviews, on a GPU with nobody watching; results in files, logs beside them
+- Find jobs with `qstat`, take one back with `qdel`
 
 [→ Lesson 4](lesson-4.md)
 

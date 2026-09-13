@@ -63,6 +63,7 @@ Each lesson picks its own task; a script is not carried from one lesson to the n
 | Script | Used in | Task | Needs |
 |---|---|---|---|
 | `docs/tutorials/scripts/train_mnist.py` | Lesson 3 | MNIST digit classifier | PyTorch only |
+| `docs/tutorials/scripts/imdb_sentiment.py` | Lesson 4 | IMDb review sentiment, fine-tuning DistilBERT (Hugging Face's text-classification guide, GPU) | PyTorch (CUDA build), transformers, datasets, evaluate, accelerate, scikit-learn |
 
 ## Writing Style and Content Guidelines
 

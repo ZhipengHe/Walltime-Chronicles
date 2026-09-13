@@ -42,7 +42,7 @@ uv --version
 
 That's it. uv is now at `~/.local/bin/uv` and on your PATH.
 
-!!! note "If `uv --version` says command not found"
+!!! failure "If `uv --version` says command not found"
     Your `~/.bashrc` may have an early `return` for non-interactive shells, in which case `source ~/.bashrc` silently no-ops. **Open a new terminal** so the shell init runs fresh.
 
 ---
@@ -193,7 +193,7 @@ cd /scratch/${USER}/my-project && uv sync --frozen
 
 Two caveats come with `/scratch`, and Part 2 has already answered both. Files untouched for 30 days are swept, and nothing there is backed up. Neither matters for a `.venv` that `uv sync --frozen` rebuilds in seconds from two files you keep in `/home` or in git.
 
-!!! note "Where the rest of uv's files go"
+!!! info "Where the rest of uv's files go"
     - Downloaded Pythons: `~/.local/share/uv/python/`, about 110 MB per version. Leave them on `/home`.
     - Long-lived shared environments for a team: `/work/<project>`, which needs a QUT eResearch ticket. The [uv on Aqua](../scheduler/uv-on-aqua.md) guide shows how to keep a shared project on `/work` with per-user environments on `/scratch`.
 
@@ -227,7 +227,7 @@ The comparison behind the chart (the chart skips Miniconda; the box further down
 | **micromamba** | ✓ Recommended (single-binary alternative) | Minimal install: CI pipelines, container base, or personal preference for a single binary | Same conda-forge ecosystem and libmamba solver as Miniforge's `mamba`; packaged as a single statically-linked C++ binary (~17 MB) instead of a full Python install. Commands are `micromamba` (alias to `conda` or `mamba` if you want). |
 | **Miniconda** | ✗ **Not recommended** | (Listed for awareness; you'll see it in many tutorials) | Free for accredited universities (incl. QUT) under [Anaconda's Academic Policy](https://www.anaconda.com/legal/terms/academic), but registration + EULA + "non-commercial" restriction make it frictionful in practice. HPC sites are migrating away (LLNL site-wide block of Anaconda paid channels effective **Feb 2027**). Use Miniforge instead. |
 
-??? note "Miniforge: install, describe the environment in a file, verify"
+??? info "Miniforge: install, describe the environment in a file, verify"
     **Install.** About 30 seconds:
 
     ```bash
@@ -301,7 +301,7 @@ The comparison behind the chart (the chart skips Miniconda; the box further down
 
     **micromamba** is the single-binary variant of the same thing (17 MB, no Python prerequisite). Install with `"${SHELL}" <(curl -L micro.mamba.pm)`, accept the defaults it asks about, then use every command above with `micromamba` in place of `conda`.
 
-??? note "Already on Miniconda? Why this course doesn't use it, and how to move"
+??? info "Already on Miniconda? Why this course doesn't use it, and how to move"
     You'll see Miniconda referenced everywhere; most existing Python-on-HPC tutorials, including [QUT eResearch's own conda guide](https://docs.eres.qut.edu.au/hpc-conda-package-and-environment-manager)[^1], recommend it. This course doesn't, for two reasons.
 
     **1. Anaconda's Terms of Service make it frictionful.** Anaconda's [Terms of Service](https://www.anaconda.com/legal/terms/terms-of-service) (15 July 2025) let accredited universities, QUT included, use the Anaconda repository free under the [Academic Policy](https://www.anaconda.com/legal/terms/academic). Free, but with strings: each user registers with an academic email and accepts a separate Academic EULA, renewable annually; free use is restricted to "non-commercial educational and research purposes", which is unclear for industry-funded or commercialisation work; and recent installs ship the [`conda-anaconda-tos`](https://www.anaconda.com/blog/conda-anaconda-tos-plugin) plugin, which interrupts `conda create` / `install` / `search` against `pkgs/main` or `pkgs/r` to demand acceptance whether you are entitled to free use or not. Miniforge's default channel, conda-forge, is not governed by any of this.
