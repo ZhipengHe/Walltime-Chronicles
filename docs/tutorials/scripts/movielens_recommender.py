@@ -69,6 +69,8 @@ def parse_args():
         p.error("--dim, --batch, --top and --users must be at least 1")
     if args.epochs < 0 or args.threads < 0 or args.limit < 0:
         p.error("--epochs, --threads and --limit cannot be negative")
+    if args.limit == 1:
+        p.error("--limit must be 0 (all ratings) or at least 2, so both train and test get a rating")
     if not 0 < args.test_fraction < 1:
         p.error("--test-fraction must be between 0 and 1")
     if args.lr <= 0 or args.reg < 0 or args.min_ratings < 0:
@@ -119,9 +121,11 @@ def load(folder, test_fraction, seed, limit):
     films = torch.from_numpy(film_codes.astype("int64"))
     scores = torch.from_numpy(ratings["rating"].to_numpy().copy())
 
+    if len(scores) < 2:
+        sys.exit("ERROR: need at least two ratings to split train from test")
     generator = torch.Generator().manual_seed(seed)
     order = torch.randperm(len(scores), generator=generator)
-    n_test = int(len(scores) * test_fraction)
+    n_test = min(max(int(len(scores) * test_fraction), 1), len(scores) - 1)
     test, train = order[:n_test], order[n_test:]
     split = {
         "train": (users[train], films[train], scores[train]),
@@ -129,7 +133,7 @@ def load(folder, test_fraction, seed, limit):
     }
     titles = movies.set_index("movieId")["title"].reindex(film_ids).fillna("").tolist()
     counts = torch.bincount(films[train], minlength=len(film_ids))
-    return split, user_ids, titles, counts
+    return split, user_ids, titles, counts, (users, films)
 
 
 class MatrixFactorisation(nn.Module):
@@ -184,16 +188,22 @@ def rmse(model, users, films, scores, device, batch):
 
 
 @torch.no_grad()
-def recommend(model, train_users, train_films, counts, min_ratings, n_users, top, device):
-    """Top films per user among the first `n_users`, skipping films they rated and rarely rated films."""
+def recommend(model, rated_users, rated_films, counts, min_ratings, n_users, top, device):
+    """Top films per user among the first `n_users`, skipping every film they rated and rarely rated films."""
     rare = (counts < min_ratings).to(device)
     picks = []
     for user in range(n_users):
-        seen = train_films[train_users == user]
+        # All of this user's ratings, train and test alike: a held-out rating is still a film they have seen.
+        seen = rated_films[rated_users == user]
         scores = model.film.weight @ model.user.weight[user] + model.film_bias.weight.squeeze(1)
         scores[rare] = float("-inf")
         scores[seen] = float("-inf")
-        best = torch.topk(scores, top)
+        # Fewer eligible films than --top: return only those, never a masked one.
+        count = min(top, int(torch.isfinite(scores).sum().item()))
+        if count == 0:
+            picks.append((user, [], []))
+            continue
+        best = torch.topk(scores, count)
         picks.append((user, best.indices.tolist(), (best.values + model.user_bias.weight[user] + model.mean).tolist()))
     return picks
 
@@ -218,11 +228,12 @@ def main():
         # Fetch-only run, meant for the login node: stop before reading 32 million ratings.
         print(f"done      data ready in {folder}; nothing trained (--epochs 0)")
         return
-    split, user_ids, titles, counts = load(folder, args.test_fraction, args.seed, args.limit)
+    split, user_ids, titles, counts, rated = load(folder, args.test_fraction, args.seed, args.limit)
     # Move every rating to the device once. On a GPU this is a few hundred MB,
     # and it keeps each training step on the card instead of copying batches over.
     train_users, train_films, train_scores = (t.to(device) for t in split["train"])
     test_users, test_films, test_scores = (t.to(device) for t in split["test"])
+    rated_users, rated_films = (t.to(device) for t in rated)
     print(f"data      {len(train_scores) + len(test_scores):,} ratings, {len(user_ids):,} users, {len(titles):,} films")
 
     model = MatrixFactorisation(len(user_ids), len(titles), args.dim, train_scores.mean().item()).to(device)
@@ -249,7 +260,7 @@ def main():
     n_users = min(args.users, len(user_ids))
     if args.epochs > 0:
         rows = []
-        for user, films, predicted in recommend(model, train_users, train_films, counts, args.min_ratings, n_users, args.top, device):
+        for user, films, predicted in recommend(model, rated_users, rated_films, counts, args.min_ratings, n_users, args.top, device):
             for rank, (film, score) in enumerate(zip(films, predicted), start=1):
                 rows.append((int(user_ids[user]), rank, titles[film], round(min(max(score, 0.5), 5.0), 2)))
         pd.DataFrame(rows, columns=["userId", "rank", "title", "predicted_rating"]).to_csv(args.recommendations, index=False)

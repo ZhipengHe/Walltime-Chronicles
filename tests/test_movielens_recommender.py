@@ -54,6 +54,7 @@ class ParseArgsTest(unittest.TestCase):
 
     def test_limit_is_accepted(self):
         self.assertEqual(self.parse("--limit", "100000").limit, 100000)
+        self.assertEqual(self.parse("--limit", "2").limit, 2)
 
     def test_rejects_values_the_training_loop_cannot_run_with(self):
         bad = (
@@ -64,6 +65,7 @@ class ParseArgsTest(unittest.TestCase):
             ["--epochs", "-1"],
             ["--threads", "-1"],
             ["--limit", "-1"],
+            ["--limit", "1"],
             ["--test-fraction", "0"],
             ["--test-fraction", "1"],
             ["--lr", "0"],

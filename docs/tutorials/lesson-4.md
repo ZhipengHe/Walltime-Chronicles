@@ -174,7 +174,7 @@ That is why every real job script starts with the same two moves: `cd "$PBS_O_WO
 
 ### Step 1: What the job does
 
-[MovieLens](https://grouplens.org/datasets/movielens/) is a public collection of film ratings that people gave on a real website; the `ml-32m` release holds 32 million of them. The job trains a **matrix factorisation** recommender, the method every recommender course starts with: each user and each film gets a short list of numbers, and a user's predicted rating for a film comes from multiplying the two lists together. Training nudges those numbers until the predictions match the ratings people actually gave. Ten percent of the ratings are held back to measure how far off it is, and at the end it writes each user's ten best films they have not seen yet.
+[MovieLens](https://grouplens.org/datasets/movielens/) is a public collection of film ratings that people gave on a real website; the `ml-32m` release holds 32 million of them. The job trains a **matrix factorisation** recommender, the method every recommender course starts with: each user and each film gets a short list of numbers, and a user's predicted rating for a film comes from multiplying the two lists together. Training nudges those numbers until the predictions match the ratings people actually gave. Ten percent of the ratings are held back to measure how far off it is, and at the end it writes the ten best films that each of the first 1,000 users has not rated yet.
 
 Each training step looks up and multiplies tens of thousands of those number lists at once, which is exactly the work a GPU is built for.
 
