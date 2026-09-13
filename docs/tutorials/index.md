@@ -2,7 +2,7 @@
 
 Welcome to the Crash Course Café! ☕ Pull up a chair and let's get you productive on QUT Aqua without the usual learning curve headaches.
 
-!!! info "Course status (2026-09-09)"
+!!! info "Course status (2026-09-13)"
     Nine lessons, each ending with something you can do that you could not do before. This table is the one place the course's status is kept.
 
     | Lesson | Status |
@@ -10,7 +10,7 @@ Welcome to the Crash Course Café! ☕ Pull up a chair and let's get you product
     | [1. Welcome to Aqua](lesson-1.md) | Written |
     | [2. Tooling Setup](lesson-2.md) | Written |
     | [3. Working Interactively](lesson-3.md) | Written |
-    | [4. Your First Batch Job](lesson-4.md) | Stub |
+    | [4. Your First Batch Job](lesson-4.md) | Written |
     | [5. When Jobs Fail](lesson-5.md) | Stub |
     | [6. Right-sizing Requests](lesson-6.md) | Stub |
     | [7. Job Arrays](lesson-7.md) | Stub |
