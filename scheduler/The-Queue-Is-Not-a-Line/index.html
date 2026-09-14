@@ -12,13 +12,13 @@
         <meta name="author" content="Zhipeng He">
       
       
-        <link rel="canonical" href="https://zhipenghe.me/Walltime-Chronicles/tutorials/lesson-1/">
+        <link rel="canonical" href="https://zhipenghe.me/Walltime-Chronicles/scheduler/The-Queue-Is-Not-a-Line/">
       
       
-        <link rel="prev" href="../prerequisites/">
+        <link rel="prev" href="../Walltime-by-Recipe/">
       
       
-        <link rel="next" href="../lesson-2/">
+        <link rel="next" href="../uv-on-aqua/">
       
       
         
@@ -29,7 +29,7 @@
     
     
       
-        <title>Lesson 1: Welcome to Aqua - Walltime Chronicles</title>
+        <title>The Queue Is Not a Line: How Aqua Ranks Your Job - Walltime Chronicles</title>
       
     
     
@@ -66,17 +66,17 @@
     
   
 <meta property="og:type" content="website" />
-<meta property="og:title" content="Lesson 1: Welcome to Aqua - Walltime Chronicles" />
+<meta property="og:title" content="The Queue Is Not a Line: How Aqua Ranks Your Job - Walltime Chronicles" />
 <meta property="og:description" content="My personal survival log of mysterious errors, queueing oddities, and PBS quirks encountered on QUT Aqua" />
-<meta property="og:image" content="https://zhipenghe.me/Walltime-Chronicles/assets/images/social/tutorials/lesson-1.png" />
+<meta property="og:image" content="https://zhipenghe.me/Walltime-Chronicles/assets/images/social/scheduler/The-Queue-Is-Not-a-Line.png" />
 <meta property="og:image:type" content="image/png" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
-<meta property="og:url" content="https://zhipenghe.me/Walltime-Chronicles/tutorials/lesson-1/" />
+<meta property="og:url" content="https://zhipenghe.me/Walltime-Chronicles/scheduler/The-Queue-Is-Not-a-Line/" />
 <meta property="twitter:card" content="summary_large_image" />
-<meta property="twitter:title" content="Lesson 1: Welcome to Aqua - Walltime Chronicles" />
+<meta property="twitter:title" content="The Queue Is Not a Line: How Aqua Ranks Your Job - Walltime Chronicles" />
 <meta property="twitter:description" content="My personal survival log of mysterious errors, queueing oddities, and PBS quirks encountered on QUT Aqua" />
-<meta property="twitter:image" content="https://zhipenghe.me/Walltime-Chronicles/assets/images/social/tutorials/lesson-1.png" />
+<meta property="twitter:image" content="https://zhipenghe.me/Walltime-Chronicles/assets/images/social/scheduler/The-Queue-Is-Not-a-Line.png" />
 </head>
   
   
@@ -89,7 +89,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#lesson-1-welcome-to-aqua" class="md-skip">
+        <a href="#the-queue-is-not-a-line-how-aqua-ranks-your-job" class="md-skip">
           Skip to content
         </a>
       
@@ -125,7 +125,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Lesson 1: Welcome to Aqua
+              The Queue Is Not a Line: How Aqua Ranks Your Job
             
           </span>
         </div>
@@ -276,8 +276,6 @@
       
   
   
-    
-  
   
   
     
@@ -311,15 +309,17 @@
     
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../" class="md-nav__link ">
+            <a href="../../tutorials/" class="md-nav__link ">
               
   
   
@@ -343,7 +343,7 @@
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             
@@ -363,7 +363,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../prerequisites/" class="md-nav__link">
+      <a href="../../tutorials/prerequisites/" class="md-nav__link">
         
   
   
@@ -388,37 +388,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Lesson 1: Welcome to Aqua
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../tutorials/lesson-1/" class="md-nav__link">
         
   
   
@@ -434,159 +407,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#what-youll-accomplish" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        📋 What You'll Accomplish
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#part-1-what-is-aqua-5-min" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        🌊 Part 1: What is Aqua? (~5 min)
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="🌊 Part 1: What is Aqua? (~5 min)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#where-your-files-live" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Where your files live
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#login-nodes-vs-compute-nodes" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Login nodes vs compute nodes
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#part-2-your-first-interactive-session-10-min" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        🛠️ Part 2: Your First Interactive Session (~10 min)
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="🛠️ Part 2: Your First Interactive Session (~10 min)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#step-1-ssh-in" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Step 1: SSH in
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#step-2-ask-pbs-for-a-5-minute-interactive-job" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Step 2: Ask PBS for a 5-minute interactive job
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#step-3-confirm-youve-moved" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Step 3: Confirm you've moved
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#step-4-exit-cleanly" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Step 4: Exit cleanly
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#key-takeaways" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        🎯 Key Takeaways
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#whats-next" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        🔗 What's Next?
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -599,7 +419,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../lesson-2/" class="md-nav__link">
+      <a href="../../tutorials/lesson-2/" class="md-nav__link">
         
   
   
@@ -627,7 +447,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../lesson-3/" class="md-nav__link">
+      <a href="../../tutorials/lesson-3/" class="md-nav__link">
         
   
   
@@ -655,7 +475,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../lesson-4/" class="md-nav__link">
+      <a href="../../tutorials/lesson-4/" class="md-nav__link">
         
   
   
@@ -683,7 +503,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../lesson-5/" class="md-nav__link">
+      <a href="../../tutorials/lesson-5/" class="md-nav__link">
         
   
   
@@ -711,7 +531,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../lesson-6/" class="md-nav__link">
+      <a href="../../tutorials/lesson-6/" class="md-nav__link">
         
   
   
@@ -739,7 +559,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../lesson-7/" class="md-nav__link">
+      <a href="../../tutorials/lesson-7/" class="md-nav__link">
         
   
   
@@ -767,7 +587,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../lesson-8/" class="md-nav__link">
+      <a href="../../tutorials/lesson-8/" class="md-nav__link">
         
   
   
@@ -795,7 +615,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../lesson-9/" class="md-nav__link">
+      <a href="../../tutorials/lesson-9/" class="md-nav__link">
         
   
   
@@ -988,6 +808,8 @@
       
   
   
+    
+  
   
   
     
@@ -1011,17 +833,15 @@
     
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../scheduler/" class="md-nav__link ">
+            <a href="../" class="md-nav__link ">
               
   
   
@@ -1045,7 +865,7 @@
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_4">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1065,7 +885,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../scheduler/Know-Your-Nodes/" class="md-nav__link">
+      <a href="../Know-Your-Nodes/" class="md-nav__link">
         
   
   
@@ -1093,7 +913,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../scheduler/The-Art-of-Walltime/" class="md-nav__link">
+      <a href="../The-Art-of-Walltime/" class="md-nav__link">
         
   
   
@@ -1121,7 +941,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../scheduler/Walltime-by-Recipe/" class="md-nav__link">
+      <a href="../Walltime-by-Recipe/" class="md-nav__link">
         
   
   
@@ -1146,10 +966,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../scheduler/The-Queue-Is-Not-a-Line/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Queue Is Not a Line: How Aqua Ranks Your Job
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -1165,6 +1012,131 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#welcome-to-the-leaderboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Welcome to the Leaderboard
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#formula" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Formula on the Wall
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reading-it-what-each-part-means" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reading It: What Each Part Means
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Reading It: What Each Part Means">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fairshare_factor-the-term-that-dominates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        fairshare_factor, the term that dominates
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#putting-it-together" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Putting It Together
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#backfill" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Backfill: How a Lower-Ranked Job Starts First
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-you-control" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What You Control
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-you-can-see" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What You Can See
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#where-next" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where next
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1177,7 +1149,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../scheduler/uv-on-aqua/" class="md-nav__link">
+      <a href="../uv-on-aqua/" class="md-nav__link">
         
   
   
@@ -1390,10 +1362,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#what-youll-accomplish" class="md-nav__link">
+  <a href="#welcome-to-the-leaderboard" class="md-nav__link">
     <span class="md-ellipsis">
       
-        📋 What You'll Accomplish
+        Welcome to the Leaderboard
       
     </span>
   </a>
@@ -1401,33 +1373,33 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#part-1-what-is-aqua-5-min" class="md-nav__link">
+  <a href="#formula" class="md-nav__link">
     <span class="md-ellipsis">
       
-        🌊 Part 1: What is Aqua? (~5 min)
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="🌊 Part 1: What is Aqua? (~5 min)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#where-your-files-live" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Where your files live
+        The Formula on the Wall
       
     </span>
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#login-nodes-vs-compute-nodes" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#reading-it-what-each-part-means" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Login nodes vs compute nodes
+        Reading It: What Each Part Means
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Reading It: What Each Part Means">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fairshare_factor-the-term-that-dominates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        fairshare_factor, the term that dominates
       
     </span>
   </a>
@@ -1440,71 +1412,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#part-2-your-first-interactive-session-10-min" class="md-nav__link">
+  <a href="#putting-it-together" class="md-nav__link">
     <span class="md-ellipsis">
       
-        🛠️ Part 2: Your First Interactive Session (~10 min)
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="🛠️ Part 2: Your First Interactive Session (~10 min)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#step-1-ssh-in" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Step 1: SSH in
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#step-2-ask-pbs-for-a-5-minute-interactive-job" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Step 2: Ask PBS for a 5-minute interactive job
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#step-3-confirm-youve-moved" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Step 3: Confirm you've moved
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#step-4-exit-cleanly" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Step 4: Exit cleanly
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#key-takeaways" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        🎯 Key Takeaways
+        Putting It Together
       
     </span>
   </a>
@@ -1512,10 +1423,43 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#whats-next" class="md-nav__link">
+  <a href="#backfill" class="md-nav__link">
     <span class="md-ellipsis">
       
-        🔗 What's Next?
+        Backfill: How a Lower-Ranked Job Starts First
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-you-control" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What You Control
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-you-can-see" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What You Can See
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#where-next" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where next
       
     </span>
   </a>
@@ -1568,7 +1512,7 @@
         <a href="../" class="md-path__link">
           
   <span class="md-ellipsis">
-    Crash Course Café
+    The Scheduler's Gambit
   </span>
 
         </a>
@@ -1587,7 +1531,7 @@
 
 
   
-    <a href="https://github.com/ZhipengHe/Walltime-Chronicles/edit/main/docs/tutorials/lesson-1.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+    <a href="https://github.com/ZhipengHe/Walltime-Chronicles/edit/main/docs/scheduler/The-Queue-Is-Not-a-Line.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
@@ -1596,232 +1540,273 @@
     
       
     
-    <a href="https://github.com/ZhipengHe/Walltime-Chronicles/raw/main/docs/tutorials/lesson-1.md" title="View source of this page" class="md-content__button md-icon">
+    <a href="https://github.com/ZhipengHe/Walltime-Chronicles/raw/main/docs/scheduler/The-Queue-Is-Not-a-Line.md" title="View source of this page" class="md-content__button md-icon">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"/></svg>
     </a>
   
 
 
-<h1 id="lesson-1-welcome-to-aqua">Lesson 1: Welcome to Aqua</h1>
-<div class="admonition quote">
-<p class="admonition-title">Mission Statement</p>
-<p><em>"From your laptop to a real compute cluster — and back — in 15 minutes."</em> 🌊</p>
-</div>
-<p>Welcome to Aqua, QUT's central HPC. The first half of this lesson is the mental model you need to stop being confused: what a cluster <em>is</em>, where your files live, and why there are two kinds of machine you'll talk to. The second half is the hands-on round-trip — SSH in, ask PBS for a compute node, do nothing useful on it, exit. Once you've done that loop end-to-end, every later lesson is just variations on the same theme.</p>
-<h2 id="what-youll-accomplish">📋 What You'll Accomplish</h2>
-<p>By the end of this 15-minute lesson, you'll have:</p>
-<ul class="task-list">
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>A mental model of Aqua</strong> — what's a node, where files live, who decides when your job runs</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>SSHed into Aqua</strong> — and confirmed you landed on a login node (<code>aquarius01</code> or <code>aquarius02</code>)</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>Run your first interactive job</strong> — <code>qsub -I</code> for 5 minutes on a real compute node</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>Felt the difference</strong> between login and compute nodes (different hostnames, same files)</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>Exited cleanly</strong> — resources released back to PBS</li>
+<h1 id="the-queue-is-not-a-line-how-aqua-ranks-your-job">The Queue Is Not a Line: How Aqua Ranks Your Job</h1>
+<blockquote>
+<p><em>Or: first come, first served was never the deal.</em></p>
+</blockquote>
+<h2 id="welcome-to-the-leaderboard"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.89 2-2-.89-2-2-2m7-2a2 2 0 1 0 2 2c0-1.11-.89-2-2-2m7-2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.89 2-2-.89-2-2-2M3.5 11c-.83 0-1.5.67-1.5 1.5V17h1v5h4v-5h1v-4.5c0-.83-.67-1.5-1.5-1.5zm7-2C9.67 9 9 9.67 9 10.5V15h1v5h4v-5h1v-4.5c0-.83-.67-1.5-1.5-1.5zm7-2c-.83 0-1.5.67-1.5 1.5V13h1v5h4v-5h1V8.5c0-.83-.67-1.5-1.5-1.5z"/></svg></span> Welcome to the Leaderboard</h2>
+<p>You submitted hours ago. Your job is still <code>Q</code>. A job that looks exactly like yours, submitted after yours, just started. Nothing is broken: the queue is a <strong>leaderboard</strong> that PBS rebuilds every scheduling cycle, and a job gets ahead of yours in one of two ways.</p>
+<ul>
+<li><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12 7.09 2.45 1.49-.65-2.81L16 3.89l-2.89-.25L12 1l-1.13 2.64L8 3.89l2.18 1.88-.68 2.81zm-8 6 2.45 1.49-.65-2.81L8 9.89l-2.89-.25L4 7 2.87 9.64 0 9.89l2.18 1.88-.68 2.81zm16-3 2.45 1.49-.65-2.81L24 6.89l-2.89-.25L20 4l-1.13 2.64-2.87.25 2.18 1.88-.68 2.81zM15 23H9V10h6zm-8 0H1v-6h6zm16 0h-6V13h6z"/></svg></span> <strong>It outscores you.</strong> The scoring rule is public. <a href="#formula">The Formula on the Wall</a> below.</li>
+<li><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.5 11H19V7a2 2 0 0 0-2-2h-4V3.5A2.5 2.5 0 0 0 10.5 1 2.5 2.5 0 0 0 8 3.5V5H4a2 2 0 0 0-2 2v3.8h1.5c1.5 0 2.7 1.2 2.7 2.7S5 16.2 3.5 16.2H2V20a2 2 0 0 0 2 2h3.8v-1.5c0-1.5 1.2-2.7 2.7-2.7s2.7 1.2 2.7 2.7V22H17a2 2 0 0 0 2-2v-4h1.5a2.5 2.5 0 0 0 2.5-2.5 2.5 2.5 0 0 0-2.5-2.5"/></svg></span> <strong>It fits a gap yours does not.</strong> That is backfilling. <a href="#backfill">Backfill</a> below.</li>
 </ul>
-<div class="admonition tip">
-<p class="admonition-title">Open a terminal now</p>
-<p>Keep a terminal window handy. Part 1 is conceptual; Part 2 is fingers on keys. You don't want to be hunting for your terminal app halfway through Step 1.</p>
+<hr />
+<h2 id="formula"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12.42 5.29c-1.1-.1-2.07.71-2.17 1.82L10 10h2.82v2h-3l-.44 5.07A4.001 4.001 0 0 1 2 18.83l1.5-1.5c.33 1.05 1.46 1.64 2.5 1.3.78-.24 1.33-.93 1.4-1.74L7.82 12h-3v-2H8l.27-3.07a4.01 4.01 0 0 1 4.33-3.65c1.26.11 2.4.81 3.06 1.89l-1.5 1.5c-.25-.77-.93-1.31-1.74-1.38M22 13.65l-1.41-1.41-2.83 2.83-2.83-2.83-1.43 1.41 2.85 2.85-2.85 2.81 1.43 1.41 2.83-2.83 2.83 2.83L22 19.31l-2.83-2.81z"/></svg></span> The Formula on the Wall</h2>
+<p>Every cycle PBS evaluates the server attribute <code>job_sort_formula</code><sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup> for every queued job and tries the highest score first. Anyone can read it:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>qmgr<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;print server&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-iE<span class="w"> </span><span class="s2">&quot;job_sort_formula|eligible_time_enable|backfill_depth&quot;</span>
+</span></code></pre></div>
+<p>At the time of writing, Aqua's looked like this:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>set server job_sort_formula = &quot;(48 * fairshare_factor) + ((6 * fairshare_factor) * ((mem/1048576/8) + ncpus + (ngpus*32))) + (0.000278 * eligible_time) + (4 * log(max(fairshare_factor, 1e-7)))&quot;
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>set server eligible_time_enable = True
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>set server backfill_depth = 10
+</span></code></pre></div>
+<p>Writing <span class="arithmatex">\(f\)</span> for <code>fairshare_factor</code>:</p>
+<div class="arithmatex">\[
+\text{score} = 48f \;+\; 6f \left( \frac{\text{mem}}{1048576 \cdot 8} + \text{ncpus} + 32\,\text{ngpus} \right) \;+\; \frac{\text{eligible\_time}}{3600} \;+\; 4 \ln \big( \max(f,\,10^{-7}) \big)
+\]</div>
+<div class="admonition warning">
+<p class="admonition-title">Snapshot, not scripture</p>
+<p>Sites tune this formula live, and there is no changelog. Run the <code>qmgr</code> line above before you quote a coefficient to anyone.</p>
 </div>
 <hr />
-<h2 id="part-1-what-is-aqua-5-min">🌊 Part 1: What is Aqua? (~5 min)</h2>
-<p><strong>Aqua</strong> (formally <em>Aquarius</em>) is QUT's centrally-funded supercomputer — free to use for QUT researchers. It's built for the workloads your laptop can't handle: training ML models on real datasets, running multi-day simulations, slicing genomes, modelling climate, fitting cosmologically large parameter sweeps. Anything where "let it run overnight on the M2" is no longer a serious plan.</p>
-<p>Architecturally, it's some seventy powerful computers (<strong>nodes</strong>) talking to a shared storage pool over high-speed networking, all coordinated by a job scheduler called <strong>PBS</strong> that hands out resources fairly across the ~hundreds of users competing for them at any given moment.</p>
-<pre class="mermaid"><code>graph TD
-    You[Your laptop] --&gt;|SSH&lt;br/&gt;via VPN if off-campus| Login[Login node&lt;br/&gt;aquarius01 / 02]
-    Login --&gt;|qsub| PBS[PBS scheduler]
-    PBS --&gt;|allocates| CPU[CPU nodes&lt;br/&gt;cpu1n*&lt;br/&gt;AMD Genoa, 192 cores]
-    PBS --&gt;|allocates| GPU[GPU nodes&lt;br/&gt;gpu1n*&lt;br/&gt;H100, A100]
-    PBS --&gt;|allocates| Mem[Large-memory node&lt;br/&gt;mem1n001&lt;br/&gt;6 TB RAM]
-
-    CPU --&gt;|read/write| FS[(Shared filesystems&lt;br/&gt;/home, /scratch, /work)]
-    GPU --&gt;|read/write| FS
-    Mem --&gt;|read/write| FS
-    Login --&gt;|read/write| FS
-
-    style You fill:#e1f5fe
-    style Login fill:#fff3e0
-    style PBS fill:#f3e5f5
-    style CPU fill:#e8f5e8
-    style GPU fill:#e8f5e8
-    style Mem fill:#fce4ec
-    style FS fill:#fff9c4</code></pre>
-<div class="admonition info">
-<p class="admonition-title">Aqua at a glance</p>
-<ul>
-<li><strong>About 70 compute nodes</strong> — mostly CPU boxes (AMD Genoa), plus H100 and A100 GPU hosts and one large-memory node</li>
-<li><strong>Over 10,000 CPU cores</strong> across the cluster</li>
-<li><strong>Over 100 GPUs</strong>, some of them sliced into smaller pieces or reserved</li>
-<li><strong>High-speed InfiniBand</strong> interconnect (200–400 Gbit/s) between nodes and storage</li>
-<li><strong>~1 PB Weka scratch storage</strong> on NVMe flash</li>
-</ul>
-<p>Exact per-node counts are in <a href="../../scheduler/Know-Your-Nodes/">Know Your Nodes</a>; the official list is <a href="https://docs.eres.qut.edu.au/about-aqua#hardware">About Aqua</a><sup id="fnref2:1"><a class="footnote-ref" href="#fn:1">1</a></sup>.</p>
-</div>
-<h3 id="where-your-files-live">Where your files live</h3>
-<p>Aqua mounts four filesystems on every node. Picking the right one for the right job is the difference between "my code is fast" and "my I/O is so slow the cluster operator emails me asking what I'm doing":</p>
+<h2 id="reading-it-what-each-part-means"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg></span> Reading It: What Each Part Means</h2>
 <table>
 <thead>
 <tr>
-<th>Filesystem</th>
-<th>Path</th>
-<th>Backed up?</th>
-<th>Speed</th>
-<th>When to use</th>
+<th>Variable</th>
+<th>Comes from</th>
+<th>Worth</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>Home</strong></td>
-<td><code>/home/$USER</code></td>
-<td>✅ Lustre</td>
-<td>Good</td>
-<td>Scripts, configs, small personal data</td>
+<td><code>mem</code>, <code>ncpus</code>, <code>ngpus</code></td>
+<td>Your <code>select</code> line, as <strong>requested</strong>, not as used</td>
+<td>1 per 8 GB, 1 per core, 32 per GPU, then ×&nbsp;<span class="arithmatex">\(6f\)</span></td>
 </tr>
 <tr>
-<td><strong>Scratch</strong></td>
-<td><code>/scratch/$USER/...</code></td>
-<td>❌ Weka</td>
-<td>Ultra-fast</td>
-<td>Active analysis, large I/O, anything performance-sensitive</td>
+<td><code>eligible_time</code></td>
+<td>Seconds queued while blocked by a lack of resources</td>
+<td>1 per hour</td>
 </tr>
 <tr>
-<td><strong>Work</strong></td>
-<td><code>/work/&lt;project&gt;/...</code></td>
-<td>✅ Lustre</td>
-<td>Good</td>
-<td>Shared project data (request via eResearch ticket)</td>
+<td><code>fairshare_factor</code></td>
+<td>Your recent usage against your share</td>
+<td>A <span class="arithmatex">\(48f\)</span> bonus, the <span class="arithmatex">\(6f\)</span> multiplier, and a <span class="arithmatex">\(4 \ln f\)</span> penalty</td>
 </tr>
 <tr>
-<td><strong>TMPDIR</strong></td>
-<td><code>$TMPDIR</code> (job-only)</td>
-<td>❌ Weka</td>
-<td>Ultra-fast</td>
-<td>Per-job intermediates — gone when the job exits</td>
+<td>walltime, <code>Priority</code></td>
+<td>—</td>
+<td>Nothing. Walltime matters to <a href="#backfill">backfilling</a> instead</td>
 </tr>
 </tbody>
 </table>
-<div class="admonition warning">
-<p class="admonition-title">Two rules to internalise now</p>
-<ol>
-<li><strong>Scratch isn't backed up</strong> and files inactive for 30+ days get auto-swept. Move anything you want to keep into <code>/home</code> or <code>/work</code> before that.</li>
-<li><strong>Don't dump millions of small files in <code>/home</code>.</strong> Lustre slows to a crawl. If a workflow generates many tiny files (extracting archives, compiling, installing deps), do it on <code>/scratch</code> and copy the result back.</li>
-</ol>
-</div>
-<p>For the deeper take — including per-queue node assignments and which filesystem is fastest for which I/O shape — see <a href="../../scheduler/Know-Your-Nodes/">Know Your Nodes</a>. For the official QUT reference: <a href="https://docs.eres.qut.edu.au/hpc-filesystem">QUT eResearch — Filesystem and data management</a><sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup>.</p>
-<h3 id="login-nodes-vs-compute-nodes">Login nodes vs compute nodes</h3>
-<p>Two distinct kinds of machine on Aqua, and the difference matters:</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Login nodes (<code>aquarius01</code>, <code>aquarius02</code>)</label><label for="__tabbed_1_2">Compute nodes (<code>cpu1n*</code>, <code>gpu1n*</code>, <code>mem1n001</code>)</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
+<p>So the size price list is <mark>1 GPU = 32 cores = 256 GB</mark>. <a href="../Walltime-by-Recipe/#recipe-4-single-h100-training">Recipe 4</a>'s <code>ncpus=12:ngpus=1:mem=64gb</code> is 32 + 12 + 8 = <strong>52</strong> points of size, before the factor multiplies it.</p>
+<h3 id="fairshare_factor-the-term-that-dominates"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3c-1.27 0-2.4.8-2.82 2H3v2h1.95L2 14c-.47 2 1 3 3.5 3s4.06-1 3.5-3L6.05 7h3.12c.33.85.98 1.5 1.83 1.83V20H2v2h20v-2h-9V8.82c.85-.32 1.5-.97 1.82-1.82h3.13L15 14c-.47 2 1 3 3.5 3s4.06-1 3.5-3l-2.95-7H21V5h-6.17C14.4 3.8 13.27 3 12 3m0 2a1 1 0 0 1 1 1 1 1 0 0 1-1 1 1 1 0 0 1-1-1 1 1 0 0 1 1-1m-6.5 5.25L7 14H4zm13 0L20 14h-3z"/></svg></span> <code>fairshare_factor</code>, the term that dominates</h3>
+<p>A number between 0 and 1, higher is better<sup id="fnref2:2"><a class="footnote-ref" href="#fn:2">2</a></sup><sup id="fnref:3"><a class="footnote-ref" href="#fn:3">3</a></sup>:</p>
+<div class="arithmatex">\[f = 2^{-\,\text{usage}/\text{share}}\]</div>
+<dl>
+<dt><strong>Share</strong></dt>
+<dd>Your slice of the cluster, set by the administrators. Nothing you submit changes it.</dd>
+<dt><strong>Usage</strong></dt>
+<dd>Your slice of everyone's recent consumption. It grows while your jobs run and fades when they stop.</dd>
+</dl>
+<p>Usage equal to share gives <span class="arithmatex">\(f = 0.5\)</span>, twice your share gives <span class="arithmatex">\(0.25\)</span>, almost nothing gives close to <span class="arithmatex">\(1\)</span>. Two more rules:</p>
 <ul>
-<li><strong>Where you land</strong> when you SSH in; <code>aqua.qut.edu.au</code> sends you to one of the two</li>
-<li><strong>Shared</strong> with every other user logged in right now</li>
-<li>Small: <code>aquarius02</code> is one 24-core EPYC box with 187 GB RAM — easily overwhelmed</li>
-<li>Use it for: editing files, submitting jobs, checking job status, light file transfer</li>
-<li><strong>Don't</strong> run heavy work here — compiling, training, multi-hour scripts, terabyte copies</li>
-<li>Think of it as: the reception desk</li>
+<li><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 4a4 4 0 0 1 4 4 4 4 0 0 1-4 4 4 4 0 0 1-4-4 4 4 0 0 1 4-4m0 10c4.42 0 8 1.79 8 4v2H4v-2c0-2.21 3.58-4 8-4"/></svg></span> <strong>It belongs to you, not to a job.</strong> All your queued jobs carry the same <span class="arithmatex">\(f\)</span>, so among themselves they are ordered by size and waiting time.</li>
+<li><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 19h1a1 1 0 0 1 1 1h7v2h-7a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1H2v-2h7a1 1 0 0 1 1-1h1v-2H4a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-7zM4 3h16a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1m5 4h1V5H9zm0 8h1v-2H9zM5 5v2h2V5zm0 8v2h2v-2z"/></svg></span> <strong>Each scheduler keeps its own records.</strong> <code>qmgr -c "print sched"</code> shows a separate <code>sched_priv</code> for each, so CPU batch work does not lower your standing in the GPU batch queue.</li>
 </ul>
-</div>
-<div class="tabbed-block">
-<ul>
-<li><strong>Where PBS sends your job</strong> when resources are free</li>
-<li><strong>Dedicated to your job</strong> for its entire walltime</li>
-<li>About seventy of them, each with well over 100 cores, lots of RAM, sometimes GPUs</li>
-<li>Hostname format tells you the type: <code>cpu1nNNN</code> (CPU), <code>gpu1nNNN</code> (GPU), <code>mem1n001</code> (the 6 TB monster)</li>
-<li>This is where the real work happens</li>
-</ul>
-</div>
-</div>
-</div>
-<p>The hostname in your shell prompt tells you which one you're on. We'll see this in action below.</p>
-<hr />
-<h2 id="part-2-your-first-interactive-session-10-min">🛠️ Part 2: Your First Interactive Session (~10 min)</h2>
-<p>Time to SSH in and try a tiny interactive job. The goal isn't to <em>do</em> anything useful — it's to feel the <strong>login → request → compute → exit</strong> loop end-to-end before Lesson 4 starts introducing real PBS scripts. If you can do this round-trip, you're 80% of the way to being productive on Aqua.</p>
-<h3 id="step-1-ssh-in">Step 1: SSH in</h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>ssh<span class="w"> </span>&lt;your-username&gt;@aqua.qut.edu.au
-</span></code></pre></div>
-<p>Replace <code>&lt;your-username&gt;</code> with your QUT username. You'll see a login banner, then end up at a prompt that looks something like:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>[your-username@aquarius02 ~]$
-</span></code></pre></div>
-<p>The <code>aquarius02</code> part is the <strong>login node hostname</strong> (you may land on <code>aquarius01</code> instead; there are two) — that's how you know you're at the front door, not inside a compute node yet.</p>
-<div class="admonition example">
-<p class="admonition-title">Sanity checks before you go further</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>hostname<span class="w">    </span><span class="c1"># → aquarius01 or aquarius02</span>
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nb">pwd</span><span class="w">         </span><span class="c1"># → /home/&lt;your-username&gt;</span>
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>whoami<span class="w">      </span><span class="c1"># → &lt;your-username&gt;</span>
-</span></code></pre></div>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Don't run anything heavy here</p>
-<p>The login node is shared with everyone logged in right now. Compiling a large project, running a Python script for 20 minutes, copying terabytes of data — none of that goes here. PBS exists so you don't have to. We're about to use it.</p>
-</div>
-<h3 id="step-2-ask-pbs-for-a-5-minute-interactive-job">Step 2: Ask PBS for a 5-minute interactive job</h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>qsub<span class="w"> </span>-I<span class="w"> </span>-l<span class="w"> </span><span class="nv">walltime</span><span class="o">=</span><span class="m">00</span>:05:00<span class="w"> </span>-l<span class="w"> </span><span class="k">select</span><span class="o">=</span><span class="m">1</span>:ncpus<span class="o">=</span><span class="m">1</span>:mem<span class="o">=</span>1GB
-</span></code></pre></div>
 <div class="admonition note">
-<p class="admonition-title">Command breakdown</p>
-<ul>
-<li><code>qsub -I</code> → request an <strong>interactive</strong> job (PBS will give you a shell on a compute node)</li>
-<li><code>-l walltime=00:05:00</code> → kill the job after 5 minutes if you haven't exited</li>
-<li><code>-l select=1:ncpus=1:mem=1GB</code> → give me 1 chunk: 1 CPU core, 1 GB RAM</li>
-</ul>
-</div>
-<p>That's the smallest reasonable shape — just enough to see "yes, I'm somewhere different now." Real interactive sessions will ask for more (covered in Lesson 3).</p>
-<p>After submitting, you'll see something like:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>qsub: waiting for job 12345678.aqua-pbs to start
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>qsub: job 12345678.aqua-pbs ready
-</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
-</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>[your-username@cpu1n023 ~]$
-</span></code></pre></div>
-<p>Two things happened:</p>
-<ol>
-<li><strong>Job ID was assigned</strong> (<code>12345678.aqua-pbs</code>). You'll see job IDs everywhere — they're how PBS and you refer to the same thing.</li>
-<li><strong>Your prompt's hostname changed</strong> from the login node to a compute node (here, <code>cpu1n023</code> — PBS picked whichever was free).</li>
-</ol>
-<p>You're on a compute node now. The shell you're typing into is running on a different physical machine from the one you SSHed into.</p>
-<div class="admonition info">
-<p class="admonition-title">If the wait is long</p>
-<p><code>qsub -I</code> blocks until PBS finds a free compute node. For a 1-core / 1 GB request it's usually seconds; for bigger asks it can take minutes or hours (peak times). If you're waiting more than 30 seconds for this tiny request, <code>Ctrl+C</code> and try again — there might be a maintenance window or an unusually busy stretch.</p>
-</div>
-<h3 id="step-3-confirm-youve-moved">Step 3: Confirm you've moved</h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>hostname<span class="w">    </span><span class="c1"># → cpu1nNNN (no longer an aquarius)</span>
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nb">pwd</span><span class="w">         </span><span class="c1"># → /home/&lt;your-username&gt; (same — your home travels with you)</span>
-</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>nproc<span class="w">       </span><span class="c1"># → 1 (you asked for 1 core, PBS gave you 1 core)</span>
-</span></code></pre></div>
-<p>Notice <code>pwd</code> is unchanged: your home directory follows you across nodes, because <code>/home</code> is a shared filesystem mounted on every node. This is also why <code>/scratch</code> and <code>/work</code> work the same way — write a file from one node, read it from another.</p>
-<p>Try <code>ls ~/</code> — same files you'd see from the login node.</p>
-<h3 id="step-4-exit-cleanly">Step 4: Exit cleanly</h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nb">exit</span>
-</span></code></pre></div>
-<p>You're back at the login node prompt (<code>aquarius01</code> or <code>aquarius02</code>), and PBS has released your compute node back into the pool. The job is now <code>F</code> (finished) in queue state. If you forget to exit, the job dies on its own when walltime expires — but exiting cleanly is polite.</p>
-<div class="admonition success">
-<p class="admonition-title">You've now done the basic round-trip</p>
-<p>Log in → request resources → work on a compute node → exit. This is the loop you'll repeat for every interactive session, forever. Batch jobs (Lesson 4) are the same pattern with a script in the middle and no human waiting around for it.</p>
+<p class="admonition-title">Where the page stops being precise</p>
+<p>The usage unit, how fast it fades and the size of your share live in root-only scheduler configuration. Treat <span class="arithmatex">\(f\)</span> as a dial you influence but cannot read.</p>
 </div>
 <hr />
-<h2 id="key-takeaways">🎯 Key Takeaways</h2>
-<div class="admonition success">
-<p class="admonition-title">You now know</p>
-<p>🌊 <strong>What Aqua is</strong> — QUT's centrally-funded HPC, free to researchers, about 70 nodes, over 10k CPU cores, over 100 GPUs</p>
-<p>📂 <strong>Where files live</strong> — <code>/home</code> for code (backed up), <code>/scratch</code> for active data (fast, not backed up), <code>/work</code> for shared (backed up), <code>$TMPDIR</code> for per-job intermediates</p>
-<p>🚪 <strong>Login vs compute</strong> — login is <code>aquarius01</code> / <code>aquarius02</code> (shared reception desk, no heavy work); compute is <code>cpu1n*</code> / <code>gpu1n*</code> / <code>mem1n*</code> (dedicated to your job)</p>
-<p>🛠️ <strong>The round-trip</strong> — <code>ssh</code> → <code>qsub -I</code> → work → <code>exit</code>. PBS handles the rest.</p>
+<h2 id="putting-it-together"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 2h10a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2m0 2v4h10V4zm0 6v2h2v-2zm4 0v2h2v-2zm4 0v2h2v-2zm-8 4v2h2v-2zm4 0v2h2v-2zm4 0v2h2v-2zm-8 4v2h2v-2zm4 0v2h2v-2zm4 0v2h2v-2z"/></svg></span> Putting It Together</h2>
+<!-- markdownlint-disable MD033 -->
+<div id="queue-score-explorer" class="qse"></div>
+<!-- markdownlint-enable MD033 -->
+
+<div class="admonition warning">
+<p class="admonition-title">You cannot out-wait a fair-share deficit</p>
+<p>Every queued job earns the same point per hour, so two identical jobs submitted together keep their gap however long they wait. The gap closes only as your usage fades while you are not running.</p>
 </div>
 <hr />
-<h2 id="whats-next">🔗 What's Next?</h2>
-<p>→ <strong><a href="../lesson-2/">Lesson 2: Tooling Setup</a></strong> — install <a href="https://docs.astral.sh/uv/">uv</a> or <a href="https://github.com/conda-forge/miniforge">Miniforge</a> so your next interactive session has a real Python environment to play with.</p>
-<div class="admonition question">
-<p class="admonition-title">Stuck?</p>
+<h2 id="backfill"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.5 11H19V7a2 2 0 0 0-2-2h-4V3.5A2.5 2.5 0 0 0 10.5 1 2.5 2.5 0 0 0 8 3.5V5H4a2 2 0 0 0-2 2v3.8h1.5c1.5 0 2.7 1.2 2.7 2.7S5 16.2 3.5 16.2H2V20a2 2 0 0 0 2 2h3.8v-1.5c0-1.5 1.2-2.7 2.7-2.7s2.7 1.2 2.7 2.7V22H17a2 2 0 0 0 2-2v-4h1.5a2.5 2.5 0 0 0 2.5-2.5 2.5 2.5 0 0 0-2.5-2.5"/></svg></span> Backfill: How a Lower-Ranked Job Starts First</h2>
+<p>Starting jobs strictly by score would let one large job hold every GPU behind it idle. Backfilling fills those gaps<sup id="fnref3:2"><a class="footnote-ref" href="#fn:2">2</a></sup>, much like a restaurant seating a walk-in couple at a table booked for 8 pm, as long as they will be gone by then. Each cycle, every queued job is one of two kinds:</p>
+<dl>
+<dt><strong>Top job</strong></dt>
+<dd>One of the <code>backfill_depth</code> highest scores. Starts now if it fits; otherwise PBS books it a start time on the GPUs it will get.</dd>
+<dt><strong>Filler</strong></dt>
+<dd>Every other job. Starts now only if it fits an idle gap that ends before the next booking. PBS judges that from the walltime you <strong>request</strong>, not from how long the job really runs.</dd>
+</dl>
+<p>The animation plays two invented days on four of Aqua's H100 nodes, with Aqua's published scheduler settings: a cycle every 60 seconds and the <code>gpu_batch_exec</code> depth from the table below. Watch the green bars, which are fillers starting ahead of higher-ranked jobs, and the dashed line in the queue, below which no job has a booking. Fair-share factors are assumed, and only jobs that ask for <code>gpu_id=H100</code> are shown.</p>
+<!-- markdownlint-disable MD033 -->
+<div id="backfill-animation" class="bfa"></div>
+<!-- markdownlint-enable MD033 -->
+
+<p>On Aqua:</p>
+<table>
+<thead>
+<tr>
+<th>Scope</th>
+<th><code>backfill_depth</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gpu_batch_exec</code></td>
+<td><strong>5</strong></td>
+</tr>
+<tr>
+<td><code>cpu_batch_exec</code></td>
+<td>60</td>
+</tr>
+<tr>
+<td>server default, for queues without their own</td>
+<td>10</td>
+</tr>
+</tbody>
+</table>
 <ul>
-<li><strong>SSH not working?</strong> Revisit the <a href="../prerequisites/">Prerequisites Checklist</a>.</li>
-<li><strong>Want better tooling?</strong> <a href="../../remote-dev/">Cmd+Opt+Remote</a> covers SSHFS, VS Code Tunnel, JupyterHub, and friends — pick a development workflow that doesn't make you cry.</li>
-<li><strong>Curious about the hardware?</strong> <a href="../../scheduler/Know-Your-Nodes/">Know Your Nodes</a> is the deep field guide — per-queue node assignments, GPU/CPU families, the quirks worth knowing.</li>
+<li><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11.83 9 15 12.16V12a3 3 0 0 0-3-3zm-4.3.8 1.55 1.55c-.05.21-.08.42-.08.65a3 3 0 0 0 3 3c.22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53a5 5 0 0 1-5-5c0-.79.2-1.53.53-2.2M2 4.27l2.28 2.28.45.45C3.08 8.3 1.78 10 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.43.42L19.73 22 21 20.73 3.27 3M12 7a5 5 0 0 1 5 5c0 .64-.13 1.26-.36 1.82l2.93 2.93c1.5-1.25 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-4 .7l2.17 2.15C10.74 7.13 11.35 7 12 7"/></svg></span> <strong><code>qstat -T</code> estimates a start only for top jobs</strong>, and only for your own. Blank most likely means "not in the top five right now".</li>
+<li><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 3 5 7h3v7h2V7h3m3 10v-7h-2v7h-3l4 4 4-4z"/></svg></span> <strong>You can be next, and then not.</strong> The list is rebuilt every cycle, and your running jobs keep lowering your <span class="arithmatex">\(f\)</span>.</li>
 </ul>
+<div class="admonition note">
+<p class="admonition-title">Mechanism, not guarantee</p>
+<p>The depths are public. The scheduler setting that switches bookings on is root-only, so this section describes how PBS backfills rather than proving Aqua does.</p>
 </div>
+<details class="info">
+<summary>The comment <code>Not Running: Insufficient amount of resource: qlist</code></summary>
+<p>On Aqua <code>qlist</code> tags each node with the queues allowed to use it. The comment means no node tagged for your queue had room that cycle. It says nothing about your fair share or your permissions.</p>
+</details>
+<hr />
+<h2 id="what-you-control"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 22H5v-2h14zM13 2c-1.25 0-2.42.62-3.11 1.66L7 8l2 2 2.06-1.37c.44-.31 1.08-.19 1.39.27.02.03.05.06.05.1.3.59.19 1.3-.28 1.77l-4.8 4.8c-.55.56-.55 1.46.01 2.01.26.26.62.42.99.42H17V6a4 4 0 0 0-4-4"/></svg></span> What You Control</h2>
+<table>
+<thead>
+<tr>
+<th>Lever</th>
+<th>Do</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 19a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H6zm2.46-7.12 1.41-1.41L12 12.59l2.12-2.12 1.41 1.41L13.41 14l2.12 2.12-1.41 1.41L12 15.41l-2.12 2.12-1.41-1.41L10.59 14zM15.5 4l-1-1h-5l-1 1H5v2h14V4z"/></svg></span> Waiting time</td>
+<td><strong>Never delete and resubmit.</strong> Fix a queued job with <code>qalter -l walltime=...</code></td>
+<td><code>qdel</code> resets <code>eligible_time</code> to zero, and nothing gives those points back</td>
+</tr>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m23.5 17-5 5-3.5-3.5 1.5-1.5 2 2 3.5-3.5zM13 19c0-1.5.5-2.8 1.4-3.9L11 13V7h1.5v5.2l3.1 1.9c1-.7 2.1-1.1 3.4-1.1 1 0 2 .3 2.8.7.1-.6.2-1.1.2-1.7 0-5.5-4.5-10-10-10S2 6.5 2 12s4.5 10 10 10c.6 0 1.2-.1 1.7-.2-.4-.8-.7-1.8-.7-2.8"/></svg></span> Walltime</td>
+<td>Request what the job needs plus a margin</td>
+<td>A filler must end before the next booking; padding closes gaps</td>
+</tr>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19.5 3.09 15 7.59V4h-2v7h7V9h-3.59l4.5-4.5zM4 13v2h3.59l-4.5 4.5 1.41 1.41 4.5-4.5V20h2v-7z"/></svg></span> Size</td>
+<td>Trim for placement, not for points</td>
+<td>Smaller requests fit more gaps but score lower, more so when <span class="arithmatex">\(f\)</span> is high</td>
+</tr>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10.59 13.41c.41.39.41 1.03 0 1.42-.39.39-1.03.39-1.42 0a5.003 5.003 0 0 1 0-7.07l3.54-3.54a5.003 5.003 0 0 1 7.07 0 5.003 5.003 0 0 1 0 7.07l-1.49 1.49c.01-.82-.12-1.64-.4-2.42l.47-.48a2.98 2.98 0 0 0 0-4.24 2.98 2.98 0 0 0-4.24 0l-3.53 3.53a2.98 2.98 0 0 0 0 4.24m2.82-4.24c.39-.39 1.03-.39 1.42 0a5.003 5.003 0 0 1 0 7.07l-3.54 3.54a5.003 5.003 0 0 1-7.07 0 5.003 5.003 0 0 1 0-7.07l1.49-1.49c-.01.82.12 1.64.4 2.43l-.47.47a2.98 2.98 0 0 0 0 4.24 2.98 2.98 0 0 0 4.24 0l3.53-3.53a2.98 2.98 0 0 0 0-4.24.973.973 0 0 1 0-1.42"/></svg></span> Chains</td>
+<td>Use <a href="../Walltime-by-Recipe/#recipe-8-long-pipeline-with-chained-jobs">Recipe 8</a>'s <code>afterok</code> links to fit gaps, not to bank waiting</td>
+<td>Each link accrues nothing until the one before it ends</td>
+</tr>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M23 12h-6v-2l3.39-4H17V4h6v2l-3.38 4H23zm-8 4H9v-2l3.39-4H9V8h6v2l-3.38 4H15zm-8 4H1v-2l3.39-4H1v-2h6v2l-3.38 4H7z"/></svg></span> <span class="arithmatex">\(f\)</span></td>
+<td>Stop running</td>
+<td>Nothing else raises it</td>
+</tr>
+</tbody>
+</table>
+<details class="info">
+<summary>When <code>eligible_time</code> accrues</summary>
+<p>Watch it with <code>qstat -f &lt;jobid&gt; | grep -E "eligible_time|comment"</code>. The rules<sup id="fnref4:2"><a class="footnote-ref" href="#fn:2">2</a></sup>:</p>
+<ul>
+<li><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 7 9 19l-5.5-5.5 1.41-1.41L9 16.17 19.59 5.59z"/></svg></span> <strong>Accrues</strong> while the job is blocked by a lack of resources.</li>
+<li><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></span> <strong>Does not accrue</strong> while blocked by a run limit, a user hold, or a <code>qsub -a</code> start time. PBS does not show which state you are in.</li>
+<li><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15 20H9v-8H4.16L12 4.16 19.84 12H15z"/></svg></span> <strong>Only goes up</strong> during the life of a job, and survives a requeue.</li>
+</ul>
+</details>
+<hr />
+<h2 id="what-you-can-see"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11.83 9 15 12.16V12a3 3 0 0 0-3-3zm-4.3.8 1.55 1.55c-.05.21-.08.42-.08.65a3 3 0 0 0 3 3c.22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53a5 5 0 0 1-5-5c0-.79.2-1.53.53-2.2M2 4.27l2.28 2.28.45.45C3.08 8.3 1.78 10 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.43.42L19.73 22 21 20.73 3.27 3M12 7a5 5 0 0 1 5 5c0 .64-.13 1.26-.36 1.82l2.93 2.93c1.5-1.25 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-4 .7l2.17 2.15C10.74 7.13 11.35 7 12 7"/></svg></span> What You Can See</h2>
+<table>
+<thead>
+<tr>
+<th>You want</th>
+<th>Command</th>
+<th>You get</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>The formula</td>
+<td><code>qmgr -c "print server" \| grep job_sort_formula</code></td>
+<td>All of it</td>
+</tr>
+<tr>
+<td>Your job's score</td>
+<td>nothing</td>
+<td>Inside the scheduler process and its root-owned log</td>
+</tr>
+<tr>
+<td>Your accrued wait</td>
+<td><code>qstat -f &lt;jobid&gt;</code> → <code>eligible_time</code></td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Why you were skipped this cycle</td>
+<td><code>qstat -f &lt;jobid&gt;</code> → <code>comment</code></td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Where you stand</td>
+<td><code>qstat -T</code></td>
+<td>A start estimate only for a top job</td>
+</tr>
+<tr>
+<td>Your factor, your share, the decay</td>
+<td><code>pbsfs</code>, <code>sched_config</code></td>
+<td>Root only. Make friends with the HPC admin</td>
+</tr>
+<tr>
+<td>Anyone else's job</td>
+<td><code>qstat -u &lt;them&gt;</code></td>
+<td>Empty. <code>query_other_jobs</code> is off</td>
+</tr>
+</tbody>
+</table>
+<p>Hiding scores and factors is standard PBS Professional, not an Aqua quirk<sup id="fnref:4"><a class="footnote-ref" href="#fn:4">4</a></sup>.</p>
+<blockquote>
+<p><strong>Remember:</strong> A long wait is the scheduler doing arithmetic, not holding a grudge. The arithmetic is above. The grudge, if any, is yours.</p>
+</blockquote>
+<hr />
+<h2 id="where-next"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M22 12a10 10 0 0 1-10 10A10 10 0 0 1 2 12 10 10 0 0 1 12 2a10 10 0 0 1 10 10M6 13h8l-3.5 3.5 1.42 1.42L17.84 12l-5.92-5.92L10.5 7.5 14 11H6z"/></svg></span> Where next</h2>
+<ul>
+<li><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 20a8 8 0 0 0 8-8 8 8 0 0 0-8-8 8 8 0 0 0-8 8 8 8 0 0 0 8 8m0-18a10 10 0 0 1 10 10 10 10 0 0 1-10 10C6.47 22 2 17.5 2 12A10 10 0 0 1 12 2m.5 5v5.25l4.5 2.67-.75 1.23L11 13V7z"/></svg></span> <a href="../The-Art-of-Walltime/">Guess, Request, Regret: The Art of Walltime</a> — choosing a walltime that fits gaps.</li>
+<li><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12.5 1.5c-1.77 0-3.33 1.17-3.83 2.87C8.14 4.13 7.58 4 7 4a4 4 0 0 0-4 4 4.01 4.01 0 0 0 3 3.87V19h13v-7.13c1.76-.46 3-2.05 3-3.87a4 4 0 0 0-4-4c-.58 0-1.14.13-1.67.37-.5-1.7-2.06-2.87-3.83-2.87m-.5 9h1v7h-1zm-3 2h1v5H9zm6 0h1v5h-1zM6 20v1a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-1z"/></svg></span> <a href="../Walltime-by-Recipe/">Walltime by Recipe</a> — copy-paste requests, including the single-GPU shape used on this page.</li>
+<li><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 19h1a1 1 0 0 1 1 1h7v2h-7a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1H2v-2h7a1 1 0 0 1 1-1h1v-2H4a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-7zM4 3h16a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1m5 4h1V5H9zm0 8h1v-2H9zM5 5v2h2V5zm0 8v2h2v-2z"/></svg></span> <a href="../Know-Your-Nodes/">Know Your Nodes</a> — the hardware behind each queue.</li>
+<li><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3 1 9l11 6 9-4.91V17h2V9M5 13.18v4L12 21l7-3.82v-4L12 17z"/></svg></span> QUT eResearch — <a href="https://docs.eres.qut.edu.au/hpc-queue-limits">Queues and limits</a><sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup>.</li>
+</ul>
 <div class="footnote">
 <hr />
 <ol>
 <li id="fn:1">
-<p>Access only in QUT network. Please use VPN to access the documentation when off-campus.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref2:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+<p>Access only in QUT network. Please use VPN to access the documentation when off-campus.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+<li id="fn:2">
+<p>Altair, "<a href="https://help.altair.com/2024.1.0/PBS%20Professional/PBSAdminGuide2024.1.pdf">PBS Professional 2024.1 Administrator's Guide</a>". Section 4.9.21 covers the job sorting formula, its terms and their units. Section 4.9.3 covers backfilling, top jobs and <code>backfill_depth</code>. Section 4.9.19 covers fair share, including how <code>fairshare_factor</code> is defined. Section 4.9.13 covers when eligible time accrues and when it does not.&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a><a class="footnote-backref" href="#fnref2:2" title="Jump back to footnote 2 in the text">&#8617;</a><a class="footnote-backref" href="#fnref3:2" title="Jump back to footnote 2 in the text">&#8617;</a><a class="footnote-backref" href="#fnref4:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+</li>
+<li id="fn:3">
+<p>OpenPBS, "<a href="https://github.com/openpbs/openpbs/tree/master/src/scheduler">Scheduler source code</a>". Where <code>fairshare_factor</code> is actually computed.&#160;<a class="footnote-backref" href="#fnref:3" title="Jump back to footnote 3 in the text">&#8617;</a></p>
+</li>
+<li id="fn:4">
+<p>MetaCentrum, "<a href="https://docs.metacentrum.cz/en/docs/computing/resources/fairshare">Fairshare</a>". Tells users the fair-share value cannot be displayed directly.&#160;<a class="footnote-backref" href="#fnref:4" title="Jump back to footnote 4 in the text">&#8617;</a></p>
 </li>
 </ol>
 </div>
@@ -1847,7 +1832,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="September 13, 2026 21:22:53 AEST">September 13, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="September 14, 2026 22:31:07 AEST">September 14, 2026</span>
   </span>
 
     
@@ -1857,7 +1842,7 @@
     <span class="md-icon" title="Created">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="June 20, 2026 23:58:40 AEST">June 20, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="September 14, 2026 22:31:07 AEST">September 14, 2026</span>
   </span>
 
     

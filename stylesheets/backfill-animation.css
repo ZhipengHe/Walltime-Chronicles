@@ -1,0 +1,137 @@
+/*
+ * Styles for the backfill animation on "The Queue Is Not a Line".
+ *
+ * Everything is scoped under .bfa so nothing leaks into the Material theme.
+ * Neutral colours come from Material's theme variables; the job colours are
+ * fixed chart colours. Sizes are in px so the chart keeps its proportions when
+ * Material scales the root font size.
+ */
+.bfa {
+  --bg: var(--md-default-bg-color);
+  --panel: var(--md-code-bg-color);
+  --fg: var(--md-default-fg-color);
+  --muted: var(--md-default-fg-color--light);
+  --faint: var(--md-default-fg-color--lighter);
+  --line: var(--md-default-fg-color--lightest);
+  --lane: color-mix(in srgb, var(--md-default-fg-color) 6%, transparent);
+  --accent: var(--md-primary-fg-color);
+  --on-accent: var(--md-primary-bg-color);
+  --focus: var(--md-accent-fg-color);
+  --mono: var(--md-code-font-family, "Roboto Mono", SFMono-Regular, Consolas, monospace);
+  --run: #9fb1cc;
+  --top: #2a78d6;
+  --filler: #1baf7a;
+  --bad: #a8112c;
+  --label: 84px;
+  margin: 1.2em 0;
+  color: var(--fg);
+  font-size: 15px;
+  line-height: 1.55;
+}
+[data-md-color-scheme="slate"] .bfa { --run: #56698a; --bad: #ff8a9a; }
+.bfa,
+.bfa * { box-sizing: border-box; }
+.bfa p { margin: 0; }
+.bfa .frame { border: 1px solid var(--line); border-radius: 4px; overflow: hidden; }
+.bfa .section { padding: 12px 14px; }
+.bfa .section + .section { border-top: 1px solid var(--line); }
+.bfa .title { font-weight: 700; }
+.bfa .section-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 6px 16px; margin-bottom: 4px; }
+
+/* Header: controls, clock and counters in one row. */
+.bfa .head { background: var(--panel); display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; }
+.bfa .bar { display: contents; }
+.bfa .buttons { display: flex; gap: 4px; padding: 3px; background: var(--bg); border: 1px solid var(--line); border-radius: 999px; }
+.bfa button.icon { font: inherit; color: var(--fg); width: 36px; height: 36px; margin: 0; padding: 0; border: 0; border-radius: 50%; background: transparent; display: grid; place-items: center; cursor: pointer; }
+.bfa button.icon svg { width: 20px; height: 20px; }
+.bfa button.icon:hover:not(:disabled) { background: var(--panel); }
+.bfa button.icon.primary { background: var(--accent); color: var(--on-accent); }
+.bfa button.icon.primary:hover:not(:disabled) { filter: brightness(1.1); }
+.bfa button.icon:disabled { opacity: 0.35; cursor: default; }
+.bfa button.icon.primary:disabled { background: var(--faint); }
+.bfa button.icon:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.bfa .status-row { display: flex; align-items: center; gap: 16px; }
+.bfa .clock { font-family: var(--mono); font-weight: 700; font-size: 16px; font-variant-numeric: tabular-nums; line-height: 1.3; }
+.bfa .clock small { display: block; font-size: 11px; font-weight: 400; color: var(--muted); }
+.bfa .stats { display: flex; gap: 4px 16px; }
+.bfa .stat { display: grid; line-height: 1.35; }
+.bfa .stat b { font-family: var(--mono); font-size: 15px; font-variant-numeric: tabular-nums; }
+.bfa .stat span { font-size: 10.5px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+
+/* GPU timeline: bars sit on strips that slide with the clock. */
+.bfa .legend { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 12.5px; color: var(--muted); }
+.bfa .legend span { display: inline-flex; align-items: center; gap: 6px; }
+.bfa .sw { width: 18px; height: 10px; border-radius: 2px; display: inline-block; }
+.bfa .sw.run { background: var(--run); }
+.bfa .sw.filler { background: var(--filler); }
+.bfa .sw.hl { background: var(--run); box-shadow: 0 0 0 1.5px var(--fg); }
+.bfa .sw.booked,
+.bfa .blk.booked { background: repeating-linear-gradient(135deg, color-mix(in srgb, var(--top) 55%, transparent) 0 2px, transparent 2px 5px); box-shadow: inset 0 0 0 1px var(--top); }
+.bfa .timeline-wrap { margin-top: 16px; }
+.bfa .timeline { position: relative; }
+.bfa .node { display: grid; grid-template-columns: var(--label) minmax(0, 1fr); align-items: center; padding: 3px 0; border-top: 1px solid var(--line); }
+.bfa .node:first-child { border-top: 0; }
+.bfa .node-name { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+.bfa .gpus { display: grid; gap: 1px; }
+.bfa .track { position: relative; height: 9px; background: var(--lane); border-radius: 2px; overflow: hidden; }
+.bfa .strip { position: absolute; top: 0; bottom: 0; left: 0; width: 0; will-change: transform; }
+.bfa .blk { position: absolute; top: 0; bottom: 0; border-radius: 2px; }
+.bfa .blk.earlier,
+.bfa .blk.top { background: var(--run); }
+.bfa .blk.filler { background: var(--filler); }
+.bfa .blk.done { opacity: 0.28; }
+.bfa .blk.hl { box-shadow: 0 0 0 1.5px var(--fg); z-index: 2; }
+.bfa .blk.enter { animation: bfa-fade 0.7s ease-out; }
+.bfa .now { position: absolute; top: -16px; bottom: 20px; width: 2px; margin-left: -1px; background: var(--fg); z-index: 3; pointer-events: none; }
+.bfa .now::after { content: "now"; position: absolute; top: 0; left: 5px; font-size: 10.5px; font-weight: 700; font-family: var(--mono); }
+.bfa .axis { display: grid; grid-template-columns: var(--label) minmax(0, 1fr); height: 20px; margin-top: 4px; }
+.bfa .axis-track { position: relative; overflow: hidden; font-family: var(--mono); font-size: 11px; color: var(--muted); -webkit-mask-image: linear-gradient(to right, transparent, #000 28px, #000 calc(100% - 28px), transparent); mask-image: linear-gradient(to right, transparent, #000 28px, #000 calc(100% - 28px), transparent); }
+.bfa .axis-track span { position: absolute; top: 2px; transform: translateX(-50%); white-space: nowrap; }
+.bfa .gridline { position: absolute; top: 0; bottom: 0; width: 1px; background: var(--line); }
+
+/* Queue table: fixed slots, rows slide when the ranking changes. */
+.bfa .table-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 6px; flex-wrap: wrap; }
+.bfa .table-note { font-size: 12.8px; color: var(--muted); }
+.bfa .table-wrap { overflow-x: auto; overflow-y: hidden; }
+.bfa table.bfa-table { display: table; width: 100%; margin: 0; border: 0; border-radius: 0; border-collapse: separate; border-spacing: 0; font-size: 13px; font-variant-numeric: tabular-nums; }
+.bfa table.bfa-table th { text-align: left; font-size: 10.9px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); font-weight: 700; padding: 0 8px 6px; border-bottom: 1px solid var(--line); white-space: nowrap; background: none; min-width: 0; }
+.bfa table.bfa-table td { padding: 0 8px; border-bottom: 1px solid var(--line); white-space: nowrap; background: var(--bg); height: 24px; line-height: 1.25; vertical-align: middle; }
+.bfa table.bfa-table .num { text-align: right; }
+.bfa table.bfa-table td.mono { font-family: var(--mono); font-size: 12.5px; }
+.bfa table.bfa-table td.booked { color: var(--top); }
+.bfa .rows tr { will-change: transform; }
+.bfa .rows tr.top td:first-child { box-shadow: inset 3px 0 0 var(--top); }
+.bfa .rows tr.out td { color: var(--muted); }
+.bfa .rows tr.cut td { padding: 0; height: 11px; border-bottom: 0; background: repeating-linear-gradient(90deg, var(--faint) 0 6px, transparent 6px 11px) center / 100% 1.5px no-repeat; }
+.bfa .rows tr.pad td { border-bottom-color: transparent; color: var(--muted); font-size: 12.5px; }
+.bfa .rows tr.more td { color: var(--muted); font-size: 12.5px; border-bottom: 0; }
+.bfa .rows tr[data-new] td { animation: bfa-fade 0.5s ease; }
+
+/* Latest events: fixed height, newest first, fading at the bottom. */
+.bfa .log { display: grid; grid-template-columns: var(--label) 8.2em minmax(0, 1fr); gap: 7px 0; font-size: 14.4px; height: 9.6em; overflow: hidden; align-content: start; -webkit-mask-image: linear-gradient(to bottom, #000 78%, transparent); mask-image: linear-gradient(to bottom, #000 78%, transparent); }
+.bfa .log time { font-family: var(--mono); font-size: 12.5px; color: var(--muted); padding-top: 2px; font-variant-numeric: tabular-nums; }
+.bfa .log .tag { justify-self: start; align-self: start; margin-top: 2px; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; padding: 1px 7px; border: 1px solid currentColor; border-radius: 999px; white-space: nowrap; }
+.bfa .tag.backfill { color: var(--filler); }
+.bfa .tag.booked { color: var(--top); }
+.bfa .tag.lost { color: var(--bad); }
+.bfa .tag.start { color: var(--muted); }
+.bfa .tag.wait { color: var(--accent); }
+.bfa .log p { line-height: 1.45; }
+.bfa .log .new { animation: bfa-rise 0.5s ease; }
+.bfa .log .old { opacity: 0.6; }
+
+@keyframes bfa-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes bfa-rise { from { opacity: 0; transform: translateY(-3px); } to { opacity: 1; transform: none; } }
+
+@media (max-width: 560px) {
+  .bfa { --label: 70px; }
+  .bfa .stats { flex-wrap: wrap; }
+  .bfa .log { grid-template-columns: 3.6em minmax(0, 1fr); }
+  .bfa .log .tag,
+  .bfa .log p { grid-column: 2; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bfa .blk.enter,
+  .bfa .log .new,
+  .bfa .rows tr[data-new] td { animation: none; }
+}
