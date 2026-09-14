@@ -1635,23 +1635,18 @@
 
 <div class="admonition warning">
 <p class="admonition-title">You cannot out-wait a fair-share deficit</p>
-<p>Every queued job earns the same point per hour, so two identical jobs submitted together keep their gap however long they wait. The gap closes only as your usage fades while you are not running.</p>
+<p>Every queued job earns the same point per hour, so two identical jobs submitted together keep the same score difference however long they wait. The difference closes only as your usage fades while you are not running.</p>
 </div>
 <hr />
 <h2 id="backfill"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.5 11H19V7a2 2 0 0 0-2-2h-4V3.5A2.5 2.5 0 0 0 10.5 1 2.5 2.5 0 0 0 8 3.5V5H4a2 2 0 0 0-2 2v3.8h1.5c1.5 0 2.7 1.2 2.7 2.7S5 16.2 3.5 16.2H2V20a2 2 0 0 0 2 2h3.8v-1.5c0-1.5 1.2-2.7 2.7-2.7s2.7 1.2 2.7 2.7V22H17a2 2 0 0 0 2-2v-4h1.5a2.5 2.5 0 0 0 2.5-2.5 2.5 2.5 0 0 0-2.5-2.5"/></svg></span> Backfill: How a Lower-Ranked Job Starts First</h2>
-<p>Starting jobs strictly by score would let one large job hold every GPU behind it idle. Backfilling fills those gaps<sup id="fnref3:2"><a class="footnote-ref" href="#fn:2">2</a></sup>, much like a restaurant seating a walk-in couple at a table booked for 8 pm, as long as they will be gone by then. Each cycle, every queued job is one of two kinds:</p>
+<p>Starting jobs strictly by score would let one large job hold GPUs idle while it waits for a whole node. Backfilling uses those gaps<sup id="fnref3:2"><a class="footnote-ref" href="#fn:2">2</a></sup>, much like a restaurant seating a walk-in couple at a table booked for 8 pm, as long as they will be gone by then. Each cycle PBS goes down the queue from the highest score, and backfilling needs two terms:</p>
 <dl>
 <dt><strong>Top job</strong></dt>
-<dd>One of the <code>backfill_depth</code> highest scores. Starts now if it fits; otherwise PBS books it a start time on the GPUs it will get.</dd>
+<dd>One of the <code>backfill_depth</code> highest-scoring jobs that cannot start yet. PBS books it a start time, and no other job may delay it.</dd>
 <dt><strong>Filler</strong></dt>
-<dd>Every other job. Starts now only if it fits an idle gap that ends before the next booking. PBS judges that from the walltime you <strong>request</strong>, not from how long the job really runs.</dd>
+<dd>A lower-ranked job that starts now anyway, because it fits an idle gap that ends before those bookings.</dd>
 </dl>
-<p>The animation plays two invented days on four of Aqua's H100 nodes, with Aqua's published scheduler settings: a cycle every 60 seconds and the <code>gpu_batch_exec</code> depth from the table below. Watch the green bars, which are fillers starting ahead of higher-ranked jobs, and the dashed line in the queue, below which no job has a booking. Fair-share factors are assumed, and only jobs that ask for <code>gpu_id=H100</code> are shown.</p>
-<!-- markdownlint-disable MD033 -->
-<div id="backfill-animation" class="bfa"></div>
-<!-- markdownlint-enable MD033 -->
-
-<p>On Aqua:</p>
+<p>How many jobs get a booking depends on the queue:</p>
 <table>
 <thead>
 <tr>
@@ -1674,8 +1669,39 @@
 </tr>
 </tbody>
 </table>
+<p>Suppose, in <code>gpu_batch_exec</code>, the four highest-ranked jobs cannot start and hold bookings, one of them on the only idle GPU from six hours from now. The jobs ranked 5th and 6th want that GPU:</p>
+<table>
+<thead>
+<tr>
+<th>Job</th>
+<th>Requests</th>
+<th>Ends before the booking?</th>
+<th>What happens</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ranked 5th</td>
+<td>24 hours</td>
+<td>No</td>
+<td>Cannot start, so it takes the fifth booking, for later</td>
+</tr>
+<tr>
+<td>Ranked 6th</td>
+<td>4 hours</td>
+<td>Yes</td>
+<td>Starts now, before the 5th, and delays no booking</td>
+</tr>
+</tbody>
+</table>
+<p>Bookings go to the first five jobs that cannot start; walltime decides who fits a gap. PBS judges the fit from the walltime you <strong>request</strong>, so the same 6th-ranked job asking for 24 hours would wait too, and with all five bookings taken it would get none. Backfilling promises no start time: it only lets a job start now when its walltime fits a gap that exists now.</p>
+<p>The animation plays two invented days on four of Aqua's H100 nodes, with Aqua's published scheduler settings: a cycle every 60 seconds and five bookings. Green bars are fillers, each ending before the booking on its GPU, and the dashed line in the queue marks where bookings stop. Fair-share factors are assumed, and only jobs that ask for <code>gpu_id=H100</code> are shown.</p>
+<!-- markdownlint-disable MD033 -->
+<div id="backfill-animation" class="bfa"></div>
+<!-- markdownlint-enable MD033 -->
+
 <ul>
-<li><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11.83 9 15 12.16V12a3 3 0 0 0-3-3zm-4.3.8 1.55 1.55c-.05.21-.08.42-.08.65a3 3 0 0 0 3 3c.22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53a5 5 0 0 1-5-5c0-.79.2-1.53.53-2.2M2 4.27l2.28 2.28.45.45C3.08 8.3 1.78 10 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.43.42L19.73 22 21 20.73 3.27 3M12 7a5 5 0 0 1 5 5c0 .64-.13 1.26-.36 1.82l2.93 2.93c1.5-1.25 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-4 .7l2.17 2.15C10.74 7.13 11.35 7 12 7"/></svg></span> <strong><code>qstat -T</code> estimates a start only for top jobs</strong>, and only for your own. Blank most likely means "not in the top five right now".</li>
+<li><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11.83 9 15 12.16V12a3 3 0 0 0-3-3zm-4.3.8 1.55 1.55c-.05.21-.08.42-.08.65a3 3 0 0 0 3 3c.22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53a5 5 0 0 1-5-5c0-.79.2-1.53.53-2.2M2 4.27l2.28 2.28.45.45C3.08 8.3 1.78 10 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.43.42L19.73 22 21 20.73 3.27 3M12 7a5 5 0 0 1 5 5c0 .64-.13 1.26-.36 1.82l2.93 2.93c1.5-1.25 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-4 .7l2.17 2.15C10.74 7.13 11.35 7 12 7"/></svg></span> <strong><code>qstat -T</code> estimates a start only for top jobs</strong>, and only for your own. Blank most likely means "not in the top five right now". An estimate can move earlier when running jobs finish before their walltime.</li>
 <li><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 3 5 7h3v7h2V7h3m3 10v-7h-2v7h-3l4 4 4-4z"/></svg></span> <strong>You can be next, and then not.</strong> The list is rebuilt every cycle, and your running jobs keep lowering your <span class="arithmatex">\(f\)</span>.</li>
 </ul>
 <div class="admonition note">
@@ -1699,13 +1725,13 @@
 <tbody>
 <tr>
 <td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 19a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H6zm2.46-7.12 1.41-1.41L12 12.59l2.12-2.12 1.41 1.41L13.41 14l2.12 2.12-1.41 1.41L12 15.41l-2.12 2.12-1.41-1.41L10.59 14zM15.5 4l-1-1h-5l-1 1H5v2h14V4z"/></svg></span> Waiting time</td>
-<td><strong>Never delete and resubmit.</strong> Fix a queued job with <code>qalter -l walltime=...</code></td>
+<td><strong>Never delete and resubmit.</strong> To shorten a queued job's walltime, use <code>qalter -l walltime=...</code>; users can only lower a request</td>
 <td><code>qdel</code> resets <code>eligible_time</code> to zero, and nothing gives those points back</td>
 </tr>
 <tr>
 <td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m23.5 17-5 5-3.5-3.5 1.5-1.5 2 2 3.5-3.5zM13 19c0-1.5.5-2.8 1.4-3.9L11 13V7h1.5v5.2l3.1 1.9c1-.7 2.1-1.1 3.4-1.1 1 0 2 .3 2.8.7.1-.6.2-1.1.2-1.7 0-5.5-4.5-10-10-10S2 6.5 2 12s4.5 10 10 10c.6 0 1.2-.1 1.7-.2-.4-.8-.7-1.8-.7-2.8"/></svg></span> Walltime</td>
 <td>Request what the job needs plus a margin</td>
-<td>A filler must end before the next booking; padding closes gaps</td>
+<td>A filler must end before the next booking, so padding closes gaps; too little and PBS kills the job</td>
 </tr>
 <tr>
 <td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19.5 3.09 15 7.59V4h-2v7h7V9h-3.59l4.5-4.5zM4 13v2h3.59l-4.5 4.5 1.41 1.41 4.5-4.5V20h2v-7z"/></svg></span> Size</td>
@@ -1832,7 +1858,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="September 14, 2026 22:31:07 AEST">September 14, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="September 14, 2026 23:17:13 AEST">September 14, 2026</span>
   </span>
 
     
