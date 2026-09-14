@@ -539,6 +539,8 @@
     buttons();
   }
   function buttons() {
+    // After instant navigation replaces the page, a last animation frame can still call stop(); the controls are gone.
+    if (!$("bfa-start")) return;
     $("bfa-start").disabled = playing;
     $("bfa-stop").disabled = !playing;
     $("bfa-next").disabled = !!state && state.t >= E.RUN_MIN;
