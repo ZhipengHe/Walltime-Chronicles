@@ -100,14 +100,14 @@ How many jobs get a booking depends on the queue:
 | `cpu_batch_exec` | 60 |
 | server default, for queues without their own | 10 |
 
-Suppose, in `gpu_batch_exec`, only one GPU is idle, and a top job has booked it from six hours from now. Two jobs below that top job want it:
+Suppose, in `gpu_batch_exec`, the four highest-ranked jobs cannot start and hold bookings, one of them on the only idle GPU from six hours from now. The jobs ranked 5th and 6th want that GPU:
 
 | Job | Requests | Ends before the booking? | What happens |
 |---|---|---|---|
-| Ranked 5th | 24 hours | No | Cannot start. It is within the top five, so it gets its own booking for later |
+| Ranked 5th | 24 hours | No | Cannot start, so it takes the fifth booking, for later |
 | Ranked 6th | 4 hours | Yes | Starts now, before the 5th, and delays no booking |
 
-Rank decides who gets a booking; walltime decides who fits a gap. PBS judges the fit from the walltime you **request**, so the same 6th-ranked job asking for 24 hours would wait too, with no booking at all. Backfilling promises no start time: it only lets a job start now when its walltime fits a gap that exists now.
+Bookings go to the first five jobs that cannot start; walltime decides who fits a gap. PBS judges the fit from the walltime you **request**, so the same 6th-ranked job asking for 24 hours would wait too, and with all five bookings taken it would get none. Backfilling promises no start time: it only lets a job start now when its walltime fits a gap that exists now.
 
 The animation plays two invented days on four of Aqua's H100 nodes, with Aqua's published scheduler settings: a cycle every 60 seconds and five bookings. Green bars are fillers, each ending before the booking on its GPU, and the dashed line in the queue marks where bookings stop. Fair-share factors are assumed, and only jobs that ask for `gpu_id=H100` are shown.
 
