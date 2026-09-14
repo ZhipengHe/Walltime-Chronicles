@@ -442,7 +442,7 @@
   }
 
   function renderClock() {
-    var t = Math.max(state.t, 0), c = clock(t), text = c.hm + "<small>Day " + c.day + " of 2</small>";
+    var t = Math.max(state.t, 0), c = clock(t), text = c.hm + "<small>Day " + c.day + ", " + Math.floor(t / 60) + " of " + E.RUN_MIN / 60 + " h</small>";
     if (text !== lastClock) { $("bfa-clock").innerHTML = text; lastClock = text; }
   }
 
