@@ -16,7 +16,7 @@ The good news is that the scoring rule is public. You can read it, and once you 
 
 ## :material-function-variant: The Formula on the Wall
 
-PBS Professional lets a site replace its default ordering with a single expression, the server attribute `job_sort_formula`. Every scheduling cycle it is evaluated for every queued job, and the highest score goes first. Anyone can read it:
+PBS Professional lets a site replace its default ordering with a single expression, the server attribute `job_sort_formula`[^2]. Every scheduling cycle it is evaluated for every queued job, and the highest score goes first. Anyone can read it:
 
 ```bash
 qmgr -c "print server" | grep -iE "job_sort_formula|eligible_time_enable|backfill_depth"
@@ -39,7 +39,7 @@ $$
 !!! warning "Snapshot, not scripture"
     Sites tune this formula live, and there is no changelog. Run the `qmgr` line above before you quote a coefficient to anyone.
 
-??? example "Three shapes the same formula has taken"
+??? info "Three shapes the same formula has taken"
     Writing $R$ for the size total and *hours* for the waiting term:
 
     | Variant | Formula |
@@ -74,7 +74,7 @@ It is the only term that grows on its own, and the only one you can watch direct
 
 ### :material-scale-balance: How heavy a user you have been: `fairshare_factor`
 
-A number between **0 and 1**, where **higher is better**.
+A number between **0 and 1**, where **higher is better**[^2][^3].
 
 $$f = 2^{-\,\text{usage}/\text{share}}$$
 
@@ -86,7 +86,7 @@ So the rule is short: **running more drives your factor down, and running nothin
 
 The factor appears twice in the formula, which is why it dominates everything else. Once as a multiplier on everything you asked for, and once inside a logarithm as a flat penalty worth $0$ at $f = 1$, about $-2.8$ at $0.5$, and about $-12$ at $0.05$. The $10^{-7}$ floor is only there so that an account with no allowance at all does not feed $\ln 0$ into the maths.
 
-!!! warning "This is where the page stops being precise"
+!!! note "This is where the page stops being precise"
     The unit your usage is counted in, how quickly it fades, and how large your allowance is all live in the scheduler's private configuration. That is root-only and not even mounted on the login node, so no user can read it and this page will not guess. Treat the factor as a dial you influence but cannot measure.
 
 ### :material-close-circle: What is not in the formula
@@ -122,17 +122,17 @@ You can watch your waiting time accrue:
 qstat -f <jobid> | grep -E "eligible_time|comment"
 ```
 
-The rules:
+The rules[^2]:
 
 - :material-check: **It accrues** while the job is blocked by a lack of resources.
 - :material-close: **It does not accrue** while the job is blocked by a run limit, by a user hold, or by a `qsub -a` start time. During those you accrue *ineligible* time instead, and PBS does not show you which state you are in.
 - :material-arrow-up-bold: **It only ever goes up.** Requeues keep it. `qalter` keeps it.
 - :material-delete-forever: **`qdel` destroys it.** A resubmission starts from zero.
 
-!!! danger "Chained jobs bank nothing"
+!!! warning "Chained jobs bank nothing"
     A job that depends on another can only accrue eligible time once the job it depends on has finished. Split a long run into a five-link `afterok` chain (Recipe 8) and links two to five sit at zero until the previous link ends, then start from zero. The chain fits under the 48-hour ceiling; it does not stockpile waiting.
 
-!!! danger "Delete-and-resubmit is the most expensive edit you can make"
+!!! warning "Delete-and-resubmit is the most expensive edit you can make"
     Every hour a queued job has waited is a point that nothing else gives back. Realising the walltime should have been 40 h instead of 48 h is rarely worth resetting a day of waiting. Try `qalter -l walltime=...` on the queued job first.
 
 ---
@@ -187,7 +187,6 @@ This is normal for PBS Professional sites, not an Aqua quirk. Several large cent
 
 > **Remember:** A long wait is the scheduler doing arithmetic, not holding a grudge. The arithmetic is above. The grudge, if any, is yours.
 
-??? note "Where this came from"
-    The formula and the backfill depths are live server attributes, readable by any user. The meaning of `fairshare_factor`, the units, and the eligible-time rules are from the [PBS Professional Administrator's Guide](https://help.altair.com/2024.1.0/PBS%20Professional/PBSAdminGuide2024.1.pdf) (§4.9.13, §4.9.19, §4.9.21) cross-checked against the [OpenPBS scheduler source](https://github.com/openpbs/openpbs/tree/master/src/scheduler). The man pages installed on the login node do not define the factor at all.
-
 [^1]: Access only in QUT network. Please use VPN to access the documentation when off-campus.
+[^2]: Altair, "[PBS Professional 2024.1 Administrator's Guide](https://help.altair.com/2024.1.0/PBS%20Professional/PBSAdminGuide2024.1.pdf)". Section 4.9.21 covers the job sorting formula, its terms and their units. Section 4.9.19 covers fair share, including how `fairshare_factor` is defined. Section 4.9.13 covers when eligible time accrues and when it does not.
+[^3]: OpenPBS, "[Scheduler source code](https://github.com/openpbs/openpbs/tree/master/src/scheduler)". Where `fairshare_factor` is actually computed.
