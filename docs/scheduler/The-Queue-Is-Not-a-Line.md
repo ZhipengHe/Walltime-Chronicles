@@ -78,27 +78,21 @@ Usage equal to share gives $f = 0.5$, twice your share gives $0.25$, almost noth
 <!-- markdownlint-enable MD033 -->
 
 !!! warning "You cannot out-wait a fair-share deficit"
-    Every queued job earns the same point per hour, so two identical jobs submitted together keep their gap however long they wait. The gap closes only as your usage fades while you are not running.
+    Every queued job earns the same point per hour, so two identical jobs submitted together keep the same score difference however long they wait. The difference closes only as your usage fades while you are not running.
 
 ---
 
 ## :material-puzzle: Backfill: How a Lower-Ranked Job Starts First {#backfill}
 
-Starting jobs strictly by score would let one large job hold every GPU behind it idle. Backfilling fills those gaps[^2], much like a restaurant seating a walk-in couple at a table booked for 8 pm, as long as they will be gone by then. Each cycle, every queued job is one of two kinds:
+Starting jobs strictly by score would let one large job hold GPUs idle while it waits for a whole node. Backfilling uses those gaps[^2], much like a restaurant seating a walk-in couple at a table booked for 8 pm, as long as they will be gone by then. Each cycle PBS goes down the queue from the highest score, and backfilling needs two terms:
 
 **Top job**
-:   One of the `backfill_depth` highest scores. Starts now if it fits; otherwise PBS books it a start time on the GPUs it will get.
+:   One of the `backfill_depth` highest-scoring jobs that cannot start yet. PBS books it a start time, and no other job may delay it.
 
 **Filler**
-:   Every other job. Starts now only if it fits an idle gap that ends before the next booking. PBS judges that from the walltime you **request**, not from how long the job really runs.
+:   A lower-ranked job that starts now anyway, because it fits an idle gap that ends before those bookings.
 
-The animation plays two invented days on four of Aqua's H100 nodes, with Aqua's published scheduler settings: a cycle every 60 seconds and the `gpu_batch_exec` depth from the table below. Watch the green bars, which are fillers starting ahead of higher-ranked jobs, and the dashed line in the queue, below which no job has a booking. Fair-share factors are assumed, and only jobs that ask for `gpu_id=H100` are shown.
-
-<!-- markdownlint-disable MD033 -->
-<div id="backfill-animation" class="bfa"></div>
-<!-- markdownlint-enable MD033 -->
-
-On Aqua:
+How many jobs get a booking depends on the queue:
 
 | Scope | `backfill_depth` |
 |---|---|
@@ -106,7 +100,22 @@ On Aqua:
 | `cpu_batch_exec` | 60 |
 | server default, for queues without their own | 10 |
 
-- :material-eye-off: **`qstat -T` estimates a start only for top jobs**, and only for your own. Blank most likely means "not in the top five right now".
+Suppose, in `gpu_batch_exec`, only one GPU is idle, and a top job has booked it from six hours from now. Two jobs below that top job want it:
+
+| Job | Requests | Ends before the booking? | What happens |
+|---|---|---|---|
+| Ranked 5th | 24 hours | No | Cannot start. It is within the top five, so it gets its own booking for later |
+| Ranked 6th | 4 hours | Yes | Starts now, before the 5th, and delays no booking |
+
+Rank decides who gets a booking; walltime decides who fits a gap. PBS judges the fit from the walltime you **request**, so the same 6th-ranked job asking for 24 hours would wait too, with no booking at all. Backfilling promises no start time: it only lets a job start now when its walltime fits a gap that exists now.
+
+The animation plays two invented days on four of Aqua's H100 nodes, with Aqua's published scheduler settings: a cycle every 60 seconds and five bookings. Green bars are fillers, each ending before the booking on its GPU, and the dashed line in the queue marks where bookings stop. Fair-share factors are assumed, and only jobs that ask for `gpu_id=H100` are shown.
+
+<!-- markdownlint-disable MD033 -->
+<div id="backfill-animation" class="bfa"></div>
+<!-- markdownlint-enable MD033 -->
+
+- :material-eye-off: **`qstat -T` estimates a start only for top jobs**, and only for your own. Blank most likely means "not in the top five right now". An estimate can move earlier when running jobs finish before their walltime.
 - :material-swap-vertical: **You can be next, and then not.** The list is rebuilt every cycle, and your running jobs keep lowering your $f$.
 
 !!! note "Mechanism, not guarantee"
@@ -121,8 +130,8 @@ On Aqua:
 
 | Lever | Do | Why |
 |---|---|---|
-| :material-delete-forever: Waiting time | **Never delete and resubmit.** Fix a queued job with `qalter -l walltime=...` | `qdel` resets `eligible_time` to zero, and nothing gives those points back |
-| :material-clock-check: Walltime | Request what the job needs plus a margin | A filler must end before the next booking; padding closes gaps |
+| :material-delete-forever: Waiting time | **Never delete and resubmit.** To shorten a queued job's walltime, use `qalter -l walltime=...`; users can only lower a request | `qdel` resets `eligible_time` to zero, and nothing gives those points back |
+| :material-clock-check: Walltime | Request what the job needs plus a margin | A filler must end before the next booking, so padding closes gaps; too little and PBS kills the job |
 | :material-arrow-collapse: Size | Trim for placement, not for points | Smaller requests fit more gaps but score lower, more so when $f$ is high |
 | :material-link-variant: Chains | Use [Recipe 8](Walltime-by-Recipe.md#recipe-8-long-pipeline-with-chained-jobs)'s `afterok` links to fit gaps, not to bank waiting | Each link accrues nothing until the one before it ends |
 | :material-sleep: $f$ | Stop running | Nothing else raises it |
