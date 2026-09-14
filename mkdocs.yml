@@ -92,9 +92,13 @@ extra_javascript:
   - javascripts/katex.js
   - https://unpkg.com/katex@0/dist/katex.min.js
   - https://unpkg.com/katex@0/dist/contrib/auto-render.min.js
+  - javascripts/queue-score-explorer.js
+  - javascripts/backfill-animation.js
 
 extra_css:
   - https://unpkg.com/katex@0/dist/katex.min.css
+  - stylesheets/queue-score-explorer.css
+  - stylesheets/backfill-animation.css
 
 
 nav:
@@ -122,6 +126,7 @@ nav:
     - "Know Your Nodes": scheduler/Know-Your-Nodes.md
     - "Guess, Request, Regret: The Art of Walltime": scheduler/The-Art-of-Walltime.md
     - "Walltime by Recipe: Worked Examples for Aqua": scheduler/Walltime-by-Recipe.md
+    - "The Queue Is Not a Line: How Aqua Ranks Your Job": scheduler/The-Queue-Is-Not-a-Line.md
     - "uv on Aqua: Cache + Envs Placement": scheduler/uv-on-aqua.md
   - "PBS Cookbook":
     - pbs-scripts/index.md

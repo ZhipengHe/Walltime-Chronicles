@@ -1,0 +1,134 @@
+/*
+ * Styles for the interactive score explorer on "The Queue Is Not a Line".
+ *
+ * Everything is scoped under .qse so nothing leaks into the Material theme.
+ * Neutral colours come from Material's theme variables. The formula colours
+ * and the four term colours are fixed chart colours; the term colours are the
+ * first four slots of a colour-blind-checked categorical palette.
+ */
+.qse {
+  --bg: var(--md-default-bg-color);
+  --panel: var(--md-code-bg-color);
+  --line: var(--md-default-fg-color--lightest);
+  --grid: var(--md-default-fg-color--lightest);
+  --axis: var(--md-default-fg-color--lighter);
+  --fg: var(--md-default-fg-color);
+  --muted: var(--md-default-fg-color--light);
+  --accent: var(--md-primary-fg-color);
+  --focus: var(--md-accent-fg-color);
+  --mono: var(--md-code-font-family, "Roboto Mono", SFMono-Regular, Consolas, monospace);
+  --c-bonus48: #4051b5;
+  --c-size6: #c2185b;
+  --c-size8: #7a5c4f;
+  --t-bonus: #2a78d6;
+  --t-size: #eb6834;
+  --t-wait: #1baf7a;
+  --t-pen: #eda100;
+  --bad: #a8112c;
+  --bad-bg: #fde8ec;
+  --ok: #0b6e53;
+  --ok-bg: #e2f4ee;
+  --tip-bg: #1f2233;
+  --tip-fg: #ffffff;
+  container: qse / inline-size;
+  margin: 1.2em 0;
+  color: var(--fg);
+}
+.qse,
+.qse * { box-sizing: border-box; }
+
+/* Layout: controls beside results when there is room, stacked otherwise. */
+.qse .explorer { border: 1px solid var(--line); border-radius: 4px; display: grid; grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.3fr); overflow: hidden; }
+@container qse (max-width: 760px) {
+  .qse .explorer { grid-template-columns: minmax(0, 1fr); }
+}
+.qse .controls { background: var(--panel); padding: 1.35em; display: grid; gap: 1.35em; align-content: start; }
+.qse .results { display: grid; align-content: start; }
+.qse .part { padding: 1.25em 1.35em; display: grid; gap: 0.75em; }
+.qse .part + .part { border-top: 1px solid var(--line); }
+.qse .part-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.4em 0.75em; }
+.qse .part-title { font-weight: 700; font-size: 0.98em; }
+
+/* Controls */
+.qse .group-label { font-size: 0.72em; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); font-weight: 700; margin: 0 0 0.6em; }
+.qse fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
+.qse legend { padding: 0; }
+.qse .formulas { display: grid; gap: 0.4em; }
+.qse .formula-opt { position: relative; }
+.qse .formula-opt input { position: absolute; opacity: 0; pointer-events: none; }
+.qse .formula-opt label { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 2px 10px; padding: 0.55em 0.75em; border: 1px solid var(--line); border-radius: 4px; background: var(--bg); cursor: pointer; }
+.qse .formula-opt .key { grid-row: span 2; align-self: center; width: 22px; height: 0; border-top: 3px solid; }
+.qse .formula-opt .key.dash6 { border-top-style: dashed; }
+.qse .formula-opt .key.dash8 { border-top-style: dotted; }
+.qse .formula-opt .expr { line-height: 1.4; overflow-wrap: anywhere; }
+.qse .formula-opt .desc { font-size: 0.8em; color: var(--muted); }
+.qse .formula-opt .tag { display: inline-block; font-size: 0.68em; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--accent); border: 1px solid currentColor; border-radius: 999px; padding: 0 0.5em; margin-left: 0.6em; vertical-align: 0.15em; }
+.qse .formula-opt input:checked + label { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.qse .formula-opt input:focus-visible + label { outline: 2px solid var(--focus); outline-offset: 2px; }
+.qse .stack { display: grid; gap: 0.85em; }
+.qse .ctl { display: grid; gap: 0.35em; }
+.qse .ctl-head { display: flex; justify-content: space-between; align-items: baseline; gap: 0.75em; }
+.qse .ctl-head label { font-weight: 700; font-size: 0.93em; }
+.qse input[type="range"] { width: 100%; accent-color: var(--accent); margin: 0; }
+.qse input[type="number"] { width: 5.5em; font-family: var(--mono); font-size: 0.85em; color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 3px; padding: 3px 6px; text-align: right; font-variant-numeric: tabular-nums; }
+.qse input:focus-visible,
+.qse button:focus-visible,
+.qse .plot:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.qse .size-line { font-size: 0.9em; color: var(--muted); line-height: 1.5; }
+.qse .eq-grid { display: grid; grid-template-columns: auto auto minmax(0, 1fr); column-gap: 0.35em; row-gap: 2px; align-items: center; }
+.qse .def { font-size: 0.88em; color: var(--muted); line-height: 1.5; }
+.qse .walltime { font-size: 0.82em; color: var(--muted); border-top: 1px dashed var(--line); padding-top: 0.75em; }
+
+/* Plot */
+.qse .display-math { padding: 0.6em 0.75em; background: var(--panel); border-radius: 4px; overflow-x: auto; overflow-y: hidden; }
+.qse .display-math .main { font-size: 1.05em; }
+.qse .display-math .katex-display { margin: 0; }
+.qse .plot-wrap { position: relative; }
+.qse .plot { display: block; width: 100%; height: auto; touch-action: pan-y; cursor: crosshair; user-select: none; }
+.qse .plot text { font-family: var(--mono); font-size: 11px; fill: var(--muted); }
+.qse .plot .axis-title,
+.qse .plot .stop-label { font-family: var(--md-text-font-family, Roboto, "Helvetica Neue", Arial, sans-serif); }
+.qse .plot .axis-title { font-size: 11.5px; }
+.qse .plot .stop-label { font-size: 10.5px; }
+.qse .plot .val-label { font-size: 12px; font-weight: 700; fill: var(--fg); paint-order: stroke; stroke: var(--bg); stroke-width: 5px; stroke-linejoin: round; }
+.qse .plot .it { font-family: "Cambria Math", "STIX Two Math", "Times New Roman", serif; font-style: italic; font-size: 14px; }
+.qse .tip { position: absolute; top: 8px; z-index: 1; pointer-events: none; background: var(--tip-bg); color: var(--tip-fg); border-radius: 4px; padding: 6px 10px; font-size: 0.78em; line-height: 1.55; font-variant-numeric: tabular-nums; white-space: nowrap; transform: translateX(-50%); }
+.qse .tip[hidden] { display: none !important; }
+.qse .tip .row { display: flex; align-items: center; gap: 8px; }
+.qse .tip .k { width: 14px; height: 0; border-top: 2px solid; }
+.qse .tip b { margin-left: auto; padding-left: 12px; font-family: var(--mono); }
+
+/* Zoom switch */
+.qse .switch { display: inline-flex; align-items: center; gap: 0.5em; background: none; border: 0; padding: 2px 0; font: inherit; font-size: 0.82em; color: var(--muted); cursor: pointer; }
+.qse .switch-track { position: relative; width: 32px; height: 18px; border-radius: 999px; background: var(--md-default-fg-color--lighter); flex: none; transition: background 150ms ease; }
+.qse .switch-knob { position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; border-radius: 50%; background: var(--bg); box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3); transition: transform 150ms ease; }
+.qse .switch[aria-checked="true"] { color: var(--fg); }
+.qse .switch[aria-checked="true"] .switch-track { background: var(--accent); }
+.qse .switch[aria-checked="true"] .switch-knob { transform: translateX(14px); }
+@media (prefers-reduced-motion: reduce) {
+  .qse .switch-track,
+  .qse .switch-knob { transition: none; }
+}
+
+/* Your job against a fresh account */
+.qse .chip { font-size: 0.8em; font-weight: 700; padding: 2px 10px; border-radius: 999px; white-space: nowrap; }
+.qse .chip.bad { color: var(--bad); background: var(--bad-bg); }
+.qse .chip.ok { color: var(--ok); background: var(--ok-bg); }
+.qse .key { display: flex; flex-wrap: wrap; gap: 4px 18px; font-size: 0.82em; color: var(--muted); }
+.qse .key > span { display: inline-flex; align-items: center; gap: 6px; }
+.qse .sw { display: inline-flex; width: 32px; height: 10px; border-radius: 2px; overflow: hidden; flex: none; }
+.qse .sw i { flex: 1; }
+.qse .sw.fresh { opacity: 0.3; }
+.qse .terms { display: grid; grid-template-columns: minmax(96px, max-content) minmax(0, 1fr) auto; column-gap: 14px; row-gap: 12px; align-items: center; }
+.qse .term-name { font-size: 0.86em; line-height: 1.3; }
+.qse .term-name .sub { display: block; color: var(--muted); font-size: 0.98em; }
+.qse .term-bars { position: relative; display: grid; gap: 3px; }
+.qse .term-bar { position: relative; height: 13px; }
+.qse .term-bar span { position: absolute; top: 0; bottom: 0; border-radius: 2px; }
+.qse .term-bar.fresh span { opacity: 0.3; }
+.qse .term-zero { position: absolute; top: 0; bottom: 0; width: 1px; background: var(--axis); }
+.qse .term-vals { display: grid; gap: 3px; font-family: var(--mono); font-size: 0.74em; line-height: 13px; font-variant-numeric: tabular-nums; text-align: right; color: var(--muted); white-space: nowrap; }
+.qse .term-vals b { font-weight: 700; color: var(--fg); }
+.qse .terms .total { border-top: 1px solid var(--line); padding-top: 12px; }
+.qse .term-name.total { font-weight: 700; }
+.qse .term-bars.total .term-zero { top: 12px; }

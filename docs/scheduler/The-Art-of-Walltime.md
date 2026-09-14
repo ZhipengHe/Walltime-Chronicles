@@ -516,7 +516,7 @@ Things to remember before you `qsub -I`:
 
 - A guide to interpreting cryptic error messages when your job dies with 5 seconds of walltime remaining.
 - The psychological impact of watching your perfectly estimated job finish with exactly `00:00:01` remaining.
-- Advanced negotiations with the queue scheduler: bargaining, pleading, and acceptance.
+- ~~Advanced negotiations with the queue scheduler: bargaining, pleading, and acceptance.~~ Written: [The Queue Is Not a Line](The-Queue-Is-Not-a-Line.md).
 - Walltime support group: sharing stories of that time you asked for 48 hours and it took 48 hours and 3 minutes.
 
 The perfect walltime doesn't exist. But the perfect walltime *estimate* does.
