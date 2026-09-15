@@ -428,7 +428,7 @@ cat imdb_sentiment.o*
     --- Job Runtime Information at ...
     ```
 
-Two lines in there are worth a second look. Epoch 2 scored higher (0.9322) than the final 0.9227: the guide keeps the epoch with the lowest `eval_loss` (`load_best_model_at_end`), and that was epoch 1. And the `.e` file is not empty this time; it holds one `Downloading builder script` line, the accuracy metric's small script, which `evaluate` fetches again on every run. That line is harmless.
+Two lines in there are worth a second look. Epoch 2 scored higher (0.9322) than the final 0.9227: the guide keeps the epoch with the lowest `eval_loss` (`load_best_model_at_end`), and that was epoch 1. And the `.e` file is not empty this time. It holds three lines in which the Hugging Face libraries say they are using the cached reviews and the cached accuracy metric because offline mode is enabled: the script turns offline mode on for every run except `--fetch-only`, so a job never waits on the internet. Those lines are harmless.
 
 !!! tip "Results go in files; logs are logs"
     Nobody reads a batch job's screen, so a batch program should write what it produces to files it names, like `results.json` and the fine-tuned model in `imdb_model/` (1.8 GB, because the guide saves a checkpoint after each epoch). The `.o` and `.e` files are for progress and errors. A program that only prints its answer leaves that answer in a file named after a job ID.
@@ -513,7 +513,7 @@ What a job actually used, and how to ask for the right amount next time, is [Les
     - **The GPU job sits in `Q` for a long time?** The cards are busy. It will start; a shorter walltime can help it fit in sooner.
     - **The log says the device is `cpu`, or CUDA is not available?** `pyproject.toml` still points PyTorch at the CPU index. Switch it as in Part 2, Step 2, and run `uv sync` again.
     - **The log says CUDA out of memory?** Make each step smaller: add `--batch 8` to the `uv run` line.
-    - **The job starts by downloading the model or the reviews?** The `--fetch-only` step in Part 2 was skipped, so `~/.cache/huggingface` is empty. Run it once on the login node, then submit again.
+    - **The job stops with `ConnectionError: Couldn't reach 'stanfordnlp/imdb' on the Hub (OfflineModeIsEnabled)`?** The `--fetch-only` step in Part 2 was skipped, so `~/.cache/huggingface` is empty, and a job does not download. Run it once on the login node, then submit again.
     - **No log files appeared?** They land in the directory you ran `qsub` from, once the job ends.
     - **No email?** Look for `PBS JOB` from `eresearch@qut.edu.au`, including your junk folder, and check the script has `#PBS -m abe`. To send it to another address, add `#PBS -M you@example.com`.
 
