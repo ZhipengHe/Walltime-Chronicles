@@ -276,7 +276,7 @@ uv run python imdb_sentiment.py --fetch-only
 They land in `~/.cache/huggingface`, about 460 MB in all: 257 MB of model and 208 MB of reviews. The job reads them from there instead of downloading them again.
 
 !!! info "Where the model and data come from"
-    DistilBERT is published by Hugging Face under the Apache 2.0 licence. The IMDb reviews were collected at Stanford for a 2011 paper by Maas et al., which the dataset's authors ask you to cite if you use it. Both download from the Hugging Face Hub, and neither needs an account.
+    DistilBERT is published by Hugging Face under the Apache 2.0 licence.[^1] The IMDb reviews were collected at Stanford for a 2011 paper by Maas et al., which the dataset's authors ask you to cite if you use it.[^2] Both download from the Hugging Face Hub, and neither needs an account.
 
 [Download the script](scripts/imdb_sentiment.py), or read it here:
 
@@ -568,3 +568,6 @@ What a job actually used, and how to ask for the right amount next time, is [Les
     python imdb_sentiment.py --batch 8          # smaller steps, less GPU memory
     python imdb_sentiment.py --limit 500        # 500 reviews each way, fine on a CPU
     ```
+
+[^1]: Hugging Face, "[distilbert/distilbert-base-uncased](https://huggingface.co/distilbert/distilbert-base-uncased)". The model card; its licence is Apache 2.0, and the model is public with no gated access.
+[^2]: Andrew L. Maas et al., "[Large Movie Review Dataset](https://ai.stanford.edu/~amaas/data/sentiment/)", Stanford AI Lab. The dataset page, which asks anyone using the reviews to cite "Learning Word Vectors for Sentiment Analysis", ACL-HLT 2011.
