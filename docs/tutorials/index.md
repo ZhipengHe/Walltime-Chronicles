@@ -2,7 +2,7 @@
 
 Welcome to the Crash Course Café! ☕ Pull up a chair and let's get you productive on QUT Aqua without the usual learning curve headaches.
 
-!!! info "Course status (2026-09-13)"
+!!! info "Course status (2026-09-15)"
     Nine lessons, each ending with something you can do that you could not do before. This table is the one place the course's status is kept.
 
     | Lesson | Status |
@@ -12,7 +12,7 @@ Welcome to the Crash Course Café! ☕ Pull up a chair and let's get you product
     | [3. Working Interactively](lesson-3.md) | Written |
     | [4. Your First Batch Job](lesson-4.md) | Written |
     | [5. When Jobs Fail](lesson-5.md) | Written |
-    | [6. Right-sizing Requests](lesson-6.md) | Stub |
+    | [6. Right-sizing Requests](lesson-6.md) | Written |
     | [7. Job Arrays](lesson-7.md) | Stub |
     | [8. Long Jobs: Dependencies & Checkpointing](lesson-8.md) | Stub |
     | [9. Working with an AI Agent on Aqua](lesson-9.md) | Stub |
@@ -171,9 +171,9 @@ This crash course is your launching pad. When you hit specific challenges, you'l
 
 > *"How much computer do I actually need?"*
 
-- The measure-then-request loop
-- Cores, memory, walltime, GPU — what to ask for and why
-- One worked translation: a measured run → PBS request
+- What a request costs, too little and too much, and why a GPU job is sized GPU first
+- Read what a finished job used on QUT's HPC Monitoring Dashboard
+- Turn each reading into a line of the next request, and save the job's record
 
 [→ Lesson 6](lesson-6.md)
 
