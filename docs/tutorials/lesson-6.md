@@ -227,6 +227,8 @@ exit $status
 
 The other two lines keep the job's exit status honest. A job's exit status is its last command's ([Lesson 5](lesson-5.md), Part 2), so without them a failed run would end with `qstat`'s success. `status=$?` saves the program's exit status, and `exit $status` ends the job with it, after the record is written.
 
+If PBS stops the job at its walltime or memory limit, the script stops there too and the file is never written. The job's record is still at the end of its `.o` file ([Lesson 5](lesson-5.md), Part 1), in `qstat -xf <job-id>` for four days, and on the dashboard for about 30.
+
 ### Step 2: Submit it and check
 
 ```bash

@@ -36,10 +36,11 @@ import time
 # whether each cached file is current, and on a node that cannot reach it they
 # wait instead of using the cache. transformers follows HF_HUB_OFFLINE, datasets
 # and evaluate each read their own variable, and all three are read on import.
-if "--fetch-only" not in sys.argv[1:]:
-    os.environ["HF_HUB_OFFLINE"] = "1"
-    os.environ["HF_DATASETS_OFFLINE"] = "1"
-    os.environ["HF_EVALUATE_OFFLINE"] = "1"
+# Both ways are set outright, so a value left in the environment can neither stop
+# --fetch-only from downloading nor send a job back online.
+OFFLINE = "0" if "--fetch-only" in sys.argv[1:] else "1"
+for offline_variable in ("HF_HUB_OFFLINE", "HF_DATASETS_OFFLINE", "HF_EVALUATE_OFFLINE"):
+    os.environ[offline_variable] = OFFLINE
 
 import evaluate
 import numpy as np

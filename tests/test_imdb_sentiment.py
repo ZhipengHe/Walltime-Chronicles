@@ -103,7 +103,12 @@ class OfflineModeTest(unittest.TestCase):
     def test_fetch_only_stays_online(self):
         env = self.environment_after_import("--fetch-only")
         for name in self.NAMES:
-            self.assertNotIn(name, env)
+            self.assertEqual(env.get(name), "0", name)
+
+    def test_an_inherited_one_does_not_stop_fetch_only_downloading(self):
+        env = self.environment_after_import("--fetch-only", start={name: "1" for name in self.NAMES})
+        for name in self.NAMES:
+            self.assertEqual(env.get(name), "0", name)
 
 
 if __name__ == "__main__":
