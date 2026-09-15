@@ -12,7 +12,9 @@ results are written to files.
     python imdb_sentiment.py --limit 500     # 500 reviews each way, enough to try it on a CPU
 
 It needs PyTorch, transformers, datasets, evaluate, accelerate and
-scikit-learn. The model and data are cached under ~/.cache/huggingface.
+scikit-learn. The model and data are cached under ~/.cache/huggingface. Every
+run except --fetch-only reads them from that cache without going online, so a
+job does not depend on its compute node reaching the Hugging Face Hub.
 
 References
     DistilBERT: V. Sanh, L. Debut, J. Chaumond and T. Wolf. 2019. DistilBERT, a
@@ -29,6 +31,15 @@ import json
 import os
 import sys
 import time
+
+# Only --fetch-only goes online. Without these, the libraries below ask the Hub
+# whether each cached file is current, and on a node that cannot reach it they
+# wait instead of using the cache. transformers follows HF_HUB_OFFLINE, datasets
+# and evaluate each read their own variable, and all three are read on import.
+if "--fetch-only" not in sys.argv[1:]:
+    os.environ.setdefault("HF_HUB_OFFLINE", "1")
+    os.environ.setdefault("HF_DATASETS_OFFLINE", "1")
+    os.environ.setdefault("HF_EVALUATE_OFFLINE", "1")
 
 import evaluate
 import numpy as np

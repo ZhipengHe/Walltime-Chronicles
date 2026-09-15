@@ -6,6 +6,7 @@ itself is validated by running the script on Aqua, not here.
 """
 
 import importlib.util
+import os
 import sys
 import types
 import unittest
@@ -77,6 +78,25 @@ class ParseArgsTest(unittest.TestCase):
     def test_model_and_dataset_are_the_guides(self):
         self.assertEqual(self.script.MODEL, "distilbert/distilbert-base-uncased")
         self.assertEqual(self.script.DATASET, "stanfordnlp/imdb")
+
+
+class OfflineModeTest(unittest.TestCase):
+    """A job reads the cache without going online; only --fetch-only downloads."""
+
+    def environment_after_import(self, *argv):
+        with mock.patch.dict(os.environ, {}, clear=True), mock.patch.object(sys, "argv", ["imdb_sentiment.py", *argv]):
+            load_script()
+            return dict(os.environ)
+
+    def test_a_job_reads_the_cache_offline(self):
+        env = self.environment_after_import("--epochs", "3")
+        for name in ("HF_HUB_OFFLINE", "HF_DATASETS_OFFLINE", "HF_EVALUATE_OFFLINE"):
+            self.assertEqual(env.get(name), "1", name)
+
+    def test_fetch_only_stays_online(self):
+        env = self.environment_after_import("--fetch-only")
+        for name in ("HF_HUB_OFFLINE", "HF_DATASETS_OFFLINE", "HF_EVALUATE_OFFLINE"):
+            self.assertNotIn(name, env)
 
 
 if __name__ == "__main__":

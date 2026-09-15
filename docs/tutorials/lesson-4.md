@@ -291,7 +291,7 @@ They land in `~/.cache/huggingface`, about 460 MB in all: 257 MB of model and 20
 ```bash title="~/hello-aqua/imdb_sentiment.pbs"
 #!/bin/bash
 #PBS -N imdb_sentiment
-#PBS -l select=1:ncpus=4:ngpus=1:mem=32GB
+#PBS -l select=1:ncpus=4:ngpus=1:mem=32GB:gpu_id=H100
 #PBS -l walltime=01:00:00
 #PBS -m abe
 
@@ -301,7 +301,8 @@ uv run python imdb_sentiment.py
 ```
 
 !!! note "Command breakdown"
-    - `ngpus=1` → one GPU, which sends the job to the GPU batch queue. Batch jobs get a **whole card**, not the MIG slices of Lesson 3's interactive queue: whichever A100 or H100 is free, unless you add `:gpu_id=H100` or `:gpu_id=A100` to choose
+    - `ngpus=1` → one GPU, which sends the job to the GPU batch queue. Batch jobs get a **whole card**, not the MIG slices of Lesson 3's interactive queue
+    - `gpu_id=H100` → which kind of card. Without it, PBS gives the job whichever A100 or H100 is free
     - `cd "$PBS_O_WORKDIR"` → back to `~/hello-aqua`, where the project and the script are; the model and data wait in `~/.cache/huggingface`
     - `nvidia-smi ...` → one line in the log saying which card PBS handed you
     - `uv run python ...` → runs the script through the project, so it gets the CUDA build of PyTorch from `uv.lock`, not the system Python Part 1 found
@@ -536,7 +537,7 @@ What a job actually used, and how to ask for the right amount next time, is [Les
     ```bash
     #!/bin/bash
     #PBS -N my_job
-    #PBS -l select=1:ncpus=4:ngpus=1:mem=32GB
+    #PBS -l select=1:ncpus=4:ngpus=1:mem=32GB:gpu_id=H100
     #PBS -l walltime=01:00:00
     #PBS -m abe
 
