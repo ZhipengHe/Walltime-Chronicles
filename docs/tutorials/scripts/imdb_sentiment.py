@@ -37,9 +37,9 @@ import time
 # wait instead of using the cache. transformers follows HF_HUB_OFFLINE, datasets
 # and evaluate each read their own variable, and all three are read on import.
 if "--fetch-only" not in sys.argv[1:]:
-    os.environ.setdefault("HF_HUB_OFFLINE", "1")
-    os.environ.setdefault("HF_DATASETS_OFFLINE", "1")
-    os.environ.setdefault("HF_EVALUATE_OFFLINE", "1")
+    os.environ["HF_HUB_OFFLINE"] = "1"
+    os.environ["HF_DATASETS_OFFLINE"] = "1"
+    os.environ["HF_EVALUATE_OFFLINE"] = "1"
 
 import evaluate
 import numpy as np

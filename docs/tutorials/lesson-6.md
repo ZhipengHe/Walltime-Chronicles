@@ -214,13 +214,18 @@ A reading is only good for the run it came from. The script's settings, listed i
 
 ### Step 1: Save the record in the job
 
-Add one line to the end of the job script:
+Change the end of the job script to:
 
 ```bash
+uv run python imdb_sentiment.py
+status=$?
 qstat -xf $PBS_JOBID > resource_usage_$PBS_JOBID
+exit $status
 ```
 
-It writes the job's record, with what was requested next to what was used, into a file named after the job.[^3] PBS forgets a job four days after it ends and the dashboard after about 30. The file lasts for as long as you keep it, and it is what the next request starts from.
+`qstat -xf` writes the job's record, with what was requested next to what was used, into a file named after the job.[^3] PBS forgets a job four days after it ends and the dashboard after about 30. The file lasts for as long as you keep it, and it is what the next request starts from.
+
+The other two lines keep the job's exit status honest. A job's exit status is its last command's ([Lesson 5](lesson-5.md), Part 2), so without them a failed run would end with `qstat`'s success. `status=$?` saves the program's exit status, and `exit $status` ends the job with it, after the record is written.
 
 ### Step 2: Submit it and check
 
@@ -303,7 +308,9 @@ For the estimation theory behind walltime, see [The Art of Walltime](../schedule
 
     cd "$PBS_O_WORKDIR"
     uv run python my_program.py
+    status=$?
     qstat -xf $PBS_JOBID > resource_usage_$PBS_JOBID
+    exit $status
     ```
 
 === "Commands"
@@ -320,5 +327,5 @@ For the estimation theory behind walltime, see [The Art of Walltime](../schedule
     ```
 
 [^1]: QUT eResearch, "[Monitoring Job Resource Usage](https://docs.eres.qut.edu.au/hpc-job-monitoring)". Exclusive use of requested resources, the HPC Monitoring Dashboard and its pages, the rule for adding cores, the 80% target, and the CPU job asking for 48 cores and 96 GB. Access only on the QUT network; use the VPN off campus.
-[^2]: QUT eResearch, "[Queues and limits](https://docs.eres.qut.edu.au/hpc-queue-limits)". The 10-minute minimum walltime, and a request having to fit on one node.
-[^3]: QUT eResearch, "[Estimating/optimising resources to request for a job](https://docs.eres.qut.edu.au/hpc-estimatingoptimising-resources-to-request-for-)". Saving `qstat -fx $PBS_JOBID` to `resource_usage_$PBS_JOBID` at the end of a job script.
+[^2]: QUT eResearch, "[Queues and limits](https://docs.eres.qut.edu.au/hpc-queue-limits)". The 10-minute minimum walltime, and a request having to fit on one node. Access only on the QUT network; use the VPN off campus.
+[^3]: QUT eResearch, "[Estimating/optimising resources to request for a job](https://docs.eres.qut.edu.au/hpc-estimatingoptimising-resources-to-request-for-)". Saving `qstat -fx $PBS_JOBID` to `resource_usage_$PBS_JOBID` at the end of a job script. Access only on the QUT network; use the VPN off campus.

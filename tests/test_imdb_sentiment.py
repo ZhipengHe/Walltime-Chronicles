@@ -83,19 +83,26 @@ class ParseArgsTest(unittest.TestCase):
 class OfflineModeTest(unittest.TestCase):
     """A job reads the cache without going online; only --fetch-only downloads."""
 
-    def environment_after_import(self, *argv):
-        with mock.patch.dict(os.environ, {}, clear=True), mock.patch.object(sys, "argv", ["imdb_sentiment.py", *argv]):
+    NAMES = ("HF_HUB_OFFLINE", "HF_DATASETS_OFFLINE", "HF_EVALUATE_OFFLINE")
+
+    def environment_after_import(self, *argv, start=None):
+        with mock.patch.dict(os.environ, start or {}, clear=True), mock.patch.object(sys, "argv", ["imdb_sentiment.py", *argv]):
             load_script()
             return dict(os.environ)
 
     def test_a_job_reads_the_cache_offline(self):
         env = self.environment_after_import("--epochs", "3")
-        for name in ("HF_HUB_OFFLINE", "HF_DATASETS_OFFLINE", "HF_EVALUATE_OFFLINE"):
+        for name in self.NAMES:
+            self.assertEqual(env.get(name), "1", name)
+
+    def test_an_inherited_zero_does_not_turn_offline_mode_off(self):
+        env = self.environment_after_import(start={name: "0" for name in self.NAMES})
+        for name in self.NAMES:
             self.assertEqual(env.get(name), "1", name)
 
     def test_fetch_only_stays_online(self):
         env = self.environment_after_import("--fetch-only")
-        for name in ("HF_HUB_OFFLINE", "HF_DATASETS_OFFLINE", "HF_EVALUATE_OFFLINE"):
+        for name in self.NAMES:
             self.assertNotIn(name, env)
 
 
