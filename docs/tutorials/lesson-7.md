@@ -119,7 +119,7 @@ Two things in that picture matter for the rest of the lesson. The request belong
     | `-J 1-100:2` | every second index: 1, 3, 5, … |
     | `-J 1-100%10` | a hundred subjobs, at most ten running at once |
 
-    `-J` also works on the `qsub` command line, like every other directive. QUT's practical ceiling for one array is about 5000 subjobs.[^1]
+    `-J` also works on the `qsub` command line, like every other directive. Aqua's documentation puts the practical ceiling for one array at about 5000 subjobs.[^1]
 
 ### Step 3: Write and submit a throwaway array
 
@@ -344,7 +344,7 @@ uv run python radon_chains.py --seed "$PBS_ARRAY_INDEX" --out "chains/chain_${PB
     - `set -e` → stop this subjob at the first command that fails ([Lesson 5](lesson-5.md))
 
 !!! note "Where the numbers came from"
-    Generous on purpose, as Lesson 4's first job was: each chain used about 12 seconds of its 30 minutes and 335 MB of its 4 GB. Sized the [Lesson 6](lesson-6.md) way that is `mem=1GB` and `walltime=00:10:00`, QUT's minimum. Two things are particular to arrays. The walltime has to fit the **slowest** chain rather than the one you measured, and the memory is reserved eight times over, so what Lesson 6 sizes is what you then multiply.
+    Generous on purpose, as Lesson 4's first job was: each chain used about 12 seconds of its 30 minutes and 335 MB of its 4 GB. Sized the [Lesson 6](lesson-6.md) way that is `mem=1GB` and `walltime=00:10:00`, Aqua's minimum. Two things are particular to arrays. The walltime has to fit the **slowest** chain rather than the one you measured, and the memory is reserved eight times over, so what Lesson 6 sizes is what you then multiply.
 
 !!! warning "Sized for the slowest run"
     One walltime applies to every subjob. Chains that adapt badly take longer than chains that do not, and PBS stops any subjob that goes past the limit, so the walltime has to fit the slowest chain you expect, not the one you measured.
@@ -524,12 +524,12 @@ qstat -xt '12345681[]'
     12345681[8].aqua       radon_chains     your-username     00:00:00 F cpu_batch_exec
     ```
 
-Seven subjobs started, saw their file and exited within two seconds, leaving a `.o` with nothing but Aqua's summary. Subjob 3 did the work, and the gap loop now prints nothing. QUT's checkpointing example uses the same idea, testing for its output before redoing it.[^1]
+Seven subjobs started, saw their file and exited within two seconds, leaving a `.o` with nothing but Aqua's summary. Subjob 3 did the work, and the gap loop now prints nothing. QUT eResearch's checkpointing example uses the same idea, testing for its output before redoing it.[^1]
 
 !!! tip "The Aqua-specific part of the choice"
     Step 1's chart decides the pattern. Two things on Aqua sharpen it:
 
-    - **How short is too short to queue.** QUT's own array example answered it by rewriting itself: one image per subjob was "too small of an input size", each converting in under a second, so they put ten images in each subjob.[^1] That is the fourth row of Part 2's table, a slice per index. This lesson's twelve-second chains sit near that line: as an array they took 31 seconds of wall time, as a loop they would take about ninety, and either is fine at this size.
+    - **How short is too short to queue.** QUT eResearch's own array example answered it by rewriting itself: one image per subjob was "too small of an input size", each converting in under a second, so they put ten images in each subjob.[^1] That is the fourth row of Part 2's table, a slice per index. This lesson's twelve-second chains sit near that line: as an array they took 31 seconds of wall time, as a loop they would take about ninety, and either is fine at this size.
     - **A whole GPU changes the arithmetic.** The queue wait is paid once per job, and whole cards are the most contested thing on Aqua, so twenty short GPU runs as twenty subjobs pay that wait twenty times over. For GPU work, fewer and bigger jobs usually win, with the runs looped inside.
 
 ---
