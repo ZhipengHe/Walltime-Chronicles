@@ -39,7 +39,7 @@ So a request can go wrong in both directions:
 
 What a job holds and does not use adds up when there are many jobs: a CPU job that asks for 32 GB and uses 6 GB, run a hundred times, holds 2,600 GB that none of the copies uses.
 
-QUT's target is to use at least 80% of each resource you request.[^1] How to read that target depends on whether the job uses a GPU, which Part 5 comes back to.
+QUT eResearch's target is to use at least 80% of each resource you request.[^1] How to read that target depends on whether the job uses a GPU, which Part 5 comes back to.
 
 !!! note "A smaller request does not rank higher"
     Aqua orders waiting jobs partly by the size of what they request, so trimming a request lowers that part of its score a little. It can still start sooner, because it fits where a bigger request does not. [The Queue Is Not a Line](../scheduler/The-Queue-Is-Not-a-Line.md) explains both.
@@ -123,7 +123,7 @@ The top row repeats the request. The gauges below it show how much of each resou
 | **Memory Usage** | 14.46% | on average, about a seventh of the 32 GiB was in use |
 | **GPU Usage** | 71.60% | the GPU was busy for most of the run |
 
-The gauges are red below 30%, yellow from 30%, orange from 60% and green from 90%, so a job that meets QUT's 80% target still shows orange.
+The gauges are red below 30%, yellow from 30%, orange from 60% and green from 90%, so a job that meets QUT eResearch's 80% target still shows orange.
 
 ![CPU Usage and Memory Usage graphs for the Lesson 4 job, each with a table of Mean, Max and Last values](images/lesson-6/dashboard-cpu-memory.jpg)
 
@@ -169,7 +169,7 @@ Each line of the request comes from a reading in Part 3. Walltime starts the sam
 
 ### Step 2: The Lesson 4 job, a GPU job
 
-- **Walltime: `00:15:00`.** It used 6 minutes 7 seconds. Fifteen minutes leaves room for a run that goes slower, and is above QUT's 10-minute minimum.[^2]
+- **Walltime: `00:15:00`.** It used 6 minutes 7 seconds. Fifteen minutes leaves room for a run that goes slower, and is above Aqua's 10-minute minimum.[^2]
 - **GPU: one H100.** It was busy for most of the run, the script uses one card, and `gpu_id=H100` names the kind it ran on.
 - **Cores: keep `4`.** About 1.3 were busy at the peak. Four leaves the GPU room to be fed, and is a small part of the 42 cores that come with an H100.
 - **Memory: keep `32GB`.** The `Max` was 6.24 GiB, and 32 GB is well inside the 240 GB that comes with an H100.
@@ -193,7 +193,7 @@ uv run python imdb_sentiment.py
 Two other jobs, one of each kind:
 
 - **A GPU job past its share.** Suppose a job on one H100 asks for 32 cores and 600 GB, and the dashboard shows 18 cores and 360 GB used. The 32 cores are inside the 42-core share, so they can stay, or come down to about 24 to leave more for others. The memory is two and a half times the 240 GB share, which leaves the node's other three GPUs about 125 GB each. Trim it to about 450 GB, the 360 GB `Max` plus a quarter.
-- **A CPU job.** QUT's own example asked for 48 cores and 96 GB. Its summary showed `CPU time : 00:22:38` in `Wall time : 00:07:55`, about 3 cores busy, and `Mem usage : 5293996kb`, about 5 GB. By the table, that is 3 or 4 cores and 8 GB, which is what QUT suggests too.[^1]
+- **A CPU job.** QUT eResearch's own example asked for 48 cores and 96 GB. Its summary showed `CPU time : 00:22:38` in `Wall time : 00:07:55`, about 3 cores busy, and `Mem usage : 5293996kb`, about 5 GB. By the table, that is 3 or 4 cores and 8 GB, which is what QUT suggests too.[^1]
 
 ### Step 4: When the run changes
 
@@ -238,7 +238,7 @@ qsub imdb_sentiment.pbs
 When it ends, open it on the dashboard as in Part 3:
 
 - **A GPU job, like the Lesson 4 job:** GPU Usage should be no lower than the first run's 72%. Low core and memory gauges are normal. If GPU Usage drops after you cut cores or memory, they are holding the GPU back: give them back.
-- **A CPU job:** CPU Usage and Memory Usage should be near QUT's 80%, with the memory `Max` safely below the request.
+- **A CPU job:** CPU Usage and Memory Usage should be near QUT eResearch's 80%, with the memory `Max` safely below the request.
 
 Adjust once, not endlessly: if a gauge is still far from where it should be, change that line once more; if a reading came close to its limit, give that line more room.
 
@@ -282,7 +282,7 @@ For the estimation theory behind walltime, see [The Art of Walltime](../schedule
 
 === "CPU job"
     ```text
-    walltime   the wall time it used, plus room for a slower run (QUT queues take at least 10 minutes)
+    walltime   the wall time it used, plus room for a slower run (Aqua's queues take at least 10 minutes)
     cores      CPU Usage % x cores requested = cores busy; round up
                add more only if CPU Usage was at 100% and threads outnumbered cores
     memory     the Memory Usage Max, plus room, rounded up
@@ -291,7 +291,7 @@ For the estimation theory behind walltime, see [The Art of Walltime](../schedule
 
 === "GPU job"
     ```text
-    walltime   the wall time it used, plus room for a slower run (QUT queues take at least 10 minutes)
+    walltime   the wall time it used, plus room for a slower run (Aqua's queues take at least 10 minutes)
     GPU        the cards the program uses, usually 1; name the kind with gpu_id
     cores      generous room above the cores busy, up to one GPU's share (H100 about 42, A100 about 15);
                past the share, cores busy plus room

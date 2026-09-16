@@ -14,7 +14,7 @@ Welcome to the Crash Course Café! ☕ Pull up a chair and let's get you product
     | [5. When Jobs Fail](lesson-5.md) | Written |
     | [6. Right-sizing Requests](lesson-6.md) | Written |
     | [7. Job Arrays](lesson-7.md) | Written |
-    | [8. Long Jobs: Dependencies & Checkpointing](lesson-8.md) | Stub |
+    | [8. Long Jobs](lesson-8.md) | Written |
     | [9. Working with an AI Agent on Aqua](lesson-9.md) | Stub |
 
     A stub states the lesson's scope and points to the guides that cover the material today.
@@ -189,13 +189,13 @@ This crash course is your launching pad. When you hit specific challenges, you'l
 
 [→ Lesson 7](lesson-7.md)
 
-### Lesson 8: Long Jobs — Dependencies & Checkpointing (15–20 min)
+### Lesson 8: Long Jobs (15–20 min)
 
 > *"When one walltime ceiling isn't enough"*
 
-- The 48-hour-barrier problem
-- Job dependencies with `afterok` (wrapper-script idiom)
-- Checkpointing intuition
+- Two shapes of work that outgrow a walltime: stages chained with `-W depend=afterok`, or one job PBS restarts with `-c`
+- Train a hopping robot for twenty minutes on a ten-minute walltime, saving as it goes and resuming where it stopped, scored by a job that waited for it
+- Read a broken link: a failed stage and the job deleted behind it, a restart that starts from scratch
 
 [→ Lesson 8](lesson-8.md)
 
