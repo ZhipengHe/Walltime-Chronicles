@@ -102,7 +102,8 @@ def train(args):
     import torch
     from stable_baselines3 import PPO
 
-    torch.set_num_threads(int(os.environ.get("NCPUS", os.cpu_count() or 1)))
+    # PBS exports NCPUS inside a job. Outside one, on the login node, one thread.
+    torch.set_num_threads(int(os.environ.get("NCPUS", "1")))
     env = gym.make(args.env)
     latest = latest_checkpoint(args.checkpoints)
     if latest:

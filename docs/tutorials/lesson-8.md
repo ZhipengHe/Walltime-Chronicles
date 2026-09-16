@@ -361,11 +361,11 @@ uv run python hopper_ppo.py --timesteps 4096 --save-every 2048 --checkpoints tes
     env       Hopper-v5  seed 0
     start     no checkpoint in test_ckpt/; training from scratch
     saved         2,048 steps  mean reward    11.9  at 1s  -> test_ckpt/hopper_2048_steps.zip
-    saved         4,096 steps  mean reward    26.8  at 12s  -> test_ckpt/hopper_4096_steps.zip
-    done      4,096 steps trained in 21s, peak memory 721 MB
+    saved         4,096 steps  mean reward    26.8  at 2s  -> test_ckpt/hopper_4096_steps.zip
+    done      4,096 steps trained in 3s, peak memory 714 MB
     ```
 
-Twenty seconds, two checkpoint files, and a mean reward of 12, which is a hopper falling over. Remove `test_ckpt/` afterwards; the job keeps its own directory. The script is Part 3's three duties in Python: it saves every `--save-every` steps into `checkpoints/`, named by step count and renamed into place; it loads the file with the most steps if there is one, `PPO.load(latest, env=env)`, and continues with `learn(remaining, reset_num_timesteps=False)`; and `--timesteps` is the total to reach.
+Three seconds, two checkpoint files, and a mean reward of 12, which is a hopper falling over. Remove `test_ckpt/` afterwards; the job keeps its own directory. The script is Part 3's three duties in Python: it saves every `--save-every` steps into `checkpoints/`, named by step count and renamed into place; it loads the file with the most steps if there is one, `PPO.load(latest, env=env)`, and continues with `learn(remaining, reset_num_timesteps=False)`; and `--timesteps` is the total to reach.
 
 [Download the script](scripts/hopper_ppo.py), or read it here:
 
