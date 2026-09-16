@@ -558,7 +558,7 @@ qstat -xf 12345681 | grep -E "job_state|depend|Exit_status|comment"
         depend = afterok:12345680.aqua@aqua
     ```
 
-No exit status, no `comment`, and no log files: the job never ran. PBS deleted it the moment its condition became impossible, which is what the `qsub` man page promises.[^4] A failure costs the stage and everything waiting behind it. Fix the stage, then submit the chain again from that stage. For a step that should run whatever happened, `afterany` is the dependency instead.
+No exit status, no `comment`, and no log files: the job never ran. PBS deleted it the moment its condition became impossible, which is what the `qsub` man page promises.[^4] A failure costs the stage and everything waiting behind it. Fix the stage, then submit the chain again from that stage. For a step that should run whatever happened, `afterany` is the dependency instead.[^5]
 
 ### Step 2: A restart that does not resume
 
@@ -649,6 +649,7 @@ For the full chained-stage pattern, see [Walltime by Recipe](../scheduler/Wallti
 [^2]: QUT eResearch, "[Running jobs longer than 48 hours](https://docs.eres.qut.edu.au/breaking-the-48hr-barrier)". The three answers, the dependent-jobs example and the checkpointed example. Access only on the QUT network; use the VPN off campus.
 [^3]: QUT eResearch, "[Introduction to Checkpointing](https://docs.eres.qut.edu.au/checkpointing)" and "[Implementing Checkpointing](https://docs.eres.qut.edu.au/implementing-checkpointing)". The `-c` forms, automatic resubmission at the walltime, the `USR1` and `USR2` signals, bash quitting on them without traps, the interval rule, the 21-attempt limit with `run_count`, why checkpointing is recommended, and the generic (CRIU) script. Access only on the QUT network; use the VPN off campus.
 [^4]: OpenPBS, "[qsub man page](https://github.com/openpbs/openpbs/blob/master/doc/man1/qsub.1B)". The `-c` checkpoint options, the `-W depend` types, and "if an error is detected, the new job is deleted by the server".
+[^5]: QUT eResearch, "[Submitting jobs on Aqua](https://docs.eres.qut.edu.au/hpc-submitting-jobs-on-aqua)". The dependency types and their argument lists. Access only on the QUT network; use the VPN off campus.
 [^6]: OpenPBS, "[job.h](https://github.com/openpbs/openpbs/blob/master/src/include/job.h)". `JOB_EXEC_HOOK_RERUN = -18`, "a hook requested for job to be requeued"; also `-20` for a failed node and `-29` for the walltime, the codes Lesson 5 uses.
 [^7]: Gymnasium, "[Hopper](https://gymnasium.farama.org/environments/mujoco/hopper/)". The environment, its reward for forward motion, and the MuJoCo engine it runs in.
 [^8]: Stable-Baselines3, "[Callbacks](https://stable-baselines3.readthedocs.io/en/master/guide/callbacks.html)" and "[Examples](https://stable-baselines3.readthedocs.io/en/master/guide/examples.html)". `CheckpointCallback` and its file naming, `PPO.load` with an environment for further training, `learn` with `reset_num_timesteps`, and `evaluate_policy`.
