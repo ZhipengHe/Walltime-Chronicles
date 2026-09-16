@@ -268,7 +268,7 @@ uv add pymc arviz netcdf4
      + xarray-einstats==0.11.0
     ```
 
-The radon data needs nothing, because it ships inside PyMC, so no subjob touches the network. The compilation is the part to get right:
+The radon data is two files from PyMC's examples repository, fetched below alongside the script, so no subjob touches the network. The compilation is the part to get right:
 
 !!! warning "Eight subjobs compiling at once"
     PyMC builds the model through PyTensor and caches the compiled result under `~/.pytensor`. Processes compiling at the same moment contend for that cache's lock, which is what eight subjobs starting together would do. The PyMC developers' advice for many processes at once is a compile directory unique to each.[^3] So in Step 4 each subjob compiles into its own directory inside `$TMPDIR`, the scratch PBS gives every job. That costs each chain four seconds and saves it from waiting on the other seven.
@@ -277,6 +277,8 @@ The radon data needs nothing, because it ships inside PyMC, so no subjob touches
 
 ```bash
 wget https://raw.githubusercontent.com/ZhipengHe/Walltime-Chronicles/main/docs/tutorials/scripts/radon_chains.py
+wget https://raw.githubusercontent.com/pymc-devs/pymc-examples/main/examples/data/srrs2.dat
+wget https://raw.githubusercontent.com/pymc-devs/pymc-examples/main/examples/data/cty.dat
 uv run python radon_chains.py --compile-only
 ```
 
@@ -464,7 +466,7 @@ qdel '12345679[3]'     # just the third chain
 
 ### Step 2: Find the runs that failed
 
-One index, one file, so the failures are the gaps. Ask over the same range the `-J` line used:
+One index, one file, so the failures are the gaps. The script writes a chain under its final name only once it is complete, so a file that exists is a finished chain. Ask over the same range the `-J` line used:
 
 ```bash
 for i in $(seq 1 8); do [ -f "chains/chain_$i.nc" ] || echo "missing $i"; done

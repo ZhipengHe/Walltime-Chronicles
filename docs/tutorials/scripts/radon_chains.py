@@ -2,7 +2,8 @@
 
 The model is the varying-intercept model from PyMC's primer on multilevel
 modelling, fitted to radon measurements from 919 households across 85
-Minnesota counties (Gelman and Hill, 2006). The data ships with PyMC.
+Minnesota counties (Gelman and Hill, 2006). The data is the primer's two
+files, srrs2.dat and cty.dat, read from the working directory.
 
 One run is one chain. Its knobs map to what a job asks PBS for: draws and
 tune to walltime, the seed to which chain this is. Several chains, each from
@@ -51,13 +52,12 @@ def load_radon():
     """Return (log_radon, floor, county index, county names) for Minnesota, as the primer prepares them."""
     import numpy as np
     import pandas as pd
-    import pymc as pm
 
-    srrs2 = pd.read_csv(pm.get_data("srrs2.dat"))
+    srrs2 = pd.read_csv("srrs2.dat")
     srrs2.columns = srrs2.columns.map(str.strip)
     srrs_mn = srrs2[srrs2.state == "MN"].copy()
 
-    cty = pd.read_csv(pm.get_data("cty.dat"))
+    cty = pd.read_csv("cty.dat")
     cty_mn = cty[cty.st == "MN"].copy()
     cty_mn["fips"] = 1000 * cty_mn.stfips + cty_mn.ctfips
 
@@ -134,7 +134,11 @@ def main():
     out_dir = os.path.dirname(args.out)
     if out_dir:
         os.makedirs(out_dir, exist_ok=True)
-    idata.to_netcdf(args.out)
+    # The chain appears under its final name only once it is fully written,
+    # so a job that tests for the file before redoing the run can trust it.
+    partial = args.out + ".partial"
+    idata.to_netcdf(partial)
+    os.replace(partial, args.out)
 
     divergences = int(idata.sample_stats["diverging"].sum())
     elapsed = time.time() - started
