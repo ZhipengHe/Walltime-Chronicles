@@ -2,7 +2,7 @@
 
 Welcome to the Crash Course Café! ☕ Pull up a chair and let's get you productive on QUT Aqua without the usual learning curve headaches.
 
-!!! info "Course status (2026-09-15)"
+!!! info "Course status (2026-09-16)"
     Nine lessons, each ending with something you can do that you could not do before. This table is the one place the course's status is kept.
 
     | Lesson | Status |
@@ -13,7 +13,7 @@ Welcome to the Crash Course Café! ☕ Pull up a chair and let's get you product
     | [4. Your First Batch Job](lesson-4.md) | Written |
     | [5. When Jobs Fail](lesson-5.md) | Written |
     | [6. Right-sizing Requests](lesson-6.md) | Written |
-    | [7. Job Arrays](lesson-7.md) | Stub |
+    | [7. Job Arrays](lesson-7.md) | Written |
     | [8. Long Jobs: Dependencies & Checkpointing](lesson-8.md) | Stub |
     | [9. Working with an AI Agent on Aqua](lesson-9.md) | Stub |
 
@@ -179,13 +179,13 @@ This crash course is your launching pad. When you hit specific challenges, you'l
 
 **Phase 3, scaling (Lessons 7 and 8).** Many jobs from one script, and work that outlives a single walltime.
 
-### Lesson 7: Job Arrays (15 min)
+### Lesson 7: Job Arrays (15–20 min)
 
-> *"When the same script runs 100 times"*
+> *"One script, many runs, and one number to tell them apart."*
 
-- `qsub -J 1-N`, `PBS_ARRAY_INDEX`
-- Sub-job monitoring with `qstat -t`
-- Recovering from partial failure
+- An array, a loop or separate jobs: what each costs you, and the one `#PBS -J` line that makes a job out of every run
+- Run eight MCMC chains as one array, the index choosing each chain's seed and output file
+- Watch the array as one thing with `qstat -t`, find the runs that failed, and rerun only those
 
 [→ Lesson 7](lesson-7.md)
 

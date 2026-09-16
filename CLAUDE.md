@@ -64,6 +64,7 @@ Each lesson picks its own task; a script is not carried from one lesson to the n
 |---|---|---|---|
 | `docs/tutorials/scripts/train_mnist.py` | Lesson 3 | MNIST digit classifier | PyTorch only |
 | `docs/tutorials/scripts/imdb_sentiment.py` | Lessons 4 and 6 | IMDb review sentiment, fine-tuning DistilBERT (Hugging Face's text-classification guide, GPU) | PyTorch (CUDA build), transformers, datasets, evaluate, accelerate, scikit-learn |
+| `docs/tutorials/scripts/radon_chains.py` | Lesson 7 | One MCMC chain of PyMC's multilevel radon model (PyMC's multilevel modelling primer, CPU); one chain per array subjob | pymc, arviz, netcdf4 |
 
 ## Writing Style and Content Guidelines
 
