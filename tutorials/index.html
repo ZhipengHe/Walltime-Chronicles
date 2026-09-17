@@ -305,8 +305,6 @@
       
         
       
-        
-      
     
     
     
@@ -594,35 +592,7 @@
   <span class="md-ellipsis">
     
   
-    Lesson 8: Long Jobs — Dependencies & Checkpointing
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="lesson-9/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Lesson 9: Working with an AI Agent on Aqua
+    Lesson 8: Long Jobs
   
 
     
@@ -1163,6 +1133,33 @@
   
   
     <li class="md-nav__item">
+      <a href="../playground/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Playground
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../LICENSE/" class="md-nav__link">
         
   
@@ -1492,17 +1489,6 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#lesson-9-working-with-an-ai-agent-on-aqua-1520-min" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Lesson 9: Working with an AI Agent on Aqua (15–20 min)
-      
-    </span>
-  </a>
-  
-</li>
-        
       </ul>
     </nav>
   
@@ -1591,58 +1577,6 @@
 
 <h1 id="getting-started-hpc-crash-course">Getting Started: HPC Crash Course</h1>
 <p>Welcome to the Crash Course Café! ☕ Pull up a chair and let's get you productive on QUT Aqua without the usual learning curve headaches.</p>
-<div class="admonition info">
-<p class="admonition-title">Course status (2026-09-16)</p>
-<p>Nine lessons, each ending with something you can do that you could not do before. This table is the one place the course's status is kept.</p>
-<table>
-<thead>
-<tr>
-<th>Lesson</th>
-<th>Status</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><a href="lesson-1/">1. Welcome to Aqua</a></td>
-<td>Written</td>
-</tr>
-<tr>
-<td><a href="lesson-2/">2. Tooling Setup</a></td>
-<td>Written</td>
-</tr>
-<tr>
-<td><a href="lesson-3/">3. Working Interactively</a></td>
-<td>Written</td>
-</tr>
-<tr>
-<td><a href="lesson-4/">4. Your First Batch Job</a></td>
-<td>Written</td>
-</tr>
-<tr>
-<td><a href="lesson-5/">5. When Jobs Fail</a></td>
-<td>Written</td>
-</tr>
-<tr>
-<td><a href="lesson-6/">6. Right-sizing Requests</a></td>
-<td>Written</td>
-</tr>
-<tr>
-<td><a href="lesson-7/">7. Job Arrays</a></td>
-<td>Written</td>
-</tr>
-<tr>
-<td><a href="lesson-8/">8. Long Jobs</a></td>
-<td>Written</td>
-</tr>
-<tr>
-<td><a href="lesson-9/">9. Working with an AI Agent on Aqua</a></td>
-<td>Stub</td>
-</tr>
-</tbody>
-</table>
-<p>A stub states the lesson's scope and points to the guides that cover the material today.</p>
-</div>
-<hr />
 <h2 id="course-overview">Course Overview</h2>
 <h3 id="what-this-course-covers">What This Course Covers</h3>
 <p>This isn't your typical academic introduction to high-performance computing. This is a practical, no-nonsense guide to getting real work done on QUT's Aqua system. We'll focus on the essential skills you need to submit jobs, avoid common mistakes, and have real work running in your first week.</p>
@@ -1667,8 +1601,7 @@
 <li><strong>Submit your first PBS batch job</strong> — and find its output</li>
 <li><strong>Diagnose common failures</strong> before panicking</li>
 <li><strong>Right-size resource requests</strong> — cores, memory, walltime, GPU</li>
-<li><strong>Scale beyond a single job</strong> — arrays for bulk work, dependencies for long pipelines</li>
-<li><strong>Work with an AI coding agent on Aqua</strong> — without handing it the <code>qsub</code> button</li>
+<li><strong>Scale beyond a single job</strong> — arrays for many runs, chained jobs and checkpoints for work longer than one walltime</li>
 <li><strong>Know when to dig deeper</strong> into the specialized guides</li>
 </ul>
 <h3 id="what-you-need">What You Need</h3>
@@ -1687,7 +1620,7 @@
 <h3 id="course-structure">Course Structure</h3>
 <h4 id="time-commitment">Time Commitment</h4>
 <ul>
-<li><strong>Total time</strong>: 2 to 3 hours across <strong>9 focused lessons</strong></li>
+<li><strong>Total time</strong>: 2 to 3 hours across <strong>8 focused lessons</strong></li>
 <li><strong>Lesson format</strong>: 15–20 minutes each</li>
 <li><strong>Hands-on from Lesson 1</strong>: First SSH connection and an interactive job within the opening lesson</li>
 <li><strong>Follow-up learning</strong>: Each lesson connects to detailed guides for when you need more</li>
@@ -1720,7 +1653,7 @@
 <p><strong>Phase 1, the core loop (Lessons 1 to 4).</strong> Connect, set up Python, run work by hand on a compute node, then hand that same loop to a script.</p>
 <h3 id="lesson-1-welcome-to-aqua-15-min">Lesson 1: Welcome to Aqua (15 min)</h3>
 <blockquote>
-<p><em>"What is this magical compute cluster anyway?"</em></p>
+<p><em>"From your laptop to a real compute cluster — and back — in 15 minutes."</em></p>
 </blockquote>
 <ul>
 <li>Cluster mental model — file systems, login vs compute nodes</li>
@@ -1730,7 +1663,7 @@
 <p><a href="lesson-1/">→ Lesson 1</a></p>
 <h3 id="lesson-2-tooling-setup-1520-min">Lesson 2: Tooling Setup (15–20 min)</h3>
 <blockquote>
-<p><em>"Getting your Python tools ready"</em></p>
+<p><em>"One tool, two files, and an environment you can throw away and rebuild in a second."</em></p>
 </blockquote>
 <ul>
 <li>Install uv with one command, no QUT module needed</li>
@@ -1800,17 +1733,6 @@
 <li>Read a broken link: a failed stage and the job deleted behind it, a restart that starts from scratch</li>
 </ul>
 <p><a href="lesson-8/">→ Lesson 8</a></p>
-<p><strong>Phase 4, the capstone (Lesson 9).</strong> Put an AI agent inside the loop without handing it the <code>qsub</code> button.</p>
-<h3 id="lesson-9-working-with-an-ai-agent-on-aqua-1520-min">Lesson 9: Working with an AI Agent on Aqua (15–20 min)</h3>
-<blockquote>
-<p><em>"Delegate the typing, never the <code>qsub</code>."</em></p>
-</blockquote>
-<ul>
-<li>Where the agent runs, and how it reaches Aqua</li>
-<li>Rules for the agent: <code>AGENTS.md</code> / <code>CLAUDE.md</code> for an HPC repo</li>
-<li>What to delegate, and what stays yours</li>
-</ul>
-<p><a href="lesson-9/">→ Lesson 9</a></p>
 <hr />
 <p>Ready to dive in? Start with the <a href="prerequisites/">Prerequisites Checklist</a>, then head to <a href="lesson-1/">Lesson 1</a> and get from zero to productive in record time! 🚀</p>
 
@@ -1835,7 +1757,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="September 17, 2026 00:09:07 AEST">September 17, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="September 18, 2026 00:25:03 AEST">September 18, 2026</span>
   </span>
 
     

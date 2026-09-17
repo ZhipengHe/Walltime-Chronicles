@@ -1,25 +1,23 @@
 /*
  * Backfill animation for "The Queue Is Not a Line".
  *
- * Plays two invented days on four of Aqua's H100 nodes in gpu_batch_exec:
- * one scheduling cycle per simulated minute, backfill_depth 5, scores from the
+ * Plays two invented days on Aqua's H100 nodes in gpu_batch_exec: one
+ * scheduling cycle per simulated minute, backfill_depth 5, scores from the
  * live job_sort_formula. Builds itself inside the element with id
  * "backfill-animation" and hooks into Material for MkDocs' document$ stream,
- * the same way javascripts/queue-score-explorer.js does.
+ * the same way javascripts/queue-score-explorer.js does. The placeholder's
+ * data attributes choose the size: data-nodes, data-arrivals (jobs per hour),
+ * data-queue (jobs waiting at the start), data-slots (queue rows) and
+ * data-log (event lines). Without them it is the four-node article embed.
  */
 (function () {
   "use strict";
 
-  window.BACKFILL_CONFIG = window.BACKFILL_CONFIG || { nodes: 4, arrivalsPerHour: 1.25, initialQueue: 8 };
-
 // Backfill illustration engine for gpu_batch_exec on Aqua's 13 H100 nodes.
 // One scheduling cycle per simulated minute (scheduler_iteration = 60 s), backfill_depth 5,
 // scores from the live job_sort_formula. Workload is generated from a fixed seed. Pure logic, no DOM.
-(function (root) {
-  "use strict";
-
-  // Optional page-level settings; the defaults describe all 13 H100 nodes.
-  var cfg = root.BACKFILL_CONFIG || {};
+function makeEngine(cfg) {
+  // Page-level settings; the defaults describe all 13 H100 nodes.
   var DEPTH = 5;
   var CYCLE_MIN = 1;
   var RUN_MIN = 48 * 60;
@@ -202,18 +200,19 @@
     return NODES.length * 4 - Object.keys(busy).length;
   }
 
-  root.BackfillEngine = {
+  return {
     DEPTH: DEPTH, NODES: NODES, RUN_MIN: RUN_MIN, CYCLE_MIN: CYCLE_MIN,
     create: create, cycle: cycle, score: score, base: base, waitedHours: waitedHours, size: size,
     selectLine: selectLine, idleGpus: idleGpus
   };
-})(typeof window !== "undefined" ? window : globalThis);
+}
 
   var TEMPLATE = "<div class=\"frame\" role=\"group\" aria-label=\"Backfill animation\"><div class=\"section head\"><div class=\"bar\"><div class=\"buttons\"><button class=\"icon primary\" id=\"bfa-start\" type=\"button\" aria-label=\"Start\" title=\"Start\"><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M8 5.5v13l10.5-6.5z\" fill=\"currentColor\"/></svg></button><button class=\"icon\" id=\"bfa-stop\" type=\"button\" aria-label=\"Stop\" title=\"Stop\"><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><rect x=\"6.5\" y=\"6.5\" width=\"11\" height=\"11\" rx=\"1.5\" fill=\"currentColor\"/></svg></button><button class=\"icon\" id=\"bfa-next\" type=\"button\" aria-label=\"Next event\" title=\"Next event\"><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M5.5 5.5v13l9-6.5z\" fill=\"currentColor\"/><rect x=\"15.5\" y=\"5.5\" width=\"3\" height=\"13\" rx=\"1\" fill=\"currentColor\"/></svg></button><button class=\"icon\" id=\"bfa-reset\" type=\"button\" aria-label=\"Reset\" title=\"Reset\"><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M5 12a7 7 0 1 0 2.05-4.95\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linecap=\"round\"/><path d=\"M4.5 3.5v5h5\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg></button></div></div><div class=\"status-row\"><div class=\"clock\" id=\"bfa-clock\"></div><div class=\"stats\"><div class=\"stat\"><b id=\"bfa-queued\">0</b><span>Queued</span></div><div class=\"stat\"><b id=\"bfa-idle\">0</b><span>Idle GPUs</span></div><div class=\"stat\"><b id=\"bfa-filled\">0</b><span>Backfilled</span></div><div class=\"stat\"><b id=\"bfa-booked\">0</b><span>From booking</span></div></div></div></div><div class=\"section\"><div class=\"section-head\"><span class=\"title\">GPU nodes</span><div class=\"legend\"><span><i class=\"sw run\"></i>Running</span><span><i class=\"sw filler\"></i>Backfilled</span><span><i class=\"sw booked\"></i>Booked (top five)</span><span><i class=\"sw hl\"></i>Just changed</span></div></div><div class=\"timeline-wrap\"><div class=\"timeline\" id=\"bfa-timeline\"></div></div></div><div class=\"section\"><div class=\"table-head\"><span class=\"title\">Queue, highest score first</span><span class=\"table-note\">Above the line: the top five, the only jobs with a <code>qstat -T</code> start.</span></div><div class=\"table-wrap\"><table class=\"bfa-table\"><thead><tr><th class=\"num\">Rank</th><th>Job</th><th>Request</th><th class=\"num\">Walltime</th><th class=\"num\">f</th><th class=\"num\">Waited</th><th class=\"num\">Score</th><th><code>qstat -T</code> start</th></tr></thead><tbody id=\"bfa-rows\" class=\"rows\"></tbody></table></div></div><div class=\"section\"><div class=\"section-head\"><span class=\"title\">Latest events</span></div><div class=\"log\" id=\"bfa-log\" aria-live=\"off\"></div></div></div>";
 
   function mount(rootEl) {
-  var E = window.BackfillEngine;
-  var MS_PER_MIN = 50, BEFORE = 6 * 60, AFTER = 30 * 60, START_CLOCK = 9 * 60, LOG_LINES = 3, TABLE_ROWS = 6;
+  var d = rootEl.dataset;
+  var E = makeEngine({ nodes: Number(d.nodes) || 4, arrivalsPerHour: Number(d.arrivals) || 1.25, initialQueue: Number(d.queue) || 8 });
+  var MS_PER_MIN = 50, BEFORE = 6 * 60, AFTER = 30 * 60, START_CLOCK = 9 * 60, LOG_LINES = Number(d.log) || 3, TABLE_ROWS = Number(d.slots) || 6;
   var $ = function (id) { return document.getElementById(id); };
   var state, log = [], rowEls = {}, tableDirty = false, lastClock = "", highlight = {}, strips = [];
   // Bars sit on strips at fixed positions in minutes; each frame slides the strips to the current time.
