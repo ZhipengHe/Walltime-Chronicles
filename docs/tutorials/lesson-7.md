@@ -562,7 +562,6 @@ Seven subjobs started, saw their file and exited within two seconds, leaving a `
     - **Every subjob failed the same way?** That is the mapping, not the cluster. Run the body once by hand with `PBS_ARRAY_INDEX=1` in an interactive session.
     - **All the runs wrote to one file?** The output name has to contain the index.
     - **`qstat` shows one line?** That is the array. `qstat -t '<jobid>[]'` shows the subjobs, and `qstat -xt` once it has finished.
-    - **Five lines about a project id in every `.e`?** Aqua's accounting notice, added to every job at the moment. Your program's errors are above it.
     - **An email per subjob?** A `j` in the `-m` line. `-m abe` mails you about the array instead.
     - **Compile or cache lock errors when the subjobs start together?** They are sharing one set-up directory. Give each its own under `$TMPDIR` (Part 2, Step 4).
     - **`cannot write NetCDF files` when a chain finishes?** The file format needs `netcdf4` in the project (Part 2, Step 2).

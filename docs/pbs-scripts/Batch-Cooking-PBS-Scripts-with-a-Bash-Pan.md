@@ -46,7 +46,7 @@ Six steps to fit the recipe to your kitchen. Each tab covers one piece of the sc
 
 === ":material-format-list-bulleted: 1. Ingredients"
 
-    **Selecting your experiments.** Add or remove experiment scripts in the `EXPERIMENTS=(...)` array. This is your tasting menu — change it freely.
+    **Selecting your experiments.** Add or remove experiment scripts in the `EXPERIMENTS=(...)` array. This is your tasting menu — change it freely. Set `RPID` to your own project id while you are here; the header below expands it.
 
     ```bash
     #!/bin/bash
@@ -60,6 +60,10 @@ Six steps to fit the recipe to your kitchen. Each tab covers one piece of the sc
         # "exp_script/My_New_Experiment.sh"  # Uncomment to add new experiments
         # "path/to/another/experiment.sh"
     )
+
+    # Your project's RPID, from QUT's Data Management Planner. PBS rejects jobs
+    # without a valid one from 2 November 2026. Override per run with RPID=... .
+    RPID="${RPID:-ABCDEF1234}"
     ```
 
 === ":material-tag: 2. Naming"

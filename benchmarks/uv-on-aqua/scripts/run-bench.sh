@@ -2,7 +2,7 @@
 # Entrypoint for the uv-on-aqua benchmark.
 # Submit via:
 #   qsub -N uv-bench-cpu-ml -q cpu_batch \
-#        -l select=1:ncpus=8:mem=64GB -l walltime=01:00:00 \
+#        -l select=1:ncpus=8:mem=64GB -l walltime=01:00:00 -P ABCDEF1234 \
 #        -j oe -o $HOME/uv-bench/run.out -W block=true \
 #        scripts/run-bench.sh
 
@@ -19,7 +19,7 @@ fi
 if [ ! -f "$BENCH_ROOT/config.toml" ] || [ ! -d "$BENCH_ROOT/scripts" ]; then
   echo "ERROR: BENCH_ROOT=$BENCH_ROOT doesn't look like the benchmark directory" >&2
   echo "Submit from benchmarks/uv-on-aqua/:" >&2
-  echo "  cd benchmarks/uv-on-aqua && qsub scripts/run-bench.sh" >&2
+  echo "  cd benchmarks/uv-on-aqua && qsub -P ABCDEF1234 scripts/run-bench.sh" >&2
   exit 1
 fi
 
