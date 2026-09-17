@@ -44,7 +44,7 @@ python -m unittest discover -s tests -v
 
 - `docs/` - Main documentation content in Markdown
     - `index.md` - Homepage with project overview and disclaimers
-    - `tutorials/` - Crash Course Café: course index, prerequisites checklist, `lesson-1.md` … `lesson-9.md`; `scripts/` holds the task scripts the lessons run (see the table below)
+    - `tutorials/` - Crash Course Café: course index, prerequisites checklist, `lesson-1.md` … `lesson-8.md`; `scripts/` holds the task scripts the lessons run (see the table below)
     - `pbs-scripts/` - PBS job scripts and tools documentation
     - `scheduler/` - Walltime estimation, node selection, and uv cache/env placement guides
     - `remote-dev/` - Remote development setup, macOS metadata cleanup, `/work/<group>` permissions
