@@ -806,6 +806,8 @@
       
         
       
+        
+      
     
     
     
@@ -941,6 +943,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../remote-dev/uv-on-aqua/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    uv on Aqua: Cache + Envs Placement
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -959,8 +989,6 @@
       
         
           
-        
-      
         
       
         
@@ -1121,34 +1149,6 @@
     
   
     The Queue Is Not a Line: How Aqua Ranks Your Job
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../scheduler/uv-on-aqua/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    uv on Aqua: Cache + Envs Placement
   
 
     
@@ -1646,7 +1646,7 @@
 </div>
 <div class="admonition example">
 <p class="admonition-title">This lesson's request</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>qsub<span class="w"> </span>-I<span class="w"> </span>-l<span class="w"> </span><span class="k">select</span><span class="o">=</span><span class="m">1</span>:ncpus<span class="o">=</span><span class="m">4</span>:mem<span class="o">=</span>8GB<span class="w"> </span>-l<span class="w"> </span><span class="nv">walltime</span><span class="o">=</span><span class="m">01</span>:00:00
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>qsub<span class="w"> </span>-I<span class="w"> </span>-l<span class="w"> </span><span class="k">select</span><span class="o">=</span><span class="m">1</span>:ncpus<span class="o">=</span><span class="m">4</span>:mem<span class="o">=</span>8GB<span class="w"> </span>-l<span class="w"> </span><span class="nv">walltime</span><span class="o">=</span><span class="m">01</span>:00:00<span class="w"> </span>-P<span class="w"> </span>ABCDEF1234
 </span></code></pre></div>
 <ul>
 <li><code>ncpus=4</code> → the script reads <code>$NCPUS</code> and uses every core PBS gives it</li>
@@ -1683,7 +1683,7 @@
 <p><code>uv add</code> puts <code>torch&gt;=2.14.0</code> under <code>dependencies</code>, and <code>uv.lock</code> records the exact CPU build from that index while everything else, pandas included, keeps coming from PyPI. <code>uv sync --frozen</code> rebuilds all of it.</p>
 <div class="admonition warning">
 <p class="admonition-title">Same-filesystem rule</p>
-<p>If you followed Lesson 2's tip and moved <code>UV_CACHE_DIR</code> to <code>/scratch</code>, this venv on <code>/home</code> is now on a different filesystem from the cache, and uv will warn <code>Failed to hardlink files; falling back to full copy</code>. It still works, just slower. The fix is to keep cache and venv together: <a href="../../scheduler/uv-on-aqua/">uv on Aqua</a>.</p>
+<p>If you followed Lesson 2's tip and moved <code>UV_CACHE_DIR</code> to <code>/scratch</code>, this venv on <code>/home</code> is now on a different filesystem from the cache, and uv will warn <code>Failed to hardlink files; falling back to full copy</code>. It still works, just slower. The fix is to keep cache and venv together: <a href="../../remote-dev/uv-on-aqua/">uv on Aqua</a>.</p>
 </div>
 </div>
 <div class="tabbed-block">
@@ -1936,7 +1936,7 @@
 <h2 id="part-3-run-it-by-hand-on-a-compute-node-5-min">🛠️ Part 3: Run it by hand on a compute node (~5 min)</h2>
 <p>Now the round-trip from Lesson 1, with work in the middle.</p>
 <h3 id="step-1-request-the-node">Step 1: Request the node</h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>qsub<span class="w"> </span>-I<span class="w"> </span>-l<span class="w"> </span><span class="k">select</span><span class="o">=</span><span class="m">1</span>:ncpus<span class="o">=</span><span class="m">4</span>:mem<span class="o">=</span>8GB<span class="w"> </span>-l<span class="w"> </span><span class="nv">walltime</span><span class="o">=</span><span class="m">01</span>:00:00
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>qsub<span class="w"> </span>-I<span class="w"> </span>-l<span class="w"> </span><span class="k">select</span><span class="o">=</span><span class="m">1</span>:ncpus<span class="o">=</span><span class="m">4</span>:mem<span class="o">=</span>8GB<span class="w"> </span>-l<span class="w"> </span><span class="nv">walltime</span><span class="o">=</span><span class="m">01</span>:00:00<span class="w"> </span>-P<span class="w"> </span>ABCDEF1234
 </span></code></pre></div>
 <p>Wait for the prompt to change to <code>cpu1n001</code>.</p>
 <h3 id="step-2-activate-and-run">Step 2: Activate and run</h3>
@@ -1988,7 +1988,7 @@
 </span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>tmux<span class="w"> </span>new<span class="w"> </span>-s<span class="w"> </span>dev<span class="w">               </span><span class="c1"># a session that outlives your connection</span>
 </span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>
 </span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="c1"># Inside tmux, the same request as before:</span>
-</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>qsub<span class="w"> </span>-I<span class="w"> </span>-l<span class="w"> </span><span class="k">select</span><span class="o">=</span><span class="m">1</span>:ncpus<span class="o">=</span><span class="m">4</span>:mem<span class="o">=</span>8GB<span class="w"> </span>-l<span class="w"> </span><span class="nv">walltime</span><span class="o">=</span><span class="m">01</span>:00:00
+</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>qsub<span class="w"> </span>-I<span class="w"> </span>-l<span class="w"> </span><span class="k">select</span><span class="o">=</span><span class="m">1</span>:ncpus<span class="o">=</span><span class="m">4</span>:mem<span class="o">=</span>8GB<span class="w"> </span>-l<span class="w"> </span><span class="nv">walltime</span><span class="o">=</span><span class="m">01</span>:00:00<span class="w"> </span>-P<span class="w"> </span>ABCDEF1234
 </span></code></pre></div>
 <p>Detach with <span class="keys"><kbd class="key-control">Ctrl</kbd><span>+</span><kbd class="key-b">B</kbd></span> then <span class="keys"><kbd class="key-d">D</kbd></span>; the job keeps running. Reconnect later and reattach:</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>tmux<span class="w"> </span>attach<span class="w"> </span>-t<span class="w"> </span>dev
@@ -2028,7 +2028,7 @@
 <li><strong><code>qsub -I</code> sits at "waiting for job to start"?</strong> There is one interactive CPU node and it may be full. Try fewer cores (<code>ncpus=2:mem=4GB</code>), or check <code>pbsnodeinfo | grep cpu1n001</code> to see how busy it is.</li>
 <li><strong><code>command not found: python</code> after the prompt changes?</strong> You haven't activated the environment on the compute node. <code>source ~/hello-aqua/.venv/bin/activate</code> (or the conda equivalent) is per shell.</li>
 <li><strong>The script tries to download on the compute node?</strong> You skipped the <code>--epochs 0</code> fetch in Part 2, or ran from a different directory. Fetch once on the login node and keep <code>data/mnist/</code> next to the script.</li>
-<li><strong>PyTorch install is slow or warns about hardlinks?</strong> Cache and venv are on different filesystems. <a href="../../scheduler/uv-on-aqua/">uv on Aqua</a> has the three placements that avoid it.</li>
+<li><strong>PyTorch install is slow or warns about hardlinks?</strong> Cache and venv are on different filesystems. <a href="../../remote-dev/uv-on-aqua/">uv on Aqua</a> has the three placements that avoid it.</li>
 <li><strong>Want VS Code or Jupyter inside the interactive job instead of a bare shell?</strong> <a href="../../remote-dev/Surviving-without-VS-Code-Remote-SSH/">Surviving without VS Code Remote SSH</a> covers the tunnel and the port-forwarded Jupyter Lab, both of which run inside exactly the <code>qsub -I</code> you just used.</li>
 <li><strong>Curious what the interactive node actually is?</strong> <a href="../../scheduler/Know-Your-Nodes/">Know Your Nodes</a>, "CPU Interactive — the appetiser".</li>
 </ul>
@@ -2038,10 +2038,10 @@
 <div class="tabbed-set tabbed-alternate" data-tabs="2:3"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><input id="__tabbed_2_3" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Interactive requests</label><label for="__tabbed_2_2">tmux</label><label for="__tabbed_2_3">train_mnist.py knobs</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>qsub<span class="w"> </span>-I<span class="w"> </span>-l<span class="w"> </span><span class="k">select</span><span class="o">=</span><span class="m">1</span>:ncpus<span class="o">=</span><span class="m">4</span>:mem<span class="o">=</span>8GB<span class="w"> </span>-l<span class="w"> </span><span class="nv">walltime</span><span class="o">=</span><span class="m">01</span>:00:00<span class="w">            </span><span class="c1"># CPU, this lesson</span>
-</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>qsub<span class="w"> </span>-I<span class="w"> </span>-l<span class="w"> </span><span class="k">select</span><span class="o">=</span><span class="m">1</span>:ncpus<span class="o">=</span><span class="m">6</span>:ngpus<span class="o">=</span><span class="m">1</span>:mem<span class="o">=</span>32GB<span class="w"> </span>-l<span class="w"> </span><span class="nv">walltime</span><span class="o">=</span><span class="m">02</span>:00:00<span class="w">   </span><span class="c1"># one MIG slice</span>
-</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="nb">echo</span><span class="w"> </span><span class="nv">$NCPUS</span><span class="w"> </span><span class="nv">$PBS_JOBID</span><span class="w">                                              </span><span class="c1"># what PBS gave you</span>
-</span><span id="__span-15-4"><a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="nb">exit</span><span class="w">                                                                </span><span class="c1"># give it back</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>qsub<span class="w"> </span>-I<span class="w"> </span>-l<span class="w"> </span><span class="k">select</span><span class="o">=</span><span class="m">1</span>:ncpus<span class="o">=</span><span class="m">4</span>:mem<span class="o">=</span>8GB<span class="w"> </span>-l<span class="w"> </span><span class="nv">walltime</span><span class="o">=</span><span class="m">01</span>:00:00<span class="w"> </span>-P<span class="w"> </span>ABCDEF1234<span class="w">            </span><span class="c1"># CPU, this lesson</span>
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>qsub<span class="w"> </span>-I<span class="w"> </span>-l<span class="w"> </span><span class="k">select</span><span class="o">=</span><span class="m">1</span>:ncpus<span class="o">=</span><span class="m">6</span>:ngpus<span class="o">=</span><span class="m">1</span>:mem<span class="o">=</span>32GB<span class="w"> </span>-l<span class="w"> </span><span class="nv">walltime</span><span class="o">=</span><span class="m">02</span>:00:00<span class="w"> </span>-P<span class="w"> </span>ABCDEF1234<span class="w">   </span><span class="c1"># one MIG slice</span>
+</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="nb">echo</span><span class="w"> </span><span class="nv">$NCPUS</span><span class="w"> </span><span class="nv">$PBS_JOBID</span><span class="w">                                                            </span><span class="c1"># what PBS gave you</span>
+</span><span id="__span-15-4"><a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="nb">exit</span><span class="w">                                                                              </span><span class="c1"># give it back</span>
 </span></code></pre></div>
 </div>
 <div class="tabbed-block">
@@ -2094,7 +2094,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="September 13, 2026 21:22:53 AEST">September 13, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="September 18, 2026 01:35:58 AEST">September 18, 2026</span>
   </span>
 
     

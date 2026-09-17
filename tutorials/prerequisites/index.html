@@ -455,6 +455,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#data-management-plan" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📋 Data Management Plan
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#essential-linux-commands-file-systems" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -801,6 +812,8 @@
       
         
       
+        
+      
     
     
     
@@ -936,6 +949,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../remote-dev/uv-on-aqua/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    uv on Aqua: Cache + Envs Placement
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -954,8 +995,6 @@
       
         
           
-        
-      
         
       
         
@@ -1116,34 +1155,6 @@
     
   
     The Queue Is Not a Line: How Aqua Ranks Your Job
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../scheduler/uv-on-aqua/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    uv on Aqua: Cache + Envs Placement
   
 
     
@@ -1410,6 +1421,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#data-management-plan" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📋 Data Management Plan
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#essential-linux-commands-file-systems" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1584,6 +1606,7 @@
 <p><strong>Required before starting the lessons:</strong></p>
 <ul class="task-list">
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> 🖥️ <strong>QUT HPC access</strong>: Confirmed SSH access to Aqua</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> 📋 <strong>A data management plan</strong>: Its RPID goes on every job you submit</li>
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> 💻 <strong>Essential Linux commands</strong>: Comfortable with <code>cd</code>, <code>ls</code>, <code>pwd</code>, <code>mkdir</code>, <code>cp</code>, <code>mv</code>, <code>rm</code>, <code>chmod</code></li>
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> 📁 <strong>Linux file system</strong>: Understanding absolute vs relative paths, directory structure, home directory (<code>~</code>), root (<code>/</code>), permissions</li>
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> 📤 <strong>File transfer method</strong>: SCP, rsync, or remote editing setup complete</li>
@@ -1596,11 +1619,17 @@
 <p class="admonition-title">Need to set up access?</p>
 <p>See the official QUT guide: <a href="https://docs.eres.qut.edu.au/hpc-getting-started-with-high-performance-computin#accessing-the-hpc">Getting Started with High Performance Computing</a><sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup>.</p>
 </div>
+<h3 id="data-management-plan">📋 Data Management Plan</h3>
+<p>Every job you submit names the research project it belongs to, through the <strong>RPID</strong> of a data management plan. eResearch requires it on all jobs from 2 November 2026, and the lessons write it as <code>-P ABCDEF1234</code>; swap in your own.</p>
+<div class="admonition info">
+<p class="admonition-title">Need a plan?</p>
+<p>Create one in QUT's <a href="https://data-mgmt-plan.qut.edu.au/">Data Management Planner</a>, and see the official instructions: <a href="https://docs.eres.qut.edu.au/rdss-faqs">DMP and Research Data Storage</a><sup id="fnref2:1"><a class="footnote-ref" href="#fn:1">1</a></sup>.</p>
+</div>
 <h3 id="essential-linux-commands-file-systems">🐧 Essential Linux Commands &amp; File Systems</h3>
 <p>Working on HPC systems means living in the Linux command line. You don't need to be a shell expert, but you should be comfortable with basic navigation, file operations, and understanding how the file system is organized.</p>
 <div class="admonition info">
 <p class="admonition-title">Need to learn Linux fundamentals?</p>
-<p>QUT eResearch provides an excellent tutorial: <a href="https://docs.eres.qut.edu.au/sn-index">Intro to the Shell</a><sup id="fnref2:1"><a class="footnote-ref" href="#fn:1">1</a></sup> — covers essential commands, file systems, and more.</p>
+<p>QUT eResearch provides an excellent tutorial: <a href="https://docs.eres.qut.edu.au/sn-index">Intro to the Shell</a><sup id="fnref3:1"><a class="footnote-ref" href="#fn:1">1</a></sup> — covers essential commands, file systems, and more.</p>
 </div>
 <h4 id="core-commands-youll-use-daily">Core Commands You'll Use Daily</h4>
 <div class="admonition example">
@@ -1705,7 +1734,7 @@
 <hr />
 <ol>
 <li id="fn:1">
-<p>Access only in QUT network. Please use VPN to access the documentation when off-campus.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref2:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+<p>Access only in QUT network. Please use VPN to access the documentation when off-campus.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref2:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref3:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
 </li>
 </ol>
 </div>
@@ -1731,7 +1760,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="June 24, 2026 01:18:07 AEST">June 24, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="September 18, 2026 01:35:58 AEST">September 18, 2026</span>
   </span>
 
     

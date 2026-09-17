@@ -632,6 +632,8 @@
       
         
       
+        
+      
     
     
     
@@ -767,6 +769,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../remote-dev/uv-on-aqua/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    uv on Aqua: Cache + Envs Placement
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -787,8 +817,6 @@
       
         
           
-        
-      
         
       
         
@@ -1171,34 +1199,6 @@
     
   
     The Queue Is Not a Line: How Aqua Ranks Your Job
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../uv-on-aqua/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    uv on Aqua: Cache + Envs Placement
   
 
     
@@ -1709,16 +1709,17 @@
 <p>Every recipe below assumes this skeleton — only the <code>#PBS -l</code> resource lines and the body change.</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="ch">#!/bin/bash -l</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="c1">#PBS -N my_job              # rename per job</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c1">#PBS -j oe                  # join stderr into stdout for one log</span>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1">#PBS -m abe                 # email on abort / begin / end (optional)</span>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="c1"># --- per-recipe resource lines go here ---</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="nb">set</span><span class="w"> </span>-eoux<span class="w"> </span>pipefail<span class="w">          </span><span class="c1"># exit on error, undef var, pipe failure; trace every command</span>
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="nb">cd</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PBS_O_WORKDIR</span><span class="s2">&quot;</span>
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="c1"># --- your work here ---</span>
-</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>
-</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>qstat<span class="w"> </span>-fx<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PBS_JOBID</span><span class="s2">&quot;</span><span class="w"> </span>&gt;<span class="w"> </span><span class="s2">&quot;resource_usage_</span><span class="si">${</span><span class="nv">PBS_JOBID</span><span class="si">}</span><span class="s2">&quot;</span><span class="w">   </span><span class="c1"># post-mortem for future walltime tuning</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c1">#PBS -P ABCDEF1234          # your project&#39;s RPID</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1">#PBS -j oe                  # join stderr into stdout for one log</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="c1">#PBS -m abe                 # email on abort / begin / end (optional)</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="c1"># --- per-recipe resource lines go here ---</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="nb">set</span><span class="w"> </span>-eoux<span class="w"> </span>pipefail<span class="w">          </span><span class="c1"># exit on error, undef var, pipe failure; trace every command</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="nb">cd</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PBS_O_WORKDIR</span><span class="s2">&quot;</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="c1"># --- your work here ---</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>qstat<span class="w"> </span>-fx<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PBS_JOBID</span><span class="s2">&quot;</span><span class="w"> </span>&gt;<span class="w"> </span><span class="s2">&quot;resource_usage_</span><span class="si">${</span><span class="nv">PBS_JOBID</span><span class="si">}</span><span class="s2">&quot;</span><span class="w">   </span><span class="c1"># post-mortem for future walltime tuning</span>
 </span></code></pre></div>
 <p>What this buys you:</p>
 <ul>
@@ -1825,7 +1826,7 @@
 </div>
 <div class="tabbed-block">
 <p>Submit directly from the command line, no script file needed:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>qsub<span class="w"> </span>-I<span class="w"> </span>-l<span class="w"> </span><span class="k">select</span><span class="o">=</span><span class="m">1</span>:ncpus<span class="o">=</span><span class="m">4</span>:mem<span class="o">=</span>16gb<span class="w"> </span>-l<span class="w"> </span><span class="nv">walltime</span><span class="o">=</span><span class="m">02</span>:00:00
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>qsub<span class="w"> </span>-I<span class="w"> </span>-l<span class="w"> </span><span class="k">select</span><span class="o">=</span><span class="m">1</span>:ncpus<span class="o">=</span><span class="m">4</span>:mem<span class="o">=</span>16gb<span class="w"> </span>-l<span class="w"> </span><span class="nv">walltime</span><span class="o">=</span><span class="m">02</span>:00:00<span class="w"> </span>-P<span class="w"> </span>ABCDEF1234
 </span></code></pre></div>
 <p>Lands you in a shell on <code>cpu1n001</code> (the only interactive CPU node). Exit with <span class="keys"><kbd class="key-control">Ctrl</kbd><span>+</span><kbd class="key-d">D</kbd></span> when done.</p>
 </div>
@@ -2089,7 +2090,7 @@ T_{\text{est}} \times 1.5 &amp;\approx 2.4\,\text{h} \to \text{request } 4\,\tex
 </div>
 <div class="tabbed-block">
 <p>Submit from the command line:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>qsub<span class="w"> </span>-I<span class="w"> </span>-l<span class="w"> </span><span class="k">select</span><span class="o">=</span><span class="m">1</span>:ncpus<span class="o">=</span><span class="m">6</span>:ngpus<span class="o">=</span><span class="m">1</span>:mem<span class="o">=</span>32gb<span class="w"> </span>-l<span class="w"> </span><span class="nv">walltime</span><span class="o">=</span><span class="m">02</span>:00:00
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>qsub<span class="w"> </span>-I<span class="w"> </span>-l<span class="w"> </span><span class="k">select</span><span class="o">=</span><span class="m">1</span>:ncpus<span class="o">=</span><span class="m">6</span>:ngpus<span class="o">=</span><span class="m">1</span>:mem<span class="o">=</span>32gb<span class="w"> </span>-l<span class="w"> </span><span class="nv">walltime</span><span class="o">=</span><span class="m">02</span>:00:00<span class="w"> </span>-P<span class="w"> </span>ABCDEF1234
 </span></code></pre></div>
 <p>What <code>ngpus=1</code> means in the interactive queue: <strong>one MIG slice</strong>, either a 1g.10gb slice of an H100 (~10 GB VRAM, 28 of them on <code>gpu1n001</code>) or a 3g.20gb slice of an A100 (3/7 of the compute, half the memory, ~20 GB; 16 of them on <code>gpu0n004</code>), whichever PBS places you on. Add <code>:gpu_id=H100</code> to the select line if the card type matters to your check.</p>
 <div class="admonition danger">
@@ -2153,23 +2154,24 @@ T_{\text{est}} \times 1.5 &amp;\approx 2.4\,\text{h} \to \text{request } 4\,\tex
 </span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="c1">#PBS -l walltime=48:00:00</span>
 </span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="c1">#PBS -l select=2:ncpus=16:ngpus=4:mem=240gb:gpu_id=H100</span>
 </span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="c1">#PBS -l place=scatter:excl</span>
-</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="c1">#PBS -c w=60                                          # checkpoint every 60 min</span>
-</span><span id="__span-9-8"><a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>
-</span><span id="__span-9-9"><a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="nb">set</span><span class="w"> </span>-eoux<span class="w"> </span>pipefail
-</span><span id="__span-9-10"><a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="nb">cd</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PBS_O_WORKDIR</span><span class="s2">&quot;</span>
-</span><span id="__span-9-11"><a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>
-</span><span id="__span-9-12"><a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a><span class="c1"># Trap PBS&#39;s checkpoint signals — must be set BEFORE the work starts</span>
-</span><span id="__span-9-13"><a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a>checkpoint<span class="o">()</span><span class="w">       </span><span class="o">{</span><span class="w"> </span>:<span class="p">;</span><span class="w"> </span><span class="o">}</span><span class="w">   </span><span class="c1"># save current state (framework-specific)</span>
-</span><span id="__span-9-14"><a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a>checkpoint_abort<span class="o">()</span><span class="w"> </span><span class="o">{</span><span class="w"> </span>:<span class="p">;</span><span class="w"> </span><span class="o">}</span><span class="w">   </span><span class="c1"># save and exit cleanly</span>
-</span><span id="__span-9-15"><a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a><span class="nb">trap</span><span class="w"> </span>checkpoint<span class="w"> </span>USR1
-</span><span id="__span-9-16"><a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a><span class="nb">trap</span><span class="w"> </span>checkpoint_abort<span class="w"> </span>USR2
-</span><span id="__span-9-17"><a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a>
-</span><span id="__span-9-18"><a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a><span class="c1"># Your training launcher reads CHECKPOINT_DIR and resumes from latest</span>
-</span><span id="__span-9-19"><a id="__codelineno-9-19" name="__codelineno-9-19" href="#__codelineno-9-19"></a>torchrun<span class="w"> </span>--nnodes<span class="o">=</span><span class="m">2</span><span class="w"> </span>--nproc_per_node<span class="o">=</span><span class="m">4</span><span class="w"> </span>train.py<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-9-20"><a id="__codelineno-9-20" name="__codelineno-9-20" href="#__codelineno-9-20"></a><span class="w">    </span>--resume-from<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">CHECKPOINT_DIR</span><span class="k">:-</span><span class="nv">checkpoints</span><span class="p">/latest</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
-</span><span id="__span-9-21"><a id="__codelineno-9-21" name="__codelineno-9-21" href="#__codelineno-9-21"></a><span class="w">    </span>--out-dir<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">CHECKPOINT_DIR</span><span class="k">:-</span><span class="nv">checkpoints</span><span class="p">/latest</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span id="__span-9-22"><a id="__codelineno-9-22" name="__codelineno-9-22" href="#__codelineno-9-22"></a>
-</span><span id="__span-9-23"><a id="__codelineno-9-23" name="__codelineno-9-23" href="#__codelineno-9-23"></a>qstat<span class="w"> </span>-fx<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PBS_JOBID</span><span class="s2">&quot;</span><span class="w"> </span>&gt;<span class="w"> </span><span class="s2">&quot;resource_usage_</span><span class="si">${</span><span class="nv">PBS_JOBID</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="c1">#PBS -P ABCDEF1234</span>
+</span><span id="__span-9-8"><a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="c1">#PBS -c w=60                                          # checkpoint every 60 min</span>
+</span><span id="__span-9-9"><a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>
+</span><span id="__span-9-10"><a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="nb">set</span><span class="w"> </span>-eoux<span class="w"> </span>pipefail
+</span><span id="__span-9-11"><a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a><span class="nb">cd</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PBS_O_WORKDIR</span><span class="s2">&quot;</span>
+</span><span id="__span-9-12"><a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>
+</span><span id="__span-9-13"><a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a><span class="c1"># Trap PBS&#39;s checkpoint signals — must be set BEFORE the work starts</span>
+</span><span id="__span-9-14"><a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a>checkpoint<span class="o">()</span><span class="w">       </span><span class="o">{</span><span class="w"> </span>:<span class="p">;</span><span class="w"> </span><span class="o">}</span><span class="w">   </span><span class="c1"># save current state (framework-specific)</span>
+</span><span id="__span-9-15"><a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a>checkpoint_abort<span class="o">()</span><span class="w"> </span><span class="o">{</span><span class="w"> </span>:<span class="p">;</span><span class="w"> </span><span class="o">}</span><span class="w">   </span><span class="c1"># save and exit cleanly</span>
+</span><span id="__span-9-16"><a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a><span class="nb">trap</span><span class="w"> </span>checkpoint<span class="w"> </span>USR1
+</span><span id="__span-9-17"><a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a><span class="nb">trap</span><span class="w"> </span>checkpoint_abort<span class="w"> </span>USR2
+</span><span id="__span-9-18"><a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a>
+</span><span id="__span-9-19"><a id="__codelineno-9-19" name="__codelineno-9-19" href="#__codelineno-9-19"></a><span class="c1"># Your training launcher reads CHECKPOINT_DIR and resumes from latest</span>
+</span><span id="__span-9-20"><a id="__codelineno-9-20" name="__codelineno-9-20" href="#__codelineno-9-20"></a>torchrun<span class="w"> </span>--nnodes<span class="o">=</span><span class="m">2</span><span class="w"> </span>--nproc_per_node<span class="o">=</span><span class="m">4</span><span class="w"> </span>train.py<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-9-21"><a id="__codelineno-9-21" name="__codelineno-9-21" href="#__codelineno-9-21"></a><span class="w">    </span>--resume-from<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">CHECKPOINT_DIR</span><span class="k">:-</span><span class="nv">checkpoints</span><span class="p">/latest</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-9-22"><a id="__codelineno-9-22" name="__codelineno-9-22" href="#__codelineno-9-22"></a><span class="w">    </span>--out-dir<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">CHECKPOINT_DIR</span><span class="k">:-</span><span class="nv">checkpoints</span><span class="p">/latest</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span id="__span-9-23"><a id="__codelineno-9-23" name="__codelineno-9-23" href="#__codelineno-9-23"></a>
+</span><span id="__span-9-24"><a id="__codelineno-9-24" name="__codelineno-9-24" href="#__codelineno-9-24"></a>qstat<span class="w"> </span>-fx<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PBS_JOBID</span><span class="s2">&quot;</span><span class="w"> </span>&gt;<span class="w"> </span><span class="s2">&quot;resource_usage_</span><span class="si">${</span><span class="nv">PBS_JOBID</span><span class="si">}</span><span class="s2">&quot;</span>
 </span></code></pre></div>
 </div>
 <p>Why the wrapper instead of <code>#PBS -W depend=afterok:...</code> inside the script:</p>
@@ -2260,7 +2262,7 @@ T_{\text{est}} \times 1.5 &amp;\approx 2.4\,\text{h} \to \text{request } 4\,\tex
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="September 2, 2026 15:26:24 AEST">September 2, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="September 18, 2026 01:35:58 AEST">September 18, 2026</span>
   </span>
 
     

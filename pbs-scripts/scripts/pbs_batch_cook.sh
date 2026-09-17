@@ -23,6 +23,10 @@ EXPERIMENTS=(
     "exp_script/Example_Experiment_2.sh"
 )
 
+# Your project's RPID, from QUT's Data Management Planner. PBS rejects jobs
+# without a valid one from 2 November 2026. Override per run with RPID=... .
+RPID="${RPID:-ABCDEF1234}"
+
 # Create a unique timestamp once
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 JOB_NAME="task_${TIMESTAMP}"
@@ -38,6 +42,7 @@ cat > ${PBS_SCRIPT} << EOF
 #PBS -l select=1:ncpus=8:ngpus=1:mem=64GB:gpu_id=H100
 #PBS -M $USER@qut.edu.au
 #PBS -l walltime=48:00:00
+#PBS -P ${RPID}
 #PBS -q gpu_batch_exec
 #PBS -j oe
 #PBS -m abe

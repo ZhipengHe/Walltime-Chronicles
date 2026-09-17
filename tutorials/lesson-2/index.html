@@ -817,6 +817,8 @@
       
         
       
+        
+      
     
     
     
@@ -952,6 +954,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../remote-dev/uv-on-aqua/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    uv on Aqua: Cache + Envs Placement
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -970,8 +1000,6 @@
       
         
           
-        
-      
         
       
         
@@ -1132,34 +1160,6 @@
     
   
     The Queue Is Not a Line: How Aqua Ranks Your Job
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../scheduler/uv-on-aqua/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    uv on Aqua: Cache + Envs Placement
   
 
     
@@ -1772,10 +1772,10 @@
 <p class="admonition-title">Where the rest of uv's files go</p>
 <ul>
 <li>Downloaded Pythons: <code>~/.local/share/uv/python/</code>, about 110 MB per version. Leave them on <code>/home</code>.</li>
-<li>Long-lived shared environments for a team: <code>/work/&lt;project&gt;</code>, which needs a QUT eResearch ticket. The <a href="../../scheduler/uv-on-aqua/">uv on Aqua</a> guide shows how to keep a shared project on <code>/work</code> with per-user environments on <code>/scratch</code>.</li>
+<li>Long-lived shared environments for a team: <code>/work/&lt;project&gt;</code>, which needs a QUT eResearch ticket. The <a href="../../remote-dev/uv-on-aqua/">uv on Aqua</a> guide shows how to keep a shared project on <code>/work</code> with per-user environments on <code>/scratch</code>.</li>
 </ul>
 </div>
-<p>The full picture, with the measurements behind the "eight to nine times" and the traps people fall into, is in <strong><a href="../../scheduler/uv-on-aqua/">uv on Aqua: Cache + Envs Placement</a></strong>.</p>
+<p>The full picture, with the measurements behind the "eight to nine times" and the traps people fall into, is in <strong><a href="../../remote-dev/uv-on-aqua/">uv on Aqua: Cache + Envs Placement</a></strong>.</p>
 <hr />
 <h2 id="part-4-if-you-need-conda">🧬 Part 4: If you need conda</h2>
 <p>uv covers PyPI, which covers most of Python. Some things are not on PyPI: samtools, bcftools, R and its packages, and a fair amount of compiled scientific software live on <a href="https://conda-forge.org/">conda-forge</a> and <a href="https://bioconda.github.io/">bioconda</a>. If your work needs one of those, install <strong>Miniforge</strong> as well. It is the community-maintained conda, defaults to conda-forge, and involves no Anaconda licensing.</p>
@@ -2019,7 +2019,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="September 13, 2026 21:22:53 AEST">September 13, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="September 18, 2026 01:35:58 AEST">September 18, 2026</span>
   </span>
 
     

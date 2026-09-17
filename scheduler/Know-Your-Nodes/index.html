@@ -632,6 +632,8 @@
       
         
       
+        
+      
     
     
     
@@ -767,6 +769,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../remote-dev/uv-on-aqua/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    uv on Aqua: Cache + Envs Placement
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -787,8 +817,6 @@
       
         
           
-        
-      
         
       
         
@@ -1327,34 +1355,6 @@
     
   
     The Queue Is Not a Line: How Aqua Ranks Your Job
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../uv-on-aqua/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    uv on Aqua: Cache + Envs Placement
   
 
     
@@ -2120,33 +2120,33 @@
 <div class="tabbed-content">
 <div class="tabbed-block">
 <p><div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># 4 cores, 16 GB, 2 hours</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>qsub<span class="w"> </span>-I<span class="w"> </span>-l<span class="w"> </span><span class="k">select</span><span class="o">=</span><span class="m">1</span>:ncpus<span class="o">=</span><span class="m">4</span>:mem<span class="o">=</span>16GB<span class="w"> </span>-l<span class="w"> </span><span class="nv">walltime</span><span class="o">=</span><span class="m">02</span>:00:00
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>qsub<span class="w"> </span>-I<span class="w"> </span>-l<span class="w"> </span><span class="k">select</span><span class="o">=</span><span class="m">1</span>:ncpus<span class="o">=</span><span class="m">4</span>:mem<span class="o">=</span>16GB<span class="w"> </span>-l<span class="w"> </span><span class="nv">walltime</span><span class="o">=</span><span class="m">02</span>:00:00<span class="w"> </span>-P<span class="w"> </span>ABCDEF1234
 </span></code></pre></div>
 Lands you in a shell on <code>cpu1n001</code>. Exit with <span class="keys"><kbd class="key-control">Ctrl</kbd><span>+</span><kbd class="key-d">D</kbd></span> when you're done — there's only one of these nodes.</p>
 </div>
 <div class="tabbed-block">
 <p><div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># 1 MIG slice, 6 cores, 32 GB host RAM, 2 hours</span>
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>qsub<span class="w"> </span>-I<span class="w"> </span>-l<span class="w"> </span><span class="k">select</span><span class="o">=</span><span class="m">1</span>:ncpus<span class="o">=</span><span class="m">6</span>:ngpus<span class="o">=</span><span class="m">1</span>:mem<span class="o">=</span>32GB<span class="w"> </span>-l<span class="w"> </span><span class="nv">walltime</span><span class="o">=</span><span class="m">02</span>:00:00
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>qsub<span class="w"> </span>-I<span class="w"> </span>-l<span class="w"> </span><span class="k">select</span><span class="o">=</span><span class="m">1</span>:ncpus<span class="o">=</span><span class="m">6</span>:ngpus<span class="o">=</span><span class="m">1</span>:mem<span class="o">=</span>32GB<span class="w"> </span>-l<span class="w"> </span><span class="nv">walltime</span><span class="o">=</span><span class="m">02</span>:00:00<span class="w"> </span>-P<span class="w"> </span>ABCDEF1234
 </span></code></pre></div>
 <code>ngpus=1</code> here means <strong>one MIG slice</strong>: a 1g.10gb slice of an H100 (~10 GB VRAM) on <code>gpu1n001</code>, or a 3g.20gb slice of an A100 (~20 GB) on <code>gpu0n004</code>, whichever PBS picks; add <code>gpu_id=H100</code> or <code>gpu_id=A100</code> to choose. Good for sanity-checking a model loads. Bad for real training.</p>
 </div>
 <div class="tabbed-block">
 <p><div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># AMD Genoa-pinned MPI: 4 chunks × 8 cores, 32 GB / chunk, 24 hours</span>
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>qsub<span class="w"> </span>-l<span class="w"> </span><span class="k">select</span><span class="o">=</span><span class="m">4</span>:ncpus<span class="o">=</span><span class="m">8</span>:mem<span class="o">=</span>32GB:cpu_id<span class="o">=</span>AMD-25-17:mpiprocs<span class="o">=</span><span class="m">8</span><span class="w"> </span><span class="se">\</span>
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">     </span>-l<span class="w"> </span><span class="nv">place</span><span class="o">=</span>scatter<span class="w"> </span>-l<span class="w"> </span><span class="nv">walltime</span><span class="o">=</span><span class="m">24</span>:00:00<span class="w"> </span>script.pbs
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">     </span>-l<span class="w"> </span><span class="nv">place</span><span class="o">=</span>scatter<span class="w"> </span>-l<span class="w"> </span><span class="nv">walltime</span><span class="o">=</span><span class="m">24</span>:00:00<span class="w"> </span>-P<span class="w"> </span>ABCDEF1234<span class="w"> </span>script.pbs
 </span></code></pre></div>
 <code>cpu_id=AMD-25-17</code> keeps every chunk on the same Genoa silicon — essential for MPI sanity. Drop it if your job is embarrassingly parallel and CPU-family-agnostic.</p>
 </div>
 <div class="tabbed-block">
 <p><div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># 2 GPUs on one node, 8 cores host, 128 GB host RAM, 24 hours</span>
 </span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>qsub<span class="w"> </span>-l<span class="w"> </span><span class="k">select</span><span class="o">=</span><span class="m">1</span>:ncpus<span class="o">=</span><span class="m">8</span>:ngpus<span class="o">=</span><span class="m">2</span>:mem<span class="o">=</span>128GB:gpu_id<span class="o">=</span>H100<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">     </span>-l<span class="w"> </span><span class="nv">walltime</span><span class="o">=</span><span class="m">24</span>:00:00<span class="w"> </span>script.pbs
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">     </span>-l<span class="w"> </span><span class="nv">walltime</span><span class="o">=</span><span class="m">24</span>:00:00<span class="w"> </span>-P<span class="w"> </span>ABCDEF1234<span class="w"> </span>script.pbs
 </span></code></pre></div>
 Swap <code>gpu_id=H100</code> → <code>gpu_id=A100</code> if H100 queues are full and 40 GB VRAM is enough.</p>
 </div>
 <div class="tabbed-block">
 <p><div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># 180 cores, 4 TB RAM — PBS auto-routes anything &gt; 1.5 TB to mem1n001</span>
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>qsub<span class="w"> </span>-l<span class="w"> </span><span class="k">select</span><span class="o">=</span><span class="m">1</span>:ncpus<span class="o">=</span><span class="m">180</span>:mem<span class="o">=</span>4000GB<span class="w"> </span>-l<span class="w"> </span><span class="nv">walltime</span><span class="o">=</span><span class="m">24</span>:00:00<span class="w"> </span>script.pbs
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>qsub<span class="w"> </span>-l<span class="w"> </span><span class="k">select</span><span class="o">=</span><span class="m">1</span>:ncpus<span class="o">=</span><span class="m">180</span>:mem<span class="o">=</span>4000GB<span class="w"> </span>-l<span class="w"> </span><span class="nv">walltime</span><span class="o">=</span><span class="m">24</span>:00:00<span class="w"> </span>-P<span class="w"> </span>ABCDEF1234<span class="w"> </span>script.pbs
 </span></code></pre></div>
 No <code>-q</code> needed. The scheduler routes by your <code>mem</code> value alone.</p>
 </div>
@@ -2209,7 +2209,7 @@ No <code>-q</code> needed. The scheduler routes by your <code>mem</code> value a
 </table>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># Genoa-pinned MPI: 4 chunks × 8 cores, 32 GB / chunk, 24 hours</span>
 </span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>qsub<span class="w"> </span>-l<span class="w"> </span><span class="k">select</span><span class="o">=</span><span class="m">4</span>:ncpus<span class="o">=</span><span class="m">8</span>:mem<span class="o">=</span>32GB:cpu_id<span class="o">=</span>AMD-25-17:mpiprocs<span class="o">=</span><span class="m">8</span><span class="w"> </span><span class="se">\</span>
-</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">     </span>-l<span class="w"> </span><span class="nv">place</span><span class="o">=</span>scatter<span class="w"> </span>-l<span class="w"> </span><span class="nv">walltime</span><span class="o">=</span><span class="m">24</span>:00:00<span class="w"> </span>script.pbs
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">     </span>-l<span class="w"> </span><span class="nv">place</span><span class="o">=</span>scatter<span class="w"> </span>-l<span class="w"> </span><span class="nv">walltime</span><span class="o">=</span><span class="m">24</span>:00:00<span class="w"> </span>-P<span class="w"> </span>ABCDEF1234<span class="w"> </span>script.pbs
 </span></code></pre></div>
 <div class="admonition info">
 <p class="admonition-title">Quirk: a node at 0 % while everything else is jammed</p>
@@ -2255,7 +2255,7 @@ No <code>-q</code> needed. The scheduler routes by your <code>mem</code> value a
 </tbody>
 </table>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># Throwaway interactive shell — 4 cores, 16 GB, 2 hours</span>
-</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>qsub<span class="w"> </span>-I<span class="w"> </span>-l<span class="w"> </span><span class="k">select</span><span class="o">=</span><span class="m">1</span>:ncpus<span class="o">=</span><span class="m">4</span>:mem<span class="o">=</span>16GB<span class="w"> </span>-l<span class="w"> </span><span class="nv">walltime</span><span class="o">=</span><span class="m">02</span>:00:00
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>qsub<span class="w"> </span>-I<span class="w"> </span>-l<span class="w"> </span><span class="k">select</span><span class="o">=</span><span class="m">1</span>:ncpus<span class="o">=</span><span class="m">4</span>:mem<span class="o">=</span>16GB<span class="w"> </span>-l<span class="w"> </span><span class="nv">walltime</span><span class="o">=</span><span class="m">02</span>:00:00<span class="w"> </span>-P<span class="w"> </span>ABCDEF1234
 </span></code></pre></div>
 <div class="admonition warning">
 <p class="admonition-title">There's <mark>only one</mark> of these</p>
@@ -2301,7 +2301,7 @@ No <code>-q</code> needed. The scheduler routes by your <code>mem</code> value a
 </tbody>
 </table>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># 4 TB in-memory analysis, 24 hours</span>
-</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>qsub<span class="w"> </span>-l<span class="w"> </span><span class="k">select</span><span class="o">=</span><span class="m">1</span>:ncpus<span class="o">=</span><span class="m">180</span>:mem<span class="o">=</span>4000GB<span class="w"> </span>-l<span class="w"> </span><span class="nv">walltime</span><span class="o">=</span><span class="m">24</span>:00:00<span class="w"> </span>script.pbs
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>qsub<span class="w"> </span>-l<span class="w"> </span><span class="k">select</span><span class="o">=</span><span class="m">1</span>:ncpus<span class="o">=</span><span class="m">180</span>:mem<span class="o">=</span>4000GB<span class="w"> </span>-l<span class="w"> </span><span class="nv">walltime</span><span class="o">=</span><span class="m">24</span>:00:00<span class="w"> </span>-P<span class="w"> </span>ABCDEF1234<span class="w"> </span>script.pbs
 </span></code></pre></div>
 <div class="admonition tip">
 <p class="admonition-title">It auto-routes — but only above the threshold</p>
@@ -2360,7 +2360,7 @@ No <code>-q</code> needed. The scheduler routes by your <code>mem</code> value a
 </table>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># 2× H100 on one node, 8 cores host, 128 GB host RAM, 24 hours</span>
 </span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>qsub<span class="w"> </span>-l<span class="w"> </span><span class="k">select</span><span class="o">=</span><span class="m">1</span>:ncpus<span class="o">=</span><span class="m">8</span>:ngpus<span class="o">=</span><span class="m">2</span>:mem<span class="o">=</span>128GB:gpu_id<span class="o">=</span>H100<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">     </span>-l<span class="w"> </span><span class="nv">walltime</span><span class="o">=</span><span class="m">24</span>:00:00<span class="w"> </span>script.pbs
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">     </span>-l<span class="w"> </span><span class="nv">walltime</span><span class="o">=</span><span class="m">24</span>:00:00<span class="w"> </span>-P<span class="w"> </span>ABCDEF1234<span class="w"> </span>script.pbs
 </span></code></pre></div>
 <div class="admonition info">
 <p class="admonition-title">Why these hosts run Intel</p>
@@ -2415,7 +2415,7 @@ No <code>-q</code> needed. The scheduler routes by your <code>mem</code> value a
 </table>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># 4× A100 on one node, 16 cores host, 256 GB host RAM, 24 hours</span>
 </span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>qsub<span class="w"> </span>-l<span class="w"> </span><span class="k">select</span><span class="o">=</span><span class="m">1</span>:ncpus<span class="o">=</span><span class="m">16</span>:ngpus<span class="o">=</span><span class="m">4</span>:mem<span class="o">=</span>256GB:gpu_id<span class="o">=</span>A100<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">     </span>-l<span class="w"> </span><span class="nv">walltime</span><span class="o">=</span><span class="m">24</span>:00:00<span class="w"> </span>script.pbs
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">     </span>-l<span class="w"> </span><span class="nv">walltime</span><span class="o">=</span><span class="m">24</span>:00:00<span class="w"> </span>-P<span class="w"> </span>ABCDEF1234<span class="w"> </span>script.pbs
 </span></code></pre></div>
 <div class="admonition warning">
 <p class="admonition-title">Two more A100 hosts exist, and neither takes your batch job</p>
@@ -2466,7 +2466,7 @@ No <code>-q</code> needed. The scheduler routes by your <code>mem</code> value a
 </tbody>
 </table>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># 1 MIG slice, 6 cores, 32 GB host RAM, 2 hours</span>
-</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>qsub<span class="w"> </span>-I<span class="w"> </span>-l<span class="w"> </span><span class="k">select</span><span class="o">=</span><span class="m">1</span>:ncpus<span class="o">=</span><span class="m">6</span>:ngpus<span class="o">=</span><span class="m">1</span>:mem<span class="o">=</span>32GB<span class="w"> </span>-l<span class="w"> </span><span class="nv">walltime</span><span class="o">=</span><span class="m">02</span>:00:00
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>qsub<span class="w"> </span>-I<span class="w"> </span>-l<span class="w"> </span><span class="k">select</span><span class="o">=</span><span class="m">1</span>:ncpus<span class="o">=</span><span class="m">6</span>:ngpus<span class="o">=</span><span class="m">1</span>:mem<span class="o">=</span>32GB<span class="w"> </span>-l<span class="w"> </span><span class="nv">walltime</span><span class="o">=</span><span class="m">02</span>:00:00<span class="w"> </span>-P<span class="w"> </span>ABCDEF1234
 </span></code></pre></div>
 <div class="admonition warning">
 <p class="admonition-title">Book what you will sit at</p>
@@ -2942,7 +2942,7 @@ All chunks land on the same CPU family. Use when you didn't pin <code>cpu_id</co
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="September 9, 2026 21:08:07 AEST">September 9, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="September 18, 2026 01:35:58 AEST">September 18, 2026</span>
   </span>
 
     
