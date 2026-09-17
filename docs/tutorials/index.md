@@ -2,25 +2,6 @@
 
 Welcome to the Crash Course Café! ☕ Pull up a chair and let's get you productive on QUT Aqua without the usual learning curve headaches.
 
-!!! info "Course status (2026-09-16)"
-    Nine lessons, each ending with something you can do that you could not do before. This table is the one place the course's status is kept.
-
-    | Lesson | Status |
-    |---|---|
-    | [1. Welcome to Aqua](lesson-1.md) | Written |
-    | [2. Tooling Setup](lesson-2.md) | Written |
-    | [3. Working Interactively](lesson-3.md) | Written |
-    | [4. Your First Batch Job](lesson-4.md) | Written |
-    | [5. When Jobs Fail](lesson-5.md) | Written |
-    | [6. Right-sizing Requests](lesson-6.md) | Written |
-    | [7. Job Arrays](lesson-7.md) | Written |
-    | [8. Long Jobs](lesson-8.md) | Written |
-    | [9. Working with an AI Agent on Aqua](lesson-9.md) | Stub |
-
-    A stub states the lesson's scope and points to the guides that cover the material today.
-
----
-
 ## Course Overview
 
 ### What This Course Covers
@@ -56,8 +37,7 @@ By the end of this crash course, you'll be able to:
 - **Submit your first PBS batch job** — and find its output
 - **Diagnose common failures** before panicking
 - **Right-size resource requests** — cores, memory, walltime, GPU
-- **Scale beyond a single job** — arrays for bulk work, dependencies for long pipelines
-- **Work with an AI coding agent on Aqua** — without handing it the `qsub` button
+- **Scale beyond a single job** — arrays for many runs, chained jobs and checkpoints for work longer than one walltime
 - **Know when to dig deeper** into the specialized guides
 
 ### What You Need
@@ -77,7 +57,7 @@ By the end of this crash course, you'll be able to:
 
 #### Time Commitment
 
-- **Total time**: 2 to 3 hours across **9 focused lessons**
+- **Total time**: 2 to 3 hours across **8 focused lessons**
 - **Lesson format**: 15–20 minutes each
 - **Hands-on from Lesson 1**: First SSH connection and an interactive job within the opening lesson
 - **Follow-up learning**: Each lesson connects to detailed guides for when you need more
@@ -117,7 +97,7 @@ This crash course is your launching pad. When you hit specific challenges, you'l
 
 ### Lesson 1: Welcome to Aqua (15 min)
 
-> *"What is this magical compute cluster anyway?"*
+> *"From your laptop to a real compute cluster — and back — in 15 minutes."*
 
 - Cluster mental model — file systems, login vs compute nodes
 - First SSH connection and a 5-minute interactive job
@@ -127,7 +107,7 @@ This crash course is your launching pad. When you hit specific challenges, you'l
 
 ### Lesson 2: Tooling Setup (15–20 min)
 
-> *"Getting your Python tools ready"*
+> *"One tool, two files, and an environment you can throw away and rebuild in a second."*
 
 - Install uv with one command, no QUT module needed
 - Create a project: `pyproject.toml` for what you asked for, `uv.lock` for what you got, then rebuild the environment from them
@@ -198,18 +178,6 @@ This crash course is your launching pad. When you hit specific challenges, you'l
 - Read a broken link: a failed stage and the job deleted behind it, a restart that starts from scratch
 
 [→ Lesson 8](lesson-8.md)
-
-**Phase 4, the capstone (Lesson 9).** Put an AI agent inside the loop without handing it the `qsub` button.
-
-### Lesson 9: Working with an AI Agent on Aqua (15–20 min)
-
-> *"Delegate the typing, never the `qsub`."*
-
-- Where the agent runs, and how it reaches Aqua
-- Rules for the agent: `AGENTS.md` / `CLAUDE.md` for an HPC repo
-- What to delegate, and what stays yours
-
-[→ Lesson 9](lesson-9.md)
 
 ---
 

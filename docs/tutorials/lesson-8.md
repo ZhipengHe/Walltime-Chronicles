@@ -590,7 +590,7 @@ That short walltime is for the test only. A checkpointed job with a 48-hour wall
 
 ## 🔗 What's Next?
 
-→ **[Lesson 9: Working with an AI Agent on Aqua](lesson-9.md)** — putting an agent inside this loop without handing it the `qsub` button.
+→ You have reached the end of the Crash Course. The **[course outline](index.md)** says where to go next.
 
 For the full chained-stage pattern, see [Walltime by Recipe](../scheduler/Walltime-by-Recipe.md#recipe-8-long-pipeline-with-chained-jobs); for what happens when a walltime is exceeded, [The Art of Walltime](../scheduler/The-Art-of-Walltime.md).
 

@@ -19,7 +19,7 @@ My personal survival log of mysterious errors, queueing oddities, and PBS quirks
   Because learning is messy.
 
 - :school: **Crash Course Café**
-  Nine lessons from your first SSH to running your own work on Aqua.
+  Eight lessons from your first SSH to running your own work on Aqua.
 
 ## Documentation
 

@@ -14,7 +14,7 @@ If you have ever:
 Then this is the right place.
 
 !!! tip "Crash Course Café — onboarding for newcomers"
-    New to Aqua? The [Crash Course Café](tutorials/index.md) takes you from your first SSH to running your own work on the cluster, in nine lessons.
+    New to Aqua? The [Crash Course Café](tutorials/index.md) takes you from your first SSH to running your own work on the cluster, in eight lessons.
 
 ---
 
@@ -80,7 +80,7 @@ Pick your entry point. Each card is one shipped page.
 
 ## :material-clipboard-list-outline: What You'll Find Here
 
-- :material-school: **A crash course for newcomers** — nine lessons that take you from your first SSH to running your own work on Aqua.
+- :material-school: **A crash course for newcomers** — eight lessons that take you from your first SSH to running your own work on Aqua.
 - :material-bug-outline: **Mystery errors & how I solved them** — real issues with real fixes (and real frustration).
 - :material-lightbulb-on: **Tips, workarounds, and gotchas** — things that *should* have been in the official docs.
 - :material-script-text-outline: **PBS scripts & snippets** — copy-paste-friendly templates with helpful comments.
