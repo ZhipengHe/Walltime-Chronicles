@@ -128,13 +128,14 @@ The `aquarius02` part is the **login node hostname** (you may land on `aquarius0
 ### Step 2: Ask PBS for a 5-minute interactive job
 
 ```bash
-qsub -I -l walltime=00:05:00 -l select=1:ncpus=1:mem=1GB
+qsub -I -l walltime=00:05:00 -l select=1:ncpus=1:mem=1GB -P ABCDEF1234
 ```
 
 !!! note "Command breakdown"
     - `qsub -I` → request an **interactive** job (PBS will give you a shell on a compute node)
     - `-l walltime=00:05:00` → kill the job after 5 minutes if you haven't exited
     - `-l select=1:ncpus=1:mem=1GB` → give me 1 chunk: 1 CPU core, 1 GB RAM
+    - `-P ABCDEF1234` → your project's **RPID**, required by eResearch on every job from 2 November 2026. It comes from a data management plan: [create one in the DMP](https://docs.eres.qut.edu.au/rdss-faqs)[^1]
 
 That's the smallest reasonable shape — just enough to see "yes, I'm somewhere different now." Real interactive sessions will ask for more (covered in Lesson 3).
 

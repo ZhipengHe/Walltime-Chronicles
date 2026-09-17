@@ -40,7 +40,7 @@ The caps come from the queues themselves (`qstat -Qf cpu_inter_exec`); the [eRes
 
 !!! example "This lesson's request"
     ```bash
-    qsub -I -l select=1:ncpus=4:mem=8GB -l walltime=01:00:00
+    qsub -I -l select=1:ncpus=4:mem=8GB -l walltime=01:00:00 -P ABCDEF1234
     ```
 
     - `ncpus=4` → the script reads `$NCPUS` and uses every core PBS gives it
@@ -84,7 +84,7 @@ It needs only PyTorch. Install that into your Lesson 2 environment, download the
     `uv add` puts `torch>=2.14.0` under `dependencies`, and `uv.lock` records the exact CPU build from that index while everything else, pandas included, keeps coming from PyPI. `uv sync --frozen` rebuilds all of it.
 
     !!! warning "Same-filesystem rule"
-        If you followed Lesson 2's tip and moved `UV_CACHE_DIR` to `/scratch`, this venv on `/home` is now on a different filesystem from the cache, and uv will warn `Failed to hardlink files; falling back to full copy`. It still works, just slower. The fix is to keep cache and venv together: [uv on Aqua](../scheduler/uv-on-aqua.md).
+        If you followed Lesson 2's tip and moved `UV_CACHE_DIR` to `/scratch`, this venv on `/home` is now on a different filesystem from the cache, and uv will warn `Failed to hardlink files; falling back to full copy`. It still works, just slower. The fix is to keep cache and venv together: [uv on Aqua](../remote-dev/uv-on-aqua.md).
 
 === "Miniforge"
     Add `- pytorch-cpu` to the `dependencies` list in Lesson 2's `environment.yml`, so the file reads:
@@ -150,7 +150,7 @@ Now the round-trip from Lesson 1, with work in the middle.
 ### Step 1: Request the node
 
 ```bash
-qsub -I -l select=1:ncpus=4:mem=8GB -l walltime=01:00:00
+qsub -I -l select=1:ncpus=4:mem=8GB -l walltime=01:00:00 -P ABCDEF1234
 ```
 
 Wait for the prompt to change to `cpu1n001`.
@@ -219,7 +219,7 @@ exit                          # back on the login node
 tmux new -s dev               # a session that outlives your connection
 
 # Inside tmux, the same request as before:
-qsub -I -l select=1:ncpus=4:mem=8GB -l walltime=01:00:00
+qsub -I -l select=1:ncpus=4:mem=8GB -l walltime=01:00:00 -P ABCDEF1234
 ```
 
 Detach with ++ctrl+b++ then ++d++; the job keeps running. Reconnect later and reattach:
@@ -266,7 +266,7 @@ Those two keys and two commands are all this lesson needs; the [tmux cheat sheet
     - **`qsub -I` sits at "waiting for job to start"?** There is one interactive CPU node and it may be full. Try fewer cores (`ncpus=2:mem=4GB`), or check `pbsnodeinfo | grep cpu1n001` to see how busy it is.
     - **`command not found: python` after the prompt changes?** You haven't activated the environment on the compute node. `source ~/hello-aqua/.venv/bin/activate` (or the conda equivalent) is per shell.
     - **The script tries to download on the compute node?** You skipped the `--epochs 0` fetch in Part 2, or ran from a different directory. Fetch once on the login node and keep `data/mnist/` next to the script.
-    - **PyTorch install is slow or warns about hardlinks?** Cache and venv are on different filesystems. [uv on Aqua](../scheduler/uv-on-aqua.md) has the three placements that avoid it.
+    - **PyTorch install is slow or warns about hardlinks?** Cache and venv are on different filesystems. [uv on Aqua](../remote-dev/uv-on-aqua.md) has the three placements that avoid it.
     - **Want VS Code or Jupyter inside the interactive job instead of a bare shell?** [Surviving without VS Code Remote SSH](../remote-dev/Surviving-without-VS-Code-Remote-SSH.md) covers the tunnel and the port-forwarded Jupyter Lab, both of which run inside exactly the `qsub -I` you just used.
     - **Curious what the interactive node actually is?** [Know Your Nodes](../scheduler/Know-Your-Nodes.md), "CPU Interactive — the appetiser".
 
@@ -276,10 +276,10 @@ Those two keys and two commands are all this lesson needs; the [tmux cheat sheet
 
 === "Interactive requests"
     ```bash
-    qsub -I -l select=1:ncpus=4:mem=8GB -l walltime=01:00:00            # CPU, this lesson
-    qsub -I -l select=1:ncpus=6:ngpus=1:mem=32GB -l walltime=02:00:00   # one MIG slice
-    echo $NCPUS $PBS_JOBID                                              # what PBS gave you
-    exit                                                                # give it back
+    qsub -I -l select=1:ncpus=4:mem=8GB -l walltime=01:00:00 -P ABCDEF1234            # CPU, this lesson
+    qsub -I -l select=1:ncpus=6:ngpus=1:mem=32GB -l walltime=02:00:00 -P ABCDEF1234   # one MIG slice
+    echo $NCPUS $PBS_JOBID                                                            # what PBS gave you
+    exit                                                                              # give it back
     ```
 
 === "tmux"

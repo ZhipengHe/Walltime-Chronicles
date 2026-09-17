@@ -181,6 +181,7 @@ Only the walltime changes:
 #PBS -N imdb_sentiment
 #PBS -l select=1:ncpus=4:ngpus=1:mem=32GB:gpu_id=H100
 #PBS -l walltime=00:15:00
+#PBS -P ABCDEF1234
 #PBS -m abe
 
 cd "$PBS_O_WORKDIR"
@@ -306,6 +307,7 @@ For the estimation theory behind walltime, see [The Art of Walltime](../schedule
     #PBS -N my_job
     #PBS -l select=1:ncpus=4:ngpus=1:mem=32GB:gpu_id=H100
     #PBS -l walltime=00:15:00
+    #PBS -P ABCDEF1234
     #PBS -m abe
 
     cd "$PBS_O_WORKDIR"

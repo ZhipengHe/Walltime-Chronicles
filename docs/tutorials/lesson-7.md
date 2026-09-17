@@ -83,6 +83,7 @@ An array is Lesson 4's script with one line added:
     #PBS -N first
     #PBS -l select=1:ncpus=1:mem=1GB
     #PBS -l walltime=00:05:00
+    #PBS -P ABCDEF1234
     ```
 
 === "This lesson: three subjobs"
@@ -91,6 +92,7 @@ An array is Lesson 4's script with one line added:
     #PBS -J 1-3
     #PBS -l select=1:ncpus=1:mem=1GB
     #PBS -l walltime=00:05:00
+    #PBS -P ABCDEF1234
     ```
 
 That one line turns one submission into one job id and three **subjobs**:
@@ -136,6 +138,7 @@ nano first_array.pbs
 #PBS -J 1-3
 #PBS -l select=1:ncpus=1:mem=1GB
 #PBS -l walltime=00:05:00
+#PBS -P ABCDEF1234
 #PBS -m abe
 
 echo "index     $PBS_ARRAY_INDEX"
@@ -219,9 +222,6 @@ Three things in there are worth a second look:
 1. **Each subjob wrote its own log files**, `.o` and `.e`, named with the job's sequence number and then the index. Three subjobs leave six files; a hundred leave two hundred.
 2. **The job id carries the index.** The array is `12345678[]`, and subjob 2 is `12345678[2]`. `qstat` and `qdel` both accept that form, so you can ask about or cancel one subjob without touching the others.
 3. **The only difference between the three is the index.** Same script, same request, same everything else. PBS placed them on three different nodes, and none of them knew or cared.
-
-!!! info "The `.e` files are not empty"
-    Each holds five lines from Aqua's project accounting, the same five on every job at the moment, saying the job was recorded without a project id and allowed to run. They come from Aqua, not from your script; your program's own errors appear above them.
 
 That is the whole mechanism. What makes an array useful is what the index selects, and the rest of the lesson is one real case of it.
 
@@ -326,6 +326,7 @@ uv run python radon_chains.py --seed "$PBS_ARRAY_INDEX" --out "chains/chain_${PB
 #PBS -J 1-8
 #PBS -l select=1:ncpus=1:mem=4GB
 #PBS -l walltime=00:30:00
+#PBS -P ABCDEF1234
 #PBS -m abe
 
 set -e
@@ -561,7 +562,6 @@ Seven subjobs started, saw their file and exited within two seconds, leaving a `
     - **Every subjob failed the same way?** That is the mapping, not the cluster. Run the body once by hand with `PBS_ARRAY_INDEX=1` in an interactive session.
     - **All the runs wrote to one file?** The output name has to contain the index.
     - **`qstat` shows one line?** That is the array. `qstat -t '<jobid>[]'` shows the subjobs, and `qstat -xt` once it has finished.
-    - **Five lines about a project id in every `.e`?** Aqua's accounting notice, added to every job at the moment. Your program's errors are above it.
     - **An email per subjob?** A `j` in the `-m` line. `-m abe` mails you about the array instead.
     - **Compile or cache lock errors when the subjobs start together?** They are sharing one set-up directory. Give each its own under `$TMPDIR` (Part 2, Step 4).
     - **`cannot write NetCDF files` when a chain finishes?** The file format needs `netcdf4` in the project (Part 2, Step 2).

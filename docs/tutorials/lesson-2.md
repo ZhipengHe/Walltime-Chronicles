@@ -195,9 +195,9 @@ Two caveats come with `/scratch`, and Part 2 has already answered both. Files un
 
 !!! info "Where the rest of uv's files go"
     - Downloaded Pythons: `~/.local/share/uv/python/`, about 110 MB per version. Leave them on `/home`.
-    - Long-lived shared environments for a team: `/work/<project>`, which needs a QUT eResearch ticket. The [uv on Aqua](../scheduler/uv-on-aqua.md) guide shows how to keep a shared project on `/work` with per-user environments on `/scratch`.
+    - Long-lived shared environments for a team: `/work/<project>`, which needs a QUT eResearch ticket. The [uv on Aqua](../remote-dev/uv-on-aqua.md) guide shows how to keep a shared project on `/work` with per-user environments on `/scratch`.
 
-The full picture, with the measurements behind the "eight to nine times" and the traps people fall into, is in **[uv on Aqua: Cache + Envs Placement](../scheduler/uv-on-aqua.md)**.
+The full picture, with the measurements behind the "eight to nine times" and the traps people fall into, is in **[uv on Aqua: Cache + Envs Placement](../remote-dev/uv-on-aqua.md)**.
 
 ---
 
