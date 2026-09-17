@@ -1,6 +1,5 @@
 ---
 hide:
-  - navigation
   - toc
 ---
 
@@ -8,7 +7,7 @@ hide:
 
 > *Every interactive piece on the site, at full size.*
 
-The articles embed these pieces in a column they share with the navigation, and some of them lose room there. Here each one gets the whole width. The explanation stays with its article, linked from each block, so this page is a gallery and nothing more.
+The articles embed these pieces in a column squeezed between the navigation and the table of contents, and some of them lose room there. Here the table of contents is gone and each one gets a wider column. The explanation stays with its article, linked from each block, so this page is a gallery and nothing more.
 
 ---
 
