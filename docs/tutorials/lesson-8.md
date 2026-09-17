@@ -81,6 +81,7 @@ nano stage_a.pbs
 #PBS -N stage_a
 #PBS -l select=1:ncpus=1:mem=1GB
 #PBS -l walltime=00:10:00
+#PBS -P ABCDEF1234
 #PBS -m abe
 
 echo "host      $(hostname)"
@@ -94,6 +95,7 @@ echo "finished  $(date +%T)"
 #PBS -N stage_b
 #PBS -l select=1:ncpus=1:mem=1GB
 #PBS -l walltime=00:10:00
+#PBS -P ABCDEF1234
 #PBS -m abe
 
 echo "host      $(hostname)"
@@ -188,6 +190,7 @@ The throwaway counts to 900, one second at a time, and writes its count to a fil
 #PBS -N counter
 #PBS -l select=1:ncpus=1:mem=1GB
 #PBS -l walltime=00:10:00
+#PBS -P ABCDEF1234
 #PBS -c w=2
 #PBS -m abe
 
@@ -382,6 +385,7 @@ Three seconds, two checkpoint files, and a mean reward of 12, which is a hopper 
 #PBS -N hopper_ppo
 #PBS -l select=1:ncpus=2:mem=2GB
 #PBS -l walltime=00:10:00
+#PBS -P ABCDEF1234
 #PBS -c w=2
 #PBS -m abe
 
@@ -400,6 +404,7 @@ uv run python hopper_ppo.py --timesteps 2000000
 #PBS -N hopper_eval
 #PBS -l select=1:ncpus=1:mem=2GB
 #PBS -l walltime=00:10:00
+#PBS -P ABCDEF1234
 #PBS -m abe
 
 set -e
@@ -622,6 +627,7 @@ For the full chained-stage pattern, see [Walltime by Recipe](../scheduler/Wallti
     #PBS -N my_job
     #PBS -l select=1:ncpus=2:mem=1GB
     #PBS -l walltime=48:00:00
+    #PBS -P ABCDEF1234
     #PBS -c w=30
     #PBS -m abe
 

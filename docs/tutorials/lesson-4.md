@@ -28,13 +28,14 @@ In Lesson 3 you typed the request after `qsub -I` and PBS gave you a shell. A ba
 
 === "Lesson 3: typed"
     ```bash
-    qsub -I -l select=1:ncpus=4:mem=8GB -l walltime=01:00:00
+    qsub -I -l select=1:ncpus=4:mem=8GB -l walltime=01:00:00 -P ABCDEF1234
     ```
 
 === "Lesson 4: in a file"
     ```bash
     #PBS -l select=1:ncpus=4:mem=8GB
     #PBS -l walltime=01:00:00
+    #PBS -P ABCDEF1234
     ```
 
 Same resources, same syntax. The only thing that changed is where the request lives.
@@ -42,7 +43,7 @@ Same resources, same syntax. The only thing that changed is where the request li
 !!! info "What a PBS script is"
     A PBS script is an ordinary shell script with a header. Lines that start with `#PBS` are instructions to PBS: what to call the job, how much to give it, when to email you. PBS reads them when you run `qsub`. The shell skips them as comments, then runs everything below on the compute node, top to bottom.
 
-    The five lines in the next step are all a first job needs.
+    The six lines in the next step are all a first job needs.
 
 ??? info "Other `#PBS` directives"
     | Directive | What it does |
@@ -50,6 +51,7 @@ Same resources, same syntax. The only thing that changed is where the request li
     | `-N name` | Job name; also names the `.o` and `.e` log files |
     | `-l select=N:ncpus=C:mem=M[:ngpus=G]` | Resources: chunks, cores, memory, GPUs |
     | `-l walltime=hh:mm:ss` | Maximum run time before PBS stops the job |
+    | `-P <RPID>` | Your project's RPID; required on every job from 2 November 2026 |
     | `-l place=scatter` | Spread chunks across different nodes |
     | `-q queue` | Submit to a named queue instead of letting PBS route the job |
     | `-m abe` | Email on abort, begin and end (`n` for none) |
@@ -78,6 +80,7 @@ nano first.pbs
 #PBS -N first
 #PBS -l select=1:ncpus=1:mem=1GB
 #PBS -l walltime=00:05:00
+#PBS -P ABCDEF1234
 #PBS -m abe
 
 echo "host      $(hostname)"
@@ -91,6 +94,7 @@ echo "cores     $NCPUS"
     - `#!/bin/bash` → the shell that runs the body
     - `-N first` → the job's name in `qstat`, and the start of its log file names
     - `-l select=...`, `-l walltime=...` → the request, exactly as in Lesson 3
+    - `-P ABCDEF1234` → your project's RPID, the same one you typed in Lesson 1
     - `-m abe` → email when the job **a**borts, **b**egins and **e**nds
     - everything after the header → runs on the compute node, top to bottom
 
@@ -157,7 +161,7 @@ cat first.o*
     (about thirty more lines: the job's full record)
     ```
 
-The first five lines are the script's. Three of them are worth a second look:
+The first six lines are the script's. Three of them are worth a second look:
 
 1. **`pwd` is your home directory**, not `~/hello-aqua/jobs` where you ran `qsub`. Every job starts at home. (The path looks long because `/home` on Aqua is a shortcut to `/mnt/hpccs01/home`.)
 2. **`python` is the system one**, `/bin/python`, which is Python 3.9, not your project's 3.13. A job's shell has nothing activated, whatever your own shell had.
@@ -293,6 +297,7 @@ They land in `~/.cache/huggingface`, about 460 MB in all: 257 MB of model and 20
 #PBS -N imdb_sentiment
 #PBS -l select=1:ncpus=4:ngpus=1:mem=32GB:gpu_id=H100
 #PBS -l walltime=01:00:00
+#PBS -P ABCDEF1234
 #PBS -m abe
 
 cd "$PBS_O_WORKDIR"
@@ -527,6 +532,7 @@ What a job actually used, and how to ask for the right amount next time, is [Les
     #PBS -N my_job
     #PBS -l select=1:ncpus=4:mem=8GB
     #PBS -l walltime=01:00:00
+    #PBS -P ABCDEF1234
     #PBS -m abe
 
     cd "$PBS_O_WORKDIR"
@@ -539,6 +545,7 @@ What a job actually used, and how to ask for the right amount next time, is [Les
     #PBS -N my_job
     #PBS -l select=1:ncpus=4:ngpus=1:mem=32GB:gpu_id=H100
     #PBS -l walltime=01:00:00
+    #PBS -P ABCDEF1234
     #PBS -m abe
 
     cd "$PBS_O_WORKDIR"

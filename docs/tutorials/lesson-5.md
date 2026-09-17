@@ -282,7 +282,7 @@ Failures like the ones in Part 2 usually show up in a job's first minute: a miss
 An interactive session from [Lesson 3](lesson-3.md) is the place to do it. The interactive GPU queue gives you a slice of a GPU rather than a whole card, enough to check that the code runs. On the login node, inside `tmux`:
 
 ```bash
-qsub -I -l select=1:ncpus=6:ngpus=1:mem=32GB -l walltime=01:00:00
+qsub -I -l select=1:ncpus=6:ngpus=1:mem=32GB -l walltime=01:00:00 -P ABCDEF1234
 ```
 
 When the prompt changes to a GPU node, run the program the way the job would, but small. For Lesson 4's job, that means fewer reviews and one epoch, written to its own files so the real results are not overwritten:
@@ -360,6 +360,7 @@ For work that cannot fit in one walltime at all, [Lesson 8](lesson-8.md) splits 
     #PBS -N my_job
     #PBS -l select=1:ncpus=4:mem=8GB
     #PBS -l walltime=01:00:00
+    #PBS -P ABCDEF1234
     #PBS -m abe
 
     set -e
@@ -369,7 +370,7 @@ For work that cannot fit in one walltime at all, [Lesson 8](lesson-8.md) splits 
 
 === "Test first"
     ```bash
-    qsub -I -l select=1:ncpus=6:ngpus=1:mem=32GB -l walltime=01:00:00
+    qsub -I -l select=1:ncpus=6:ngpus=1:mem=32GB -l walltime=01:00:00 -P ABCDEF1234
     cd ~/hello-aqua
     uv run python my_program.py              # at its smallest setting; watch it run, fix, repeat
     exit

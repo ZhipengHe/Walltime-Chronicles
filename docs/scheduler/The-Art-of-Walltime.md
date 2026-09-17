@@ -204,6 +204,7 @@ flowchart TD
     ```bash
     #PBS -l walltime=01:00:00
     #PBS -l select=1:ncpus=4:mem=8gb
+    #PBS -P ABCDEF1234
     #PBS -q cpu_inter_exec
 
     # GPU variant — swap the resource line + queue:
@@ -218,6 +219,7 @@ flowchart TD
     ```bash
     #PBS -l walltime=24:00:00
     #PBS -l select=1:ncpus=12:mem=64gb:ngpus=1
+    #PBS -P ABCDEF1234
     #PBS -q gpu_batch_exec
     ```
 
@@ -228,6 +230,7 @@ flowchart TD
     ```bash
     #PBS -l walltime=04:00:00
     #PBS -l select=1:ncpus=4:mem=16gb
+    #PBS -P ABCDEF1234
     #PBS -q cpu_batch_exec
     ```
 
@@ -238,6 +241,7 @@ flowchart TD
     ```bash
     #PBS -l walltime=48:00:00
     #PBS -l select=1:ncpus=16:mem=128gb:ngpus=2
+    #PBS -P ABCDEF1234
     #PBS -q gpu_batch_exec
     ```
 
@@ -248,6 +252,7 @@ flowchart TD
     ```bash
     #PBS -l walltime=168:00:00     # 7 days; the queue allows up to 368 h
     #PBS -l select=1:ncpus=1:mem=2gb
+    #PBS -P ABCDEF1234
     #PBS -q cpu_inter_pers
     ```
 

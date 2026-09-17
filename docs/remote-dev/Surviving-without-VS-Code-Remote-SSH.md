@@ -91,7 +91,7 @@ Run these inside an interactive PBS job:
 
 ```bash
 # 1. Start an interactive job (CPU example; for GPU swap in `ngpus=1`)
-qsub -I -l select=1:ncpus=4:mem=16GB -l walltime=04:00:00
+qsub -I -l select=1:ncpus=4:mem=16GB -l walltime=04:00:00 -P ABCDEF1234
 
 # 2. (Once per home dir) Fetch the VS Code CLI
 curl -Lk 'https://code.visualstudio.com/sha/download?build=stable&os=cli-alpine-x64' \
@@ -429,7 +429,7 @@ For when JupyterHub's defaults don't fit. You install Jupyter yourself and tunne
 
     ```bash
     # Step 1. Request an interactive job on a compute node
-    qsub -I -S /bin/bash -l select=1:ncpus=4:ngpus=1:mem=32GB -l walltime=02:00:00
+    qsub -I -S /bin/bash -l select=1:ncpus=4:ngpus=1:mem=32GB -l walltime=02:00:00 -P ABCDEF1234
 
     # Step 2. Once inside the compute node (e.g., gpu1n005), start Jupyter Lab
     jupyter lab --no-browser --port=8889 --ip=$(hostname -i)   # (1)!

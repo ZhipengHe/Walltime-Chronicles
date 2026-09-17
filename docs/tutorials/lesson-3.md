@@ -40,7 +40,7 @@ The caps come from the queues themselves (`qstat -Qf cpu_inter_exec`); the [eRes
 
 !!! example "This lesson's request"
     ```bash
-    qsub -I -l select=1:ncpus=4:mem=8GB -l walltime=01:00:00
+    qsub -I -l select=1:ncpus=4:mem=8GB -l walltime=01:00:00 -P ABCDEF1234
     ```
 
     - `ncpus=4` → the script reads `$NCPUS` and uses every core PBS gives it
@@ -150,7 +150,7 @@ Now the round-trip from Lesson 1, with work in the middle.
 ### Step 1: Request the node
 
 ```bash
-qsub -I -l select=1:ncpus=4:mem=8GB -l walltime=01:00:00
+qsub -I -l select=1:ncpus=4:mem=8GB -l walltime=01:00:00 -P ABCDEF1234
 ```
 
 Wait for the prompt to change to `cpu1n001`.
@@ -219,7 +219,7 @@ exit                          # back on the login node
 tmux new -s dev               # a session that outlives your connection
 
 # Inside tmux, the same request as before:
-qsub -I -l select=1:ncpus=4:mem=8GB -l walltime=01:00:00
+qsub -I -l select=1:ncpus=4:mem=8GB -l walltime=01:00:00 -P ABCDEF1234
 ```
 
 Detach with ++ctrl+b++ then ++d++; the job keeps running. Reconnect later and reattach:
@@ -276,10 +276,10 @@ Those two keys and two commands are all this lesson needs; the [tmux cheat sheet
 
 === "Interactive requests"
     ```bash
-    qsub -I -l select=1:ncpus=4:mem=8GB -l walltime=01:00:00            # CPU, this lesson
-    qsub -I -l select=1:ncpus=6:ngpus=1:mem=32GB -l walltime=02:00:00   # one MIG slice
-    echo $NCPUS $PBS_JOBID                                              # what PBS gave you
-    exit                                                                # give it back
+    qsub -I -l select=1:ncpus=4:mem=8GB -l walltime=01:00:00 -P ABCDEF1234            # CPU, this lesson
+    qsub -I -l select=1:ncpus=6:ngpus=1:mem=32GB -l walltime=02:00:00 -P ABCDEF1234   # one MIG slice
+    echo $NCPUS $PBS_JOBID                                                            # what PBS gave you
+    exit                                                                              # give it back
     ```
 
 === "tmux"

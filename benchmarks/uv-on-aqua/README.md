@@ -48,6 +48,7 @@ qsub -N uv-bench-cpu-ml \
      -q cpu_batch \
      -l select=1:ncpus=8:mem=64GB \
      -l walltime=01:00:00 \
+     -P ABCDEF1234 \
      -j oe -o $HOME/uv-bench/run.out \
      -W block=true \
      scripts/run-bench.sh

@@ -72,14 +72,14 @@ Two further A100 hosts exist but are not general batch nodes — see **GPU A100 
 === "1. Interactive CPU"
     ```bash
     # 4 cores, 16 GB, 2 hours
-    qsub -I -l select=1:ncpus=4:mem=16GB -l walltime=02:00:00
+    qsub -I -l select=1:ncpus=4:mem=16GB -l walltime=02:00:00 -P ABCDEF1234
     ```
     Lands you in a shell on `cpu1n001`. Exit with ++ctrl+d++ when you're done — there's only one of these nodes.
 
 === "2. Interactive GPU"
     ```bash
     # 1 MIG slice, 6 cores, 32 GB host RAM, 2 hours
-    qsub -I -l select=1:ncpus=6:ngpus=1:mem=32GB -l walltime=02:00:00
+    qsub -I -l select=1:ncpus=6:ngpus=1:mem=32GB -l walltime=02:00:00 -P ABCDEF1234
     ```
     `ngpus=1` here means **one MIG slice**: a 1g.10gb slice of an H100 (~10 GB VRAM) on `gpu1n001`, or a 3g.20gb slice of an A100 (~20 GB) on `gpu0n004`, whichever PBS picks; add `gpu_id=H100` or `gpu_id=A100` to choose. Good for sanity-checking a model loads. Bad for real training.
 
@@ -87,7 +87,7 @@ Two further A100 hosts exist but are not general batch nodes — see **GPU A100 
     ```bash
     # AMD Genoa-pinned MPI: 4 chunks × 8 cores, 32 GB / chunk, 24 hours
     qsub -l select=4:ncpus=8:mem=32GB:cpu_id=AMD-25-17:mpiprocs=8 \
-         -l place=scatter -l walltime=24:00:00 script.pbs
+         -l place=scatter -l walltime=24:00:00 -P ABCDEF1234 script.pbs
     ```
     `cpu_id=AMD-25-17` keeps every chunk on the same Genoa silicon — essential for MPI sanity. Drop it if your job is embarrassingly parallel and CPU-family-agnostic.
 
@@ -95,14 +95,14 @@ Two further A100 hosts exist but are not general batch nodes — see **GPU A100 
     ```bash
     # 2 GPUs on one node, 8 cores host, 128 GB host RAM, 24 hours
     qsub -l select=1:ncpus=8:ngpus=2:mem=128GB:gpu_id=H100 \
-         -l walltime=24:00:00 script.pbs
+         -l walltime=24:00:00 -P ABCDEF1234 script.pbs
     ```
     Swap `gpu_id=H100` → `gpu_id=A100` if H100 queues are full and 40 GB VRAM is enough.
 
 === "5. LargeMem (auto-routes)"
     ```bash
     # 180 cores, 4 TB RAM — PBS auto-routes anything > 1.5 TB to mem1n001
-    qsub -l select=1:ncpus=180:mem=4000GB -l walltime=24:00:00 script.pbs
+    qsub -l select=1:ncpus=180:mem=4000GB -l walltime=24:00:00 -P ABCDEF1234 script.pbs
     ```
     No `-q` needed. The scheduler routes by your `mem` value alone.
 
@@ -139,7 +139,7 @@ Aqua has **72 compute nodes**: the 71 in the table above, in six categories, plu
 ```bash
 # Genoa-pinned MPI: 4 chunks × 8 cores, 32 GB / chunk, 24 hours
 qsub -l select=4:ncpus=8:mem=32GB:cpu_id=AMD-25-17:mpiprocs=8 \
-     -l place=scatter -l walltime=24:00:00 script.pbs
+     -l place=scatter -l walltime=24:00:00 -P ABCDEF1234 script.pbs
 ```
 
 !!! info "Quirk: a node at 0 % while everything else is jammed"
@@ -159,7 +159,7 @@ qsub -l select=4:ncpus=8:mem=32GB:cpu_id=AMD-25-17:mpiprocs=8 \
 
 ```bash
 # Throwaway interactive shell — 4 cores, 16 GB, 2 hours
-qsub -I -l select=1:ncpus=4:mem=16GB -l walltime=02:00:00
+qsub -I -l select=1:ncpus=4:mem=16GB -l walltime=02:00:00 -P ABCDEF1234
 ```
 
 !!! warning "There's ==only one== of these"
@@ -179,7 +179,7 @@ qsub -I -l select=1:ncpus=4:mem=16GB -l walltime=02:00:00
 
 ```bash
 # 4 TB in-memory analysis, 24 hours
-qsub -l select=1:ncpus=180:mem=4000GB -l walltime=24:00:00 script.pbs
+qsub -l select=1:ncpus=180:mem=4000GB -l walltime=24:00:00 -P ABCDEF1234 script.pbs
 ```
 
 !!! tip "It auto-routes — but only above the threshold"
@@ -205,7 +205,7 @@ qsub -l select=1:ncpus=180:mem=4000GB -l walltime=24:00:00 script.pbs
 ```bash
 # 2× H100 on one node, 8 cores host, 128 GB host RAM, 24 hours
 qsub -l select=1:ncpus=8:ngpus=2:mem=128GB:gpu_id=H100 \
-     -l walltime=24:00:00 script.pbs
+     -l walltime=24:00:00 -P ABCDEF1234 script.pbs
 ```
 
 !!! info "Why these hosts run Intel"
@@ -228,7 +228,7 @@ qsub -l select=1:ncpus=8:ngpus=2:mem=128GB:gpu_id=H100 \
 ```bash
 # 4× A100 on one node, 16 cores host, 256 GB host RAM, 24 hours
 qsub -l select=1:ncpus=16:ngpus=4:mem=256GB:gpu_id=A100 \
-     -l walltime=24:00:00 script.pbs
+     -l walltime=24:00:00 -P ABCDEF1234 script.pbs
 ```
 
 !!! warning "Two more A100 hosts exist, and neither takes your batch job"
@@ -255,7 +255,7 @@ qsub -l select=1:ncpus=16:ngpus=4:mem=256GB:gpu_id=A100 \
 
 ```bash
 # 1 MIG slice, 6 cores, 32 GB host RAM, 2 hours
-qsub -I -l select=1:ncpus=6:ngpus=1:mem=32GB -l walltime=02:00:00
+qsub -I -l select=1:ncpus=6:ngpus=1:mem=32GB -l walltime=02:00:00 -P ABCDEF1234
 ```
 
 !!! warning "Book what you will sit at"

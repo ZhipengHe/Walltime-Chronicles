@@ -7,6 +7,7 @@ Before diving into the HPC Crash Course lessons, make sure you're prepared with 
 **Required before starting the lessons:**
 
 - [ ] 🖥️ **QUT HPC access**: Confirmed SSH access to Aqua
+- [ ] 📋 **A data management plan**: Its RPID goes on every job you submit
 - [ ] 💻 **Essential Linux commands**: Comfortable with `cd`, `ls`, `pwd`, `mkdir`, `cp`, `mv`, `rm`, `chmod`
 - [ ] 📁 **Linux file system**: Understanding absolute vs relative paths, directory structure, home directory (`~`), root (`/`), permissions
 - [ ] 📤 **File transfer method**: SCP, rsync, or remote editing setup complete
@@ -21,6 +22,13 @@ You'll obviously need to be able to connect to QUT's Aqua system. If you can SSH
 
 !!! info "Need to set up access?"
     See the official QUT guide: [Getting Started with High Performance Computing](https://docs.eres.qut.edu.au/hpc-getting-started-with-high-performance-computin#accessing-the-hpc)[^1].
+
+### 📋 Data Management Plan
+
+Every job you submit names the research project it belongs to, through the **RPID** of a data management plan. eResearch requires it on all jobs from 2 November 2026, and the lessons write it as `-P ABCDEF1234`; swap in your own.
+
+!!! info "Need a plan?"
+    Create one in QUT's [Data Management Planner](https://data-mgmt-plan.qut.edu.au/), and see the official instructions: [DMP and Research Data Storage](https://docs.eres.qut.edu.au/rdss-faqs)[^1].
 
 ### 🐧 Essential Linux Commands & File Systems
 

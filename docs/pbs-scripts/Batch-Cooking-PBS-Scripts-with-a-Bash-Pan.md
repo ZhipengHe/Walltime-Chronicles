@@ -90,6 +90,7 @@ Six steps to fit the recipe to your kitchen. Each tab covers one piece of the sc
     #PBS -l select=1:ncpus=8:ngpus=1:mem=64GB:gpu_id=H100  # see GPU note below
     #PBS -M $USER@qut.edu.au  # Your QUT email for notifications
     #PBS -l walltime=48:00:00  # Maximum runtime — HH:MM:SS, 48h is the batch cap
+    #PBS -P ${RPID}  # Your project's RPID, required on every job from 2 November 2026
     #PBS -q gpu_batch_exec
     #PBS -j oe
     #PBS -m abe  # Mail on abort, begin, end

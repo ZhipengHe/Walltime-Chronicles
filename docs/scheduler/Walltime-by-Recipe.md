@@ -22,6 +22,7 @@ Every recipe below assumes this skeleton — only the `#PBS -l` resource lines a
 ```bash
 #!/bin/bash -l
 #PBS -N my_job              # rename per job
+#PBS -P ABCDEF1234          # your project's RPID
 #PBS -j oe                  # join stderr into stdout for one log
 #PBS -m abe                 # email on abort / begin / end (optional)
 # --- per-recipe resource lines go here ---
@@ -167,7 +168,7 @@ Interactive shell on a real compute node for setup work — building conda envs,
     Submit directly from the command line, no script file needed:
 
     ```bash
-    qsub -I -l select=1:ncpus=4:mem=16gb -l walltime=02:00:00
+    qsub -I -l select=1:ncpus=4:mem=16gb -l walltime=02:00:00 -P ABCDEF1234
     ```
 
     Lands you in a shell on `cpu1n001` (the only interactive CPU node). Exit with ++ctrl+d++ when done.
@@ -440,7 +441,7 @@ The fastest way to confirm your model actually loads on a real Aqua GPU before y
     Submit from the command line:
 
     ```bash
-    qsub -I -l select=1:ncpus=6:ngpus=1:mem=32gb -l walltime=02:00:00
+    qsub -I -l select=1:ncpus=6:ngpus=1:mem=32gb -l walltime=02:00:00 -P ABCDEF1234
     ```
 
     What `ngpus=1` means in the interactive queue: **one MIG slice**, either a 1g.10gb slice of an H100 (~10 GB VRAM, 28 of them on `gpu1n001`) or a 3g.20gb slice of an A100 (3/7 of the compute, half the memory, ~20 GB; 16 of them on `gpu0n004`), whichever PBS places you on. Add `:gpu_id=H100` to the select line if the card type matters to your check.
@@ -509,6 +510,7 @@ Total compute exceeds 48 h. The structural answer is **split into ≤ 48 h stage
         #PBS -l walltime=48:00:00
         #PBS -l select=2:ncpus=16:ngpus=4:mem=240gb:gpu_id=H100
         #PBS -l place=scatter:excl
+        #PBS -P ABCDEF1234
         #PBS -c w=60                                          # checkpoint every 60 min
 
         set -eoux pipefail
