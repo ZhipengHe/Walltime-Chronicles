@@ -131,4 +131,5 @@ nav:
     - pbs-scripts/index.md
     - "Batch-Cooking PBS Scripts with a Bash Pan": pbs-scripts/Batch-Cooking-PBS-Scripts-with-a-Bash-Pan.md
     - "PBS Brew Inspector: Tasting Notes from Your Job History": pbs-scripts/PBS-Brew-Inspector.md
+  - "The Playground": playground/index.md
   - License: LICENSE.md

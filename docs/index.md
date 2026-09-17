@@ -73,6 +73,14 @@ Pick your entry point. Each card is one shipped page.
 
     [:octicons-arrow-right-24: Surviving without Remote-SSH](remote-dev/Surviving-without-VS-Code-Remote-SSH.md)
 
+- :material-play-box-outline: **Want to poke the scheduler?**
+
+    ---
+
+    The site's interactive pieces at full size: the score explorer, and the backfill animation on all thirteen H100 nodes.
+
+    [:octicons-arrow-right-24: The Playground](playground/index.md)
+
 </div>
 <!-- markdownlint-enable MD033 -->
 

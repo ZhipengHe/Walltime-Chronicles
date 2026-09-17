@@ -71,7 +71,9 @@ Usage equal to share gives $f = 0.5$, twice your share gives $0.25$, almost noth
 
 ---
 
-## :material-calculator: Putting It Together
+## :material-calculator: Putting It Together {#explorer}
+
+Set a request, a usage and a wait, and read each term of the score. [The Playground](../playground/index.md#score-explorer) shows the same panel at full width, with the controls beside the plot.
 
 <!-- markdownlint-disable MD033 -->
 <div id="queue-score-explorer" class="qse"></div>
@@ -109,7 +111,7 @@ Suppose, in `gpu_batch_exec`, the four highest-ranked jobs cannot start and hold
 
 Bookings go to the first five jobs that cannot start; walltime decides who fits a gap. PBS judges the fit from the walltime you **request**, so the same 6th-ranked job asking for 24 hours would wait too, and with all five bookings taken it would get none. Backfilling promises no start time: it only lets a job start now when its walltime fits a gap that exists now.
 
-The animation plays two invented days on four of Aqua's H100 nodes, with Aqua's published scheduler settings: a cycle every 60 seconds and five bookings. Green bars are fillers, each ending before the booking on its GPU, and the dashed line in the queue marks where bookings stop. Fair-share factors are assumed, and only jobs that ask for `gpu_id=H100` are shown.
+The animation plays two invented days on four of Aqua's H100 nodes, with Aqua's published scheduler settings: a cycle every 60 seconds and five bookings. Green bars are fillers, each ending before the booking on its GPU, and the dashed line in the queue marks where bookings stop. Fair-share factors are assumed, and only jobs that ask for `gpu_id=H100` are shown. [The Playground](../playground/index.md#backfill) plays the same two days on all thirteen nodes.
 
 <!-- markdownlint-disable MD033 -->
 <div id="backfill-animation" class="bfa"></div>
