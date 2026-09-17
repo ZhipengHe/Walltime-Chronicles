@@ -46,11 +46,11 @@ python -m unittest discover -s tests -v
     - `index.md` - Homepage with project overview and disclaimers
     - `tutorials/` - Crash Course Café: course index, prerequisites checklist, `lesson-1.md` … `lesson-8.md`; `scripts/` holds the task scripts the lessons run (see the table below)
     - `pbs-scripts/` - PBS job scripts and tools documentation
-    - `scheduler/` - Walltime estimation, node selection, and uv cache/env placement guides
-    - `remote-dev/` - Remote development setup, macOS metadata cleanup, `/work/<group>` permissions
+    - `scheduler/` - Walltime estimation, node selection, and queue-ranking guides
+    - `remote-dev/` - Remote development setup, macOS metadata cleanup, `/work/<group>` permissions, uv cache/env placement
     - `javascripts/` - KaTeX math rendering support
 - `tests/` - Smoke tests for the tutorial scripts, plain `unittest`, no PyTorch needed (`python -m unittest discover -s tests`); CI runs them
-- `benchmarks/uv-on-aqua/` - PBS-driven `uv sync` benchmark behind `docs/scheduler/uv-on-aqua.md`: `config.toml`, `scripts/` (run harness, sanitizer, analysis stubs), `workloads/` (locked `cpu-ml` / `gpu-ml` projects), `results-archive/` (redacted per-run bundles + summaries)
+- `benchmarks/uv-on-aqua/` - PBS-driven `uv sync` benchmark behind `docs/remote-dev/uv-on-aqua.md`: `config.toml`, `scripts/` (run harness, sanitizer, analysis stubs), `workloads/` (locked `cpu-ml` / `gpu-ml` projects), `results-archive/` (redacted per-run bundles + summaries)
 - `mkdocs.yml` - MkDocs configuration with Material theme
 - `pyproject.toml` - Python project metadata and dependencies for MkDocs build
 - `uv.lock` - Pinned dependency versions (managed by `uv sync` / `uv lock`)

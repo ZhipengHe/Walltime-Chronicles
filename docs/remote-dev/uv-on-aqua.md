@@ -5,7 +5,7 @@
 !!! tip "Companion pages"
     - :material-school: [Lesson 2: Tooling Setup](../tutorials/lesson-2.md) — the 14-line operational version of this rule, plus the install + verify flow.
     - :material-flask: [Bench archive](https://github.com/ZhipengHe/Walltime-Chronicles/tree/main/benchmarks/uv-on-aqua) — methodology, harness, and the raw timing data for the numbers below.
-    - :material-server-network: [Know Your Nodes — Storage internals](Know-Your-Nodes.md#storage-internals) — the broader filesystem picture (Lustre 5 PB, Weka 1 PB, 30-day scratch sweep).
+    - :material-server-network: [Know Your Nodes — Storage internals](../scheduler/Know-Your-Nodes.md#storage-internals) — the broader filesystem picture (Lustre 5 PB, Weka 1 PB, 30-day scratch sweep).
     - :material-link-variant: [uv cache concepts](https://docs.astral.sh/uv/concepts/cache/) — the upstream doc that names the same-FS rule.
 
 ---
@@ -164,7 +164,7 @@ python script.py
 !!! tip "Why `--frozen`?"
     `uv sync --frozen` installs **exactly** what's in `uv.lock` without re-running the resolver. Deterministic, fast, reproducible across nodes. Commit `uv.lock` to git so this works at all.
 
-This pattern trades cold-install time (~16 s on a fresh node) for cleanliness — the venv vanishes when the job exits, no risk of leaving stale envs behind. Pairs naturally with [Recipe 8's checkpoint chain](Walltime-by-Recipe.md#recipe-8-long-pipeline-with-chained-jobs) when your training run spans multiple PBS stages.
+This pattern trades cold-install time (~16 s on a fresh node) for cleanliness — the venv vanishes when the job exits, no risk of leaving stale envs behind. Pairs naturally with [Recipe 8's checkpoint chain](../scheduler/Walltime-by-Recipe.md#recipe-8-long-pipeline-with-chained-jobs) when your training run spans multiple PBS stages.
 
 ---
 
@@ -321,8 +321,8 @@ So: the patterns on this page are derived from primary-source filesystem probes 
 
 - :material-school: [Lesson 2: Tooling Setup](../tutorials/lesson-2.md) — the operational 14-line version, plus uv / Miniforge / micromamba install flows.
 - :material-flask: [Bench archive on GitHub](https://github.com/ZhipengHe/Walltime-Chronicles/tree/main/benchmarks/uv-on-aqua) — full methodology, harness scripts, and the two redacted archives' raw data.
-- :material-server-network: [Know Your Nodes — Storage internals](Know-Your-Nodes.md#storage-internals) — the broader Lustre / Weka picture, 30-day scratch sweep, `$TMPDIR` behaviour.
-- :material-chef-hat: [Walltime by Recipe — Recipe 8 (chained jobs)](Walltime-by-Recipe.md#recipe-8-long-pipeline-with-chained-jobs) — pairs naturally with pattern (c) when a job exceeds 48 h.
+- :material-server-network: [Know Your Nodes — Storage internals](../scheduler/Know-Your-Nodes.md#storage-internals) — the broader Lustre / Weka picture, 30-day scratch sweep, `$TMPDIR` behaviour.
+- :material-chef-hat: [Walltime by Recipe — Recipe 8 (chained jobs)](../scheduler/Walltime-by-Recipe.md#recipe-8-long-pipeline-with-chained-jobs) — pairs naturally with pattern (c) when a job exceeds 48 h.
 - :material-link-variant: [uv cache concepts (Astral)](https://docs.astral.sh/uv/concepts/cache/) — the upstream doc behind the same-FS rule.
 - :material-link-variant: [QUT eResearch — Filesystem and data management](https://docs.eres.qut.edu.au/hpc-filesystem)[^1] — the canonical line on `/home`, `/scratch`, `/work` policy.
 
