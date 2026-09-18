@@ -25,7 +25,6 @@ theme:
     - navigation.instant.progress
     - navigation.path
     - navigation.top
-    - navigation.expand
     - navigation.indexes
     - content.action.view
     - content.action.edit
@@ -131,5 +130,6 @@ nav:
     - pbs-scripts/index.md
     - "Batch-Cooking PBS Scripts with a Bash Pan": pbs-scripts/Batch-Cooking-PBS-Scripts-with-a-Bash-Pan.md
     - "PBS Brew Inspector: Tasting Notes from Your Job History": pbs-scripts/PBS-Brew-Inspector.md
+  - "Aqua Cheatsheet": cheatsheet/index.md
   - "The Playground": playground/index.md
   - License: LICENSE.md
