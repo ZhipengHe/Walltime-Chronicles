@@ -228,7 +228,7 @@ Millions of small files in `/home` slow Lustre for everyone; unpack and build on
 |---|---|
 | `bad interpreter: No such file or directory` | Windows line endings; run `dos2unix` |
 | `module: command not found` | Shebang missing, misspelled, or with a blank line above it; use `#!/bin/bash -l` |
-| `conda: command not found` | Shell not initialised for conda; run `conda init`, or restore `.bashrc` from `/etc/skel` |
+| `conda: command not found` | Inspect the shell's conda initialization and merge the required setup into the existing configuration. Preserve customizations; back up `.bashrc` and obtain explicit approval before any overwrite. |
 | `Lmod has detected the following error` | No such module name or version; check `module spider` |
 | `Bus error (core dumped)` | Touched memory it was not given; raise `mem` |
 | `Illegal instruction` | Self-compiled software whose vector instructions this node lacks |
@@ -251,27 +251,35 @@ One program, run unattended, with the job's own record kept beside the output.
 #PBS -m abe
 set -e
 cd "$PBS_O_WORKDIR"
-uv run python my_program.py
-status=$?
-qstat -xf "$PBS_JOBID" > "resource_usage_$PBS_JOBID"
-exit $status
+status=0
+uv run python my_program.py || status=$?
+qstat -xf "$PBS_JOBID" > "resource_usage_$PBS_JOBID" || echo "Warning: job accounting could not be saved" >&2
+exit "$status"
 ```
 
 For a GPU: `#PBS -l select=1:ncpus=12:ngpus=1:mem=64GB:gpu_id=H100`
 
 ### Array
 
-One script, many runs. The index picks each run's input and output, and a rerun skips whatever already finished.
+One script, many runs. The index picks each run's input and output. A rerun skips a member only when its final output and completion marker both exist.
 
 ```bash
 #PBS -J 1-8
 ```
 
 ```bash
+set -e
+mkdir -p results
 out="results/run_${PBS_ARRAY_INDEX}.nc"
-[ -f "$out" ] && exit 0
-uv run python my_program.py --seed "$PBS_ARRAY_INDEX" --out "$out"
+[ -f "$out" ] && [ -f "${out}.done" ] && exit 0
+partial="results/run_${PBS_ARRAY_INDEX}.partial_${PBS_JOBID}.nc"
+uv run python my_program.py --seed "$PBS_ARRAY_INDEX" --out "$partial"
+test -s "$partial"
+mv -- "$partial" "$out"
+touch "${out}.done"
 ```
+
+This assumes the program exits successfully only after completing and validating its work; the nonempty-file check alone does not validate scientific results. It writes to a temporary path on the same filesystem, publishes the final file only after success, and then creates the marker. Failed runs retain their partial file for diagnosis. Reuse markers only for retries with unchanged inputs and configuration, use a new results directory for changed work, and avoid concurrent executions of the same member.
 
 | Turning the index into work | |
 |---|---|
@@ -339,4 +347,4 @@ PBS requeues at the walltime and runs the script again from the top, up to 21 at
 | Tickets: a shared `/work` folder, or anything broken | [eResearch Help Centre](http://qut.to/eresearch-support) |
 | Wording to credit eResearch in papers | [Acknowledgements in papers](https://docs.eres.qut.edu.au/acknowledgements-in-papers)[^1] |
 
-[^1]: QUT network only. Use the VPN off campus.
+[^1]: Access only in QUT network. Please use VPN to access the documentation when off-campus.

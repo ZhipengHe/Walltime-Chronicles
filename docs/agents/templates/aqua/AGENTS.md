@@ -44,12 +44,12 @@ Walltime Chronicles is an unofficial Aqua guide covering onboarding, PBS jobs, s
 
 | User need | Read as needed |
 | :-- | :-- |
-| Understand Aqua and get started | [QUT Aqua overview](https://docs.eres.qut.edu.au/about-aqua), [prerequisites](https://zhipenghe.me/Walltime-Chronicles/tutorials/prerequisites/), and [Welcome to Aqua](https://zhipenghe.me/Walltime-Chronicles/tutorials/lesson-1/) |
+| Understand Aqua and get started | [QUT Aqua overview](https://docs.eres.qut.edu.au/about-aqua)[^1], [prerequisites](https://zhipenghe.me/Walltime-Chronicles/tutorials/prerequisites/), and [Welcome to Aqua](https://zhipenghe.me/Walltime-Chronicles/tutorials/lesson-1/) |
 | Set up software and environments | [Tooling setup](https://zhipenghe.me/Walltime-Chronicles/tutorials/lesson-2/) and [environment and cache placement](https://zhipenghe.me/Walltime-Chronicles/remote-dev/uv-on-aqua/) |
-| Choose where files belong | [QUT filesystems](https://docs.eres.qut.edu.au/hpc-filesystem) |
+| Choose where files belong | [QUT filesystems](https://docs.eres.qut.edu.au/hpc-filesystem)[^1] |
 | Develop remotely or diagnose shared-directory access | [Remote development](https://zhipenghe.me/Walltime-Chronicles/remote-dev/Surviving-without-VS-Code-Remote-SSH/) and [shared permissions](https://zhipenghe.me/Walltime-Chronicles/remote-dev/Permissions-Dont-Move/) |
 | Run interactive or batch work | [Interactive work](https://zhipenghe.me/Walltime-Chronicles/tutorials/lesson-3/) and [first batch job](https://zhipenghe.me/Walltime-Chronicles/tutorials/lesson-4/) |
-| Select resources and understand waiting | [QUT queue limits](https://docs.eres.qut.edu.au/hpc-queue-limits), [resource sizing](https://zhipenghe.me/Walltime-Chronicles/tutorials/lesson-6/), and [queue scheduling](https://zhipenghe.me/Walltime-Chronicles/scheduler/The-Queue-Is-Not-a-Line/) |
+| Select resources and understand waiting | [QUT queue limits](https://docs.eres.qut.edu.au/hpc-queue-limits)[^1], [resource sizing](https://zhipenghe.me/Walltime-Chronicles/tutorials/lesson-6/), and [queue scheduling](https://zhipenghe.me/Walltime-Chronicles/scheduler/The-Queue-Is-Not-a-Line/) |
 | Understand hardware choices and estimate duration | [Know Your Nodes](https://zhipenghe.me/Walltime-Chronicles/scheduler/Know-Your-Nodes/) and [walltime examples](https://zhipenghe.me/Walltime-Chronicles/scheduler/Walltime-by-Recipe/) |
 | Diagnose a failed job | [When jobs fail](https://zhipenghe.me/Walltime-Chronicles/tutorials/lesson-5/) and the user's relevant logs |
 | Run many tasks or long workloads | [Job arrays](https://zhipenghe.me/Walltime-Chronicles/tutorials/lesson-7/) and [long jobs](https://zhipenghe.me/Walltime-Chronicles/tutorials/lesson-8/) |
@@ -207,3 +207,5 @@ Do not assume where the agent should run. Learning can happen without cluster ac
 Use an applicable approved PBS wrapper or successful script when available; otherwise prepare a script from documented Aqua examples. Request the required resources and let PBS choose placement unless a documented workload need and site policy require otherwise. Keep scheduler-provided GPU visibility intact.
 
 Choose directories deliberately before writing. Route PBS output, application logs, results, caches, and temporary files to their intended locations; do not let the SSH starting directory determine them. Follow current storage and retention policy. Scratch is not the only copy of irreplaceable results. Do not "fix" permissions, HSM state, or retention attributes recursively after a file-access failure.
+
+[^1]: Access only in QUT network. Please use VPN to access the documentation when off-campus.
