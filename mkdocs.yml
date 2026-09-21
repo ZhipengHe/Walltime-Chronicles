@@ -3,6 +3,9 @@ site_url: https://zhipenghe.me/Walltime-Chronicles/
 site_author: Zhipeng He
 site_description: My personal survival log of mysterious errors, queueing oddities, and PBS quirks encountered on QUT Aqua
 
+hooks:
+  - agent_docs.py
+
 # repo_name: ZhipengHe/Walltime-Chronicles
 repo_url: https://github.com/ZhipengHe/Walltime-Chronicles
 edit_uri: edit/main/docs/
@@ -25,7 +28,6 @@ theme:
     - navigation.instant.progress
     - navigation.path
     - navigation.top
-    - navigation.expand
     - navigation.indexes
     - content.action.view
     - content.action.edit
@@ -131,5 +133,9 @@ nav:
     - pbs-scripts/index.md
     - "Batch-Cooking PBS Scripts with a Bash Pan": pbs-scripts/Batch-Cooking-PBS-Scripts-with-a-Bash-Pan.md
     - "PBS Brew Inspector: Tasting Notes from Your Job History": pbs-scripts/PBS-Brew-Inspector.md
+  - "Agents on HPC":
+    - "Understand and Use Aqua": agents/aqua-starter.md
+    - "AGENTS.md Template": agents/templates/aqua/AGENTS.md
+  - "Aqua Cheatsheet": cheatsheet/index.md
   - "The Playground": playground/index.md
   - License: LICENSE.md

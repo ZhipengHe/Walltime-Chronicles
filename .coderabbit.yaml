@@ -49,6 +49,10 @@ reviews:
           (e.g. `../tutorials/lesson-0.md`), not directory-only links — mkdocs
           emits "unrecognized relative link" INFOs otherwise (see PR #7 fixing
           this regression in get-start.md and prerequisites.md).
+          Exception: docs/agents/templates/aqua/AGENTS.md must keep absolute
+          public website URLs because it is also exported as plain text and
+          copied into other repositories or global agent configurations, where
+          source-relative links would not resolve.
         - When citing QUT eResearch HPC docs (`docs.eres.qut.edu.au/...`),
           append the `[^1]` footnote ("Access only in QUT network. Please use
           VPN ... off-campus.") that every other page uses.
