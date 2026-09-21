@@ -1,0 +1,3057 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="My personal survival log of mysterious errors, queueing oddities, and PBS quirks encountered on QUT Aqua">
+      
+      
+        <meta name="author" content="Zhipeng He">
+      
+      
+        <link rel="canonical" href="https://zhipenghe.me/Walltime-Chronicles/cheatsheet/">
+      
+      
+        <link rel="prev" href="../agents/templates/aqua/AGENTS/">
+      
+      
+        <link rel="next" href="../playground/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Aqua Cheatsheet - Walltime Chronicles</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="https://unpkg.com/katex@0/dist/katex.min.css">
+    
+      <link rel="stylesheet" href="../stylesheets/queue-score-explorer.css">
+    
+      <link rel="stylesheet" href="../stylesheets/backfill-animation.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Aqua Cheatsheet - Walltime Chronicles" />
+<meta property="og:description" content="My personal survival log of mysterious errors, queueing oddities, and PBS quirks encountered on QUT Aqua" />
+<meta property="og:image" content="https://zhipenghe.me/Walltime-Chronicles/assets/images/social/cheatsheet/index.png" />
+<meta property="og:image:type" content="image/png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:url" content="https://zhipenghe.me/Walltime-Chronicles/cheatsheet/" />
+<meta property="twitter:card" content="summary_large_image" />
+<meta property="twitter:title" content="Aqua Cheatsheet - Walltime Chronicles" />
+<meta property="twitter:description" content="My personal survival log of mysterious errors, queueing oddities, and PBS quirks encountered on QUT Aqua" />
+<meta property="twitter:image" content="https://zhipenghe.me/Walltime-Chronicles/assets/images/social/cheatsheet/index.png" />
+</head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#aqua-cheatsheet" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Walltime Chronicles" class="md-header__button md-logo" aria-label="Walltime Chronicles" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.75 8h6.5a.75.75 0 0 1 .75.75v6.5a.75.75 0 0 1-.75.75h-6.5a.75.75 0 0 1-.75-.75v-6.5A.75.75 0 0 1 8.75 8m.75 6.5h5v-5h-5Z"/><path d="M15.25 1a.75.75 0 0 1 .75.75V4h2.25c.966 0 1.75.784 1.75 1.75V8h2.25a.75.75 0 0 1 0 1.5H20v5h2.25a.75.75 0 0 1 0 1.5H20v2.25A1.75 1.75 0 0 1 18.25 20H16v2.25a.75.75 0 0 1-1.5 0V20h-5v2.25a.75.75 0 0 1-1.5 0V20H5.75A1.75 1.75 0 0 1 4 18.25V16H1.75a.75.75 0 0 1 0-1.5H4v-5H1.75a.75.75 0 0 1 0-1.5H4V5.75C4 4.784 4.784 4 5.75 4H8V1.75a.75.75 0 0 1 1.5 0V4h5V1.75a.75.75 0 0 1 .75-.75m3 17.5a.25.25 0 0 0 .25-.25V5.75a.25.25 0 0 0-.25-.25H5.75a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Walltime Chronicles
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Aqua Cheatsheet
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/ZhipengHe/Walltime-Chronicles" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Walltime Chronicles" class="md-nav__button md-logo" aria-label="Walltime Chronicles" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.75 8h6.5a.75.75 0 0 1 .75.75v6.5a.75.75 0 0 1-.75.75h-6.5a.75.75 0 0 1-.75-.75v-6.5A.75.75 0 0 1 8.75 8m.75 6.5h5v-5h-5Z"/><path d="M15.25 1a.75.75 0 0 1 .75.75V4h2.25c.966 0 1.75.784 1.75 1.75V8h2.25a.75.75 0 0 1 0 1.5H20v5h2.25a.75.75 0 0 1 0 1.5H20v2.25A1.75 1.75 0 0 1 18.25 20H16v2.25a.75.75 0 0 1-1.5 0V20h-5v2.25a.75.75 0 0 1-1.5 0V20H5.75A1.75 1.75 0 0 1 4 18.25V16H1.75a.75.75 0 0 1 0-1.5H4v-5H1.75a.75.75 0 0 1 0-1.5H4V5.75C4 4.784 4.784 4 5.75 4H8V1.75a.75.75 0 0 1 1.5 0V4h5V1.75a.75.75 0 0 1 .75-.75m3 17.5a.25.25 0 0 0 .25-.25V5.75a.25.25 0 0 0-.25-.25H5.75a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25Z"/></svg>
+
+    </a>
+    Walltime Chronicles
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/ZhipengHe/Walltime-Chronicles" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ~/welcome
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../tutorials/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crash Course Café
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Crash Course Café
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorials/prerequisites/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prerequisites Checklist
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorials/lesson-1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 1: Welcome to Aqua
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorials/lesson-2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 2: Tooling Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorials/lesson-3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 3: Working Interactively
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorials/lesson-4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 4: Your First Batch Job
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorials/lesson-5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 5: When Jobs Fail
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorials/lesson-6/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 6: Right-sizing Requests
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorials/lesson-7/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 7: Job Arrays
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorials/lesson-8/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 8: Long Jobs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../remote-dev/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cmd+Opt+Remote
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Cmd+Opt+Remote
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../remote-dev/Surviving-without-VS-Code-Remote-SSH/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Surviving without VS Code Remote SSH
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../remote-dev/The-DS_Store-Strikes-Back/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The .DS_Store Strikes Back: Finder Edition
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../remote-dev/Permissions-Dont-Move/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Permissions Don't Move: A /work/group Survival Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../remote-dev/uv-on-aqua/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    uv on Aqua: Cache + Envs Placement
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../scheduler/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Scheduler's Gambit
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    The Scheduler's Gambit
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../scheduler/Know-Your-Nodes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Know Your Nodes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../scheduler/The-Art-of-Walltime/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guess, Request, Regret: The Art of Walltime
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../scheduler/Walltime-by-Recipe/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Walltime by Recipe: Worked Examples for Aqua
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../scheduler/The-Queue-Is-Not-a-Line/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Queue Is Not a Line: How Aqua Ranks Your Job
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../pbs-scripts/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PBS Cookbook
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    PBS Cookbook
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pbs-scripts/Batch-Cooking-PBS-Scripts-with-a-Bash-Pan/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Batch-Cooking PBS Scripts with a Bash Pan
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pbs-scripts/PBS-Brew-Inspector/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PBS Brew Inspector: Tasting Notes from Your Job History
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agents on HPC
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Agents on HPC
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../agents/aqua-starter/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Understand and Use Aqua
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../agents/templates/aqua/AGENTS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AGENTS.md Template
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Aqua Cheatsheet
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Aqua Cheatsheet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#connecting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Connecting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#transferring" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Transferring
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#job-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Job commands
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#software" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Software
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#directives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Directives
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-select-line" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The select line
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#queues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Queues
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#nodes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Nodes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#filesystems" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Filesystems
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#environment-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Environment variables
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#job-states" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Job states
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exit-statuses" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exit statuses
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#queue-comments" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Queue comments
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rejected-at-submission" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rejected at submission
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#failed-while-running" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Failed while running
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#templates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Templates
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Templates">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#batch-job" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Batch job
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#array" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Array
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chained-jobs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chained jobs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#checkpointed-job" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Checkpointed job
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sizing-the-next-request" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sizing the next request
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#elsewhere" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Elsewhere
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../playground/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Playground
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../LICENSE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    License
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#connecting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Connecting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#transferring" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Transferring
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#job-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Job commands
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#software" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Software
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#directives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Directives
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-select-line" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The select line
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#queues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Queues
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#nodes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Nodes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#filesystems" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Filesystems
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#environment-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Environment variables
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#job-states" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Job states
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exit-statuses" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exit statuses
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#queue-comments" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Queue comments
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rejected-at-submission" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rejected at submission
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#failed-while-running" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Failed while running
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#templates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Templates
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Templates">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#batch-job" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Batch job
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#array" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Array
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chained-jobs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chained jobs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#checkpointed-job" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Checkpointed job
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sizing-the-next-request" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sizing the next request
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#elsewhere" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Elsewhere
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+                
+
+
+
+  
+
+
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/ZhipengHe/Walltime-Chronicles/edit/main/docs/cheatsheet/index.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+    
+      
+    
+    <a href="https://github.com/ZhipengHe/Walltime-Chronicles/raw/main/docs/cheatsheet/index.md" title="View source of this page" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"/></svg>
+    </a>
+  
+
+
+<h1 id="aqua-cheatsheet">Aqua Cheatsheet</h1>
+<p>Replace <code>&lt;job-id&gt;</code>, <code>&lt;username&gt;</code>, <code>&lt;name&gt;</code>, <code>&lt;pkg&gt;</code> and <code>&lt;url&gt;</code> with your own, brackets included. <code>ABCDEF1234</code> stands for your project code.</p>
+<hr />
+<h2 id="connecting"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 1c-1.11 0-2 .89-2 2v4c0 1.11.89 2 2 2H1v2h12V9h-3c1.11 0 2-.89 2-2V3c0-1.11-.89-2-2-2zm0 2h6v4H4zM3 13v7h7v-2H5v-5zm11 0c-1.11 0-2 .89-2 2v4c0 1.11.89 2 2 2h-3v2h12v-2h-3c1.11 0 2-.89 2-2v-4c0-1.11-.89-2-2-2zm0 2h6v4h-6z"/></svg></span> Connecting</h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ssh &lt;username&gt;@aqua.qut.edu.au</code></td>
+<td>Log in; needs QUT network or QUT VPN</td>
+</tr>
+<tr>
+<td><code>hostname</code></td>
+<td><code>aquarius01</code> or <code>aquarius02</code> on a login node, <code>cpu1nNNN</code> or <code>gpu1nNNN</code> on a compute node</td>
+</tr>
+<tr>
+<td><code>tmux new -s &lt;name&gt;</code></td>
+<td>Start a session that survives a disconnect</td>
+</tr>
+<tr>
+<td><code>tmux attach -t &lt;name&gt;</code></td>
+<td>Reattach; <code>Ctrl-b</code> then <code>d</code> detaches</td>
+</tr>
+<tr>
+<td><code>tmux ls</code></td>
+<td>Sessions on this login node</td>
+</tr>
+<tr>
+<td><code>code tunnel</code></td>
+<td>VS Code from inside an interactive job; Remote SSH is blocked on Aqua</td>
+</tr>
+<tr>
+<td><code>exit</code></td>
+<td>Leave a session or an interactive job</td>
+</tr>
+</tbody>
+</table>
+<h2 id="transferring"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m21 9-4-4v3h-7v2h7v3M7 11l-4 4 4 4v-3h7v-2H7z"/></svg></span> Transferring</h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>scp &lt;file&gt; &lt;username&gt;@aqua.qut.edu.au:~/&lt;dir&gt;/</code></td>
+<td>Copy one file up</td>
+</tr>
+<tr>
+<td><code>scp &lt;username&gt;@aqua.qut.edu.au:~/&lt;file&gt; .</code></td>
+<td>Copy one file down</td>
+</tr>
+<tr>
+<td><code>rsync -avz ./&lt;dir&gt;/ aqua:~/&lt;dir&gt;/</code></td>
+<td>Sync a directory, skipping what already matches</td>
+</tr>
+<tr>
+<td><code>rsync -avz --dry-run ./&lt;dir&gt;/ aqua:~/&lt;dir&gt;/</code></td>
+<td>Show what a sync would do</td>
+</tr>
+<tr>
+<td><code>rsync -avz --exclude='.DS_Store' --exclude='._*' ./&lt;dir&gt;/ aqua:~/&lt;dir&gt;/</code></td>
+<td>Sync from macOS without Finder's metadata</td>
+</tr>
+<tr>
+<td><code>sftp &lt;username&gt;@aqua.qut.edu.au</code></td>
+<td>Interactive transfer: <code>cd</code>, <code>get</code>, <code>put</code></td>
+</tr>
+<tr>
+<td><code>wget -nc &lt;url&gt;</code></td>
+<td>Download onto Aqua rather than through your laptop</td>
+</tr>
+<tr>
+<td><code>dos2unix &lt;file&gt;</code></td>
+<td>Fix Windows line endings after transferring a script</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Endpoint</th>
+<th>What it is</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>eresdtn01.qut.edu.au</code></td>
+<td>Data transfer node, SFTP, for WinSCP</td>
+</tr>
+<tr>
+<td><code>\\hpc-fs\&lt;username&gt;</code></td>
+<td>Home, mounted on Windows</td>
+</tr>
+<tr>
+<td><code>\\hpc-fs\work</code></td>
+<td>Work, mounted on Windows</td>
+</tr>
+<tr>
+<td><code>smb://hpc-fs/&lt;username&gt;</code></td>
+<td>Home, mounted on macOS</td>
+</tr>
+<tr>
+<td><code>smb://hpc-fs/work</code></td>
+<td>Work, mounted on macOS</td>
+</tr>
+</tbody>
+</table>
+<h2 id="job-commands"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 19v-3h8v3zm-4.5-6L2.47 7h4.24l4.96 4.95c.58.59.58 1.55 0 2.12L6.74 19H2.5z"/></svg></span> Job commands</h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>qsub &lt;script&gt;.pbs</code></td>
+<td>Submit; prints the job id</td>
+</tr>
+<tr>
+<td><code>qsub -I -l select=... -l walltime=... -P ABCDEF1234</code></td>
+<td>Interactive job; the shell opens on a compute node</td>
+</tr>
+<tr>
+<td><code>qsub -W depend=afterok:&lt;job-id&gt; &lt;script&gt;.pbs</code></td>
+<td>Submit, held until that job ends with 0</td>
+</tr>
+<tr>
+<td><code>qstat -u $USER</code></td>
+<td>Your queued and running jobs</td>
+</tr>
+<tr>
+<td><code>qstat -xu $USER</code></td>
+<td>Yours including finished ones</td>
+</tr>
+<tr>
+<td><code>qstat -f &lt;job-id&gt;</code></td>
+<td>Every attribute of one job</td>
+</tr>
+<tr>
+<td><code>qstat -xf &lt;job-id&gt;</code></td>
+<td>The same after it finished; kept about four days</td>
+</tr>
+<tr>
+<td><code>qstat -f &lt;job-id&gt; \| grep comment</code></td>
+<td>Why a queued job has not started</td>
+</tr>
+<tr>
+<td><code>qstat -u $USER -Esw</code></td>
+<td>Comments for all your queued jobs at once</td>
+</tr>
+<tr>
+<td><code>qstat -T</code></td>
+<td>Estimated start; top-ranked jobs only, your own only</td>
+</tr>
+<tr>
+<td><code>qstat -t '&lt;job-id&gt;[]'</code></td>
+<td>Subjobs of an array; add <code>x</code> for finished ones</td>
+</tr>
+<tr>
+<td><code>qstat -fw '&lt;job-id&gt;[]' \| grep array_state_count</code></td>
+<td>An array's tally by state</td>
+</tr>
+<tr>
+<td><code>qstat -Q</code></td>
+<td>Queues and their totals</td>
+</tr>
+<tr>
+<td><code>qjobs</code></td>
+<td>eResearch's own summary of your jobs</td>
+</tr>
+<tr>
+<td><code>qdel &lt;job-id&gt;</code></td>
+<td>Cancel; resets the queue wait the job had earned</td>
+</tr>
+<tr>
+<td><code>qdel '&lt;job-id&gt;[3]'</code></td>
+<td>Cancel one subjob of an array</td>
+</tr>
+<tr>
+<td><code>qalter -l walltime=04:00:00 &lt;job-id&gt;</code></td>
+<td>Change a queued job's walltime; users can only lower it</td>
+</tr>
+<tr>
+<td><code>qhold &lt;job-id&gt;</code> / <code>qrls &lt;job-id&gt;</code></td>
+<td>Hold and release your own job</td>
+</tr>
+<tr>
+<td><code>pbsnodeinfo</code></td>
+<td>Every node's current use</td>
+</tr>
+<tr>
+<td><code>qmgr -c "print server" \| grep job_sort_formula</code></td>
+<td>The formula that ranks the queue</td>
+</tr>
+</tbody>
+</table>
+<h2 id="software"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M2 10.96a.985.985 0 0 1-.37-1.37L3.13 7c.11-.2.28-.34.47-.42l7.83-4.4c.16-.12.36-.18.57-.18s.41.06.57.18l7.9 4.44c.19.1.35.26.44.46l1.45 2.52c.28.48.11 1.09-.36 1.36l-1 .58v4.96c0 .38-.21.71-.53.88l-7.9 4.44c-.16.12-.36.18-.57.18s-.41-.06-.57-.18l-7.9-4.44A.99.99 0 0 1 3 16.5v-5.54c-.3.17-.68.18-1 0m10-6.81v6.7l5.96-3.35zM5 15.91l6 3.38v-6.71L5 9.21zm14 0v-3.22l-5 2.9c-.33.18-.7.17-1 .01v3.69zm-5.15-2.55 6.28-3.63-.58-1.01-6.28 3.63z"/></svg></span> Software</h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>module spider &lt;name&gt;</code></td>
+<td>Search for software and its versions</td>
+</tr>
+<tr>
+<td><code>module load &lt;name&gt;/&lt;version&gt;</code></td>
+<td>Load an exact version</td>
+</tr>
+<tr>
+<td><code>module list</code></td>
+<td>What is loaded now</td>
+</tr>
+<tr>
+<td><code>module purge</code></td>
+<td>Unload everything</td>
+</tr>
+<tr>
+<td><code>uv init --bare --pin-python --python 3.13</code></td>
+<td>New project: <code>pyproject.toml</code> and <code>.python-version</code></td>
+</tr>
+<tr>
+<td><code>uv add &lt;pkg&gt;</code></td>
+<td>Add a dependency; updates <code>uv.lock</code> and installs</td>
+</tr>
+<tr>
+<td><code>uv sync --frozen</code></td>
+<td>Rebuild <code>.venv</code> exactly as <code>uv.lock</code> says</td>
+</tr>
+<tr>
+<td><code>uv run &lt;command&gt;</code></td>
+<td>Run inside the project environment, no activation</td>
+</tr>
+<tr>
+<td><code>conda init</code></td>
+<td>Once, after installing Miniforge, then open a new shell</td>
+</tr>
+<tr>
+<td><code>apptainer pull docker://&lt;image&gt;</code></td>
+<td>Fetch a container image</td>
+</tr>
+<tr>
+<td><code>apptainer exec &lt;image&gt;.sif &lt;command&gt;</code></td>
+<td>Run one command inside it</td>
+</tr>
+<tr>
+<td><code>apptainer shell &lt;image&gt;.sif</code></td>
+<td>Open a shell inside it</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="directives"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5h6v6H3zm2 2v2h2V7zm6 0h10v2H11zm0 8h10v2H11zm-6 5-3.5-3.5 1.41-1.41L5 17.17l4.59-4.58L11 14z"/></svg></span> Directives</h2>
+<table>
+<thead>
+<tr>
+<th>Directive</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>#PBS -N &lt;name&gt;</code></td>
+<td>Job name, and the prefix of the log files</td>
+</tr>
+<tr>
+<td><code>#PBS -l select=1:ncpus=4:mem=8GB</code></td>
+<td>Resources, per chunk</td>
+</tr>
+<tr>
+<td><code>#PBS -l walltime=01:00:00</code></td>
+<td>Hard limit; PBS kills the job at it</td>
+</tr>
+<tr>
+<td><code>#PBS -l place=pack</code></td>
+<td>Chunks on one node; <code>scatter</code> spreads them, <code>group=cpu_id</code> keeps one CPU kind</td>
+</tr>
+<tr>
+<td><code>#PBS -P ABCDEF1234</code></td>
+<td>Project code</td>
+</tr>
+<tr>
+<td><code>#PBS -m abe</code></td>
+<td>Mail on begin, end and abort</td>
+</tr>
+<tr>
+<td><code>#PBS -M &lt;address&gt;</code></td>
+<td>Send that mail somewhere other than the default</td>
+</tr>
+<tr>
+<td><code>#PBS -j oe</code></td>
+<td>One log file instead of <code>.o</code> and <code>.e</code></td>
+</tr>
+<tr>
+<td><code>#PBS -J 1-8</code></td>
+<td>Array of 8 subjobs; <code>1-100:2</code> steps, <code>1-100%10</code> caps how many run</td>
+</tr>
+<tr>
+<td><code>#PBS -c w=30</code></td>
+<td>Requeue at the walltime; <code>USR1</code> to the shell about every 30 minutes</td>
+</tr>
+<tr>
+<td><code>-W depend=afterok:&lt;job-id&gt;</code></td>
+<td>As a <code>#PBS</code> line with a literal id; on the command line when the id is in a variable</td>
+</tr>
+</tbody>
+</table>
+<h2 id="the-select-line"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8 13c-1.86 0-3.41 1.28-3.86 3H2v2h2.14c.45 1.72 2 3 3.86 3s3.41-1.28 3.86-3H22v-2H11.86c-.45-1.72-2-3-3.86-3m0 6c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2M19.86 6c-.45-1.72-2-3-3.86-3s-3.41 1.28-3.86 3H2v2h10.14c.45 1.72 2 3 3.86 3s3.41-1.28 3.86-3H22V6zM16 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2"/></svg></span> The select line</h2>
+<table>
+<thead>
+<tr>
+<th>Part</th>
+<th>Values on Aqua</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>select=&lt;n&gt;</code></td>
+<td>Chunks; <code>ncpus</code> and <code>mem</code> are per chunk, not totals</td>
+</tr>
+<tr>
+<td><code>ncpus=&lt;n&gt;</code></td>
+<td>Cores</td>
+</tr>
+<tr>
+<td><code>mem=&lt;n&gt;GB</code></td>
+<td>Memory, always with a unit</td>
+</tr>
+<tr>
+<td><code>ngpus=&lt;n&gt;</code></td>
+<td>GPUs, or MIG slices on an interactive queue</td>
+</tr>
+<tr>
+<td><code>gpu_id=</code></td>
+<td><code>H100</code>, <code>A100</code>, or omit for either</td>
+</tr>
+<tr>
+<td><code>cpu_id=</code></td>
+<td><code>any</code>, <code>AMD-25-17</code>, <code>AMD-25-1</code>, <code>AMD-23-49</code>, <code>Intel-6-143</code></td>
+</tr>
+<tr>
+<td><code>mpiprocs=&lt;n&gt;</code></td>
+<td>MPI ranks per chunk</td>
+</tr>
+<tr>
+<td><code>+</code></td>
+<td>Not supported on Aqua</td>
+</tr>
+</tbody>
+</table>
+<h2 id="queues"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 1h16a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1m0 8h16a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1m0 8h16a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1M9 5h1V3H9zm0 8h1v-2H9zm0 8h1v-2H9zM5 3v2h2V3zm0 8v2h2v-2zm0 8v2h2v-2z"/></svg></span> Queues</h2>
+<table>
+<thead>
+<tr>
+<th>Queue</th>
+<th>Walltime</th>
+<th>Memory</th>
+<th>Cores</th>
+<th>GPUs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cpu_batch_exec</code></td>
+<td>10 min to 48 h</td>
+<td>1 GB to 16384 GB</td>
+<td>1 to 2048</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>cpu_inter_exec</code></td>
+<td>10 min to 12 h</td>
+<td>1 GB to 34 GB</td>
+<td>1 to 8</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>gpu_batch_exec</code></td>
+<td>10 min to 48 h</td>
+<td>1 GB to 1920 GB</td>
+<td>1 to 256</td>
+<td>1 to 8</td>
+</tr>
+<tr>
+<td><code>gpu_inter_exec</code></td>
+<td>10 min to 12 h</td>
+<td>1 GB to 68 GB</td>
+<td>1 to 12</td>
+<td>1 to 2</td>
+</tr>
+<tr>
+<td><code>cpu_batch_exlm</code></td>
+<td>10 min to 48 h</td>
+<td>1479 GB to 6015 GB</td>
+<td>1 to 180</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>You ask for</th>
+<th>PBS routes it to</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-I</code></td>
+<td>An interactive queue</td>
+</tr>
+<tr>
+<td><code>mem</code> above 1.5 TB</td>
+<td><code>cpu_batch_exlm</code></td>
+</tr>
+<tr>
+<td><code>ngpus</code> of 1 or more</td>
+<td>A GPU queue</td>
+</tr>
+<tr>
+<td>Anything else</td>
+<td><code>cpu_batch_exec</code></td>
+</tr>
+</tbody>
+</table>
+<p>Interactive limits apply across all of your interactive jobs at once, not per job.</p>
+<h2 id="nodes"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 4h12v1h3v2h-3v2h3v2h-3v2h3v2h-3v2h3v2h-3v1H6v-1H3v-2h3v-2H3v-2h3v-2H3V9h3V7H3V5h3zm5 11v3h1v-3zm2 0v3h1v-3zm2 0v3h1v-3z"/></svg></span> Nodes</h2>
+<table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>Hostnames</th>
+<th>Cores</th>
+<th>RAM</th>
+<th>GPUs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CPU batch</td>
+<td><code>cpu1n002</code> to <code>cpu1n050</code></td>
+<td>188</td>
+<td>1478 GB</td>
+<td>—</td>
+</tr>
+<tr>
+<td>CPU interactive</td>
+<td><code>cpu1n001</code></td>
+<td>376 logical</td>
+<td>1478 GB</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Large memory</td>
+<td><code>mem1n001</code></td>
+<td>180</td>
+<td>6014 GB</td>
+<td>—</td>
+</tr>
+<tr>
+<td>GPU H100 batch</td>
+<td><code>gpu1n002</code> to <code>gpu1n014</code></td>
+<td>168</td>
+<td>974 GB</td>
+<td>4 × H100 80 GB</td>
+</tr>
+<tr>
+<td>GPU A100 batch</td>
+<td>5 nodes</td>
+<td>120 to 124</td>
+<td>974 GB</td>
+<td>8 × A100 40 GB</td>
+</tr>
+<tr>
+<td>GPU interactive</td>
+<td>2 nodes</td>
+<td>168 / 124</td>
+<td>974 GB</td>
+<td>44 MIG slices</td>
+</tr>
+</tbody>
+</table>
+<p>One GPU's fair share of its host is about 42 cores and 240 GB on an H100, about 15 cores and 120 GB on an A100.</p>
+<h2 id="filesystems"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 15V5a2 2 0 0 1 2-2h6l2 2h6a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-6v2h1a1 1 0 0 1 1 1h7v2h-7a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1H2v-2h7a1 1 0 0 1 1-1h1v-2H5a2 2 0 0 1-2-2"/></svg></span> Filesystems</h2>
+<table>
+<thead>
+<tr>
+<th>Path</th>
+<th>Backed up</th>
+<th>Speed</th>
+<th>For</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/home/$USER</code></td>
+<td>Yes</td>
+<td>Good</td>
+<td>Scripts, configs, small personal data</td>
+</tr>
+<tr>
+<td><code>/scratch/$USER/</code></td>
+<td>No; swept after 30 days idle</td>
+<td>Ultra-fast</td>
+<td>Active analysis, heavy reads and writes</td>
+</tr>
+<tr>
+<td><code>/work/&lt;project&gt;/</code></td>
+<td>Yes</td>
+<td>Good</td>
+<td>Shared project data; requested by ticket</td>
+</tr>
+<tr>
+<td><code>/work/datasets/</code></td>
+<td>Yes</td>
+<td>Good</td>
+<td>Datasets shared across the cluster</td>
+</tr>
+<tr>
+<td><code>$TMPDIR</code></td>
+<td>No; deleted with the job</td>
+<td>Ultra-fast</td>
+<td>Per-job intermediates, copied back before the end</td>
+</tr>
+</tbody>
+</table>
+<p>Millions of small files in <code>/home</code> slow Lustre for everyone; unpack and build on <code>/scratch</code>.</p>
+<h2 id="environment-variables"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 2H3c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2M7.4 20C5.9 18.6 5 16.6 5 14.5s.9-4.1 2.4-5.5l1.6.6c-1.3 1.1-2 3-2 4.9s.7 3.7 2 4.9zm5.3-2-.8-2-1.4 2H9l2.3-3.1L10 12h1.3l.8 2 1.4-2H15l-2.2 3 1.3 3zm3.9 2-1.6-.6c1.3-1.2 2-3 2-4.9s-.7-3.7-2-4.9l1.6-.6c1.5 1.4 2.4 3.4 2.4 5.5s-.9 4.1-2.4 5.5M21 7H3V4h18z"/></svg></span> Environment variables</h2>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Holds</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>$PBS_O_WORKDIR</code></td>
+<td>The directory <code>qsub</code> ran in</td>
+</tr>
+<tr>
+<td><code>$PBS_JOBID</code></td>
+<td>This job's id</td>
+</tr>
+<tr>
+<td><code>$PBS_JOBNAME</code></td>
+<td>The <code>-N</code> name</td>
+</tr>
+<tr>
+<td><code>$NCPUS</code></td>
+<td>Cores PBS gave the job</td>
+</tr>
+<tr>
+<td><code>$TMPDIR</code></td>
+<td>This job's scratch directory</td>
+</tr>
+<tr>
+<td><code>$CUDA_VISIBLE_DEVICES</code></td>
+<td>The GPUs PBS gave the job</td>
+</tr>
+<tr>
+<td><code>$PBS_ARRAY_INDEX</code></td>
+<td>This subjob's index</td>
+</tr>
+<tr>
+<td><code>$PBS_ARRAY_ID</code></td>
+<td>The parent array's id</td>
+</tr>
+<tr>
+<td><code>$PBS_NODEFILE</code></td>
+<td>File listing the nodes the job is running on</td>
+</tr>
+<tr>
+<td><code>$PBS_QUEUE</code></td>
+<td>The queue PBS routed the job to</td>
+</tr>
+<tr>
+<td><code>$OMP_NUM_THREADS</code></td>
+<td>Threads per process, if you set it</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="job-states"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6.27 17.05A2.991 2.991 0 0 1 4 22c-1.66 0-3-1.34-3-3s1.34-3 3-3c.18 0 .36 0 .53.05l3.07-5.36-1.74-.99 4.09-1.12 1.12 4.09-1.74-.99zM20 16c-1.3 0-2.4.84-2.82 2H11v-2l-3 3 3 3v-2h6.18c.42 1.16 1.52 2 2.82 2 1.66 0 3-1.34 3-3s-1.34-3-3-3m-8-8c.18 0 .36 0 .53-.05l3.07 5.36-1.74.99 4.09 1.12 1.12-4.09-1.74.99-3.06-5.37A2.991 2.991 0 0 0 12 2c-1.66 0-3 1.34-3 3s1.34 3 3 3"/></svg></span> Job states</h2>
+<table>
+<thead>
+<tr>
+<th>State</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Q</code></td>
+<td>Queued, waiting to run</td>
+</tr>
+<tr>
+<td><code>R</code></td>
+<td>Running</td>
+</tr>
+<tr>
+<td><code>H</code></td>
+<td>Held: by <code>qhold</code>, by a dependency, or by PBS after repeated failures</td>
+</tr>
+<tr>
+<td><code>B</code></td>
+<td>An array with at least one subjob started</td>
+</tr>
+<tr>
+<td><code>E</code></td>
+<td>Exiting after running</td>
+</tr>
+<tr>
+<td><code>F</code></td>
+<td>Finished, whether it succeeded, failed or was deleted</td>
+</tr>
+<tr>
+<td><code>S</code></td>
+<td>Suspended by PBS</td>
+</tr>
+<tr>
+<td><code>M</code></td>
+<td>Moved to another server</td>
+</tr>
+<tr>
+<td><code>T</code></td>
+<td>In transition</td>
+</tr>
+<tr>
+<td><code>W</code></td>
+<td>Waiting for a <code>-a</code> start time</td>
+</tr>
+</tbody>
+</table>
+<h2 id="exit-statuses"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.34 8.17c-.93 0-1.69-.77-1.69-1.7a1.69 1.69 0 0 1 1.69-1.69c.94 0 1.7.76 1.7 1.69s-.76 1.7-1.7 1.7M10.3 19.93l-5.93-1.18.34-1.7 4.15.85 1.35-6.86-1.52.6v2.86H7v-3.96l4.4-1.87.67-.08c.6 0 1.1.34 1.43.85l.86 1.35c.68 1.21 2.03 2.03 3.64 2.03v1.68c-1.86 0-3.56-.83-4.66-2.1l-.5 2.54 1.77 1.69V23h-1.69v-5.1l-1.78-1.69zM21 23h-2V3H6v13.11l-2-.42V1h17zM6 23H4v-3.22l2 .42z"/></svg></span> Exit statuses</h2>
+<table>
+<thead>
+<tr>
+<th>Status</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>0</code></td>
+<td>The last command succeeded; read <code>.e</code> anyway</td>
+</tr>
+<tr>
+<td><code>1</code>, <code>2</code></td>
+<td>Your program failed; the end of <code>.e</code> says why</td>
+</tr>
+<tr>
+<td><code>-18</code></td>
+<td>Aqua's checkpoint hook requeued it at the walltime; expected with <code>-c</code></td>
+</tr>
+<tr>
+<td><code>-20</code></td>
+<td>The node failed; PBS queued the job again</td>
+</tr>
+<tr>
+<td><code>-29</code></td>
+<td>PBS stopped it at the walltime</td>
+</tr>
+<tr>
+<td><code>137</code></td>
+<td>PBS stopped it at the memory limit</td>
+</tr>
+<tr>
+<td><code>143</code></td>
+<td>Someone ran <code>qdel</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="queue-comments"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 22c-.6 0-1-.4-1-1v-3H4c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2h-6.1l-3.7 3.7c-.2.2-.4.3-.7.3zm4-11V5h-2v6m2 4v-2h-2v2z"/></svg></span> Queue comments</h2>
+<table>
+<thead>
+<tr>
+<th>Comment</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Insufficient amount of resource: ncpus</code> / <code>mem</code> / <code>ngpus</code></td>
+<td>Nothing that size is free yet; wait, or ask for less</td>
+</tr>
+<tr>
+<td><code>Insufficient amount of resource: qlist</code></td>
+<td>No node tagged for your queue had room this cycle</td>
+</tr>
+<tr>
+<td><code>Queue gpu per-user limit reached on resource ngpus</code></td>
+<td>Your own running jobs hold the per-user GPUs</td>
+</tr>
+<tr>
+<td><code>Job would cross dedicated time boundary</code></td>
+<td>It would still be running at the next maintenance window</td>
+</tr>
+<tr>
+<td><code>Queue long job limit has been reached</code></td>
+<td>Too many of your jobs in the long queue</td>
+</tr>
+<tr>
+<td><code>Scheduler user rate limit. Deferring until next scheduler run</code></td>
+<td>You submitted faster than the scheduler accepts</td>
+</tr>
+<tr>
+<td><code>Can Never Run: Insufficient amount of server resource</code></td>
+<td>A licence the software needs is not free</td>
+</tr>
+<tr>
+<td><code>Job held, too many failed attempts to run</code></td>
+<td>PBS failed to start it repeatedly; you cannot release this one</td>
+</tr>
+</tbody>
+</table>
+<h2 id="rejected-at-submission"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.27 3 3 8.27v7.46L8.27 21h7.46L21 15.73V8.27L15.73 3M8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59 15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41"/></svg></span> Rejected at submission</h2>
+<table>
+<thead>
+<tr>
+<th>Message</th>
+<th>Cause</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Illegal attribute or resource value select.mem</code></td>
+<td>Memory missing a unit, in the wrong unit, or negative</td>
+</tr>
+<tr>
+<td><code>Illegal attribute or resource value Resource_List.ncpus</code></td>
+<td>Something wrong with <code>ncpus</code> or its <code>select</code> line</td>
+</tr>
+<tr>
+<td><code>You cannot explicitly request 0 gpus when specifying gpu_id</code></td>
+<td>Naming a <code>gpu_id</code> means asking for at least one GPU</td>
+</tr>
+<tr>
+<td><code>cpu_id=... must be one of {...}</code></td>
+<td>Not a <code>cpu_id</code> Aqua has; the message lists the set</td>
+</tr>
+<tr>
+<td><code>ROUTER: Unable to initialise node</code></td>
+<td><code>+</code> used in the <code>select</code> line</td>
+</tr>
+</tbody>
+</table>
+<h2 id="failed-while-running"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 12h-4v-2h4m0 6h-4v-2h4m6-6h-2.81a6 6 0 0 0-1.82-1.96L17 4.41 15.59 3l-2.17 2.17a6 6 0 0 0-2.83 0L8.41 3 7 4.41l1.62 1.63C7.88 6.55 7.26 7.22 6.81 8H4v2h2.09c-.05.33-.09.66-.09 1v1H4v2h2v1c0 .34.04.67.09 1H4v2h2.81c1.04 1.79 2.97 3 5.19 3s4.15-1.21 5.19-3H20v-2h-2.09c.05-.33.09-.66.09-1v-1h2v-2h-2v-1c0-.34-.04-.67-.09-1H20z"/></svg></span> Failed while running</h2>
+<table>
+<thead>
+<tr>
+<th>Message</th>
+<th>Cause</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>bad interpreter: No such file or directory</code></td>
+<td>Windows line endings; run <code>dos2unix</code></td>
+</tr>
+<tr>
+<td><code>module: command not found</code></td>
+<td>Shebang missing, misspelled, or with a blank line above it; use <code>#!/bin/bash -l</code></td>
+</tr>
+<tr>
+<td><code>conda: command not found</code></td>
+<td>Inspect the shell's conda initialization and merge the required setup into the existing configuration. Preserve customizations; back up <code>.bashrc</code> and obtain explicit approval before any overwrite.</td>
+</tr>
+<tr>
+<td><code>Lmod has detected the following error</code></td>
+<td>No such module name or version; check <code>module spider</code></td>
+</tr>
+<tr>
+<td><code>Bus error (core dumped)</code></td>
+<td>Touched memory it was not given; raise <code>mem</code></td>
+</tr>
+<tr>
+<td><code>Illegal instruction</code></td>
+<td>Self-compiled software whose vector instructions this node lacks</td>
+</tr>
+<tr>
+<td><code>installed in '/home/&lt;username&gt;/.local/bin' which is not on PATH</code></td>
+<td>Add that directory to <code>PATH</code> in <code>.bashrc</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="templates"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 9h5.5L13 3.5zM6 2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4c0-1.11.89-2 2-2m.12 13.5 3.74 3.74 1.42-1.41-2.33-2.33 2.33-2.33-1.42-1.41zm11.16 0-3.74-3.74-1.42 1.41 2.33 2.33-2.33 2.33 1.42 1.41z"/></svg></span> Templates</h2>
+<h3 id="batch-job">Batch job</h3>
+<p>One program, run unattended, with the job's own record kept beside the output.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="ch">#!/bin/bash</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="c1">#PBS -N my_job</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c1">#PBS -l select=1:ncpus=4:mem=8GB</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1">#PBS -l walltime=01:00:00</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="c1">#PBS -P ABCDEF1234</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="c1">#PBS -m abe</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="nb">set</span><span class="w"> </span>-e
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="nb">cd</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PBS_O_WORKDIR</span><span class="s2">&quot;</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="nv">status</span><span class="o">=</span><span class="m">0</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>my_program.py<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nv">status</span><span class="o">=</span><span class="nv">$?</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>qstat<span class="w"> </span>-xf<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PBS_JOBID</span><span class="s2">&quot;</span><span class="w"> </span>&gt;<span class="w"> </span><span class="s2">&quot;resource_usage_</span><span class="nv">$PBS_JOBID</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Warning: job accounting could not be saved&quot;</span><span class="w"> </span>&gt;<span class="p">&amp;</span><span class="m">2</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="nb">exit</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$status</span><span class="s2">&quot;</span>
+</span></code></pre></div>
+<p>For a GPU: <code>#PBS -l select=1:ncpus=12:ngpus=1:mem=64GB:gpu_id=H100</code></p>
+<h3 id="array">Array</h3>
+<p>One script, many runs. The index picks each run's input and output. A rerun skips a member only when its final output and completion marker both exist.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1">#PBS -J 1-8</span>
+</span></code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nb">set</span><span class="w"> </span>-e
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>results
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nv">out</span><span class="o">=</span><span class="s2">&quot;results/run_</span><span class="si">${</span><span class="nv">PBS_ARRAY_INDEX</span><span class="si">}</span><span class="s2">.nc&quot;</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="o">[</span><span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$out</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">out</span><span class="si">}</span><span class="s2">.done&quot;</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">exit</span><span class="w"> </span><span class="m">0</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="nv">partial</span><span class="o">=</span><span class="s2">&quot;results/run_</span><span class="si">${</span><span class="nv">PBS_ARRAY_INDEX</span><span class="si">}</span><span class="s2">.partial_</span><span class="si">${</span><span class="nv">PBS_JOBID</span><span class="si">}</span><span class="s2">.nc&quot;</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>my_program.py<span class="w"> </span>--seed<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PBS_ARRAY_INDEX</span><span class="s2">&quot;</span><span class="w"> </span>--out<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$partial</span><span class="s2">&quot;</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="nb">test</span><span class="w"> </span>-s<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$partial</span><span class="s2">&quot;</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>mv<span class="w"> </span>--<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$partial</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$out</span><span class="s2">&quot;</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>touch<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">out</span><span class="si">}</span><span class="s2">.done&quot;</span>
+</span></code></pre></div>
+<p>This assumes the program exits successfully only after completing and validating its work; the nonempty-file check alone does not validate scientific results. It writes to a temporary path on the same filesystem, publishes the final file only after success, and then creates the marker. Failed runs retain their partial file for diagnosis. Reuse markers only for retries with unchanged inputs and configuration, use a new results directory for changed work, and avoid concurrent executions of the same member.</p>
+<table>
+<thead>
+<tr>
+<th>Turning the index into work</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>f=$(sed -n "${PBS_ARRAY_INDEX}p" files.txt)</code></td>
+<td>A file from a list</td>
+</tr>
+<tr>
+<td><code>args=$(sed -n "${PBS_ARRAY_INDEX}p" settings.txt)</code></td>
+<td>A row of settings</td>
+</tr>
+<tr>
+<td><code>from=$(( (PBS_ARRAY_INDEX - 1) * 10 + 1 ))</code></td>
+<td>A slice of ten</td>
+</tr>
+</tbody>
+</table>
+<h3 id="chained-jobs">Chained jobs</h3>
+<p>Stages that must happen in order, each submitted now but starting only when the one before it ends.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nv">A</span><span class="o">=</span><span class="k">$(</span>qsub<span class="w"> </span>stage_a.pbs<span class="k">)</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>qsub<span class="w"> </span>-W<span class="w"> </span><span class="nv">depend</span><span class="o">=</span>afterok:<span class="nv">$A</span><span class="w"> </span>stage_b.pbs<span class="w">     </span><span class="c1"># only if A ends with 0</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>qsub<span class="w"> </span>-W<span class="w"> </span><span class="nv">depend</span><span class="o">=</span>afterany:<span class="nv">$A</span><span class="w"> </span>report.pbs<span class="w">     </span><span class="c1"># when A ends, either way</span>
+</span></code></pre></div>
+<p>A dependent job sits in <code>H</code> until its condition is met, and the server deletes it if the condition can never be met.</p>
+<h3 id="checkpointed-job">Checkpointed job</h3>
+<p>Work that outlives one walltime. PBS takes the job back at the limit and runs the script again, so the program has to resume itself.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="ch">#!/bin/bash</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="c1">#PBS -N my_job</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="c1">#PBS -l select=1:ncpus=2:mem=1GB</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="c1">#PBS -l walltime=48:00:00</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="c1">#PBS -P ABCDEF1234</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="c1">#PBS -c w=30</span>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="c1">#PBS -m abe</span>
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="nb">cd</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PBS_O_WORKDIR</span><span class="s2">&quot;</span>
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="nb">trap</span><span class="w"> </span><span class="s1">&#39;echo &quot;USR1 $(date +%T)&quot;&#39;</span><span class="w"> </span>USR1
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="nb">trap</span><span class="w"> </span><span class="s1">&#39;echo &quot;USR2 $(date +%T)&quot;&#39;</span><span class="w"> </span>USR2
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>my_program.py<span class="w"> </span>--checkpoints<span class="w"> </span>checkpoints
+</span></code></pre></div>
+<p>PBS requeues at the walltime and runs the script again from the top, up to 21 attempts. The program must save as it goes, resume from its own checkpoint, and aim at a total rather than a duration.</p>
+<hr />
+<h2 id="sizing-the-next-request"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 17v2h6v-2zM3 5v2h10V5zm10 16v-2h8v-2h-8v-2h-2v6zM7 9v2H3v2h4v2h2V9zm14 4v-2H11v2zm-6-4h2V7h4V5h-4V3h-2z"/></svg></span> Sizing the next request</h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>grep -A3 "PBS Job" &lt;name&gt;.o*</code></td>
+<td>CPU time, wall time and memory of a finished job</td>
+</tr>
+<tr>
+<td><code>qstat -xf &lt;job-id&gt; \| grep -E "resources_used\|Resource_List"</code></td>
+<td>Used against requested</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Line</th>
+<th>CPU job</th>
+<th>GPU job</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>walltime</code></td>
+<td>Used plus room; never under 10 minutes</td>
+<td>Same</td>
+</tr>
+<tr>
+<td><code>ncpus</code></td>
+<td>CPU Usage % × cores requested, rounded up</td>
+<td>Generous, up to one GPU's share</td>
+</tr>
+<tr>
+<td><code>mem</code></td>
+<td>Memory Usage Max plus room</td>
+<td>Generous, up to one GPU's share</td>
+</tr>
+<tr>
+<td>Healthy</td>
+<td>Both gauges near 80%</td>
+<td>GPU Usage unchanged; low core and memory gauges normal</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="elsewhere"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10.59 13.41c.41.39.41 1.03 0 1.42-.39.39-1.03.39-1.42 0a5.003 5.003 0 0 1 0-7.07l3.54-3.54a5.003 5.003 0 0 1 7.07 0 5.003 5.003 0 0 1 0 7.07l-1.49 1.49c.01-.82-.12-1.64-.4-2.42l.47-.48a2.98 2.98 0 0 0 0-4.24 2.98 2.98 0 0 0-4.24 0l-3.53 3.53a2.98 2.98 0 0 0 0 4.24m2.82-4.24c.39-.39 1.03-.39 1.42 0a5.003 5.003 0 0 1 0 7.07l-3.54 3.54a5.003 5.003 0 0 1-7.07 0 5.003 5.003 0 0 1 0-7.07l1.49-1.49c-.01.82.12 1.64.4 2.43l-.47.47a2.98 2.98 0 0 0 0 4.24 2.98 2.98 0 0 0 4.24 0l3.53-3.53a2.98 2.98 0 0 0 0-4.24.973.973 0 0 1 0-1.42"/></svg></span> Elsewhere</h2>
+<table>
+<thead>
+<tr>
+<th>Resource</th>
+<th>Where</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Job gauges, per job</td>
+<td><a href="https://hpc-monitoring.eres.qut.edu.au">HPC Monitoring Dashboard</a><sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup></td>
+</tr>
+<tr>
+<td>Notebooks, managed</td>
+<td><a href="https://jupyterhub.eres.qut.edu.au">QUT JupyterHub</a><sup id="fnref2:1"><a class="footnote-ref" href="#fn:1">1</a></sup></td>
+</tr>
+<tr>
+<td>Official documentation</td>
+<td><a href="https://docs.eres.qut.edu.au/about-aqua">QUT eResearch docs</a><sup id="fnref3:1"><a class="footnote-ref" href="#fn:1">1</a></sup></td>
+</tr>
+<tr>
+<td>Tickets: a shared <code>/work</code> folder, or anything broken</td>
+<td><a href="http://qut.to/eresearch-support">eResearch Help Centre</a></td>
+</tr>
+<tr>
+<td>Wording to credit eResearch in papers</td>
+<td><a href="https://docs.eres.qut.edu.au/acknowledgements-in-papers">Acknowledgements in papers</a><sup id="fnref4:1"><a class="footnote-ref" href="#fn:1">1</a></sup></td>
+</tr>
+</tbody>
+</table>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p>Access only in QUT network. Please use VPN to access the documentation when off-campus.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref2:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref3:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref4:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+
+
+
+
+
+
+
+  
+    
+  
+  
+    
+  
+
+
+  <aside class="md-source-file">
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="Last update">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="September 22, 2026 00:21:25 AEST">September 22, 2026</span>
+  </span>
+
+    
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="Created">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="September 18, 2026 14:19:07 AEST">September 18, 2026</span>
+  </span>
+
+    
+    
+    
+      
+  <span class="md-source-file__fact">
+    
+      
+  <span class="md-icon" title="Contributors">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33s1.71.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2"/></svg>
+  </span>
+  <span>GitHub</span>
+
+    
+    <nav>
+      
+        <a href="https://github.com/ZhipengHe" class="md-author" title="@ZhipengHe">
+          
+          <img src="https://avatars.githubusercontent.com/u/29477872?v=4&size=72" alt="ZhipengHe">
+        </a>
+      
+      
+      
+    </nav>
+  </span>
+
+    
+  </aside>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2025 Zhipeng He
+
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://zhipenghe.me" target="_blank" rel="noopener" title="zhipenghe.me" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M234.2 8.6c12.3-11.4 31.3-11.4 43.5 0L368 92.3V80c0-17.7 14.3-32 32-32h32c17.7 0 32 14.3 32 32v101.5l37.8 35.1c9.6 9 12.8 22.9 8 35.1S493.2 272 480 272h-16v176c0 35.3-28.7 64-64 64H112c-35.3 0-64-28.7-64-64V272H32c-13.2 0-25-8.1-29.8-20.3s-1.6-26.2 8-35.1zM240 320c-26.5 0-48 21.5-48 48v96h128v-96c0-26.5-21.5-48-48-48z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/zhipenghe" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["search.suggest", "search.highlight", "search.share", "navigation.instant", "navigation.instant.progress", "navigation.path", "navigation.top", "navigation.indexes", "content.action.view", "content.action.edit", "content.code.copy", "content.code.select", "content.code.annotate"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="../javascripts/katex.js"></script>
+      
+        <script src="https://unpkg.com/katex@0/dist/katex.min.js"></script>
+      
+        <script src="https://unpkg.com/katex@0/dist/contrib/auto-render.min.js"></script>
+      
+        <script src="../javascripts/queue-score-explorer.js"></script>
+      
+        <script src="../javascripts/backfill-animation.js"></script>
+      
+    
+  </body>
+</html>

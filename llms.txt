@@ -1,0 +1,51 @@
+# Walltime Chronicles
+
+> An unofficial practical guide to QUT Aqua high-performance computing: understand the shared system, prepare software and PBS jobs, choose resources and storage, monitor work, and diagnose failures. It also provides general Aqua guidance for AI assistants and agents, usable for learning, global instructions, or project work.
+
+Start with the Aqua agent guide when establishing how to assist with Aqua, then read only the topics relevant to the user's request. No research project or cluster account is required to learn from this site. The agent guide is plain-text Markdown; most other links are readable HTML documentation.
+
+QUT documentation governs institutional policy and current system requirements. This site supplies explanations and examples. Do not treat example accounts, paths, resource requests, or historical measurements as the user's configuration or current cluster state. QUT pages may require university network or VPN access; say when a needed fact cannot be verified.
+
+Reading these documents grants no remote access or execution authority. Explain and prepare within the user's task. Substantial cluster computation belongs in scheduler allocations; queue changes require specific user approval. Persistent agent configuration and actual permission controls must be set deliberately by the user.
+
+## Start here
+
+- [Aqua agent guide](https://zhipenghe.me/Walltime-Chronicles/agents/aqua-guide.txt): Plain-text system overview, reading map, action boundaries, environment and storage practices, job preparation, monitoring, and evidence requirements.
+- [Using the guide](https://zhipenghe.me/Walltime-Chronicles/agents/aqua-starter/): Global, project, and standalone use; examples; sources; and how this index connects to the instructions.
+- [Crash Course Café](https://zhipenghe.me/Walltime-Chronicles/tutorials/): Eight-lesson learning path from first access to arrays and long-running work.
+- [Prerequisites](https://zhipenghe.me/Walltime-Chronicles/tutorials/prerequisites/): Access and foundational skills for hands-on use.
+- [Welcome to Aqua](https://zhipenghe.me/Walltime-Chronicles/tutorials/lesson-1/): Login versus compute nodes, shared storage, and the scheduler model.
+
+## Official Aqua references
+
+- [QUT Aqua overview](https://docs.eres.qut.edu.au/about-aqua): Official system information.
+- [QUT queue limits](https://docs.eres.qut.edu.au/hpc-queue-limits): Current resource and scheduling limits; verify before preparing a concrete request.
+- [QUT filesystems](https://docs.eres.qut.edu.au/hpc-filesystem): Official storage purposes and policies.
+
+## Environments, storage, and remote work
+
+- [Tooling setup](https://zhipenghe.me/Walltime-Chronicles/tutorials/lesson-2/): Preparing the software environment.
+- [uv environment and cache placement](https://zhipenghe.me/Walltime-Chronicles/remote-dev/uv-on-aqua/): Environment setup and filesystem placement patterns.
+- [Remote development](https://zhipenghe.me/Walltime-Chronicles/remote-dev/Surviving-without-VS-Code-Remote-SSH/): Working with remote files and tools.
+- [Shared-directory permissions](https://zhipenghe.me/Walltime-Chronicles/remote-dev/Permissions-Dont-Move/): Understanding access behavior in shared work directories.
+
+## Prepare and run workloads
+
+- [Interactive work](https://zhipenghe.me/Walltime-Chronicles/tutorials/lesson-3/): Allocated interactive sessions and their lifecycle.
+- [First batch job](https://zhipenghe.me/Walltime-Chronicles/tutorials/lesson-4/): PBS scripts, environment initialization, submission, and outputs.
+- [Resource sizing](https://zhipenghe.me/Walltime-Chronicles/tutorials/lesson-6/): Using observations to choose resource requests.
+- [Know Your Nodes](https://zhipenghe.me/Walltime-Chronicles/scheduler/Know-Your-Nodes/): Hardware choices and workload fit; check current availability before acting.
+- [Walltime by Recipe](https://zhipenghe.me/Walltime-Chronicles/scheduler/Walltime-by-Recipe/): Worked runtime-estimation examples.
+- [Job arrays](https://zhipenghe.me/Walltime-Chronicles/tutorials/lesson-7/): Many independent tasks and controlled scheduling.
+- [Long jobs](https://zhipenghe.me/Walltime-Chronicles/tutorials/lesson-8/): Checkpoints, continuation, and long-running workloads.
+
+## Monitor and diagnose
+
+- [When jobs fail](https://zhipenghe.me/Walltime-Chronicles/tutorials/lesson-5/): Diagnosing failures using scheduler and application evidence.
+- [The Queue Is Not a Line](https://zhipenghe.me/Walltime-Chronicles/scheduler/The-Queue-Is-Not-a-Line/): Scheduling priority, waiting, and backfill.
+- [Aqua cheatsheet](https://zhipenghe.me/Walltime-Chronicles/cheatsheet/): Command, directive, state, and error reference; examples are not authorization to execute.
+
+## Optional
+
+- [PBS Cookbook](https://zhipenghe.me/Walltime-Chronicles/pbs-scripts/): Reusable helpers and their explanations. Inspect side effects before invoking a helper, especially one that submits work.
+- [The Art of Walltime](https://zhipenghe.me/Walltime-Chronicles/scheduler/The-Art-of-Walltime/): Additional discussion of walltime estimation.
