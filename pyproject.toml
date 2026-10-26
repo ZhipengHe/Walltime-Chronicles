@@ -3,7 +3,7 @@ name = "walltime-chronicles"
 version = "0.0.0"
 description = "Personal survival log of mysterious errors, queueing oddities, and PBS quirks encountered on QUT Aqua HPC system"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 license = "MIT"
 authors = [
     { name = "Zhipeng He" },
